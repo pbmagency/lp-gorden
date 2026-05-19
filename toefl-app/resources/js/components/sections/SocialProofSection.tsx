@@ -1,0 +1,260 @@
+import { useState } from 'react';
+import { Star, MessageCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import SectionWrapper from '@/components/ui/section-wrapper';
+import LpButton from '@/components/ui/lp-button';
+import SocialProofMicro from '@/components/ui/social-proof-micro';
+
+const statsBar = [
+    { value: '45.000+', label: 'Alumni Sukses' },
+    { value: '4.9/5',   label: 'Rating Rata-rata' },
+    { value: '13+',     label: 'Tahun Pengalaman' },
+    { value: '95%',     label: 'Skor Naik Signifikan', micro: 'Berdasarkan data alumni batch 2023–2024' },
+];
+
+const scoreResults = [
+    { label: 'TOEFL ITP Online', name: 'Widya Ningrum',         score: 563, source: 'Score Report resmi ETS,2/4/2024' },
+    { label: 'TOEFL ITP Online', name: 'Yohanes K. Susanta',    score: 560, source: 'Score Report resmi ETS,3/8/2024' },
+    { label: 'Capai Target',     name: 'Kak Rani',               score: 547, source: 'Screenshot WA ke instruktur' },
+    { label: 'TOEFL ITP Online', name: 'Yuhana Dharma',          score: 537, source: 'Screenshot WA ke instruktur' },
+    { label: 'LPDP',             name: 'Nadia Ayu Tiarasari',    score: 513, source: 'TOEFL ITP Online, 6/28/2024' },
+    { label: 'TOEFL ITP Online', name: 'Siti Martha Uly Sinaga', score: 507, source: 'Score Report resmi ETS,7/11/2024' },
+];
+
+const waScreenshots = [
+    { src: '/image/toefl1.webp', score: '547' },
+    { src: '/image/toefl2.webp', score: '543' },
+    { src: '/image/toefl3.webp', score: '563' },
+    { src: '/image/toefl4.webp', score: '560' },
+    { src: '/image/toefl5.webp', score: '507' },
+    { src: '/image/toefl6.webp', score: '513' },
+    { src: '/image/toefl7.webp', score: '537' },
+];
+
+const carouselItems = [
+    { name: 'Kak Rani',      score: 547 },
+    { name: 'Kak Ayu',       score: 543 },
+    { name: 'Mbak Widya',    score: 563 },
+    { name: 'Pak Yohanes',   score: 560 },
+    { name: 'Kak Uly Sinaga',score: 507 },
+    { name: 'Kak Nadia Ayu', score: 513 },
+];
+
+const internationalTestimonials = [
+    { title: 'Sangat Terjangkau Untuk Mahasiswa', name: 'Andi Manggala Putra', role: 'Accounting and Finance', university: 'University of Nottingham, UK', text: 'Full Bright ini tempat yang paling "pas" buat teman-teman Mahasiswa menaklukkan Tes TOEFL & IELTS', avatar: '/people/People 1.webp' },
+    { title: 'A Good Place to Learn TOEFL & IELTS', name: 'Hajrah', role: 'Student Water Resources Engineering and Management', university: 'Stuttgart University, Germany', text: 'Fullbright growing together with their students. This place is good place to learn TOEFL & IELTS. Thank you for the teacher and friendly staff. Now I can see the world', avatar: '/people/People 2.webp' },
+];
+
+function Stars() {
+    return <div className="flex gap-0.5">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={13} fill="#F59E0B" color="#F59E0B" />)}</div>;
+}
+
+function avatarBg(i: number) { return i % 2 === 0 ? '#151515' : '#D70808'; }
+
+function ScoreCard({ label, name, score, source }: typeof scoreResults[0]) {
+    return (
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 border border-gray-100 hover:-translate-y-2 hover:shadow-[0_20px_56px_rgba(0,0,0,0.1)] transition-all duration-300" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
+            <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>{label}</span>
+                <Stars />
+            </div>
+            <div className="text-center py-2">
+                <p className="text-xs mb-1 font-semibold uppercase tracking-widest" style={{ color: '#9ca3af' }}>Skor Diraih</p>
+                <p className="text-5xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#16a34a' }}>{score}</p>
+            </div>
+            <div className="border-t border-gray-100 pt-3">
+                <p className="text-xs font-bold" style={{ color: '#151515' }}>{name}</p>
+                <p className="text-xs mt-0.5" style={{ color: '#9ca3af' }}>{source}</p>
+            </div>
+        </div>
+    );
+}
+
+function PhotoLightbox({ photos, index, onClose, onPrev, onNext }: {
+    photos: typeof waScreenshots;
+    index: number;
+    onClose: () => void;
+    onPrev: () => void;
+    onNext: () => void;
+}) {
+    const photo = photos[index];
+    return (
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.92)' }}
+            onClick={onClose}
+        >
+            <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white transition" aria-label="Tutup">
+                <X size={28} />
+            </button>
+            <button
+                onClick={(e) => { e.stopPropagation(); onPrev(); }}
+                className="absolute left-4 text-white/70 hover:text-white transition p-2"
+                aria-label="Sebelumnya"
+            >
+                <ChevronLeft size={36} />
+            </button>
+            <div className="flex flex-col items-center gap-4 px-16" onClick={(e) => e.stopPropagation()}>
+                <img
+                    src={photo.src}
+                    alt={photo.name}
+                    className="max-h-[80vh] max-w-[340px] w-full object-contain rounded-2xl"
+                    style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
+                />
+                <div className="text-center">
+                    <p className="text-white font-black text-base" style={{ fontFamily: 'var(--font-heading)' }}>{photo.name}</p>
+                    <p className="text-white/60 text-sm">Skor {photo.score} · {photo.label}</p>
+                </div>
+                <p className="text-white/40 text-xs">{index + 1} / {photos.length}</p>
+            </div>
+            <button
+                onClick={(e) => { e.stopPropagation(); onNext(); }}
+                className="absolute right-4 text-white/70 hover:text-white transition p-2"
+                aria-label="Berikutnya"
+            >
+                <ChevronRight size={36} />
+            </button>
+        </div>
+    );
+}
+
+export default function SocialProofSection() {
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+    const openLightbox = (i: number) => setLightboxIndex(i);
+    const closeLightbox = () => setLightboxIndex(null);
+    const prevPhoto = () => setLightboxIndex((i) => i !== null ? (i - 1 + waScreenshots.length) % waScreenshots.length : null);
+    const nextPhoto = () => setLightboxIndex((i) => i !== null ? (i + 1) % waScreenshots.length : null);
+
+    return (
+        <div id="testimonials">
+            {/* Stats bar */}
+            <div style={{ backgroundColor: '#151515' }} className="py-10">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                        {statsBar.map((s) => (
+                            <div key={s.label}>
+                                <p className="text-4xl md:text-5xl font-black tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>{s.value}</p>
+                                <p className="text-xs mt-1.5 opacity-75 font-medium tracking-wide">{s.label}</p>
+                                {s.micro && <p className="text-[10px] mt-1 opacity-50 italic">{s.micro}</p>}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* <SectionWrapper bg="cultured" className="py-20 md:py-24">
+                <div className="text-center mb-14">
+                    <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>🏆 Skor Resmi — Terkonfirmasi dari Score Report ETS</div>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                        Lihat Sendiri Skor yang <span style={{ color: '#D70808' }}>Berhasil Diraih Alumni</span>
+                    </h2>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+                    {scoreResults.map((r) => <ScoreCard key={r.name} {...r} />)}
+                </div>
+                <div className="text-center">
+                    <LpButton href="#pricing" size="lg">Raih Skorku Sekarang →</LpButton>
+                    <SocialProofMicro />
+                </div>
+            </SectionWrapper> */}
+
+            <SectionWrapper bg="white" className="py-20 md:py-24">
+                <div className="text-center mb-12">
+                    <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
+                        <MessageCircle size={13} /> Screenshot WA Asli dari Alumni
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                        Foto Skor yang Dikirim <span style={{ color: '#D70808' }}>Langsung ke Instruktur</span>
+                    </h2>
+                    <p className="text-sm" style={{ color: '#9ca3af' }}>Klik foto untuk memperbesar · Geser untuk melihat semua</p>
+                </div>
+
+                {/* Top 3 photos — grid with captions, clickable lightbox */}
+                <div className="grid grid-cols-3 gap-3 mb-6 max-w-3xl mx-auto">
+                    {waScreenshots.slice(0, 3).map((img, i) => (
+                        <div key={img.src} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => openLightbox(i)}>
+                            <div className="relative group overflow-hidden w-full" style={{ borderRadius: '14px', boxShadow: '0 6px 24px rgba(0,0,0,0.18)', aspectRatio: '9/16' }}>
+                                <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="eager" />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}>
+                                    <span className="text-white text-xs font-bold bg-black/50 px-3 py-1 rounded-full">Perbesar</span>
+                                </div>
+                            </div>
+                            <p className="text-xs font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Photo infinite carousel */}
+                <div className="overflow-hidden mb-14" style={{ maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)' }}>
+                    <div className="infinite-track">
+                        {Array.from({ length: 4 }, () => waScreenshots).flat().map((img, i) => (
+                            <div key={i} className="shrink-0 mx-2 flex flex-col items-center gap-1.5 cursor-pointer" onClick={() => openLightbox(i % waScreenshots.length)}>
+                                <div className="relative overflow-hidden" style={{ width: '130px', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', aspectRatio: '9/16' }}>
+                                    <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                                <p className="text-[10px] font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* International testimonials */}
+                <div className="w-full max-w-4xl mx-auto mb-14">
+                    <p className="text-xs font-bold uppercase tracking-widest text-center mb-6" style={{ color: '#9ca3af' }}>Testimoni Resmi dari Alumni Internasional</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {internationalTestimonials.map((t, i) => (
+                            <div key={t.name} className="rounded-2xl p-5 border border-gray-100 flex flex-col gap-3 min-w-0" style={{ backgroundColor: '#F9F9F9', boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
+                                <span className="text-xs font-semibold px-2.5 py-1 rounded-full self-start" style={{ backgroundColor: '#FFF0F0', color: '#D70808' }}>{t.university}</span>
+                                <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#D70808' }}>{t.title}</p>
+                                <p className="text-sm leading-relaxed flex-1" style={{ color: '#3d3d3d' }}>"{t.text}"</p>
+                                <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                                    {t.avatar ? (
+                                        <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-white text-sm shrink-0" style={{ backgroundColor: avatarBg(i), fontFamily: 'var(--font-heading)' }}>{t.name[0]}</div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-black truncate" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>{t.name}</p>
+                                        <p className="text-xs truncate" style={{ color: '#6b7280' }}>{t.role}</p>
+                                    </div>
+                                    <Stars />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Score carousel — name only, no source */}
+                <div className="overflow-hidden mt-10" style={{ maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)' }}>
+                    <div className="infinite-track">
+                        {Array.from({ length: 4 }, () => carouselItems).flat().map((item, i) => (
+                            <div key={i} className="shrink-0 mx-3 bg-white rounded-2xl px-5 py-4 flex items-center gap-3 border border-gray-100" style={{ width: '220px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+                                <div className="w-9 h-9 rounded-full flex items-center justify-center font-black text-white text-sm shrink-0" style={{ backgroundColor: avatarBg(i), fontFamily: 'var(--font-heading)' }}>{item.name[0]}</div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-black truncate" style={{ color: '#151515' }}>{item.name}</p>
+                                </div>
+                                <p className="text-xl font-black shrink-0" style={{ fontFamily: 'var(--font-heading)', color: '#16a34a' }}>{item.score}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="text-center mt-10">
+                    <LpButton href="#pricing" size="sm">Jadilah Alumni Sukses Berikutnya →</LpButton>
+                    <SocialProofMicro />
+                </div>
+            </SectionWrapper>
+
+            {/* Lightbox */}
+            {lightboxIndex !== null && (
+                <PhotoLightbox
+                    photos={waScreenshots}
+                    index={lightboxIndex}
+                    onClose={closeLightbox}
+                    onPrev={prevPhoto}
+                    onNext={nextPhoto}
+                />
+            )}
+        </div>
+    );
+}
