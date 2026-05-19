@@ -240,7 +240,7 @@ export default function SocialProofSection() {
                 </div>
 
                 <div className="text-center mt-10">
-                    <LpButton href="#pricing" size="sm">Jadilah Alumni Sukses Berikutnya →</LpButton>
+                    <LpButton href="#pricing" size="md">Jadilah Alumni Sukses Berikutnya →</LpButton>
                     <SocialProofMicro />
                 </div>
             </SectionWrapper>

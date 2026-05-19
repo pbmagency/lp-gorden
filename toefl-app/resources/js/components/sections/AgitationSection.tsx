@@ -1,7 +1,5 @@
 import { AlertTriangle } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
-import LpButton from '@/components/ui/lp-button';
-import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 const painPoints = [
     'Deadline LPDP, Fulbright & CPNS sudah di depan mata',
@@ -36,13 +34,11 @@ export default function AgitationSection() {
                 </div>
 
                 <div className="text-center">
-                    <p className="text-base leading-relaxed mb-8" style={{ color: '#3d3d3d' }}>
+                    <p className="text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
                         Kalau kamu mengangguk di 3 poin di atas,<br />
                         kamu tidak butuh belajar lebih keras.<br />
                         <strong style={{ color: '#151515' }}>Kamu butuh metode yang lebih pintar.</strong>
                     </p>
-                    <LpButton href="#value" size="md">Lihat Solusi Full Bright →</LpButton>
-                    <SocialProofMicro />
                 </div>
             </div>
         </SectionWrapper>

@@ -93,7 +93,7 @@ function PayButton({ href, label, onClick }: { href: string; label: string; onCl
 
 function OrDivider() {
     return (
-        <div className="flex items-center gap-3 my-2">
+        <div className="flex items-center gap-3 my-3">
             <div className="flex-1 h-px" style={{ backgroundColor: '#e5e7eb' }} />
             <span className="text-xs font-semibold" style={{ color: '#9ca3af' }}>atau</span>
             <div className="flex-1 h-px" style={{ backgroundColor: '#e5e7eb' }} />
@@ -185,7 +185,7 @@ export default function PricingSection() {
                             </div>
                             <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#D70808' }}>Rp 250.000</p>
                         </div>
-                        <ul className="flex flex-col gap-2 mb-7 flex-1">
+                        <ul className="flex flex-col gap-2 mb-5 flex-1">
                             {starterFeatures.map((f) => (
                                 <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
                                     <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />
@@ -226,7 +226,7 @@ export default function PricingSection() {
                             <p className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-heading)', color: '#D70808' }}>Rp 375.000</p>
                             <p className="text-xs font-semibold" style={{ color: '#D70808' }}>Hemat Rp 1.500.000 dari harga normal!</p>
                         </div>
-                        <ul className="flex flex-col gap-2 mb-7 flex-1">
+                        <ul className="flex flex-col gap-2 mb-5 flex-1">
                             {bundlingFeatures.map((f) => (
                                 <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
                                     <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#D70808" />
@@ -263,7 +263,7 @@ export default function PricingSection() {
                             </div>
                             <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#D70808' }}>Rp 350.000</p>
                         </div>
-                        <ul className="flex flex-col gap-2 mb-7 flex-1">
+                        <ul className="flex flex-col gap-2 mb-5 flex-1">
                             {intermediateFeatures.map((f) => (
                                 <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
                                     <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />

@@ -18,23 +18,20 @@ export default function HeroSection() {
             <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
             <div className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
 
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 md:pt-20 md:pb-24">
-                <div className="grid lg:grid-cols-2 gap-14 items-center">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 md:pt-10 md:pb-14">
+                <div className="grid lg:grid-cols-2 gap-10 items-center">
 
                     {/* Left column — text content, full-width on mobile */}
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-3 lg:gap-4">
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
                             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
                                 🔥 Kursi Terbatas · Batch Juli 2026
                             </div>
-                            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase" style={{ backgroundColor: '#F3F3F3', color: '#151515', border: '1px solid #e5e7eb' }}>
-                                17+ Tahun · Mahasiswa & Karyawan
-                            </div>
                         </div>
 
                         {/* b. Headline */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-black leading-tight" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                        <h1 className="text-4xl sm:text-5xl lg:text-[2.85rem] font-black leading-tight" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
                             Deadline Beasiswa LPDP, Fulbright & CPNS Sudah{' '}
                             <span style={{ color: '#D70808' }}>Semakin Dekat</span>.{' '}
                             <br className="hidden md:block" />
@@ -43,7 +40,7 @@ export default function HeroSection() {
                         </h1>
 
                         {/* c. Sub-copy */}
-                        <p className="text-base md:text-lg leading-relaxed" style={{ color: '#3d3d3d' }}>
+                        <p className="text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
                             Bukan kelas bahasa Inggris biasa.{' '}
                             <strong style={{ color: '#151515' }}>Metode 30 Jam Full Bright mengajarkan pola,</strong>{' '}
                             bukan menghafal ribuan soal{' '}
@@ -61,10 +58,10 @@ export default function HeroSection() {
 
                         {/* e. CTA buttons */}
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <LpButton href="#pricing" size="sm" fullWidth className="sm:w-auto sm:px-7 sm:py-3 sm:text-base" onClick={() => trackCTA('hero_primary', 'Mulai Belajar Sekarang', '#pricing')}>
+                            <LpButton href="#pricing" size="md" fullWidth className="sm:w-auto" onClick={() => trackCTA('hero_primary', 'Mulai Belajar Sekarang', '#pricing')}>
                                 Mulai Belajar Sekarang →
                             </LpButton>
-                            <LpButton href="#testimonials" variant="ghost" size="sm" fullWidth className="sm:w-auto sm:px-7 sm:py-3 sm:text-base" onClick={() => trackCTA('hero_secondary', 'Lihat Bukti Alumni', '#testimonials')}>
+                            <LpButton href="#testimonials" variant="ghost" size="md" fullWidth className="sm:w-auto" onClick={() => trackCTA('hero_secondary', 'Lihat Bukti Alumni', '#testimonials')}>
                                 Lihat Bukti Alumni →
                             </LpButton>
                         </div>
