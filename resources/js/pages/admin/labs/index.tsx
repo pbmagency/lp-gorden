@@ -966,7 +966,7 @@ export default function LabsIndex({
                                                 />
                                                 <Legend />
                                                 {selectedFunnelSources.map(
-                                                    (source, index) => (
+                                                    (source) => (
                                                         <Bar
                                                             key={source}
                                                             dataKey={source}

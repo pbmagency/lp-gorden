@@ -43,24 +43,6 @@ function Stars() {
 
 function avatarBg(i: number) { return i % 2 === 0 ? '#151515' : '#D70808'; }
 
-function _ScoreCard({ label, name, score, source }: { label: string; name: string; score: number; source: string }) {
-    return (
-        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 border border-gray-100 hover:-translate-y-2 hover:shadow-[0_20px_56px_rgba(0,0,0,0.1)] transition-all duration-300" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
-            <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>{label}</span>
-                <Stars />
-            </div>
-            <div className="text-center py-2">
-                <p className="text-xs mb-1 font-semibold uppercase tracking-widest" style={{ color: '#9ca3af' }}>Skor Diraih</p>
-                <p className="text-5xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#16a34a' }}>{score}</p>
-            </div>
-            <div className="border-t border-gray-100 pt-3">
-                <p className="text-xs font-bold" style={{ color: '#151515' }}>{name}</p>
-                <p className="text-xs mt-0.5" style={{ color: '#9ca3af' }}>{source}</p>
-            </div>
-        </div>
-    );
-}
 
 function PhotoLightbox({ photos, index, onClose, onPrev, onNext }: {
     photos: typeof waScreenshots;
