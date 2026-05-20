@@ -4,90 +4,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TOEFL Online — a landing page for a TOEFL preparation service. The frontend is a React + TypeScript single-page application styled with Tailwind CSS v4. The backend is a Laravel (PHP) API.
+TOEFL Online — a landing page for the "Full Bright" TOEFL preparation service targeting Indonesian students. The frontend is a React 19 + TypeScript SPA styled with Tailwind CSS v4. There is no backend yet; all CTAs link to WhatsApp (`wa.me/...`) or anchor scroll targets.
 
 ## Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, TypeScript, Vite |
-| Styling | Tailwind CSS v4 |
-| Backend | Laravel 11+ (PHP) |
-| HTTP client | Axios or Fetch |
-
-## Project Structure (expected)
-
-```
-toefl-online/
-├── frontend/          # React + TypeScript + Vite app
-│   ├── src/
-│   │   ├── components/   # UI components (feature folders)
-│   │   ├── hooks/        # Custom React hooks
-│   │   ├── lib/          # Utilities, helpers
-│   │   └── styles/       # Global CSS, Tailwind tokens
-│   ├── index.html
-│   ├── vite.config.ts
-│   └── package.json
-└── backend/           # Laravel API
-    ├── app/
-    ├── routes/api.php
-    └── ...
-```
+| Styling | Tailwind CSS v4 (CSS-first, no config file) |
+| Icons | lucide-react |
+| Fonts | @fontsource/nunito (headings), @fontsource/inter (body) — self-hosted |
+| Analytics | Facebook Pixel (`fbq`) — declared globally, called in PricingSection |
 
 ## Common Commands
 
-### Frontend
-
 ```bash
 cd frontend
-npm install          # install dependencies
-npm run dev          # start Vite dev server (usually :5173)
-npm run build        # production build
-npm run preview      # preview production build locally
+npm install
+npm run dev          # Vite dev server at :5173
+npm run build        # tsc -b && vite build
 npm run lint         # ESLint
-npm run typecheck    # tsc --noEmit
+npm run preview      # preview production build
 ```
 
-### Backend (Laravel)
+There is no standalone `typecheck` script — type errors surface via `npm run build` (which runs `tsc -b` first).
 
-```bash
-cd backend
-composer install           # install PHP dependencies
-cp .env.example .env
-php artisan key:generate
-php artisan migrate        # run database migrations
-php artisan serve          # start dev server (usually :8000)
-php artisan test           # run PHPUnit test suite
-php artisan test --filter=TestName   # run single test
-```
+## Architecture
 
-## Tailwind CSS v4 Notes
+`App.tsx` renders sections in a fixed order via a flat list of imports — no router. All navigation is anchor-based (`href="#pricing"`, `href="#testimonials"`).
 
-Tailwind v4 uses a CSS-first configuration — **no `tailwind.config.js`**. Design tokens are defined in a CSS file using `@theme`:
+**Section render order:**
+`UrgencyBanner → Navbar → HeroSection → AgitationSection → ValueSection → MediaCoverageSection → SocialProofSection → PricingSection → FAQSection → Footer`
 
-```css
-/* src/styles/tokens.css */
-@import "tailwindcss";
+### UI primitives (`src/components/ui/`)
 
-@theme {
-  --color-brand: oklch(60% 0.2 250);
-  --font-sans: "Inter", sans-serif;
-}
-```
+- **`Button`** — variants: `primary` (red CTA), `secondary` (dark), `outline`, `ghost`, `whatsapp` (green). Renders `<a>` when `href` is provided, `<button>` otherwise. Accepts `fullWidth` and `size` (`sm`/`md`/`lg`).
+- **`SectionWrapper`** — wraps every section with consistent `max-w-6xl mx-auto` container and `bg` prop (`white`/`cultured`/`dark`). Always use this for new sections.
+- **`SocialProofMicro`** — reusable star + alumni-count + guarantee strip. Used under CTAs and at card bottoms.
 
-Utility classes are generated from these custom properties automatically.
+### Styling approach
 
-## Architecture Notes
+Tailwind utility classes are combined with inline `style` props throughout. Tokens from `tokens.css` are referenced via CSS custom properties (e.g. `style={{ color: 'var(--color-cta)' }}`). Prefer the named token values over raw hex when they match:
 
-- The frontend is a static SPA served separately from Laravel. During development, Vite proxies API calls to the Laravel dev server.
-- API routes live in `backend/routes/api.php` and are prefixed with `/api`.
-- Contact form submissions (if any) are handled by a Laravel endpoint — validate server-side, never trust frontend-only validation.
-- All environment-specific values (API base URL, etc.) go in `.env` / `.env.local` files — never hardcoded.
+| Token | Value |
+|-------|-------|
+| `--color-cta` | `#D70808` (primary red) |
+| `--color-text` | `#151515` |
+| `--color-body` | `#3d3d3d` |
+| `--color-cultured` | `#F3F3F3` |
+| `--font-heading` | Nunito |
+| `--font-body` | Inter |
+
+### Animations
+
+Two global animation utilities are defined in `tokens.css`:
+- `.infinite-track` — horizontal auto-scroll (used in testimonial carousel), pauses on hover
+- `.stagger-wrap` / `.stagger-wrap.revealed` — scroll-reveal with per-child delay. Add the `revealed` class via IntersectionObserver.
+
+### Public assets
+
+Static images are served from the `public/` directory and referenced with root-relative paths (e.g. `/image/toefl10.jpeg`). Do not import images from `src/assets/` for content images.
+
+### Facebook Pixel
+
+`fbq` is declared as a global in `PricingSection.tsx` via `declare function fbq(...)`. Call it inside try/catch since it may not be loaded. See `trackAddToCart()` in that file for the pattern.
+
+### WhatsApp CTAs
+
+The WhatsApp number in CTA links (`wa.me/6281234567890`) is a placeholder and should be updated to the real number before going live. Search for `wa.me` to find all instances.
 
 ## Key Conventions
 
-- Component files: `PascalCase.tsx` (e.g., `HeroSection.tsx`)
-- Hooks: `useX.ts` (e.g., `useScrollProgress.ts`)
-- CSS custom properties over hardcoded values — no magic numbers in stylesheets
-- Animate only compositor-friendly properties (`transform`, `opacity`) — never `width`, `height`, `top`, `left`
-- Semantic HTML elements (`<header>`, `<main>`, `<section>`, `<footer>`) before generic `<div>` wrappers
+- Component files: `PascalCase.tsx`; section components in `sections/`, reusable primitives in `ui/`
+- New sections must use `SectionWrapper` — never add raw `max-w-*` container wrappers inline
+- Animate only `transform` and `opacity` — never layout-bound properties
+- Semantic HTML (`<section>`, `<header>`, `<footer>`) before `<div>` wrappers
+- No React Router — keep all navigation as anchor links

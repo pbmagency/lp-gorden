@@ -133,7 +133,7 @@ class AnalyticsController extends Controller
         )
             ->where('created_at', '>=', $startDate)
             ->whereIn('event_type', ['visit', 'engagement', 'cta_click', 'payment'])
-            ->groupBy(['date', 'event_type'])
+            ->groupByRaw('DATE(created_at), event_type')
             ->orderBy('date')
             ->get()
             ->groupBy('event_type');

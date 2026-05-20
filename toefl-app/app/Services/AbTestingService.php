@@ -230,7 +230,7 @@ class AbTestingService
             ->select([
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
                 'session_id',
-                DB::raw("MAX(CAST(json_extract(event_data, '$.depth') AS REAL)) as max_depth"),
+                DB::raw("MAX(CAST(json_extract(event_data, '$.depth') AS DECIMAL(15,4))) as max_depth"),
             ])
             ->where('event_type', 'scroll')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -365,7 +365,7 @@ class AbTestingService
         $rows = DB::table('user_analytics')
             ->select([
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
-                DB::raw("SUM(CAST(json_extract(event_data, '$.amount') AS REAL)) as revenue"),
+                DB::raw("SUM(CAST(json_extract(event_data, '$.amount') AS DECIMAL(15,2))) as revenue"),
             ])
             ->where('event_type', 'payment')
             ->whereRaw("json_extract(event_data, '$.status') = 'success'")
@@ -447,7 +447,7 @@ class AbTestingService
         $rows = DB::table('user_analytics')
             ->select([
                 'session_id',
-                DB::raw("MAX(CAST(json_extract(event_data, '$.depth') AS REAL)) as max_depth"),
+                DB::raw("MAX(CAST(json_extract(event_data, '$.depth') AS DECIMAL(15,4))) as max_depth"),
             ])
             ->where('event_type', 'scroll')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -463,7 +463,7 @@ class AbTestingService
         $rows = DB::table('user_analytics')
             ->select([
                 'session_id',
-                DB::raw("SUM(CAST(json_extract(event_data, '$.duration') AS INTEGER)) as total_ms"),
+                DB::raw("SUM(CAST(json_extract(event_data, '$.duration') AS SIGNED)) as total_ms"),
             ])
             ->where('event_type', 'engagement')
             ->whereBetween('created_at', [$startDate, $endDate])
