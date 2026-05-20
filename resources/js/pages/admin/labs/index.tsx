@@ -885,7 +885,7 @@ export default function LabsIndex({
                             <CardContent className="space-y-6">
                                 {/* Source Selector */}
                                 <div className="flex flex-wrap gap-4">
-                                    {safeFunnel.map((f) => (
+                                    {safeFunnel.map((f, index) => (
                                         <div
                                             key={f.landing_source}
                                             className="flex items-center space-x-2"
