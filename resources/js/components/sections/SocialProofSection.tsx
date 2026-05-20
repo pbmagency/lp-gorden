@@ -149,7 +149,7 @@ export default function SocialProofSection() {
                     {waScreenshots.slice(0, 3).map((img, i) => (
                         <div key={img.src} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => openLightbox(i)}>
                             <div className="relative group overflow-hidden w-full" style={{ borderRadius: '14px', boxShadow: '0 6px 24px rgba(0,0,0,0.18)', aspectRatio: '9/16' }}>
-                                <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="eager" />
+                                <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}>
                                     <span className="text-white text-xs font-bold bg-black/50 px-3 py-1 rounded-full">Perbesar</span>
                                 </div>
