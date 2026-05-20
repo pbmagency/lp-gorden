@@ -55,7 +55,11 @@ class MetaConversionService
         $userData = $this->buildUserData($request);
 
         $level       = $eventData['level'] ?? 'Starter';
-        $price       = $level === 'Intermediate' ? 350000 : 250000;
+        $price       = match ($level) {
+            'Intermediate' => 350000,
+            'Bundling'     => 375000,
+            default        => 250000,
+        };
         $productId   = 'toefl-' . strtolower($level);
         $contentName = "TOEFL Full Bright Level {$level}";
 

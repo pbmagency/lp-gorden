@@ -65,8 +65,8 @@ export interface DeviceData {
 export interface CtaLocation {
     location: string;
     click_count: number;
-    conversions: number;
-    conversion_rate: number;
+    leads: number;
+    lead_rate: number;
 }
 
 export interface CtaData {

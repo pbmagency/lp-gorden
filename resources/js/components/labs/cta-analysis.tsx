@@ -19,19 +19,19 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
         );
     }
 
-    // Sort data: LP level by total conversions, CTA level by conversions
+    // Sort data: LP level by total leads, CTA level by leads
     const sortedData = useMemo(() => {
         return [...safeData]
             .map((lp) => {
                 const locations = toSafeArray<CtaLocation>(lp.cta_locations);
                 return {
                     ...lp,
-                    cta_locations: [...locations].sort((a, b) => (b.conversions ?? 0) - (a.conversions ?? 0)),
-                    total_conversions: locations.reduce((sum, cta) => sum + (cta.conversions ?? 0), 0),
+                    cta_locations: [...locations].sort((a, b) => (b.leads ?? 0) - (a.leads ?? 0)),
+                    total_leads: locations.reduce((sum, cta) => sum + (cta.leads ?? 0), 0),
                     total_clicks: locations.reduce((sum, cta) => sum + (cta.click_count ?? 0), 0),
                 };
             })
-            .sort((a, b) => b.total_conversions - a.total_conversions);
+            .sort((a, b) => b.total_leads - a.total_leads);
     }, [safeData]);
 
     const formatLocation = (location: string) => {
@@ -47,14 +47,14 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
                 <MousePointerClick className="text-primary h-5 w-5" />
                 <div>
                     <h2 className="text-foreground text-xl font-semibold">CTA Performance</h2>
-                    <p className="text-muted-foreground text-sm">Button placement attribution sorted by conversions</p>
+                    <p className="text-muted-foreground text-sm">Button placement attribution sorted by leads</p>
                 </div>
             </div>
 
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base">Micro-Conversion Attribution</CardTitle>
-                    <CardDescription>Which button placements drive the most sales?</CardDescription>
+                    <CardDescription>Which button placements generate the most leads?</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {/* Desktop Table */}
@@ -65,14 +65,14 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
                                     <th className="text-muted-foreground p-4 text-left font-medium">Landing Page</th>
                                     <th className="text-muted-foreground p-4 text-left font-medium">Button Location</th>
                                     <th className="text-muted-foreground p-4 text-right font-medium">Clicks</th>
-                                    <th className="text-muted-foreground p-4 text-right font-medium">Conversions</th>
-                                    <th className="text-muted-foreground p-4 text-right font-medium">Conv. Rate</th>
+                                    <th className="text-muted-foreground p-4 text-right font-medium">Leads</th>
+                                    <th className="text-muted-foreground p-4 text-right font-medium">Lead Rate</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {sortedData.map((lp) =>
                                     lp.cta_locations.map((cta, ctaIndex) => {
-                                        const isTopCta = ctaIndex === 0 && (cta.conversions ?? 0) > 0;
+                                        const isTopCta = ctaIndex === 0 && (cta.leads ?? 0) > 0;
                                         const showLpName = ctaIndex === 0;
 
                                         return (
@@ -111,12 +111,12 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
                                                 </td>
                                                 <td className="p-4 text-right">
                                                     <span className={isTopCta ? 'text-chart-4 font-bold' : 'text-foreground'}>
-                                                        {(cta.conversions ?? 0).toLocaleString()}
+                                                        {(cta.leads ?? 0).toLocaleString()}
                                                     </span>
                                                 </td>
                                                 <td className="p-4 text-right">
-                                                    <Badge variant={(cta.conversion_rate ?? 0) > 5 ? 'default' : 'outline'}>
-                                                        {formatPercent(cta.conversion_rate, 2)}%
+                                                    <Badge variant={(cta.lead_rate ?? 0) > 5 ? 'default' : 'outline'}>
+                                                        {formatPercent(cta.lead_rate, 2)}%
                                                     </Badge>
                                                 </td>
                                             </tr>
@@ -134,12 +134,12 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
                                 <div className="flex items-center justify-between">
                                     <span className="text-foreground font-mono font-medium">{lp.landing_source}</span>
                                     <Badge variant="secondary" className="text-xs">
-                                        {lp.total_conversions} conversions
+                                        {lp.total_leads} leads
                                     </Badge>
                                 </div>
                                 <div className="bg-muted/50 space-y-2 rounded-lg p-3">
                                     {lp.cta_locations.map((cta, index) => {
-                                        const isTop = index === 0 && (cta.conversions ?? 0) > 0;
+                                        const isTop = index === 0 && (cta.leads ?? 0) > 0;
                                         return (
                                             <div
                                                 key={cta.location}
@@ -154,7 +154,7 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
                                                 <div className="flex items-center gap-3 text-xs">
                                                     <span className="text-muted-foreground">{cta.click_count ?? 0} clicks</span>
                                                     <span className={isTop ? 'text-chart-4 font-bold' : 'text-foreground'}>
-                                                        {cta.conversions ?? 0} sales
+                                                        {cta.leads ?? 0} leads
                                                     </span>
                                                 </div>
                                             </div>

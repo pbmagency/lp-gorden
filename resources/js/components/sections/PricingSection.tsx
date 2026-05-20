@@ -127,7 +127,8 @@ export default function PricingSection() {
                 { eventID: eventId },
             );
         } catch { /* fbq not loaded */ }
-        trackCTA(`pay_${level.toLowerCase()}`, `Bayar ${level}`, pgUrl, 'AddToCart', eventId);
+        trackCTA(`pay_${level.toLowerCase()}`, `Bayar ${level}`, pgUrl, 'AddToCart', eventId, { level });
+        trackConversion('checkout_redirect', { package: level, price });
     };
 
     const handleWaClick = (level: 'Starter' | 'Intermediate' | 'Bundling', waUrl: string) => {
@@ -140,7 +141,7 @@ export default function PricingSection() {
                 { eventID: eventId },
             );
         } catch { /* fbq not loaded */ }
-        trackCTA(`pricing_${level.toLowerCase()}`, `Daftar ${level}`, waUrl, 'AddToCart', eventId);
+        trackCTA(`pricing_${level.toLowerCase()}`, `Daftar ${level}`, waUrl, 'AddToCart', eventId, { level });
         trackConversion('wa_inquiry', { package: level, price });
         window.open(waUrl, '_blank', 'noopener,noreferrer');
     };

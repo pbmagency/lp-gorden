@@ -133,6 +133,7 @@ export function useAnalytics() {
         destination?: string,
         metaEvent?: string,
         eventId?: string,
+        extraData?: Record<string, unknown>,
     ) => {
         track({
             event_type: 'cta_click',
@@ -145,6 +146,7 @@ export function useAnalytics() {
                 meta_event: metaEvent,
                 event_id: eventId,
                 ...(metaEvent ? { _fbp: getCookieValue('_fbp'), _fbc: getCookieValue('_fbc') } : {}),
+                ...extraData,
             },
         });
     }, [track]);
