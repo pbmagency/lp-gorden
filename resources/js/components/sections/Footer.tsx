@@ -4,7 +4,7 @@ function InstagramIcon() { return <svg width="17" height="17" viewBox="0 0 24 24
 function WhatsAppIcon() { return <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.522 5.833L0 24l6.302-1.499A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.887 0-3.656-.494-5.192-1.358l-.373-.213-3.741.89.934-3.629-.243-.384A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>; }
 
 const socialLinks = [
-    { Icon: InstagramIcon, label: 'Instagram', href: 'https://instagram.com/fullbrightindonesia' },
+    { Icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/fullbright_indonesia/' },
 ];
 
 const navLinks = [
@@ -68,7 +68,7 @@ export default function Footer() {
                                 <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: 'rgba(255,255,255,0.08)', color: '#9ca3af' }}><WhatsAppIcon /></div>
                                 <div>
                                     <p className="text-xs font-semibold text-white mb-0.5">WhatsApp</p>
-                                    <a href="https://wa.me/6281234567890" className="text-xs hover:text-white transition-colors" style={{ color: '#9ca3af' }}>+62 812-3456-7890</a>
+                                    <a href="https://wa.me/6281959486507" className="text-xs hover:text-white transition-colors" style={{ color: '#9ca3af' }}>+62 819-5948-6507</a>
                                 </div>
                             </li>
                             <li className="flex items-start gap-3">
@@ -82,16 +82,15 @@ export default function Footer() {
                                 <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: 'rgba(255,255,255,0.08)', color: '#9ca3af' }}><MapPin size={15} color="#9ca3af" /></div>
                                 <div>
                                     <p className="text-xs font-semibold text-white mb-0.5">Alamat</p>
-                                    <p className="text-xs" style={{ color: '#9ca3af' }}>Makassar, Indonesia</p>
+                                    <p className="text-xs" style={{ color: '#9ca3af' }}>Gedung Yotta Signature Perintis, Jl. Perintis Kemerdekaan No.97 Lantai 3, Tamalanrea Jaya, Kec. Tamalanrea, Kota Makassar, Sulawesi Selatan 90245</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ borderColor: 'rgba(255,255,255,0.08)', color: '#6b7280' }}>
+                <div className="border-t pt-6 flex justify-center text-xs" style={{ borderColor: 'rgba(255,255,255,0.08)', color: '#6b7280' }}>
                     <p>© {new Date().getFullYear()} Full Bright Indonesia. Lembaga Resmi ITP & IIEF Jakarta.</p>
-                    <p>Metode terdaftar Full Bright Indonesia © 2026</p>
                 </div>
             </div>
         </footer>

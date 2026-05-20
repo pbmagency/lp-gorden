@@ -48,7 +48,7 @@ export default function FAQSection() {
     return (
         <>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-            <SectionWrapper id="faq" bg="cultured" className="py-20 md:py-28">
+            <SectionWrapper id="faq" bg="cultured" className="pt-20 md:pt-28 pb-12 md:pb-16">
                 <div className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>❓ FAQ</div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
@@ -68,10 +68,10 @@ export default function FAQSection() {
                 </div>
 
                 <div className="max-w-lg mx-auto text-center">
-                    <p className="text-sm font-semibold mb-6" style={{ color: '#3d3d3d' }}>Masih ada pertanyaan lain? Tim Full Bright siap menjawab dalam hitungan menit.</p>
+                    <p className="text-sm font-semibold mb-6" style={{ color: '#3d3d3d' }}>Masih ada pertanyaan lain? Hubungi kami sekarang.</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center mb-1">
-                        <LpButton href="https://wa.me/6281234567890?text=Halo%20Kak%2C%20saya%20mau%20tanya%20tentang%20program%20TOEFL%20Full%20Bright%20Indonesia" size="md" onClick={() => trackCTA('faq_wa', 'Chat via WhatsApp', 'whatsapp')}>💬 Chat via WhatsApp</LpButton>
-                        <LpButton href="#pricing" variant="ghost" size="md" onClick={() => trackCTA('faq_daftar', 'Daftar Sekarang', '#pricing')}>Daftar Sekarang →</LpButton>
+                        <LpButton href="#pricing" size="md" onClick={() => trackCTA('faq_primary', 'Mulai Belajar Sekarang', '#pricing')}>Mulai Belajar Sekarang →</LpButton>
+                        <LpButton href="#testimonials" variant="ghost" size="md" onClick={() => trackCTA('faq_testimonials', 'Lihat Bukti Alumni', '#testimonials')}>Lihat Bukti Alumni →</LpButton>
                     </div>
                     <SocialProofMicro />
                 </div>

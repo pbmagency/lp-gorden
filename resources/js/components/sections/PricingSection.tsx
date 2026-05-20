@@ -148,17 +148,17 @@ export default function PricingSection() {
 
     return (
         <>
-            <SectionWrapper id="pricing" bg="white" className="py-20 md:py-28">
+            <SectionWrapper id="pricing" bg="white" className="pt-20 md:pt-28 pb-12 md:pb-16">
 
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
                         💰 Pilih Paketmu · Flash Sale
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                        Investasi Terjangkau, <span style={{ color: '#D70808' }}>Fasilitas Paling Lengkap</span>
+                        Investasi Terbaik untuk <span style={{ color: '#D70808' }}>Masa Depanmu</span>
                     </h2>
                     <p className="text-base max-w-lg mx-auto leading-relaxed" style={{ color: '#3d3d3d' }}>
-                        Keduanya dilengkapi garansi penuh.<br />Risiko nol, hasil maksimal.
+                        Mulai belajar sekarang.<br />Pilih paket sesuai kebutuhan.
                     </p>
                 </div>
 

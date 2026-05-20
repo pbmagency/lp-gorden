@@ -6,7 +6,7 @@ import SocialProofMicro from '@/components/ui/social-proof-micro';
 const pillars = [
     { Icon: Target,    accentColor: '#D70808', borderColor: '#D70808', title: 'TOEFL Pattern Recognition Method™',  desc: 'Kamu tidak perlu hafal semua soal. Cukup kenali polanya, karena soal TOEFL selalu berulang. Ini yang bikin alumni kami bisa naik skor dalam waktu singkat.' },
     { Icon: Zap,       accentColor: '#151515', borderColor: '#151515', title: 'Shortcut Structure Framework™',       desc: 'Grammar terasa susah karena kamu belajar semuanya. Kami hanya ajarkan struktur yang benar-benar keluar di tes. Lebih cepat, lebih efektif, tanpa buku tebal.' },
-    { Icon: TrendingUp,accentColor: '#D70808', borderColor: '#D70808', title: 'Score-Focused Learning System™',      desc: 'Setiap menit belajar diarahkan untuk mendongkrak skor, bukan sekadar "mengerti materi". Tidak ada waktu yang terbuang untuk hal yang tidak keluar di tes.' },
+    { Icon: TrendingUp,accentColor: '#D70808', borderColor: '#D70808', title: 'Score-Focused Learning System™',      desc: 'Kami tidak ajarkan semua. Kami hanya ajarkan yang tepat. Materi high-impact, pola yang paling sering muncul, dan jebakan yang paling banyak menjatuhkan skor.' },
 ];
 
 const whyPoints = [
@@ -34,8 +34,7 @@ export default function ValueSection() {
                         Belajar Pola, <span style={{ color: '#D70808' }}>Bukan Menghafal</span> Ribuan Soal.
                     </h2>
                     <p className="text-base max-w-xl mx-auto leading-relaxed" style={{ color: '#3d3d3d' }}>
-                        Full Bright bukan kelas bahasa Inggris.<br />
-                        Kami adalah <strong style={{ color: '#151515' }}>sistem akselerasi skor</strong> yang dirancang khusus untuk pejuang beasiswa dan rekrutmen CPNS/BUMN.
+                        Ini cara Full Bright membantu <strong style={{ color: '#151515' }}>45.000+ orang</strong> akhirnya lolos beasiswa dan karir impian mereka, hanya dengan mengubah cara belajarnya.
                     </p>
                 </div>
 
@@ -78,7 +77,11 @@ export default function ValueSection() {
                     ))}
                 </div>
                 <div className="text-center">
-                    <LpButton href="#pricing" size="md">Lihat Paket & Harga →</LpButton>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <LpButton href="#pricing" size="md">Mulai Belajar Sekarang →</LpButton>
+                        <LpButton href="#testimonials" variant="ghost" size="md">Lihat Bukti Alumni →</LpButton>
+                    </div>
+                    <SocialProofMicro />
                 </div>
             </SectionWrapper>
 
@@ -101,7 +104,10 @@ export default function ValueSection() {
                     ))}
                 </div>
                 <div className="text-center">
-                    <LpButton href="#testimonials" size="md">Lihat Bukti Nyata Alumni →</LpButton>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <LpButton href="#pricing" size="md">Mulai Belajar Sekarang →</LpButton>
+                        <LpButton href="#testimonials" variant="ghost" size="md">Lihat Bukti Alumni →</LpButton>
+                    </div>
                     <SocialProofMicro />
                 </div>
             </SectionWrapper>

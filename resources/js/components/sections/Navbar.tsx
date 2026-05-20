@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import LpButton from '@/components/ui/lp-button';
 
-const links = [
-    { label: 'Keunggulan', href: '#value' },
-    { label: 'Testimoni',  href: '#testimonials' },
-    { label: 'Harga',      href: '#pricing' },
-    { label: 'FAQ',        href: '#faq' },
-];
 
 function FullBrightLogo() {
     return <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" className="w-40 h-auto object-contain" />;
@@ -28,13 +22,7 @@ export default function Navbar() {
                     <FullBrightLogo />
                 </a>
 
-                <nav className="hidden md:flex items-center gap-7">
-                    {links.map((l) => (
-                        <a key={l.href} href={l.href} className="text-sm font-semibold transition-colors hover:text-[#D70808]" style={{ color: '#151515' }}>
-                            {l.label}
-                        </a>
-                    ))}
-                </nav>
+                <nav />
 
                 <div className="hidden md:block">
                     <LpButton href="#pricing" size="sm">Daftar Sekarang</LpButton>

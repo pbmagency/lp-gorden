@@ -31,20 +31,18 @@ export default function HeroSection() {
                         </div>
 
                         {/* b. Headline */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-[2.85rem] font-black leading-tight" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                            Deadline Beasiswa LPDP, Fulbright & CPNS Sudah{' '}
-                            <span style={{ color: '#D70808' }}>Semakin Dekat</span>.{' '}
-                            <br className="hidden md:block" />
-                            Jangan Gagal Hanya Karena{' '}
-                            <span style={{ color: '#D70808' }}>Skor TOEFL Belum Cukup.</span>
+                        <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                            Raih Skor <span style={{ color: '#D70808' }}>TOEFL 500+</span> untuk Kampus dan Karir Impian dalam{' '}
+                            <span style={{ color: '#D70808' }}>15 Hari</span>
                         </h1>
 
                         {/* c. Sub-copy */}
                         <p className="text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
-                            Bukan kelas bahasa Inggris biasa.{' '}
-                            <strong style={{ color: '#151515' }}>Metode 30 Jam Full Bright mengajarkan pola,</strong>{' '}
-                            bukan menghafal ribuan soal{' '}
-                            <strong>cukup 1 jam 1 hari</strong> dari rumah, skor naik signifikan dalam <strong>10–15 hari</strong>.
+                            Deadline LPDP, CPNS, rekrutmen/pendaftaran makin dekat tapi skor TOEFL masih belum cukup?{' '}
+                            <strong style={{ color: '#151515' }}>Metode TOEFL Pattern Recognition</strong>{' '}
+                            bantu kamu belajar lebih fokus ke pola soal yang benar-benar keluar di tes,{' '}
+                            cukup belajar <strong>1 jam sehari</strong> dari rumah dan rasakan kenaikan skor dalam{' '}
+                            <strong>10 hari</strong>.
                         </p>
 
                         {/* d. Trust badges */}

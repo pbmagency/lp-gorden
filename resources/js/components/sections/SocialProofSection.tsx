@@ -22,12 +22,13 @@ const scoreResults = [
 
 const waScreenshots = [
     { src: '/image/toefl1.webp', score: '547' },
-    { src: '/image/toefl2.webp', score: '543' },
+    { src: '/image/toefl9.webp', score: '560' },
     { src: '/image/toefl3.webp', score: '563' },
     { src: '/image/toefl4.webp', score: '560' },
     { src: '/image/toefl5.webp', score: '507' },
     { src: '/image/toefl6.webp', score: '513' },
     { src: '/image/toefl7.webp', score: '537' },
+    { src: '/image/toefl2.webp', score: '543' },
 ];
 
 const carouselItems = [
@@ -102,7 +103,7 @@ function PhotoLightbox({ photos, index, onClose, onPrev, onNext }: {
                 />
                 <div className="text-center">
                     <p className="text-white font-black text-base" style={{ fontFamily: 'var(--font-heading)' }}>{photo.name}</p>
-                    <p className="text-white/60 text-sm">Skor {photo.score} · {photo.label}</p>
+                    <p className="text-white/60 text-sm">{photo.score ? `Skor ${photo.score} · ` : ''}{photo.label}</p>
                 </div>
                 <p className="text-white/40 text-xs">{index + 1} / {photos.length}</p>
             </div>
@@ -161,10 +162,10 @@ export default function SocialProofSection() {
             <SectionWrapper bg="white" className="py-20 md:py-24">
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
-                        <MessageCircle size={13} /> Screenshot WA Asli dari Alumni
+                        <MessageCircle size={13} /> Testimoni Alumni Kami
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                        Foto Skor yang Dikirim <span style={{ color: '#D70808' }}>Langsung ke Instruktur</span>
+                        Hasil Skor TOEFL dari <span style={{ color: '#D70808' }}>Alumni Kami</span>
                     </h2>
                     <p className="text-sm" style={{ color: '#9ca3af' }}>Klik foto untuk memperbesar · Geser untuk melihat semua</p>
                 </div>
@@ -179,7 +180,7 @@ export default function SocialProofSection() {
                                     <span className="text-white text-xs font-bold bg-black/50 px-3 py-1 rounded-full">Perbesar</span>
                                 </div>
                             </div>
-                            <p className="text-xs font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>
+                            {img.score && <p className="text-xs font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>}
                         </div>
                     ))}
                 </div>
@@ -192,7 +193,7 @@ export default function SocialProofSection() {
                                 <div className="relative overflow-hidden" style={{ width: '130px', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', aspectRatio: '9/16' }}>
                                     <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover" loading="lazy" />
                                 </div>
-                                <p className="text-[10px] font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>
+                                {img.score && <p className="text-[10px] font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>}
                             </div>
                         ))}
                     </div>
@@ -200,7 +201,7 @@ export default function SocialProofSection() {
 
                 {/* International testimonials */}
                 <div className="w-full max-w-4xl mx-auto mb-14">
-                    <p className="text-xs font-bold uppercase tracking-widest text-center mb-6" style={{ color: '#9ca3af' }}>Testimoni Resmi dari Alumni Internasional</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-center mb-6" style={{ color: '#9ca3af' }}>Testimoni Alumni yang Sukses Masuk Universitas Luar Negeri</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {internationalTestimonials.map((t, i) => (
                             <div key={t.name} className="rounded-2xl p-5 border border-gray-100 flex flex-col gap-3 min-w-0" style={{ backgroundColor: '#F9F9F9', boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
@@ -240,7 +241,7 @@ export default function SocialProofSection() {
                 </div>
 
                 <div className="text-center mt-10">
-                    <LpButton href="#pricing" size="md">Jadilah Alumni Sukses Berikutnya →</LpButton>
+                    <LpButton href="#pricing" size="md">Mulai Belajar Sekarang →</LpButton>
                     <SocialProofMicro />
                 </div>
             </SectionWrapper>
