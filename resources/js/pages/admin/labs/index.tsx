@@ -23,7 +23,6 @@ import {
     formatDuration,
     formatNumber,
     formatPercent,
-    safeNumber,
     toSafeArray,
 } from '@/lib/safe-data';
 import type {
@@ -886,7 +885,7 @@ export default function LabsIndex({
                             <CardContent className="space-y-6">
                                 {/* Source Selector */}
                                 <div className="flex flex-wrap gap-4">
-                                    {safeFunnel.map((f, index) => (
+                                    {safeFunnel.map((f) => (
                                         <div
                                             key={f.landing_source}
                                             className="flex items-center space-x-2"

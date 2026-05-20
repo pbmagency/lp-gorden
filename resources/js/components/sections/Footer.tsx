@@ -14,22 +14,6 @@ const navLinks = [
     { label: 'FAQ',        href: '#faq' },
 ];
 
-function FooterLogoMark() {
-    return (
-        <svg width="34" height="34" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="38" height="38" rx="9" fill="#D70808" />
-            <rect x="7" y="10" width="11" height="2.5" rx="1.25" fill="white" />
-            <rect x="7" y="10" width="2.5" height="18" rx="1.25" fill="white" />
-            <rect x="7" y="17.75" width="8.5" height="2.5" rx="1.25" fill="white" />
-            <rect x="21" y="10" width="2.5" height="18" rx="1.25" fill="white" />
-            <rect x="21" y="10" width="8" height="2.5" rx="1.25" fill="white" />
-            <rect x="21" y="18.25" width="8" height="2.5" rx="1.25" fill="white" />
-            <rect x="21" y="25.5" width="8" height="2.5" rx="1.25" fill="white" />
-            <path d="M29 12.5 Q33.5 12.5 33.5 16.75 Q33.5 20.75 29 20.75" stroke="white" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-            <path d="M29 20.75 Q34.5 20.75 34.5 25 Q34.5 28 29 28" stroke="white" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-        </svg>
-    );
-}
 
 export default function Footer() {
     return (

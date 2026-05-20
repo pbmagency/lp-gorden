@@ -53,5 +53,4 @@ export function useDwellTime() {
         };
     }, [sendPing]);
 
-    return { isEngaged: hasInitialTracked.current, timeActive: timeActive.current };
 }

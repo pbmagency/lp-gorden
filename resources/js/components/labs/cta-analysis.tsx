@@ -8,17 +8,6 @@ import { useMemo } from 'react';
 export function CtaAnalysis({ data }: CtaAnalysisProps) {
     const safeData = toSafeArray(data);
 
-    if (safeData.length === 0) {
-        return (
-            <Card className="py-12 text-center">
-                <CardContent>
-                    <MousePointerClick className="text-muted-foreground mx-auto mb-4 h-10 w-10" />
-                    <p className="text-muted-foreground">No CTA performance data available</p>
-                </CardContent>
-            </Card>
-        );
-    }
-
     // Sort data: LP level by total leads, CTA level by leads
     const sortedData = useMemo(() => {
         return [...safeData]
@@ -33,6 +22,17 @@ export function CtaAnalysis({ data }: CtaAnalysisProps) {
             })
             .sort((a, b) => b.total_leads - a.total_leads);
     }, [safeData]);
+
+    if (safeData.length === 0) {
+        return (
+            <Card className="py-12 text-center">
+                <CardContent>
+                    <MousePointerClick className="text-muted-foreground mx-auto mb-4 h-10 w-10" />
+                    <p className="text-muted-foreground">No CTA performance data available</p>
+                </CardContent>
+            </Card>
+        );
+    }
 
     const formatLocation = (location: string) => {
         return location

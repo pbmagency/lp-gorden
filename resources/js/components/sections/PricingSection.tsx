@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { CheckCircle2, Lock, Shield, Star } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
-import LpButton from '@/components/ui/lp-button';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics, generateEventId } from '@/hooks/use-analytics';
 

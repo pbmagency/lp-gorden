@@ -11,14 +11,6 @@ const statsBar = [
     { value: '95%',     label: 'Skor Naik Signifikan', micro: 'Berdasarkan data alumni batch 2023–2024' },
 ];
 
-const scoreResults = [
-    { label: 'TOEFL ITP Online', name: 'Widya Ningrum',         score: 563, source: 'Score Report resmi ETS,2/4/2024' },
-    { label: 'TOEFL ITP Online', name: 'Yohanes K. Susanta',    score: 560, source: 'Score Report resmi ETS,3/8/2024' },
-    { label: 'Capai Target',     name: 'Kak Rani',               score: 547, source: 'Screenshot WA ke instruktur' },
-    { label: 'TOEFL ITP Online', name: 'Yuhana Dharma',          score: 537, source: 'Screenshot WA ke instruktur' },
-    { label: 'LPDP',             name: 'Nadia Ayu Tiarasari',    score: 513, source: 'TOEFL ITP Online, 6/28/2024' },
-    { label: 'TOEFL ITP Online', name: 'Siti Martha Uly Sinaga', score: 507, source: 'Score Report resmi ETS,7/11/2024' },
-];
 
 const waScreenshots = [
     { src: '/image/toefl1.webp', score: '547' },
@@ -51,7 +43,7 @@ function Stars() {
 
 function avatarBg(i: number) { return i % 2 === 0 ? '#151515' : '#D70808'; }
 
-function ScoreCard({ label, name, score, source }: typeof scoreResults[0]) {
+function _ScoreCard({ label, name, score, source }: { label: string; name: string; score: number; source: string }) {
     return (
         <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 border border-gray-100 hover:-translate-y-2 hover:shadow-[0_20px_56px_rgba(0,0,0,0.1)] transition-all duration-300" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
             <div className="flex items-center justify-between">

@@ -27,5 +27,4 @@ export function useScrollTracking() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [trackScroll]);
 
-    return scrollDepths.current;
 }
