@@ -8,7 +8,7 @@ const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },
     { value: '4.9/5',   label: 'Rating Rata-rata' },
     { value: '13+',     label: 'Tahun Pengalaman' },
-    { value: '95%',     label: 'Skor Naik Signifikan', micro: 'Berdasarkan data alumni batch 2023–2024' },
+    { value: '95%',     label: 'Skor Naik Signifikan', micro: 'Berdasarkan data alumni batch 2024–2025' },
 ];
 
 
