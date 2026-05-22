@@ -1,59 +1,81 @@
-import { CheckCircle2, Lock, Shield, Star } from 'lucide-react';
+import { CheckCircle2, Globe, Lock, Shield, Star, XCircle } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics, generateEventId } from '@/hooks/use-analytics';
+import { waUrl } from '@/lib/wa-number';
 
-const WA_STARTER   = 'https://wa.me/6281234567890?text=Halo%20Kak%2C%20saya%20ingin%20tanya%20Level%20Starter';
-const WA_INTER     = 'https://wa.me/6281234567890?text=Halo%20Kak%2C%20saya%20ingin%20tanya%20Level%20Intermediate';
-const WA_BUNDLING  = 'https://wa.me/6281234567890?text=Halo%20Kak%2C%20saya%20ingin%20tanya%20Paket%20Bundling';
+const WA_STARTER   = waUrl('Halo Kak, saya ingin tanya Level Starter');
+const WA_INTER     = waUrl('Halo Kak, saya ingin tanya Level Intermediate');
+const WA_BUNDLING  = waUrl('Halo Kak, saya ingin tanya Paket Bundling');
 
 const PG_STARTER   = 'https://member.fullbrightindonesia.com/paket-premium-toefl-level-starter-live-zoom-intensif-flash-sale';
 const PG_INTER     = 'https://member.fullbrightindonesia.com/paket-premium-toefl-level-intermediate-live-zoom-intensif-flash-sale';
 const PG_BUNDLING  = 'https://member.fullbrightindonesia.com/paket-premium-toefl-level-starter-live-zoom-intensif-flash-sale';
 
-const starterFeatures = [
-    '10 Hari Live ZOOM + Rekaman (2 Minggu)',
-    '30+ Video E-Course Materi',
-    'E-Book Structure & Written Expression (150+ Soal)',
-    'E-Book Listening + Audio & Reading (190+ Soal)',
-    'Grup WA Diskusi & Tanya Jawab (Senin–Jumat)',
-    'Placement Test (Pre-Test)',
-    'Progress & Post Test: 2 Kali (mengulang 3x gratis)',
-    '200+ Latihan Soal via Google Form & ZOOM',
-    'Sertifikat TOEFL Prediction (GRATIS)',
-    'Webinar Beasiswa S2/S3 via ZOOM Setiap Bulan',
+type FeatureItem =
+    | { type: 'check'; text: string }
+    | { type: 'globe'; text: string }
+    | { type: 'label'; text: string }
+    | { type: 'cross'; text: string };
+
+const starterFeatures: FeatureItem[] = [
+    { type: 'check', text: 'LIVE ZOOM 10 Hari' },
+    { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
+    { type: 'check', text: '30+ Video Materi Pembelajaran' },
+    { type: 'check', text: 'E-Book Structure (100+ Soal)' },
+    { type: 'check', text: 'E-Book Listening dan Reading (190+ Soal)' },
+    { type: 'check', text: 'Grup WA Diskusi' },
+    { type: 'check', text: 'Placement Test / Pre-Test' },
+    { type: 'check', text: 'Post Test (Full Test) 1x' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 170 Soal)' },
+    { type: 'check', text: '10+ Link Soal Tambahan saat LIVE ZOOM' },
+    { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
+    { type: 'globe', text: 'Konsultasi Kampus Luar Negeri, urus LoA, Visa, dll kerjasama dengan IDP.' },
+    { type: 'label', text: 'Bonus Spesial' },
+    { type: 'check', text: 'Sertifikat TOEFL Prediction' },
+    { type: 'cross', text: 'Tidak termasuk garansi mengulang 1 bulan' },
 ];
 
-const intermediateFeatures = [
-    '15 Hari Live ZOOM + Rekaman',
-    '60+ Video Materi Pembelajaran',
-    'E-Book Structure (500+ Latihan Soal)',
-    'E-Book Listening & Reading (100+ Latihan Soal)',
-    'Placement Test / Pre-Test',
-    'Post Test (Full Test), bisa mengulang 3x gratis',
-    '20 Link Latihan Soal Google Form',
-    '20+ Link Soal Tambahan di LIVE ZOOM',
-    'Grup WA Diskusi',
-    'Webinar Beasiswa Luar Negeri',
-    'Bonus: Sertifikat TOEFL Prediction',
+const intermediateFeatures: FeatureItem[] = [
+    { type: 'check', text: 'LIVE ZOOM 15 Hari' },
+    { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
+    { type: 'check', text: '60+ Video Materi Pembelajaran' },
+    { type: 'check', text: 'E-Book Structure (300+ Soal)' },
+    { type: 'check', text: 'E-Book Listening dan Reading (300+ Soal)' },
+    { type: 'check', text: 'Grup WA Diskusi' },
+    { type: 'check', text: 'Placement Test / Pre-Test' },
+    { type: 'check', text: 'Progress Test & Post Test (Full Test) 2x' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 210 Soal)' },
+    { type: 'check', text: '15 Link Soal Tambahan saat LIVE ZOOM' },
+    { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
+    { type: 'globe', text: 'Konsultasi Kampus Luar Negeri, urus LoA, Visa, dll kerjasama dengan IDP.' },
+    { type: 'label', text: 'Bonus Spesial' },
+    { type: 'check', text: 'Sertifikat TOEFL Prediction' },
+    { type: 'cross', text: 'Tidak termasuk garansi mengulang 1 bulan' },
 ];
 
-const bundlingFeatures = [
-    'Semua fasilitas Level Starter (10 Hari)',
-    'Semua fasilitas Level Intermediate (15 Hari)',
-    '25 Hari Total Live ZOOM + Rekaman',
-    '90+ Video E-Course Materi Lengkap',
-    'E-Book Structure, Listening & Reading Komplit',
-    'Grup WA Diskusi & Tanya Jawab (Senin–Jumat)',
-    'Placement Test + Post Test, mengulang 3x gratis',
-    '200+ Latihan Soal via Google Form & ZOOM',
-    'Webinar Beasiswa Luar Negeri',
-    'Sertifikat TOEFL Prediction (GRATIS)',
+const bundlingFeatures: FeatureItem[] = [
+    { type: 'check', text: 'LIVE ZOOM 25 Hari' },
+    { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
+    { type: 'check', text: '90+ Video Materi Pembelajaran' },
+    { type: 'check', text: 'E-Book Structure (500+ Soal)' },
+    { type: 'check', text: 'E-Book Listening dan Reading (500+ Soal)' },
+    { type: 'check', text: 'Grup WA Diskusi' },
+    { type: 'check', text: 'Placement Test / Pre-Test' },
+    { type: 'check', text: 'Progress Test & Post Test (Full Test) 3x' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 380 Soal)' },
+    { type: 'check', text: '25 Link Soal Tambahan saat LIVE ZOOM' },
+    { type: 'check', text: 'Free mengulang 1 bulan jika belum capai skor 500+' },
+    { type: 'check', text: 'Garansi mengulang 1 bulan' },
+    { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
+    { type: 'globe', text: 'Konsultasi Kampus Luar Negeri, urus LoA, Visa, dll kerjasama dengan IDP.' },
+    { type: 'label', text: 'Bonus Spesial' },
+    { type: 'check', text: 'Sertifikat TOEFL Prediction' },
 ];
 
 const guarantees = [
-    { Icon: Shield, title: 'Garansi Mengulang 1 Bulan',        desc: 'Jika skor kamu belum mencapai target setelah mengikuti program secara penuh dan konsisten, kamu boleh mengulang kelas di batch berikutnya secara GRATIS.' },
-    { Icon: Shield, title: 'Post Test Bisa Diulang 3× Gratis', desc: 'Belum puas dengan hasil Post Test? Kamu bisa mengulang ujian akhir hingga 3 kali secara gratis untuk memaksimalkan skor.' },
+    { Icon: Shield, title: 'Garansi Mengulang 1 Bulan',        exclusive: true, desc: 'Jika skor kamu belum mencapai target setelah mengikuti program secara penuh dan konsisten, kamu boleh mengulang kelas di batch berikutnya secara GRATIS.' },
+    { Icon: Shield, title: 'Post Test Bisa Diulang 3× Gratis', exclusive: true, desc: 'Belum puas dengan hasil Post Test? Kamu bisa mengulang ujian akhir hingga 3 kali secara gratis untuk memaksimalkan skor.' },
 ];
 
 function StarRow() {
@@ -185,12 +207,26 @@ export default function PricingSection() {
                             <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#D70808' }}>Rp 250.000</p>
                         </div>
                         <ul className="flex flex-col gap-2 mb-5 flex-1">
-                            {starterFeatures.map((f) => (
-                                <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
-                                    <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />
-                                    {f}
-                                </li>
-                            ))}
+                            {starterFeatures.map((f, i) => {
+                                if (f.type === 'label') return (
+                                    <li key={i} className="text-xs font-black uppercase tracking-widest mt-2" style={{ color: '#D70808' }}>{f.text}</li>
+                                );
+                                if (f.type === 'globe') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <Globe size={14} className="shrink-0 mt-0.5" color="#3b82f6" />{f.text}
+                                    </li>
+                                );
+                                if (f.type === 'cross') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm pt-3 mt-2 border-t border-gray-100" style={{ color: '#9ca3af' }}>
+                                        <XCircle size={14} className="shrink-0 mt-0.5" color="#d1d5db" />{f.text}
+                                    </li>
+                                );
+                                return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />{f.text}
+                                    </li>
+                                );
+                            })}
                         </ul>
                         <PayButton href={PG_STARTER} label="Bayar Sekarang →" onClick={() => handlePayClick('Starter', PG_STARTER)} />
                         <OrDivider />
@@ -199,7 +235,7 @@ export default function PricingSection() {
                     </div>
 
                     {/* ── Bundling ── HIGHLIGHTED */}
-                    <div className="rounded-3xl p-7 flex flex-col relative overflow-hidden" style={{ border: '2px solid #D70808', boxShadow: '0 16px 56px rgba(215,8,8,0.22), 0 0 0 1px rgba(215,8,8,0.08)', background: 'linear-gradient(165deg, #ffffff 0%, #fff9f9 100%)' }}>
+                    <div className="rounded-3xl p-7 flex flex-col relative overflow-hidden" style={{ border: '2px solid #16a34a', boxShadow: '0 16px 56px rgba(22,163,74,0.2), 0 0 0 1px rgba(22,163,74,0.08)', background: 'linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%)' }}>
                         <div className="absolute top-0 right-0 text-xs font-black px-4 py-2 rounded-bl-2xl text-white" style={{ backgroundColor: '#D70808', fontFamily: 'var(--font-heading)' }}>
                             ⭐ PALING HEMAT
                         </div>
@@ -226,12 +262,26 @@ export default function PricingSection() {
                             <p className="text-xs font-semibold" style={{ color: '#D70808' }}>Hemat Rp 1.500.000 dari harga normal!</p>
                         </div>
                         <ul className="flex flex-col gap-2 mb-5 flex-1">
-                            {bundlingFeatures.map((f) => (
-                                <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
-                                    <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#D70808" />
-                                    {f}
-                                </li>
-                            ))}
+                            {bundlingFeatures.map((f, i) => {
+                                if (f.type === 'label') return (
+                                    <li key={i} className="text-xs font-black uppercase tracking-widest mt-2" style={{ color: '#D70808' }}>{f.text}</li>
+                                );
+                                if (f.type === 'globe') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <Globe size={14} className="shrink-0 mt-0.5" color="#3b82f6" />{f.text}
+                                    </li>
+                                );
+                                if (f.type === 'cross') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm pt-3 mt-2 border-t border-gray-100" style={{ color: '#9ca3af' }}>
+                                        <XCircle size={14} className="shrink-0 mt-0.5" color="#d1d5db" />{f.text}
+                                    </li>
+                                );
+                                return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />{f.text}
+                                    </li>
+                                );
+                            })}
                         </ul>
                         <PayButton href={PG_BUNDLING} label="Bayar Sekarang →" onClick={() => handlePayClick('Bundling', PG_BUNDLING)} />
                         <p className="text-xs text-center -mt-1" style={{ color: '#D70808', fontWeight: 600 }}>* Centang opsi Bundle saat checkout</p>
@@ -263,12 +313,26 @@ export default function PricingSection() {
                             <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#D70808' }}>Rp 350.000</p>
                         </div>
                         <ul className="flex flex-col gap-2 mb-5 flex-1">
-                            {intermediateFeatures.map((f) => (
-                                <li key={f} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
-                                    <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />
-                                    {f}
-                                </li>
-                            ))}
+                            {intermediateFeatures.map((f, i) => {
+                                if (f.type === 'label') return (
+                                    <li key={i} className="text-xs font-black uppercase tracking-widest mt-2" style={{ color: '#D70808' }}>{f.text}</li>
+                                );
+                                if (f.type === 'globe') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <Globe size={14} className="shrink-0 mt-0.5" color="#3b82f6" />{f.text}
+                                    </li>
+                                );
+                                if (f.type === 'cross') return (
+                                    <li key={i} className="flex items-start gap-2 text-sm pt-3 mt-2 border-t border-gray-100" style={{ color: '#9ca3af' }}>
+                                        <XCircle size={14} className="shrink-0 mt-0.5" color="#d1d5db" />{f.text}
+                                    </li>
+                                );
+                                return (
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
+                                        <CheckCircle2 size={14} className="shrink-0 mt-0.5" color="#16a34a" />{f.text}
+                                    </li>
+                                );
+                            })}
                         </ul>
                         <PayButton href={PG_INTER} label="Bayar Sekarang →" onClick={() => handlePayClick('Intermediate', PG_INTER)} />
                         <OrDivider />
@@ -279,24 +343,29 @@ export default function PricingSection() {
                 </div>
 
                 {/* Legalitas */}
-                <div className="flex justify-center mb-8">
-                    <div className="inline-flex flex-wrap items-center justify-start gap-3 rounded-2xl px-6 py-3" style={{ backgroundColor: '#F3F3F3', border: '1px solid #e5e7eb' }}>
-                        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#9ca3af' }}>Legalitas Resmi:</span>
-                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ ITP & IIEF Jakarta</span>
-                        <span className="text-xs" style={{ color: '#d1d5db' }}>·</span>
-                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ SK Kemenkumham AHU-0055720-AH.01.14 Tahun 2020</span>
+                <div className="max-w-2xl mx-auto mb-8 rounded-2xl px-6 py-4" style={{ backgroundColor: '#F3F3F3', border: '1px solid #e5e7eb' }}>
+                    <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#9ca3af' }}>Legalitas Resmi</p>
+                    <div className="flex flex-col gap-1.5">
+                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun 2020</span>
+                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ SK Izin Operasional LKP 503/20177/LKP/DPM-PTSP/8/2024</span>
+                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ NPSN Nomor K9998700</span>
+                        <span className="text-xs font-semibold" style={{ color: '#151515' }}>✓ Bekerja sama dengan IIEF Jakarta</span>
                     </div>
+                    <a href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs font-semibold hover:underline" style={{ color: '#D70808' }}>
+                        Info Detail Legalitas →
+                    </a>
                 </div>
 
                 {/* Guarantee badges */}
                 <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto mb-6">
-                    {guarantees.map(({ Icon, title, desc }) => (
+                    {guarantees.map(({ Icon, title, exclusive, desc }) => (
                         <div key={title} className="flex items-start gap-4 rounded-2xl p-6" style={{ backgroundColor: '#F3F3F3' }}>
                             <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: '#FFF0F0' }}>
                                 <Icon size={22} color="#D70808" />
                             </div>
                             <div>
-                                <p className="font-black text-sm mb-2" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>{title}</p>
+                                <p className="font-black text-sm mb-1" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>{title}</p>
+                                {exclusive && <p className="text-[10px] font-semibold mb-2" style={{ color: '#16a34a' }}>khusus paket bundling</p>}
                                 <p className="text-xs leading-relaxed" style={{ color: '#3d3d3d' }}>{desc}</p>
                             </div>
                         </div>

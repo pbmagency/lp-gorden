@@ -42,7 +42,7 @@ export default function HeroSection() {
                             <strong style={{ color: '#151515' }}>Metode TOEFL Pattern Recognition</strong>{' '}
                             bantu kamu belajar lebih fokus ke pola soal yang benar-benar keluar di tes,{' '}
                             cukup belajar <strong>1 jam sehari</strong> dari rumah dan rasakan kenaikan skor dalam{' '}
-                            <strong>10 hari</strong>.
+                            <strong>15 hari</strong>.
                         </p>
 
                         {/* d. Trust badges */}

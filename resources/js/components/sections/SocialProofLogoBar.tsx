@@ -1,10 +1,10 @@
 const logos = [
-    { src: '/logo/Kompas-TV.webp',    alt: 'Kompas TV' },
-    { src: '/logo/liputan6.webp',     alt: 'Liputan6' },
-    { src: '/logo/detikcom.webp',     alt: 'Detik.com' },
-    { src: '/logo/tribunnews.webp',   alt: 'Tribun News' },
-    { src: '/logo/INews.webp',        alt: 'iNews' },
-    { src: '/logo/logojpnncom.webp',  alt: 'JPNN' },
+    { src: '/logo/Kompas-TV.webp',         alt: 'Kompas TV' },
+    { src: '/logo/liputan6.webp',          alt: 'Liputan6' },
+    { src: '/logo/detikcom.webp',          alt: 'Detik.com' },
+    { src: '/logo/TribunJakartaLogo.webp', alt: 'Tribun Jakarta', scale: 1.4 },
+    { src: '/logo/Poskota.webp',           alt: 'Poskota',        scale: 1.5 },
+    { src: '/logo/BeritaSatu.webp',        alt: 'Berita Satu' },
 ];
 
 export default function SocialProofLogoBar() {
@@ -15,14 +15,15 @@ export default function SocialProofLogoBar() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8">
                 {logos.map((logo) => (
-                    <img
-                        key={logo.alt}
-                        src={logo.src}
-                        alt={logo.alt}
-                        loading="lazy"
-                        className="h-7 w-auto object-contain select-none"
-                        style={{ filter: 'grayscale(100%)', opacity: 0.6 }}
-                    />
+                    <div key={logo.alt} className="flex items-center justify-center" style={{ width: '110px', height: '36px' }}>
+                        <img
+                            src={logo.src}
+                            alt={logo.alt}
+                            loading="lazy"
+                            className="max-h-full max-w-full w-auto h-auto object-contain select-none"
+                            style={{ filter: 'grayscale(100%)', opacity: 0.6, transform: logo.scale ? `scale(${logo.scale})` : undefined }}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
