@@ -3,7 +3,7 @@ import LpButton from '@/components/ui/lp-button';
 
 
 function FullBrightLogo() {
-    return <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" width="160" height="160" className="w-40 h-auto object-contain" fetchPriority="high" loading="eager" decoding="async" />;
+    return <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" className="w-40 h-auto object-contain" fetchPriority="high" loading="eager" decoding="sync" />;
 }
 
 export default function Navbar() {

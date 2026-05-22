@@ -1,19 +1,16 @@
 import { Head } from '@inertiajs/react';
-import { Suspense, lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 
-// Above-fold sections — eager loaded so hero renders immediately
-import UrgencyBanner from '@/components/sections/UrgencyBanner';
-import Navbar        from '@/components/sections/Navbar';
-import HeroSection   from '@/components/sections/HeroSection';
-
-// Below-fold sections — lazy loaded to reduce initial JS bundle size
-const SocialProofLogoBar = lazy(() => import('@/components/sections/SocialProofLogoBar'));
-const AgitationSection   = lazy(() => import('@/components/sections/AgitationSection'));
-const ValueSection       = lazy(() => import('@/components/sections/ValueSection'));
-const SocialProofSection = lazy(() => import('@/components/sections/SocialProofSection'));
-const PricingSection     = lazy(() => import('@/components/sections/PricingSection'));
-const FAQSection         = lazy(() => import('@/components/sections/FAQSection'));
-const Footer             = lazy(() => import('@/components/sections/Footer'));
+import UrgencyBanner       from '@/components/sections/UrgencyBanner';
+import Navbar              from '@/components/sections/Navbar';
+import HeroSection         from '@/components/sections/HeroSection';
+import SocialProofLogoBar  from '@/components/sections/SocialProofLogoBar';
+import AgitationSection    from '@/components/sections/AgitationSection';
+import ValueSection        from '@/components/sections/ValueSection';
+import SocialProofSection  from '@/components/sections/SocialProofSection';
+import PricingSection      from '@/components/sections/PricingSection';
+import FAQSection          from '@/components/sections/FAQSection';
+import Footer              from '@/components/sections/Footer';
 
 import { useAnalytics }      from '@/hooks/use-analytics';
 import { waUrl }             from '@/lib/wa-number';
@@ -47,15 +44,13 @@ export default function Landing() {
                 <UrgencyBanner />
                 <Navbar />
                 <HeroSection />
-                <Suspense fallback={null}>
-                    <SocialProofLogoBar />
-                    <AgitationSection />
-                    <ValueSection />
-                    <SocialProofSection />
-                    <PricingSection />
-                    <FAQSection />
-                    <Footer />
-                </Suspense>
+                <SocialProofLogoBar />
+                <AgitationSection />
+                <ValueSection />
+                <SocialProofSection />
+                <PricingSection />
+                <FAQSection />
+                <Footer />
 
                 {/* Floating WhatsApp Button */}
                 <a

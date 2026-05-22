@@ -35,13 +35,11 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        {{-- Google Fonts: preconnect + stylesheet link di HTML (bukan @import di CSS yg render-blocking) --}}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
-
-        {{-- Preload logo saja (above-fold). toefl1/9/3 lazy-loaded di bawah fold, preload-nya malah berebut bandwidth --}}
+        {{-- Preload critical above-fold assets --}}
         <link rel="preload" href="/logo/Primary Logo.webp" as="image" fetchpriority="high">
+        <link rel="preload" href="/image/toefl1.webp" as="image">
+        <link rel="preload" href="/image/toefl9.webp" as="image">
+        <link rel="preload" href="/image/toefl3.webp" as="image">
 
         <!-- Meta Pixel — replace YOUR_PIXEL_ID with actual pixel ID -->
         <script>

@@ -15,8 +15,8 @@ export default function HeroSection() {
 
     return (
         <section id="hero" className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #fff 55%, #FFF5F5 100%)' }}>
-            <div className="hidden lg:block absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
-            <div className="hidden lg:block absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
+            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
+            <div className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 md:pt-10 md:pb-14">
                 <div className="grid lg:grid-cols-2 gap-10 items-center">

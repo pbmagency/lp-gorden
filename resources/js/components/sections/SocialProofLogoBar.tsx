@@ -19,11 +19,9 @@ export default function SocialProofLogoBar() {
                         <img
                             src={logo.src}
                             alt={logo.alt}
-                            width="110"
-                            height="36"
                             loading="lazy"
-                            decoding="async"
                             className="max-h-full max-w-full w-auto h-auto object-contain select-none"
+                            loading="lazy" decoding="async"
                             style={{ filter: 'grayscale(100%)', opacity: 0.6, transform: logo.scale ? `scale(${logo.scale})` : undefined }}
                         />
                     </div>
