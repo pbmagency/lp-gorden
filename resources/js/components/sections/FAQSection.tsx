@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ChevronDown } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import LpButton from '@/components/ui/lp-button';
@@ -6,8 +6,27 @@ import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { waUrl } from '@/lib/wa-number';
 
-const faqs = [
-    { category: 'Jadwal & Format', q: 'Kapan jadwal kelas dan apakah bisa disesuaikan?', a: 'Kami menyediakan 5 pilihan sesi harian: Pagi (09.00–10.00 WIB), Siang (13.00–14.00 WIB), Sore (16.00–17.00 WIB), Malam (19.00–20.00 WIB), dan Malam (20.15–21.15 WIB). Kamu cukup pilih salah satu sesi yang paling cocok dengan jadwalmu. Jika berhalangan hadir LIVE ZOOM, jangan khawatir — materi bisa diakses di rekaman ZOOM.' },
+const jadwalSlots = ['Pagi (09.00 – 10.00 WIB)', 'Siang (13.00 – 14.00 WIB)', 'Sore (16.00 – 17.00 WIB)', 'Malam (19.00 – 20.00 WIB)', 'Malam (20.15 – 21.15 WIB)'];
+
+const faqs: { category: string; q: string; a: string; node?: ReactNode }[] = [
+    {
+        category: 'Jadwal & Format',
+        q: 'Kapan jadwal kelas dan apakah bisa disesuaikan?',
+        a: 'Kami menyediakan 5 pilihan sesi harian: Pagi (09.00–10.00 WIB), Siang (13.00–14.00 WIB), Sore (16.00–17.00 WIB), Malam (19.00–20.00 WIB), dan Malam (20.15–21.15 WIB). Jika berhalangan hadir LIVE ZOOM, jangan khawatir — materi bisa diakses di rekaman ZOOM.',
+        node: (
+            <div className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
+                <p className="font-bold mb-2.5" style={{ color: '#151515' }}>Pilihan Jam Belajar (Pilih Salah Satunya)</p>
+                <ul className="flex flex-col gap-1.5 mb-3">
+                    {jadwalSlots.map((s) => (
+                        <li key={s} className="flex items-center gap-2">
+                            <span className="font-black" style={{ color: '#D70808' }}>•</span> {s}
+                        </li>
+                    ))}
+                </ul>
+                <p className="text-xs italic" style={{ color: '#6b7280' }}>Catatan: Jika berhalangan hadir LIVE ZOOM, jangan khawatir — materi bisa diakses di rekaman ZOOM.</p>
+            </div>
+        ),
+    },
     { category: 'Jadwal & Format', q: 'Apakah kelasnya online atau offline?', a: 'Kelas berlangsung sepenuhnya secara online via Zoom. Kamu bisa mengikuti dari mana saja, baik dari rumah, kantor, maupun kafe. Yang kamu butuhkan hanya smartphone atau laptop dengan koneksi internet yang stabil.' },
     { category: 'Jadwal & Format', q: 'Bagaimana cara akses LMS dan materinya?', a: 'Setelah mendaftar dan melakukan pembayaran, kamu akan mendapatkan email berisi link dan akun untuk masuk ke platform LMS Full Bright. Di sana tersedia video e-course, e-book, dan bank soal yang bisa diakses kapan saja selama 2 tahun. Rekaman ZOOM juga bisa diakses seumur hidup.' },
     { category: 'Sertifikat & Legalitas', q: 'Apakah sertifikat Full Bright valid untuk melamar kerja atau kuliah?', a: 'Full Bright Indonesia adalah lembaga resmi dengan legalitas lengkap: SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun 2020, SK Izin Operasional LKP 503/20177/LKP/DPM-PTSP/8/2024, NPSN Nomor K9998700, dan bekerja sama dengan IIEF Jakarta. Sertifikat dapat digunakan untuk: Daftar Kuliah S1/S2/S3, Lamar Kerja, Seleksi CPNS, Rekrutmen BUMN, Ujian Skripsi, Kenaikan Pangkat, dan Pendaftaran Beasiswa.' },
@@ -29,7 +48,7 @@ const faqSchema = {
     mainEntity: faqs.map((faq) => ({ '@type': 'Question', name: faq.q, acceptedAnswer: { '@type': 'Answer', text: faq.a } })),
 };
 
-function FAQItem({ q, a }: { q: string; a: string }) {
+function FAQItem({ q, a, node }: { q: string; a: string; node?: ReactNode }) {
     const [open, setOpen] = useState(defaultOpen.has(q));
     return (
         <div className="border-b border-gray-100 last:border-0">
@@ -38,7 +57,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
                 <ChevronDown size={18} className="shrink-0 mt-0.5 transition-transform duration-300" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', color: open ? '#D70808' : '#9ca3af' }} />
             </button>
             <div style={{ maxHeight: open ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)', opacity: open ? 1 : 0 }} className="transition-opacity duration-300">
-                <div className="pb-6 pr-8"><p className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>{a}</p></div>
+                <div className="pb-6 pr-8">
+                    {node ?? <p className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>{a}</p>}
+                </div>
             </div>
         </div>
     );
@@ -68,7 +89,7 @@ export default function FAQSection() {
                 </div>
 
                 <div className="max-w-3xl mx-auto bg-white rounded-3xl px-7 py-2 mb-12" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-                    {filtered.map((item) => <FAQItem key={item.q} q={item.q} a={item.a} />)}
+                    {filtered.map((item) => <FAQItem key={item.q} q={item.q} a={item.a} node={item.node} />)}
                 </div>
 
                 <div className="max-w-lg mx-auto text-center">
