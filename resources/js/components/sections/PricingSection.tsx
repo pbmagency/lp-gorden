@@ -91,7 +91,10 @@ function WhatsAppIcon({ size = 18, color = '#25D366' }: { size?: number; color?:
     );
 }
 
-function PayButton({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
+function PayButton({ href, label, onClick, green }: { href: string; label: string; onClick?: () => void; green?: boolean }) {
+    const bg     = green ? '#16a34a' : '#D70808';
+    const shadow = green ? '0 6px 24px rgba(22,163,74,0.4)' : '0 6px 24px rgba(215,8,8,0.4)';
+    const hover  = green ? 'hover:shadow-[0_12px_32px_rgba(22,163,74,0.5)]' : 'hover:shadow-[0_12px_32px_rgba(215,8,8,0.5)]';
     return (
         <div className="flex flex-col gap-1.5">
             <a
@@ -99,8 +102,8 @@ function PayButton({ href, label, onClick }: { href: string; label: string; onCl
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onClick}
-                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 font-black rounded-2xl px-5 py-4 text-sm sm:text-base text-white transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(215,8,8,0.5)] active:translate-y-0 active:shadow-none"
-                style={{ backgroundColor: '#D70808', boxShadow: '0 6px 24px rgba(215,8,8,0.4)' }}
+                className={`cursor-pointer inline-flex w-full items-center justify-center gap-2 font-black rounded-2xl px-5 py-4 text-sm sm:text-base text-white transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 ${hover} active:translate-y-0 active:shadow-none`}
+                style={{ backgroundColor: bg, boxShadow: shadow }}
             >
                 {label}
             </a>
@@ -236,7 +239,7 @@ export default function PricingSection() {
 
                     {/* ── Bundling ── HIGHLIGHTED */}
                     <div className="rounded-3xl p-7 flex flex-col relative overflow-hidden" style={{ border: '2px solid #16a34a', boxShadow: '0 16px 56px rgba(22,163,74,0.2), 0 0 0 1px rgba(22,163,74,0.08)', background: 'linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%)' }}>
-                        <div className="absolute top-0 right-0 text-xs font-black px-4 py-2 rounded-bl-2xl text-white" style={{ backgroundColor: '#D70808', fontFamily: 'var(--font-heading)' }}>
+                        <div className="absolute top-0 right-0 text-xs font-black px-4 py-2 rounded-bl-2xl text-white" style={{ backgroundColor: '#16a34a', fontFamily: 'var(--font-heading)' }}>
                             ⭐ PALING HEMAT
                         </div>
                         <div className="flex items-start justify-between mb-1 mt-5">
@@ -264,7 +267,7 @@ export default function PricingSection() {
                         <ul className="flex flex-col gap-2 mb-5 flex-1">
                             {bundlingFeatures.map((f, i) => {
                                 if (f.type === 'label') return (
-                                    <li key={i} className="text-xs font-black uppercase tracking-widest mt-2" style={{ color: '#D70808' }}>{f.text}</li>
+                                    <li key={i} className="text-xs font-black uppercase tracking-widest mt-2" style={{ color: '#16a34a' }}>{f.text}</li>
                                 );
                                 if (f.type === 'globe') return (
                                     <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#3d3d3d' }}>
@@ -283,7 +286,7 @@ export default function PricingSection() {
                                 );
                             })}
                         </ul>
-                        <PayButton href={PG_BUNDLING} label="Bayar Sekarang →" onClick={() => handlePayClick('Bundling', PG_BUNDLING)} />
+                        <PayButton href={PG_BUNDLING} label="Bayar Sekarang →" onClick={() => handlePayClick('Bundling', PG_BUNDLING)} green />
                         <p className="text-xs text-center -mt-1" style={{ color: '#D70808', fontWeight: 600 }}>* Centang opsi Bundle saat checkout</p>
                         <OrDivider />
                         <WaButton onClick={() => handleWaClick('Bundling', WA_BUNDLING)} label="Tanya via WhatsApp" />
