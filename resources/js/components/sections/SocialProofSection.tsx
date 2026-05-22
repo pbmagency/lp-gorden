@@ -97,11 +97,21 @@ const reviewPhotos = Array.from({ length: 19 }, (_, i) => `/review/Riview (${i +
 export default function SocialProofSection() {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+    const [reviewReady, setReviewReady] = useState(false);
 
     const openLightbox = (i: number) => setLightboxIndex(i);
     const closeLightbox = () => setLightboxIndex(null);
     const prevPhoto = () => setLightboxIndex((i) => i !== null ? (i - 1 + waScreenshots.length) % waScreenshots.length : null);
     const nextPhoto = () => setLightboxIndex((i) => i !== null ? (i + 1) % waScreenshots.length : null);
+
+    useEffect(() => {
+        const id = window.requestIdleCallback
+            ? window.requestIdleCallback(() => setReviewReady(true), { timeout: 2000 })
+            : setTimeout(() => setReviewReady(true), 1500) as unknown as number;
+        return () => {
+            window.requestIdleCallback ? window.cancelIdleCallback(id) : clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+        };
+    }, []);
 
     const openReview = (i: number) => setReviewIndex(i % 19);
     const closeReview = () => setReviewIndex(null);
@@ -222,8 +232,8 @@ export default function SocialProofSection() {
                     </div>
                 </div>
 
-                {/* Review alumni carousel */}
-                <div className="mt-12 mb-2">
+                {/* Review alumni carousel — deferred until idle */}
+                {reviewReady && <div className="mt-12 mb-2">
                     <p className="text-xs font-black uppercase tracking-widest text-center mb-5" style={{ color: '#9ca3af' }}>Review Alumni di Google & Media Sosial</p>
                     <div className="overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)' }}>
                         <div className="infinite-track" style={{ animationDuration: '60s', alignItems: 'flex-start' }}>
@@ -246,7 +256,7 @@ export default function SocialProofSection() {
                             ))}
                         </div>
                     </div>
-                </div>
+                </div>}
 
                 <div className="text-center mt-10">
                     <LpButton href="#pricing" size="md">Mulai Belajar Sekarang →</LpButton>

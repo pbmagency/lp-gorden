@@ -21,6 +21,7 @@ export default function SocialProofLogoBar() {
                             alt={logo.alt}
                             loading="lazy"
                             className="max-h-full max-w-full w-auto h-auto object-contain select-none"
+                            loading="lazy" decoding="async"
                             style={{ filter: 'grayscale(100%)', opacity: 0.6, transform: logo.scale ? `scale(${logo.scale})` : undefined }}
                         />
                     </div>
