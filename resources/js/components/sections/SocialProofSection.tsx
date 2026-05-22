@@ -109,7 +109,11 @@ export default function SocialProofSection() {
             ? window.requestIdleCallback(() => setReviewReady(true), { timeout: 2000 })
             : setTimeout(() => setReviewReady(true), 1500) as unknown as number;
         return () => {
-            window.requestIdleCallback ? window.cancelIdleCallback(id) : clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+            if (window.requestIdleCallback) {
+                window.cancelIdleCallback(id);
+            } else {
+                clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+            }
         };
     }, []);
 
