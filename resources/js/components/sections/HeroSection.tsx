@@ -26,7 +26,7 @@ export default function HeroSection() {
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
                             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
-                                🔥 Kursi Terbatas · Batch Juli 2026
+                                ✦ Khusus 18+ Tahun (Mahasiswa &amp; Karyawan Profesional)
                             </div>
                         </div>
 
