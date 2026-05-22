@@ -15,7 +15,7 @@ const faqs: { category: string; q: string; a: string; node?: ReactNode }[] = [
         a: 'Kami menyediakan 5 pilihan sesi harian: Pagi (09.00–10.00 WIB), Siang (13.00–14.00 WIB), Sore (16.00–17.00 WIB), Malam (19.00–20.00 WIB), dan Malam (20.15–21.15 WIB). Jika berhalangan hadir LIVE ZOOM, jangan khawatir — materi bisa diakses di rekaman ZOOM.',
         node: (
             <div className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
-                <p className="font-bold mb-2.5" style={{ color: '#151515' }}>Pilihan Jam Belajar (Pilih Salah Satunya)</p>
+                <p className="mb-2.5" style={{ color: '#3d3d3d' }}>Pilihan Jam Belajar (Pilih Salah Satunya)</p>
                 <ul className="flex flex-col gap-1.5 mb-3">
                     {jadwalSlots.map((s) => (
                         <li key={s} className="flex items-center gap-2">
