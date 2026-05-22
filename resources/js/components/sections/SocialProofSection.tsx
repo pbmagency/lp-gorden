@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Star, MessageCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import LpButton from '@/components/ui/lp-button';
