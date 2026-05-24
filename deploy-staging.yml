@@ -10,10 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SERVER_IP: '72.61.210.213'
+      SERVER_IP: '72.61.142.238'
       SERVER_USER: 'root'
-      TARGET_DIR_LARAVEL: '/home/gumpreneur.id/laravel'
-      TARGET_DIR_PUBLIC: '/home/gumpreneur.id/public_html'
+      TARGET_DIR_LARAVEL: '/home/pbmagency.id/laravel-sub1'
+      TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub1'
 
     steps:
       - name: Checkout Code
@@ -92,7 +92,7 @@ jobs:
             php artisan optimize:clear
             php artisan migrate --force
 
-            chown -R gumpr6869:gumpr6869 ${{ env.TARGET_DIR_LARAVEL }}
-            chown -R gumpr6869:gumpr6869 ${{ env.TARGET_DIR_PUBLIC }}
-            chown -R gumpr6869:gumpr6869 ${{ env.TARGET_DIR_LARAVEL }}/storage
-            chown -R gumpr6869:gumpr6869 ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
+            chown -R pbmag2242:pbmag2242 ${{ env.TARGET_DIR_LARAVEL }}
+            chown -R pbmag2242:pbmag2242 ${{ env.TARGET_DIR_PUBLIC }}
+            chown -R pbmag2242:pbmag2242 ${{ env.TARGET_DIR_LARAVEL }}/storage
+            chown -R pbmag2242:pbmag2242 ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
