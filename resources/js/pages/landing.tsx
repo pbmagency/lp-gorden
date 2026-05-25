@@ -54,7 +54,7 @@ export default function Landing() {
 
                 {/* Floating WhatsApp Button */}
                 <a
-                    href={waUrl('Halo Kak, saya ingin tanya tentang program TOEFL Full Bright')}
+                    href={waUrl('Halo Admin Full Bright Indonesia. Saya lihat iklan. Saya minat mau daftar kelas TOEFL.')}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"

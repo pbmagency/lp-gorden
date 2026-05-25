@@ -4,9 +4,9 @@ import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics, generateEventId } from '@/hooks/use-analytics';
 import { waUrl } from '@/lib/wa-number';
 
-const WA_STARTER   = waUrl('Halo Kak, saya ingin tanya Level Starter');
-const WA_INTER     = waUrl('Halo Kak, saya ingin tanya Level Intermediate');
-const WA_BUNDLING  = waUrl('Halo Kak, saya ingin tanya Paket Bundling');
+const WA_STARTER   = waUrl('Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL Level Starter');
+const WA_INTER     = waUrl('Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL Level Intermediate.');
+const WA_BUNDLING  = waUrl('Halo Admin Full Bright Indonesia. Saya minat mau daftar paket HEMAT TOEFL Level Starter + Intermediate.');
 
 const PG_STARTER   = 'https://member.fullbrightindonesia.com/paket-premium-toefl-level-starter-live-zoom-intensif-flash-sale';
 const PG_INTER     = 'https://member.fullbrightindonesia.com/paket-premium-toefl-level-intermediate-live-zoom-intensif-flash-sale';

@@ -1,10 +1,10 @@
 const logos = [
-    { src: '/logo/Kompas-TV.webp',         alt: 'Kompas TV' },
+    { src: '/logo/Kompas-Com.webp',         alt: 'Kompas TV' },
     { src: '/logo/liputan6.webp',          alt: 'Liputan6' },
     { src: '/logo/detikcom.webp',          alt: 'Detik.com' },
     { src: '/logo/TribunJakartaLogo.webp', alt: 'Tribun Jakarta', scale: 1.4 },
     { src: '/logo/Poskota.webp',           alt: 'Poskota',        scale: 1.5 },
-    { src: '/logo/BeritaSatu.webp',        alt: 'Berita Satu' },
+    { src: '/logo/BeritaSatu2.webp',        alt: 'Berita Satu' },
 ];
 
 export default function SocialProofLogoBar() {
