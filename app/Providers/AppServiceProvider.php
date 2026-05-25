@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        // URL::forceRootUrl('https://fullbrightindonesia.org');
-        // URL::forceScheme('https');
+        URL::forceRootUrl('https://fullbrightindonesia.org');
+        URL::forceScheme('https');
 
         $this->configureDefaults();
     }
