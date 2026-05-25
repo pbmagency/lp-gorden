@@ -25,9 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        URL::forceRootUrl('https://fullbrightindonesia.org');
-        URL::forceScheme('https');
-
         $this->configureDefaults();
     }
 
@@ -42,14 +39,15 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
+                ? Password::min(12)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
                 ->uncompromised()
-            : null,
+                : null,
         );
     }
 }
