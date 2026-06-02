@@ -231,7 +231,7 @@ export default function PricingSection() {
                                 );
                             })}
                         </ul>
-                        <PayButton href={PG_STARTER} label="Bayar Sekarang →" onClick={() => handlePayClick('Starter', PG_STARTER)} />
+                        <PayButton href={PG_STARTER} label="Amankan Seat →" onClick={() => handlePayClick('Starter', PG_STARTER)} />
                         <OrDivider />
                         <WaButton onClick={() => handleWaClick('Starter', WA_STARTER)} label="Tanya via WhatsApp" />
                         <SocialProofMicro variant="badges" />
@@ -286,7 +286,7 @@ export default function PricingSection() {
                                 );
                             })}
                         </ul>
-                        <PayButton href={PG_BUNDLING} label="Bayar Sekarang →" onClick={() => handlePayClick('Bundling', PG_BUNDLING)} green />
+                        <PayButton href={PG_BUNDLING} label="Amankan Seat →" onClick={() => handlePayClick('Bundling', PG_BUNDLING)} green />
                         <p className="text-xs text-center -mt-1" style={{ color: '#D70808', fontWeight: 600 }}>* Centang opsi Bundle saat checkout</p>
                         <OrDivider />
                         <WaButton onClick={() => handleWaClick('Bundling', WA_BUNDLING)} label="Tanya via WhatsApp" />
@@ -337,7 +337,7 @@ export default function PricingSection() {
                                 );
                             })}
                         </ul>
-                        <PayButton href={PG_INTER} label="Bayar Sekarang →" onClick={() => handlePayClick('Intermediate', PG_INTER)} />
+                        <PayButton href={PG_INTER} label="Amankan Seat →" onClick={() => handlePayClick('Intermediate', PG_INTER)} />
                         <OrDivider />
                         <WaButton onClick={() => handleWaClick('Intermediate', WA_INTER)} label="Tanya via WhatsApp" />
                         <SocialProofMicro variant="badges" />
