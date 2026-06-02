@@ -22,11 +22,15 @@ export default function Navbar() {
                     <FullBrightLogo />
                 </a>
 
-                <nav />
-
-                <div className="hidden md:block">
-                    <LpButton href="#pricing" size="sm">Daftar Sekarang</LpButton>
-                </div>
+                <a href="#pricing" className="hidden md:flex items-center gap-3 bg-gradient-to-r from-red-700 to-red-800 text-white pl-4 pr-5 py-2.5 rounded-full hover:from-red-800 hover:to-red-900 transition-all duration-200 shadow-lg hover:shadow-xl group">
+                    <div className="flex items-center gap-2 text-sm">
+                        <span className="line-through opacity-75">Rp1.000rb</span>
+                        <span className="text-yellow-300 font-bold">•</span>
+                        <span className="font-medium opacity-90">Rp250rb</span>
+                    </div>
+                    <div className="w-px h-6 bg-white/30 mx-1" />
+                    <span className="text-sm font-bold group-hover:translate-x-0.5 transition-transform">Amankan Seat →</span>
+                </a>
             </div>
         </header>
     );
