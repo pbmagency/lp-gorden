@@ -12,8 +12,8 @@ jobs:
     env:
       SERVER_IP: '72.61.142.238'
       SERVER_USER: 'root'
-      TARGET_DIR_LARAVEL: '/home/pbmagency.id/laravel-sub1'
-      TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub1'
+      TARGET_DIR_LARAVEL: '/home/fullbrightindonesia.org/laravel-main'
+      TARGET_DIR_PUBLIC: '/home/fullbrightindonesia.org/toefl'
 
     steps:
       - name: Checkout Code
