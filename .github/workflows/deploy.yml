@@ -93,7 +93,7 @@ jobs:
             php artisan optimize:clear
             php artisan migrate --force
 
-            chown -R ${{env.DOMAIN_USERNAME}}:${{env.DOMAIN_USERNAME}} ${{ env.TARGET_DIR_LARAVEL }}
-            chown -R ${{env.DOMAIN_USERNAME}}:${{env.DOMAIN_USERNAME}} ${{ env.TARGET_DIR_PUBLIC }}
-            chown -R ${{env.DOMAIN_USERNAME}}:${{env.DOMAIN_USERNAME}} ${{ env.TARGET_DIR_LARAVEL }}/storage
-            chown -R ${{env.DOMAIN_USERNAME}}:${{env.DOMAIN_USERNAME}} ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
+            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}
+            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_PUBLIC }}
+            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}/storage
+            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
