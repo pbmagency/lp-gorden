@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SERVER_IP: '72.61.210.213'
+      SERVER_IP: '72.61.142.238'
       SERVER_USER: 'root'
       TARGET_DIR_LARAVEL: '/home/pbmagency.id/laravel-sub2'
       TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub2'
