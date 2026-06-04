@@ -30,5 +30,3 @@ export default defineConfig({
         }),
     ],
 });
-
-generateTypes: process.env.CI !== 'true',
