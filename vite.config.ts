@@ -27,6 +27,9 @@ export default defineConfig({
         wayfinder({
             formVariants: true,
             phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
+            generateTypes: process.env.CI !== 'true',
         }),
     ],
 });
+
+
