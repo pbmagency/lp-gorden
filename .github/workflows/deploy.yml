@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SERVER_IP: '72.61.142.238'
-      SERVER_USER: 'root'
+      SERVER_USER: 'pbmag2242'
       TARGET_DIR_LARAVEL: '/home/pbmagency.id/laravel-sub2'
       TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub2'
       DOMAIN_USERNAME: 'pbmag2242'
