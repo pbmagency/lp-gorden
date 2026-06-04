@@ -23,7 +23,7 @@ export default function Footer() {
                 <div className="grid md:grid-cols-3 gap-10 mb-10">
                     <div>
                         <div className="mb-4">
-                            <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" className="w-40 h-auto object-contain brightness-0 invert" />
+                            <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" loading="lazy" decoding="async" className="w-40 h-auto object-contain brightness-0 invert" />
                         </div>
                         <p className="text-xs leading-relaxed mb-4" style={{ color: '#9ca3af' }}>
                             SK Kemenkumham RI No. AHU-0055720-AH.0114 Tahun 2020<br />

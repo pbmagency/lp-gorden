@@ -29,4 +29,13 @@ export default defineConfig({
             phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
         }),
     ],
+    build: {
+        chunkSizeWarningLimit: 500,
+        cssCodeSplit: true,
+        sourcemap: false,
+        reportCompressedSize: false,
+    },
+    optimizeDeps: {
+        include: ['react', 'react-dom', 'lucide-react'],
+    },
 });

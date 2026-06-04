@@ -1,4 +1,5 @@
 import { ShieldCheck, Star, Award, Users } from 'lucide-react';
+import { memo } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics } from '@/hooks/use-analytics';
@@ -10,23 +11,31 @@ const stats = [
     { icon: <ShieldCheck size={18} />, value: 'Resmi', label: 'Lembaga ITP & IIEF' },
 ];
 
-export default function HeroSection() {
+export default memo(function HeroSection() {
     const { trackCTA } = useAnalytics();
 
     return (
         <section id="hero" className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #fff 55%, #FFF5F5 100%)' }}>
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
-            <div className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
+            <div className="absolute -top-32 -right-32 md:-top-24 md:-right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
+            <div className="absolute -bottom-32 -left-32 md:-bottom-16 md:-left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
 
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 md:pt-10 md:pb-14">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6 md:pt-10 md:pb-14">
                 <div className="grid lg:grid-cols-2 gap-10 items-center">
 
                     {/* Left column — text content, full-width on mobile */}
                     <div className="flex flex-col gap-3 lg:gap-4">
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
-                            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
-                                Khusus 18+ Tahun (Mahasiswa &amp; Karyawan Profesional)
+                            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-wide" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
+                                <div className="flex items-center gap-1">
+                                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={12} fill="#ffd000" color="#ffd000" />)}
+                                </div>
+                                <span className="uppercase tracking-widest">45.000+ ALUMNI</span>
+                                <div className="flex items-center -space-x-2 ml-2">
+                                    <img src="/people/People 1.webp" alt="alumni" loading="lazy" decoding="async" className="w-5 h-5 rounded-full border-2 border-white object-cover" />
+                                    <img src="/people/People 2.webp" alt="alumni" loading="lazy" decoding="async" className="w-5 h-5 rounded-full border-2 border-white object-cover" />
+                                    <img src="/people/People 3.webp" alt="alumni" loading="lazy" decoding="async" className="w-5 h-5 rounded-full border-2 border-white object-cover" />
+                                </div>
                             </div>
                         </div>
 
@@ -38,16 +47,12 @@ export default function HeroSection() {
 
                         {/* c. Sub-copy */}
                         <p className="text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
-                            Deadline LPDP, CPNS, rekrutmen/pendaftaran makin dekat tapi skor TOEFL masih belum cukup?{' '}
-                            <strong style={{ color: '#151515' }}>Metode TOEFL Pattern Recognition</strong>{' '}
-                            bantu kamu belajar lebih fokus ke pola soal yang benar-benar keluar di tes,{' '}
-                            cukup belajar <strong>1 jam sehari</strong> dari rumah dan rasakan kenaikan skor dalam{' '}
-                            <strong>15 hari</strong>.
+                            <strong style={{ color: '#151515' }}>Deadline LPDP, CPNS, atau rekrutmen semakin dekat?</strong> Pelajari pola soal yang paling sering muncul di tes, cukup <strong style={{ color: '#151515' }}>1 jam sehari</strong>, dan <strong style={{ color: '#151515' }}>tingkatkan skor TOEFL dalam 15 hari</strong>.
                         </p>
 
                         {/* d. Trust badges */}
                         <div className="flex flex-wrap gap-2">
-                            {['Lembaga Resmi ITP & IIEF', 'Pengajar Skor 600+', '13+ Tahun Pengalaman'].map((b) => (
+                            {['Lembaga Resmi ITP & IIEF', '13+ Tahun Pengalaman'].map((b) => (
                                 <span key={b} className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
                                     ✓ {b}
                                 </span>
@@ -108,10 +113,10 @@ export default function HeroSection() {
             </div>
 
             <div style={{ lineHeight: 0, marginBottom: '-1px' }}>
-                <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '56px' }}>
+                <svg viewBox="0 0 1440 56" preserveAspectRatio="none" className="w-full h-8 md:h-14" style={{ display: 'block' }}>
                     <path d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z" fill="#F3F3F3" />
                 </svg>
             </div>
         </section>
     );
-}
+});

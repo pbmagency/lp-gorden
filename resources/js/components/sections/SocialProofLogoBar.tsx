@@ -7,26 +7,39 @@ const logos = [
     { src: '/logo/BeritaSatu2.webp',        alt: 'Berita Satu' },
 ];
 
-export default function SocialProofLogoBar() {
+import { memo } from 'react';
+
+const LogoItem = memo(({ logo, index }) => (
+    <div key={index} className="shrink-0 flex items-center justify-center" style={{ width: '110px', height: '36px' }}>
+        <img
+            src={logo.src}
+            alt={logo.alt}
+            loading="lazy"
+            decoding="async"
+            className="max-h-full max-w-full w-auto h-auto object-contain select-none"
+            style={{ filter: 'grayscale(100%)', opacity: 0.6, transform: logo.scale ? `scale(${logo.scale})` : undefined }}
+        />
+    </div>
+));
+
+const SocialProofLogoBar = memo(() => {
+    // Triple logos for seamless looping tanpa gap
+    const duplicatedLogos = [...logos, ...logos, ...logos];
+
     return (
         <div className="w-full py-8 px-4" style={{ backgroundColor: '#F9F9F9', borderBottom: '1px solid #e5e7eb' }}>
             <p className="text-center text-xs font-bold uppercase tracking-widest mb-6" style={{ color: '#9ca3af' }}>
                 Dipercaya & Diliput Media Nasional
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-8">
-                {logos.map((logo) => (
-                    <div key={logo.alt} className="flex items-center justify-center" style={{ width: '110px', height: '36px' }}>
-                        <img
-                            src={logo.src}
-                            alt={logo.alt}
-                            loading="lazy"
-                            className="max-h-full max-w-full w-auto h-auto object-contain select-none"
-                            loading="lazy" decoding="async"
-                            style={{ filter: 'grayscale(100%)', opacity: 0.6, transform: logo.scale ? `scale(${logo.scale})` : undefined }}
-                        />
-                    </div>
-                ))}
+            <div className="overflow-hidden">
+                <div className="infinite-track flex gap-8" style={{ animationDuration: '30s' }}>
+                    {duplicatedLogos.map((logo, i) => (
+                        <LogoItem key={i} logo={logo} index={i} />
+                    ))}
+                </div>
             </div>
         </div>
     );
-}
+});
+
+export default SocialProofLogoBar;
