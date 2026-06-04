@@ -26,7 +26,9 @@ export default defineConfig({
         tailwindcss(),
         wayfinder({
             formVariants: true,
-            phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
+            phpBinary: process.env.CI === 'true' 
+                ? 'php'                                                    // ← Linux runner
+                : 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',  // ← Windows lokal
             generateTypes: process.env.CI !== 'true',
         }),
     ],
