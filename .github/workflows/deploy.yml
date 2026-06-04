@@ -29,12 +29,24 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+      # ✅ TAMBAHAN: Setup .env agar php artisan bisa jalan saat build
+      - name: Setup Environment for Build
+        run: |
+          cp .env.example .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=/tmp/database.sqlite" >> .env
+          touch /tmp/database.sqlite
+          php artisan key:generate
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      # ✅ UBAH: Tambah CI=false agar wayfinder skip type generation
       - name: Install NPM & Build Inertia React
+        env:
+          CI: false
         run: |
           npm install
           npm run build
@@ -51,12 +63,10 @@ jobs:
           ssh-keyscan -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-      # ---------------------------------------------------------
-      # SYNC 1: Pindahkan Core Laravel
-      # ---------------------------------------------------------
       - name: Sync Core Laravel to Server
         run: |
           rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
           --exclude='.env' \
           --exclude='/storage/' \
           --exclude='/bootstrap/cache/' \
@@ -65,19 +75,14 @@ jobs:
           --exclude='/public/' \
           ./ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}
 
-      # ---------------------------------------------------------
-      # SYNC 2: Pindahkan Aset Public
-      # ---------------------------------------------------------
       - name: Sync Public Assets to public_html
         run: |
           rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
           --exclude='index.php' \
           --exclude='.htaccess' \
           ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}
 
-      # ---------------------------------------------------------
-      # POST-DEPLOYMENT
-      # ---------------------------------------------------------
       - name: Run Artisan & Move Manifest
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -89,7 +94,7 @@ jobs:
             cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
 
             cd ${{ env.TARGET_DIR_PUBLIC }}
-            ln -sfn ../laravel/storage/app/public storage
+            ln -sfn ../laravel-sub2/storage/app/public storage
 
             cd ${{ env.TARGET_DIR_LARAVEL }}
             php artisan optimize:clear
