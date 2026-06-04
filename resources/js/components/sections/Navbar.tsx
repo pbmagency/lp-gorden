@@ -29,9 +29,6 @@ const Navbar = memo(() => {
                     <FullBrightLogo />
                 </a>
 
-
-
-
                 <a
                     href="#pricing"
                     className="group flex items-center gap-0 overflow-hidden rounded-full bg-gradient-to-r from-red-700 to-red-800 shadow-lg transition-all duration-200 hover:from-red-800 hover:to-red-900 hover:shadow-xl"
