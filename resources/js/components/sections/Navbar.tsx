@@ -12,8 +12,8 @@ const Navbar = memo(() => {
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 12);
         window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+        return () => window.removeEventListener('scroll', onScroll); 
+    }, []);   
 
     return (
         <header
@@ -28,6 +28,9 @@ const Navbar = memo(() => {
                 <a href="#" className="flex shrink-0 items-center select-none">
                     <FullBrightLogo />
                 </a>
+
+
+
 
                 <a
                     href="#pricing"
