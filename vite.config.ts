@@ -27,16 +27,8 @@ export default defineConfig({
         wayfinder({
             formVariants: true,
             phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
-            generateTypes: process.env.CI !== 'true',
         }),
     ],
-    build: {
-        chunkSizeWarningLimit: 500,
-        cssCodeSplit: true,
-        sourcemap: false,
-        reportCompressedSize: false,
-    },
-    optimizeDeps: {
-        include: ['react', 'react-dom', 'lucide-react'],
-    },
 });
+
+generateTypes: process.env.CI !== 'true',
