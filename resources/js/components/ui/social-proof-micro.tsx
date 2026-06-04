@@ -24,13 +24,8 @@ export default function SocialProofMicro({ variant = 'default' }: SocialProofMic
     const color = variant === 'light' ? 'rgba(255,255,255,0.75)' : '#6b7280';
 
     return (
-        <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-1 mt-3">
-            <span className="flex items-center gap-1 text-xs font-semibold" style={{ color }}>
-                {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={11} fill="#F59E0B" color="#F59E0B" />)}
-                <span className="ml-1">4.9/5 Google Review</span>
-            </span>
-            <span className="text-xs" style={{ color }}>•</span>
-            <span className="text-xs font-semibold" style={{ color }}>45.000+ Alumni Sukses</span>
+        <div className="flex items-center justify-start flex-wrap gap-x-3 gap-y-1 mt-3 pl-10">
+            <span className="text-xs font-semibold tracking-wider" style={{ color }}>Khusus 18+ Tahun</span>
             <span className="text-xs" style={{ color }}>•</span>
             <span className="flex items-center gap-1 text-xs font-semibold" style={{ color }}><Shield size={11} />Garansi 100%</span>
         </div>

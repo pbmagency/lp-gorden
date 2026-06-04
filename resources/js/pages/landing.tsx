@@ -38,6 +38,14 @@ export default function Landing() {
                 <title>Full Bright Indonesia – Spesialis TOEFL & IELTS Sejak 2013 | 45.000+ Alumni</title>
                 <meta name="description" content="Full Bright Indonesia – Spesialis TOEFL & IELTS Sejak 2013. Metode 30 Jam, 1 Jam 1 Hari. 45.000+ alumni sukses raih skor TOEFL ITP dalam 10–15 hari. Lembaga resmi ITP & IIEF Jakarta." />
                 <meta name="keywords" content="belajar TOEFL online, kursus TOEFL ITP, TOEFL LPDP, TOEFL CPNS, TOEFL BUMN, Full Bright Indonesia" />
+                
+                {/* Preload critical images */}
+                <link rel="preload" as="image" href="/logo/Primary Logo.webp" />
+                <link rel="preload" as="image" href="/people/People 1.webp" />
+                <link rel="preload" as="image" href="/people/People 2.webp" />
+                <link rel="preload" as="image" href="/people/People 3.webp" />
+                <link rel="preload" as="image" href="/logo/Kompas-Com.webp" />
+                <link rel="preload" as="image" href="/logo/liputan6.webp" />
             </Head>
 
             <div className="min-h-screen bg-white">
