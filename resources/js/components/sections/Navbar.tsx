@@ -29,14 +29,6 @@ const Navbar = memo(() => {
                     <FullBrightLogo />
                 </a>
 
-                <a href="#pricing" className="flex items-center gap-2 md:gap-3 bg-gradient-to-r from-red-700 to-red-800 text-white pl-3 md:pl-4 pr-4 md:pr-5 py-2 md:py-2.5 rounded-full hover:from-red-800 hover:to-red-900 transition-all duration-200 shadow-lg hover:shadow-xl group">
-                    <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm">
-                        <span className="line-through opacity-75">Rp1.000rb</span>
-                        <span className="text-yellow-300 font-bold">•</span>
-                        <span className="font-medium opacity-90">Rp250rb</span>
-                    </div>
-                    <div className="w-px h-5 md:h-6 bg-white/30 mx-0.5 md:mx-1" />
-                    <span className="text-xs md:text-sm font-bold group-hover:translate-x-0.5 transition-transform whitespace-nowrap">Amankan Seat →</span>
                 <a
                     href="#pricing"
                     className="group flex items-center gap-0 overflow-hidden rounded-full bg-gradient-to-r from-red-700 to-red-800 shadow-lg transition-all duration-200 hover:from-red-800 hover:to-red-900 hover:shadow-xl"
