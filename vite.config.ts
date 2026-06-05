@@ -25,13 +25,11 @@ export default defineConfig({
             },
         }),
         tailwindcss(),
-        wayfinder({
+        ...(process.env.CI !== 'true' ? [wayfinder({
             formVariants: true,
-            phpBinary: process.env.CI === 'true' 
-                ? 'php'                                                    // ← Linux runner
-                : 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',  // ← Windows lokal
-            generateTypes: process.env.CI !== 'true',
-        }),
+            phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
+            generateTypes: true,
+        })] : []),
         // Pre-compress assets for OpenLiteSpeed to serve directly
         compression({ algorithm: 'gzip', exclude: [/\.(br)$/, /\.(gz)$/] }),
         compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] }),
