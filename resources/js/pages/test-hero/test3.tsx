@@ -77,6 +77,14 @@ export default function Landing() {
                     href={waUrl('Halo Admin Full Bright Indonesia. Saya lihat iklan. Saya minat mau daftar kelas TOEFL.')}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                        try {
+                            (window as { fbq?: (e: string, n: string, p?: object) => void }).fbq?.(
+                                'track', 'Search',
+                                { search_string: 'TOEFL Full Bright - WhatsApp Inquiry' },
+                            );
+                        } catch { /* fbq not loaded */ }
+                    }}
                     className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{ backgroundColor: '#25D366', boxShadow: '0 4px 20px rgba(37,211,102,0.5)' }}
                     aria-label="Chat WhatsApp"

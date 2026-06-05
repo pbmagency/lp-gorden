@@ -101,6 +101,14 @@ export default function Landing() {
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                        try {
+                            (window as { fbq?: (e: string, n: string, p?: object) => void }).fbq?.(
+                                'track', 'Search',
+                                { search_string: 'TOEFL Full Bright - WhatsApp Inquiry' },
+                            );
+                        } catch { /* fbq not loaded */ }
+                    }}
                     className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{
                         backgroundColor: '#25D366',

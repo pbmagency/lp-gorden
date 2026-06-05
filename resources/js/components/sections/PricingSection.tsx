@@ -159,8 +159,8 @@ export default function PricingSection() {
         const price   = level === 'Starter' ? 250000 : level === 'Intermediate' ? 350000 : 375000;
         try {
             (window as { fbq?: (e: string, n: string, p?: object, o?: object) => void }).fbq?.(
-                'track', 'AddToCart',
-                { content_name: `TOEFL Full Bright ${level}`, value: price, currency: 'IDR' },
+                'track', 'Search',
+                { search_string: `TOEFL Full Bright ${level}` },
                 { eventID: eventId },
             );
         } catch { /* fbq not loaded */ }
