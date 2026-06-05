@@ -95,7 +95,15 @@ export default function FAQSection() {
                 <div className="max-w-lg mx-auto text-center">
                     <p className="text-sm font-semibold mb-6" style={{ color: '#3d3d3d' }}>Masih ada pertanyaan lain? Hubungi kami sekarang.</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center mb-1">
-                        <LpButton href={waUrl('Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL. Saya mau tanya-tanya dulu.')} size="md" onClick={() => trackCTA('faq_primary', 'Chat Via WA', '#pricing')}>Chat Via WA →</LpButton>
+                        <LpButton href={waUrl('Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL. Saya mau tanya-tanya dulu.')} size="md" onClick={() => {
+                            try {
+                                (window as { fbq?: (e: string, n: string, p?: object) => void }).fbq?.(
+                                    'track', 'Search',
+                                    { search_string: 'TOEFL Full Bright - WhatsApp Inquiry' },
+                                );
+                            } catch { /* fbq not loaded */ }
+                            trackCTA('faq_primary', 'Chat Via WA', '#pricing');
+                        }}>Chat Via WA →</LpButton>
                         <LpButton href="#testimonials" variant="ghost" size="md" onClick={() => trackCTA('faq_testimonials', 'Lihat Bukti Alumni', '#testimonials')}>Lihat Bukti Alumni →</LpButton>
                     </div>
                     <SocialProofMicro />
