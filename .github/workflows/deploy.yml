@@ -48,7 +48,26 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          ssh-keyscan -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts
+          for attempt in 1 2 3; do
+            keyscan_error_file="$(mktemp)"
+
+            if ssh-keyscan -T 30 -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts 2>"$keyscan_error_file"; then
+              rm -f "$keyscan_error_file"
+              break
+            fi
+
+            echo "ssh-keyscan attempt $attempt failed:"
+            cat "$keyscan_error_file"
+            rm -f "$keyscan_error_file"
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Failed to fetch SSH host key for ${{ env.SERVER_IP }} after 3 attempts."
+              exit 1
+            else
+              echo "ssh-keyscan attempt $attempt failed, retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
           chmod 600 ~/.ssh/known_hosts
 
       # ---------------------------------------------------------
