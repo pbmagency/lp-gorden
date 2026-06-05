@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          ssh-keyscan -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H -T 30 ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts 2>/dev/null || true
           chmod 600 ~/.ssh/known_hosts
 
       # ---------------------------------------------------------
@@ -57,6 +57,7 @@ jobs:
       - name: Sync Core Laravel to Server
         run: |
           rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
           --exclude='.env' \
           --exclude='/storage/' \
           --exclude='/bootstrap/cache/' \
@@ -71,6 +72,7 @@ jobs:
       - name: Sync Public Assets to public_html
         run: |
           rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
           --exclude='index.php' \
           --exclude='.htaccess' \
           ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}
@@ -84,6 +86,7 @@ jobs:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host_key_checking: false
           script: |
             mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/public/build
             cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
