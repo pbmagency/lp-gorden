@@ -1,13 +1,13 @@
 import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
-// Above-the-fold — load immediately (critical rendering path)
+// Above-the-fold — load immediately
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection from '@/components/sections/HeroSection';
+import HeroSection from '@/components/sections/test-hero/HeroSection2';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
-// Below-the-fold — lazy load to reduce initial bundle size
+// Below-the-fold — lazy load
 const AgitationSection = lazy(
     () => import('@/components/sections/AgitationSection'),
 );
@@ -26,13 +26,12 @@ import { waUrl } from '@/lib/wa-number';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
 
-// Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
     return <div aria-hidden="true" style={{ minHeight: '1px' }} />;
 }
 
 export default function Landing() {
-    const { trackCTA, trackVisit } = useAnalytics();
+    const { trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
@@ -68,13 +67,11 @@ export default function Landing() {
             </Head>
 
             <div className="min-h-screen bg-white">
-                {/* Above-the-fold: rendered immediately */}
                 <UrgencyBanner />
                 <Navbar />
                 <HeroSection />
                 <SocialProofLogoBar />
 
-                {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
                 </Suspense>

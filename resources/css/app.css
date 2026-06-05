@@ -2,8 +2,8 @@
 
 @import 'tw-animate-css';
 
-/* Google Fonts — must come before @theme */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+/* Nunito is loaded via bunny.net through laravel-vite-plugin @fonts directive */
+/* Removing the blocking Google Fonts @import — it was duplicating the font load */
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -178,6 +178,9 @@ html { scroll-behavior: smooth; }
     display: flex;
     width: max-content;
     animation: infiniteScroll 40s linear infinite;
+    /* GPU-composited animation — keeps off main thread */
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .infinite-track:hover {

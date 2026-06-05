@@ -1,9 +1,19 @@
 import { useEffect, useState, memo } from 'react';
 import LpButton from '@/components/ui/lp-button';
 
-
 const FullBrightLogo = memo(() => {
-    return <img src="/logo/Primary Logo.webp" alt="Full Bright Indonesia" className="w-40 h-auto object-contain" fetchPriority="high" loading="eager" decoding="sync" />;
+    return (
+        <img
+            src="/logo/Primary Logo.webp"
+            alt="Full Bright Indonesia"
+            width={160}
+            height={48}
+            className="h-auto w-40 object-contain"
+            fetchPriority="high"
+            loading="eager"
+            decoding="sync"
+        />
+    );
 });
 
 const Navbar = memo(() => {
@@ -12,8 +22,8 @@ const Navbar = memo(() => {
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 12);
         window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll); 
-    }, []);   
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     return (
         <header
@@ -60,7 +70,7 @@ const Navbar = memo(() => {
                     <div className="mx-0 w-px self-stretch bg-white/25" />
 
                     {/* Bagian kanan: tombol Beli */}
-                    <div className="flex shrink-0 items-center justify-center px-2 py-1.5 transition-colors duration-200 sm:px-3 sm:py-2">
+                    <div className="hidden shrink-0 items-center justify-center px-2 py-1.5 transition-colors duration-200 sm:flex sm:px-3 sm:py-2">
                         <span className="text-[11px] font-bold whitespace-nowrap text-white transition-transform group-hover:translate-x-0.5 sm:text-sm">
                             Ambil →
                         </span>

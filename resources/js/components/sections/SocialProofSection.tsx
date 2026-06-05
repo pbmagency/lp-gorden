@@ -72,6 +72,8 @@ function PhotoLightbox({ photos, index, onClose, onPrev, onNext }: {
                 <img
                     src={photo.src}
                     alt={photo.name}
+                    width={340}
+                    height={604}
                     className="max-h-[80vh] max-w-[340px] w-full object-contain rounded-2xl"
                     style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
                 />
@@ -171,7 +173,7 @@ export default function SocialProofSection() {
                     {waScreenshots.slice(0, 3).map((img, i) => (
                         <div key={img.src} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => openLightbox(i)}>
                             <div className="relative group overflow-hidden w-full" style={{ borderRadius: '14px', boxShadow: '0 6px 24px rgba(0,0,0,0.18)', aspectRatio: '9/16' }}>
-                                <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" />
+                                <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} width={260} height={463} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}>
                                     <span className="text-white text-xs font-bold bg-black/50 px-3 py-1 rounded-full">Perbesar</span>
                                 </div>
@@ -184,10 +186,10 @@ export default function SocialProofSection() {
                 {/* Photo infinite carousel */}
                 <div className="overflow-hidden mb-14" style={{ maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)' }}>
                     <div className="infinite-track" style={{ animationDuration: '35s' }}>
-                        {Array.from({ length: 4 }, () => waScreenshots).flat().map((img, i) => (
+                        {Array.from({ length: 2 }, () => waScreenshots).flat().map((img, i) => (
                             <div key={i} className="shrink-0 mx-2 flex flex-col items-center gap-1.5 cursor-pointer" onClick={() => openLightbox(i % waScreenshots.length)}>
                                 <div className="relative overflow-hidden" style={{ width: '130px', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', aspectRatio: '9/16' }}>
-                                    <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} className="w-full h-full object-cover" loading="lazy" />
+                                    <img src={img.src} alt={`Score Report Alumni Skor ${img.score}`} width={130} height={231} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                 </div>
                                 {img.score && <p className="text-[10px] font-bold text-center" style={{ color: '#151515' }}>Skor {img.score}</p>}
                             </div>
@@ -206,7 +208,7 @@ export default function SocialProofSection() {
                                 <p className="text-sm leading-relaxed flex-1" style={{ color: '#3d3d3d' }}>"{t.text}"</p>
                                 <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
                                     {t.avatar ? (
-                                        <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                                        <img src={t.avatar} alt={t.name} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
                                     ) : (
                                         <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-white text-sm shrink-0" style={{ backgroundColor: avatarBg(i), fontFamily: 'var(--font-heading)' }}>{t.name[0]}</div>
                                     )}
@@ -247,8 +249,9 @@ export default function SocialProofSection() {
                                         <img
                                             src={src}
                                             alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
-                                            className="h-auto w-auto group-hover:scale-105 transition-transform duration-300"
-                                            style={{ maxWidth: '200px' }}
+                                            width={200}
+                                            height={300}
+                                            className="h-auto w-full group-hover:scale-105 transition-transform duration-300"
                                             loading="lazy"
                                             decoding="async"
                                         />
