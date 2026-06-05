@@ -63,10 +63,10 @@ jobs:
             if [ "$attempt" -eq 3 ]; then
               echo "Failed to fetch SSH host key for ${{ env.SERVER_IP }} after 3 attempts."
               exit 1
+            else
+              echo "ssh-keyscan attempt $attempt failed, retrying in 5 seconds..."
+              sleep 5
             fi
-
-            echo "ssh-keyscan attempt $attempt failed, retrying in 5 seconds..."
-            sleep 5
           done
           chmod 600 ~/.ssh/known_hosts
 
