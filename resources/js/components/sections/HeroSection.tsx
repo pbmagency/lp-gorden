@@ -7,59 +7,142 @@ const stats = [
     { icon: <Users size={18} />, value: '45.000+', label: 'Alumni Sukses' },
     { icon: <Star size={18} />, value: '4.9/5', label: 'Rating Alumni' },
     { icon: <Award size={18} />, value: '13+', label: 'Tahun Pengalaman' },
-    { icon: <ShieldCheck size={18} />, value: 'Resmi', label: 'Lembaga ITP & IIEF' },
+    {
+        icon: <ShieldCheck size={18} />,
+        value: 'Resmi',
+        label: 'Lembaga ITP & IIEF',
+    },
 ];
 
 export default function HeroSection() {
     const { trackCTA } = useAnalytics();
 
     return (
-        <section id="hero" className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #fff 55%, #FFF5F5 100%)' }}>
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" style={{ backgroundColor: '#D70808', filter: 'blur(120px)', opacity: 0.07 }} />
-            <div className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none" style={{ backgroundColor: '#151515', filter: 'blur(100px)', opacity: 0.05 }} />
+        <section
+            id="hero"
+            className="relative overflow-hidden"
+            style={{
+                background: 'linear-gradient(160deg, #fff 55%, #FFF5F5 100%)',
+            }}
+        >
+            <div
+                className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
+                style={{
+                    backgroundColor: '#D70808',
+                    filter: 'blur(120px)',
+                    opacity: 0.07,
+                }}
+            />
+            <div
+                className="pointer-events-none absolute -bottom-16 -left-16 h-72 w-72 rounded-full"
+                style={{
+                    backgroundColor: '#151515',
+                    filter: 'blur(100px)',
+                    opacity: 0.05,
+                }}
+            />
 
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 md:pt-10 md:pb-14">
-                <div className="grid lg:grid-cols-2 gap-10 items-center">
-
+            <div className="mx-auto max-w-6xl px-4 pt-8 pb-12 sm:px-6 md:pt-10 md:pb-14 lg:px-8">
+                <div className="grid items-center gap-10 lg:grid-cols-2">
                     {/* Left column — text content, full-width on mobile */}
                     <div className="flex flex-col gap-3 lg:gap-4">
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
-                            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
-                                Khusus 18+ Tahun (Mahasiswa &amp; Karyawan Profesional)
+                            <div
+                                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+                                style={{
+                                    backgroundColor: '#FFF0F0',
+                                    color: '#D70808',
+                                    border: '1px solid #ffb3b3',
+                                }}
+                            >
+                                Khusus 18+ Tahun (Mahasiswa &amp; Karyawan
+                                Profesional)
                             </div>
                         </div>
 
                         {/* b. Headline */}
-                        <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                            Raih Skor <span style={{ color: '#D70808' }}>TOEFL 500+</span> untuk Kampus dan Karir Impian dalam{' '}
+                        <h1
+                            className="text-3xl leading-tight font-black sm:text-4xl lg:text-[2.75rem]"
+                            style={{
+                                fontFamily: 'var(--font-heading)',
+                                color: '#151515',
+                            }}
+                        >
+                            Raih Skor{' '}
+                            <span style={{ color: '#D70808' }}>TOEFL 500+</span>{' '}
+                            untuk Kampus dan Karir Impian dalam{' '}
                             <span style={{ color: '#D70808' }}>15 Hari</span>
                         </h1>
 
                         {/* c. Sub-copy */}
-                        <p className="text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
-                            Deadline LPDP, CPNS, rekrutmen/pendaftaran makin dekat tapi skor TOEFL masih belum cukup?{' '}
-                            <strong style={{ color: '#151515' }}>Metode TOEFL Pattern Recognition</strong>{' '}
-                            bantu kamu belajar lebih fokus ke pola soal yang benar-benar keluar di tes,{' '}
-                            cukup belajar <strong>1 jam sehari</strong> dari rumah dan rasakan kenaikan skor dalam{' '}
-                            <strong>15 hari</strong>.
+                        <p
+                            className="text-base leading-relaxed"
+                            style={{ color: '#3d3d3d' }}
+                        >
+                            Deadline LPDP, CPNS, rekrutmen/pendaftaran makin
+                            dekat tapi skor TOEFL masih belum cukup?{' '}
+                            <strong style={{ color: '#151515' }}>
+                                Metode TOEFL Pattern Recognition
+                            </strong>{' '}
+                            bantu kamu belajar lebih fokus ke pola soal yang
+                            benar-benar keluar di tes, cukup belajar{' '}
+                            <strong>1 jam sehari</strong> dari rumah dan rasakan
+                            kenaikan skor dalam <strong>15 hari</strong>.
                         </p>
 
                         {/* d. Trust badges */}
                         <div className="flex flex-wrap gap-2">
-                            {['Lembaga Resmi ITP & IIEF', 'Pengajar Skor 600+', '13+ Tahun Pengalaman'].map((b) => (
-                                <span key={b} className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
+                            {[
+                                'Lembaga Resmi ITP & IIEF',
+                                'Pengajar Skor 600+',
+                                '13+ Tahun Pengalaman',
+                            ].map((b) => (
+                                <span
+                                    key={b}
+                                    className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold"
+                                    style={{
+                                        backgroundColor: '#FFF0F0',
+                                        color: '#D70808',
+                                        border: '1px solid #ffb3b3',
+                                    }}
+                                >
                                     ✓ {b}
                                 </span>
                             ))}
                         </div>
 
                         {/* e. CTA buttons */}
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <LpButton href="#pricing" size="md" fullWidth className="sm:w-auto" onClick={() => trackCTA('hero_primary', 'Mulai Belajar Sekarang', '#pricing')}>
+                        <div className="flex flex-col gap-3 sm:flex-row">
+                            <LpButton
+                                href="#pricing"
+                                size="md"
+                                fullWidth
+                                className="sm:w-auto"
+                                onClick={() =>
+                                    trackCTA(
+                                        'hero_primary',
+                                        'Mulai Belajar Sekarang',
+                                        '#pricing',
+                                    )
+                                }
+                            >
                                 Mulai Belajar Sekarang →
                             </LpButton>
-                            <LpButton href="#testimonials" variant="ghost" size="md" fullWidth className="sm:w-auto" onClick={() => trackCTA('hero_secondary', 'Lihat Bukti Alumni', '#testimonials')}>
+                            <LpButton
+                                href="#testimonials"
+                                variant="ghost"
+                                size="md"
+                                fullWidth
+                                className="sm:w-auto"
+                                onClick={() =>
+                                    trackCTA(
+                                        'hero_secondary',
+                                        'Lihat Bukti Alumni',
+                                        '#testimonials',
+                                    )
+                                }
+                            >
                                 Lihat Bukti Alumni →
                             </LpButton>
                         </div>
@@ -68,48 +151,135 @@ export default function HeroSection() {
                     </div>
 
                     {/* Right column — score card, desktop only */}
-                    <div className="hidden lg:flex justify-center">
+                    <div className="hidden justify-center lg:flex">
                         <div className="w-full max-w-[360px]">
                             <div className="relative">
-                                <div className="rounded-3xl p-8 text-white" style={{ background: 'linear-gradient(145deg, #3d6ab0 0%, #1e3a6e 100%)', boxShadow: '0 24px 80px rgba(30,58,110,0.45), inset 0 1px 0 rgba(255,255,255,0.15)' }}>
-                                    <p className="text-sm font-semibold opacity-75 mb-2">Rata-rata skor TOEFL alumni kami</p>
-                                    <div className="flex items-end gap-3 mb-2">
-                                        <p className="text-6xl font-black" style={{ fontFamily: 'var(--font-heading)', color: '#F59E0B' }}>527</p>
+                                <div
+                                    className="rounded-3xl p-8 text-white"
+                                    style={{
+                                        background:
+                                            'linear-gradient(145deg, #3d6ab0 0%, #1e3a6e 100%)',
+                                        boxShadow:
+                                            '0 24px 80px rgba(30,58,110,0.45), inset 0 1px 0 rgba(255,255,255,0.15)',
+                                    }}
+                                >
+                                    <p className="mb-2 text-sm font-semibold opacity-75">
+                                        Rata-rata skor TOEFL alumni kami
+                                    </p>
+                                    <div className="mb-2 flex items-end gap-3">
+                                        <p
+                                            className="text-6xl font-black"
+                                            style={{
+                                                fontFamily:
+                                                    'var(--font-heading)',
+                                                color: '#F59E0B',
+                                            }}
+                                        >
+                                            527
+                                        </p>
                                         <div className="pb-1">
-                                            <p className="text-sm font-black" style={{ color: '#4ade80' }}>+100 poin</p>
-                                            <p className="text-xs opacity-60">rata-rata kenaikan</p>
+                                            <p
+                                                className="text-sm font-black"
+                                                style={{ color: '#4ade80' }}
+                                            >
+                                                +100 poin
+                                            </p>
+                                            <p className="text-xs opacity-60">
+                                                rata-rata kenaikan
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="h-px mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
+                                    <div
+                                        className="mb-6 h-px"
+                                        style={{
+                                            backgroundColor:
+                                                'rgba(255,255,255,0.15)',
+                                        }}
+                                    />
                                     <div className="grid grid-cols-2 gap-3">
                                         {stats.map((s) => (
-                                            <div key={s.label} className="rounded-2xl p-3 text-center" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                                                <p className="text-xl font-black mb-0.5" style={{ fontFamily: 'var(--font-heading)' }}>{s.value}</p>
-                                                <p className="text-xs opacity-70">{s.label}</p>
+                                            <div
+                                                key={s.label}
+                                                className="rounded-2xl p-3 text-center"
+                                                style={{
+                                                    backgroundColor:
+                                                        'rgba(255,255,255,0.1)',
+                                                }}
+                                            >
+                                                <p
+                                                    className="mb-0.5 text-xl font-black"
+                                                    style={{
+                                                        fontFamily:
+                                                            'var(--font-heading)',
+                                                    }}
+                                                >
+                                                    {s.value}
+                                                </p>
+                                                <p className="text-xs opacity-70">
+                                                    {s.label}
+                                                </p>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="absolute -bottom-5 -left-4 bg-white rounded-2xl px-4 py-3 flex items-center gap-3 max-w-[220px]" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.14)' }}>
+                                <div
+                                    className="absolute -bottom-5 -left-4 flex max-w-[220px] items-center gap-3 rounded-2xl bg-white px-4 py-3"
+                                    style={{
+                                        boxShadow:
+                                            '0 8px 32px rgba(0,0,0,0.14)',
+                                    }}
+                                >
                                     <span className="text-2xl">🎓</span>
-                                    <p className="text-xs font-black leading-snug" style={{ color: '#151515', fontFamily: 'var(--font-heading)' }}>Alumni kami tersebar di seluruh dunia</p>
+                                    <p
+                                        className="text-xs leading-snug font-black"
+                                        style={{
+                                            color: '#151515',
+                                            fontFamily: 'var(--font-heading)',
+                                        }}
+                                    >
+                                        Alumni kami tersebar di seluruh dunia
+                                    </p>
                                 </div>
 
-                                <div className="absolute -top-4 -right-4 bg-white rounded-2xl px-3 py-2 flex items-center gap-1.5" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
-                                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={12} fill="#F59E0B" color="#F59E0B" />)}
-                                    <span className="text-xs font-black ml-1" style={{ color: '#151515' }}>4.9</span>
+                                <div
+                                    className="absolute -top-4 -right-4 flex items-center gap-1.5 rounded-2xl bg-white px-3 py-2"
+                                    style={{
+                                        boxShadow:
+                                            '0 8px 32px rgba(0,0,0,0.12)',
+                                    }}
+                                >
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <Star
+                                            key={i}
+                                            size={12}
+                                            fill="#F59E0B"
+                                            color="#F59E0B"
+                                        />
+                                    ))}
+                                    <span
+                                        className="ml-1 text-xs font-black"
+                                        style={{ color: '#151515' }}
+                                    >
+                                        4.9
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div style={{ lineHeight: 0, marginBottom: '-1px' }}>
-                <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '56px' }}>
-                    <path d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z" fill="#F3F3F3" />
+                <svg
+                    viewBox="0 0 1440 56"
+                    preserveAspectRatio="none"
+                    style={{ display: 'block', width: '100%', height: '56px' }}
+                >
+                    <path
+                        d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z"
+                        fill="#F3F3F3"
+                    />
                 </svg>
             </div>
         </section>
