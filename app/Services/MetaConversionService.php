@@ -113,10 +113,10 @@ class MetaConversionService
 
             $response = $eventRequest->execute();
 
-            Log::debug('Meta CAPI response', [
-                'events_received' => $response->getEventsReceived(),
-                'messages'        => $response->getMessages(),
-            ]);
+            // Log::debug('Meta CAPI response', [
+            //     'events_received' => $response->getEventsReceived(),
+            //     'messages'        => $response->getMessages(),
+            // ]);
         } catch (\Throwable $e) {
             Log::warning('Meta CAPI request failed', ['error' => $e->getMessage()]);
         }

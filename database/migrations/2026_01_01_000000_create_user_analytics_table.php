@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('utm_content')->nullable();
             $table->string('utm_term')->nullable();
             $table->string('ip_hash')->nullable();
-            $table->string('user_agent')->nullable();
+            $table->text('user_agent')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('created_at');
 
