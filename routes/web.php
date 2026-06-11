@@ -22,6 +22,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
 
+// ── Cycle 2 Test Problem ──────────────────────────────────────────────────────
+Route::inertia('/cycle2/agitation-test-1', 'cycle2/agitation-test-1')->name('cycle2.agitation1');
+Route::inertia('/cycle2/agitation-test-2', 'cycle2/agitation-test-2')->name('cycle2.agitation2');
+Route::inertia('/cycle2/agitation-test-3', 'cycle2/agitation-test-3')->name('cycle2.agitation3');
+
+
 // ── Admin routes ──────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AnalyticsController::class, 'index'])->name('analytics');
