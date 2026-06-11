@@ -147,7 +147,7 @@ export default function AgitationSection() {
                     </p>
                     <div className="flex justify-center">
                         <a
-                            href="#pricing"
+                            href="#value"
                             className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold hover:gap-3 transition-all"
                             style={{ color: '#D70808' }}
                         >

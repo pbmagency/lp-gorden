@@ -18,7 +18,7 @@ export default function AgitationSection() {
                     <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>
                         <AlertTriangle size={13} /> Apakah Kamu Mengalami Ini?
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
                         Takut Semua Mimpimu Gagal Hanya Karena{' '}
                         <span style={{ color: '#D70808' }}>Skor TOEFL?</span>
                     </h2>
