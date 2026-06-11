@@ -9,7 +9,7 @@ import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
-    () => import('@/components/sections/AgitationSection'),
+    () => import('@/components/sections/AgitationSectionWrapper'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(

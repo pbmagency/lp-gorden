@@ -8,7 +8,7 @@ import HeroSection        from '@/components/sections/test-hero/HeroSection3';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
 // Below-the-fold — lazy load
-const AgitationSection   = lazy(() => import('@/components/sections/AgitationSection'));
+const AgitationSection   = lazy(() => import('@/components/sections/cycle2-test-problem/AgitationSection2'));
 const ValueSection       = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(() => import('@/components/sections/SocialProofSection'));
 const PricingSection     = lazy(() => import('@/components/sections/PricingSection'));
