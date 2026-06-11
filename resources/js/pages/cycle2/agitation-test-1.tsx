@@ -1,15 +1,15 @@
 import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
-// Above-the-fold — load immediately (critical rendering path)
+// Above-the-fold — load immediately
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection2 from '@/components/sections/test-hero/HeroSection2';
+import HeroSection from '@/components/sections/HeroSection';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
-// Below-the-fold — lazy load to reduce initial bundle size
+// Below-the-fold — lazy load
 const AgitationSection = lazy(
-    () => import('@/components/sections/AgitationSectionWrapper'),
+    () => import('@/components/sections/cycle2-test-problem/AgitationSection1'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(
@@ -26,13 +26,12 @@ import { waUrl } from '@/lib/wa-number';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
 
-// Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
     return <div aria-hidden="true" style={{ minHeight: '1px' }} />;
 }
 
-export default function Landing() {
-    const { trackCTA, trackVisit } = useAnalytics();
+export default function AgitationTest1() {
+    const { trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
@@ -54,27 +53,20 @@ export default function Landing() {
         <>
             <Head>
                 <title>
-                    Full Bright Indonesia – Spesialis TOEFL &amp; IELTS Sejak
-                    2013 | 45.000+ Alumni
+                    Cycle 2 - AgitationSection 1 | Full Bright Indonesia
                 </title>
                 <meta
                     name="description"
-                    content="Full Bright Indonesia – Spesialis TOEFL & IELTS Sejak 2013. Metode 30 Jam, 1 Jam 1 Hari. 45.000+ alumni sukses raih skor TOEFL ITP dalam 10–15 hari. Lembaga resmi ITP & IIEF Jakarta."
-                />
-                <meta
-                    name="keywords"
-                    content="belajar TOEFL online, kursus TOEFL ITP, TOEFL LPDP, TOEFL CPNS, TOEFL BUMN, Full Bright Indonesia"
+                    content="Testing AgitationSection 1 variant"
                 />
             </Head>
 
             <div className="min-h-screen bg-white">
-                {/* Above-the-fold: rendered immediately */}
                 <UrgencyBanner />
                 <Navbar />
-                <HeroSection2 />
+                <HeroSection />
                 <SocialProofLogoBar />
 
-                {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
                 </Suspense>
@@ -103,11 +95,21 @@ export default function Landing() {
                     rel="noopener noreferrer"
                     onClick={() => {
                         try {
-                            (window as { fbq?: (e: string, n: string, p?: object) => void }).fbq?.(
-                                'track', 'Search',
-                                { search_string: 'TOEFL Full Bright - WhatsApp Inquiry' },
-                            );
-                        } catch { /* fbq not loaded */ }
+                            (
+                                window as {
+                                    fbq?: (
+                                        e: string,
+                                        n: string,
+                                        p?: object,
+                                    ) => void;
+                                }
+                            ).fbq?.('track', 'Search', {
+                                search_string:
+                                    'TOEFL Full Bright - WhatsApp Inquiry',
+                            });
+                        } catch {
+                            /* fbq not loaded */
+                        }
                     }}
                     className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{
