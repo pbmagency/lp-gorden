@@ -53,10 +53,7 @@ export default function Landing() {
     return (
         <>
             <Head>
-                <title>
-                    Full Bright Indonesia – Spesialis TOEFL &amp; IELTS Sejak
-                    2013 | 45.000+ Alumni
-                </title>
+                <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
                 <meta
                     name="description"
                     content="Full Bright Indonesia – Spesialis TOEFL & IELTS Sejak 2013. Metode 30 Jam, 1 Jam 1 Hari. 45.000+ alumni sukses raih skor TOEFL ITP dalam 10–15 hari. Lembaga resmi ITP & IIEF Jakarta."
@@ -103,11 +100,21 @@ export default function Landing() {
                     rel="noopener noreferrer"
                     onClick={() => {
                         try {
-                            (window as { fbq?: (e: string, n: string, p?: object) => void }).fbq?.(
-                                'track', 'Search',
-                                { search_string: 'TOEFL Full Bright - WhatsApp Inquiry' },
-                            );
-                        } catch { /* fbq not loaded */ }
+                            (
+                                window as {
+                                    fbq?: (
+                                        e: string,
+                                        n: string,
+                                        p?: object,
+                                    ) => void;
+                                }
+                            ).fbq?.('track', 'Search', {
+                                search_string:
+                                    'TOEFL Full Bright - WhatsApp Inquiry',
+                            });
+                        } catch {
+                            /* fbq not loaded */
+                        }
                     }}
                     className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{
