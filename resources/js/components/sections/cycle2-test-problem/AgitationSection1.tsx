@@ -41,7 +41,7 @@ export default function AgitationSection() {
 
                     {/* Main Headline */}
                     <h2
-                        className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 leading-tight"
+                        className="text-2xl sm:text-3xl md:text-4xl font-black mb-5"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',

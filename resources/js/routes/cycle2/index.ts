@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
 export const agitation1 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation1.url(options),
@@ -11,13 +11,13 @@ export const agitation1 = (options?: RouteQueryOptions): RouteDefinition<'get'> 
 
 agitation1.definition = {
     methods: ["get","head"],
-    url: '/cycle2/agitation-test-1',
+    url: '/c2-problem-1',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
 agitation1.url = (options?: RouteQueryOptions) => {
     return agitation1.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ agitation1.url = (options?: RouteQueryOptions) => {
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
 agitation1.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation1.url(options),
@@ -35,7 +35,7 @@ agitation1.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
 agitation1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: agitation1.url(options),
@@ -45,7 +45,7 @@ agitation1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
     const agitation1Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
         action: agitation1.url(options),
@@ -55,7 +55,7 @@ agitation1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
         agitation1Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation1.url(options),
@@ -64,7 +64,7 @@ agitation1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-1'
+ * @route '/c2-problem-1'
  */
         agitation1Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation1.url({
@@ -80,7 +80,7 @@ agitation1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
 export const agitation2 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation2.url(options),
@@ -89,13 +89,13 @@ export const agitation2 = (options?: RouteQueryOptions): RouteDefinition<'get'> 
 
 agitation2.definition = {
     methods: ["get","head"],
-    url: '/cycle2/agitation-test-2',
+    url: '/c2-problem-2',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
 agitation2.url = (options?: RouteQueryOptions) => {
     return agitation2.definition.url + queryParams(options)
@@ -104,7 +104,7 @@ agitation2.url = (options?: RouteQueryOptions) => {
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
 agitation2.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation2.url(options),
@@ -113,7 +113,7 @@ agitation2.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
 agitation2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: agitation2.url(options),
@@ -123,7 +123,7 @@ agitation2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
     const agitation2Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
         action: agitation2.url(options),
@@ -133,7 +133,7 @@ agitation2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
         agitation2Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation2.url(options),
@@ -142,7 +142,7 @@ agitation2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-2'
+ * @route '/c2-problem-2'
  */
         agitation2Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation2.url({
@@ -158,7 +158,7 @@ agitation2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
 export const agitation3 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation3.url(options),
@@ -167,13 +167,13 @@ export const agitation3 = (options?: RouteQueryOptions): RouteDefinition<'get'> 
 
 agitation3.definition = {
     methods: ["get","head"],
-    url: '/cycle2/agitation-test-3',
+    url: '/c2-problem-3',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
 agitation3.url = (options?: RouteQueryOptions) => {
     return agitation3.definition.url + queryParams(options)
@@ -182,7 +182,7 @@ agitation3.url = (options?: RouteQueryOptions) => {
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
 agitation3.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: agitation3.url(options),
@@ -191,7 +191,7 @@ agitation3.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
 agitation3.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: agitation3.url(options),
@@ -201,7 +201,7 @@ agitation3.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
     const agitation3Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
         action: agitation3.url(options),
@@ -211,7 +211,7 @@ agitation3.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
         agitation3Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation3.url(options),
@@ -220,7 +220,7 @@ agitation3.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/cycle2/agitation-test-3'
+ * @route '/c2-problem-3'
  */
         agitation3Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: agitation3.url({
