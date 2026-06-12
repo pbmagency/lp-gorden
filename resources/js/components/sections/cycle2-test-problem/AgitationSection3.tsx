@@ -27,7 +27,7 @@ export default function AgitationSection() {
                     </div>
 
                     {/* Headline */}
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
                         Bukan Karena Kamu <span style={{ color: '#D70808' }}>Kurang Keras Belajar.</span>
                     </h2>
 
