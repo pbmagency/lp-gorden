@@ -52,9 +52,7 @@ export default function AgitationTest2() {
     return (
         <>
             <Head>
-                <title>
-                    Cycle 2 - AgitationSection 2 | Full Bright Indonesia
-                </title>
+                <title>Kelas TOEFL Skor 500+ Untuk LPDP dan Kerja</title>
                 <meta
                     name="description"
                     content="Testing AgitationSection 2 variant"
