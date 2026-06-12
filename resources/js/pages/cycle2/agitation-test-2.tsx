@@ -4,7 +4,7 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection from '@/components/sections/HeroSection';
+import HeroSection2 from '@/components/sections/test-hero/HeroSection2';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
 // Below-the-fold — lazy load
@@ -64,7 +64,7 @@ export default function AgitationTest2() {
             <div className="min-h-screen bg-white">
                 <UrgencyBanner />
                 <Navbar />
-                <HeroSection />
+                <HeroSection2 />
                 <SocialProofLogoBar />
 
                 <Suspense fallback={<SectionSkeleton />}>
