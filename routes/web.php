@@ -9,11 +9,6 @@ Route::inertia('/', 'landing')->name('home');
 Route::inertia('/bio-ig-toefl-hack', 'landing')->name('home2');
 Route::inertia('/toefl-hack', 'landing')->name('home3');
 
-// 3 varian test untuk meta ads
-Route::inertia('/test-hero-1', 'test-hero/test1')->name('test-hero-1');
-Route::inertia('/test-hero-2', 'test-hero/test2')->name('test-hero-2');
-Route::inertia('/test-hero-3', 'test-hero/test3')->name('test-hero-3');
-
 // ── Analytics tracking endpoint (public, uses session CSRF) ──────────────────
 Route::post('/analytics/track', [AnalyticsController::class, 'track'])->name('analytics.track');
 
