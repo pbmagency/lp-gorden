@@ -56,7 +56,7 @@ export default function Landing() {
                 <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
                 <meta
                     name="description"
-                    content="Full Bright Indonesia – Spesialis TOEFL & IELTS Sejak 2013. Metode 30 Jam, 1 Jam 1 Hari. 45.000+ alumni sukses raih skor TOEFL ITP dalam 10–15 hari. Lembaga resmi ITP & IIEF Jakarta."
+                    content="Kelas TOEFL Skor 500+ untuk LPDP dan Kerja"
                 />
                 <meta
                     name="keywords"
