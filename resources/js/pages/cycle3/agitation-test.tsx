@@ -1,15 +1,15 @@
 import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
-// Above-the-fold — load immediately (critical rendering path)
+// Above-the-fold — load immediately
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
 import HeroSection from '@/components/sections/HeroSection';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
-// Below-the-fold — lazy load to reduce initial bundle size
+// Below-the-fold — lazy load
 const AgitationSection = lazy(
-    () => import('@/components/sections/AgitationSection'),
+    () => import('@/components/sections/cycle3-test-problem/AgitationSection'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(
@@ -26,13 +26,12 @@ import { waUrl } from '@/lib/wa-number';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
 
-// Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
     return <div aria-hidden="true" style={{ minHeight: '1px' }} />;
 }
 
-export default function Landing() {
-    const { trackCTA, trackVisit } = useAnalytics();
+export default function AgitationTest1() {
+    const { trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
@@ -53,25 +52,19 @@ export default function Landing() {
     return (
         <>
             <Head>
-                <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
+                <title>Kelas TOEFL Skor 500+ Untuk LPDP dan Kerja</title>
                 <meta
                     name="description"
-                    content="Kelas TOEFL Skor 500+ untuk LPDP dan Kerja"
-                />
-                <meta
-                    name="keywords"
-                    content="belajar TOEFL online, kursus TOEFL ITP, TOEFL LPDP, TOEFL CPNS, TOEFL BUMN, Full Bright Indonesia"
+                    content="Testing AgitationSection 1 variant"
                 />
             </Head>
 
             <div className="min-h-screen bg-white">
-                {/* Above-the-fold: rendered immediately */}
                 <UrgencyBanner />
                 <Navbar />
                 <HeroSection />
                 <SocialProofLogoBar />
 
-                {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
                 </Suspense>
