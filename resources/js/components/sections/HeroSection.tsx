@@ -1,4 +1,5 @@
 import { ShieldCheck, Star, Award, Users } from 'lucide-react';
+import { memo } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
 import { useAnalytics } from '@/hooks/use-analytics';
@@ -14,7 +15,7 @@ const stats = [
     },
 ];
 
-export default function HeroSection() {
+export default memo(function HeroSection() {
     const { trackCTA } = useAnalytics();
 
     return (
@@ -26,7 +27,7 @@ export default function HeroSection() {
             }}
         >
             <div
-                className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
+                className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full md:-top-24 md:-right-24"
                 style={{
                     backgroundColor: '#D70808',
                     filter: 'blur(120px)',
@@ -34,7 +35,7 @@ export default function HeroSection() {
                 }}
             />
             <div
-                className="pointer-events-none absolute -bottom-16 -left-16 h-72 w-72 rounded-full"
+                className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full md:-bottom-16 md:-left-16"
                 style={{
                     backgroundColor: '#151515',
                     filter: 'blur(100px)',
@@ -42,22 +43,56 @@ export default function HeroSection() {
                 }}
             />
 
-            <div className="mx-auto max-w-6xl px-4 pt-8 pb-12 sm:px-6 md:pt-10 md:pb-14 lg:px-8">
+            <div className="mx-auto max-w-6xl px-4 pt-8 pb-6 sm:px-6 md:pt-10 md:pb-14 lg:px-8">
                 <div className="grid items-center gap-10 lg:grid-cols-2">
                     {/* Left column — text content, full-width on mobile */}
                     <div className="flex flex-col gap-3 lg:gap-4">
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
                             <div
-                                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+                                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-wide"
                                 style={{
                                     backgroundColor: '#FFF0F0',
                                     color: '#D70808',
                                     border: '1px solid #ffb3b3',
                                 }}
                             >
-                                Khusus 18+ Tahun (Mahasiswa &amp; Karyawan
-                                Profesional)
+                                <div className="flex items-center gap-1">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <Star
+                                            key={i}
+                                            size={12}
+                                            fill="#ffd000"
+                                            color="#ffd000"
+                                        />
+                                    ))}
+                                </div>
+                                <span className="tracking-widest uppercase">
+                                    45.000+ ALUMNI
+                                </span>
+                                <div className="ml-2 flex items-center -space-x-2">
+                                    <img
+                                        src="/people/People 1.webp"
+                                        alt="alumni"
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="h-5 w-5 rounded-full border-2 border-white object-cover"
+                                    />
+                                    <img
+                                        src="/people/People 2.webp"
+                                        alt="alumni"
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="h-5 w-5 rounded-full border-2 border-white object-cover"
+                                    />
+                                    <img
+                                        src="/people/People 3.webp"
+                                        alt="alumni"
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="h-5 w-5 rounded-full border-2 border-white object-cover"
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -69,10 +104,14 @@ export default function HeroSection() {
                                 color: '#151515',
                             }}
                         >
-                            Raih Skor{' '}
-                            <span style={{ color: '#D70808' }}>TOEFL 500+</span>{' '}
-                            untuk Kampus dan Karir Impian dalam{' '}
-                            <span style={{ color: '#D70808' }}>15 Hari</span>
+                            Capai{' '}
+                            <span style={{ color: '#D70808' }}>
+                                TOEFL 500+ Dalam 15 Hari
+                            </span>{' '}
+                            Untuk LPDP Dan CPNS Yang{' '}
+                            <span style={{ color: '#D70808' }}>
+                                Sisa 1 Bulan Lagi{' '}
+                            </span>
                         </h1>
 
                         {/* c. Sub-copy */}
@@ -80,22 +119,23 @@ export default function HeroSection() {
                             className="text-base leading-relaxed"
                             style={{ color: '#3d3d3d' }}
                         >
-                            Deadline LPDP, CPNS, rekrutmen/pendaftaran makin
-                            dekat tapi skor TOEFL masih belum cukup?{' '}
                             <strong style={{ color: '#151515' }}>
-                                Metode TOEFL Pattern Recognition
+                                Persiapkan skor TOEFL-mu
                             </strong>{' '}
-                            bantu kamu belajar lebih fokus ke pola soal yang
-                            benar-benar keluar di tes, cukup belajar{' '}
-                            <strong>1 jam sehari</strong> dari rumah dan rasakan
-                            kenaikan skor dalam <strong>15 hari</strong>.
+                            sekarang dengan strategi{' '}
+                            <strong style={{ color: '#151515' }}>
+                                belajar 1 jam sehari
+                            </strong>{' '}
+                            yang telah membantu{' '}
+                            <strong style={{ color: '#151515' }}>
+                                45.000+ alumni.
+                            </strong>
                         </p>
 
                         {/* d. Trust badges */}
                         <div className="flex flex-wrap gap-2">
                             {[
                                 'Lembaga Resmi ITP & IIEF',
-                                'Pengajar Skor 600+',
                                 '13+ Tahun Pengalaman',
                             ].map((b) => (
                                 <span
@@ -274,7 +314,8 @@ export default function HeroSection() {
                 <svg
                     viewBox="0 0 1440 56"
                     preserveAspectRatio="none"
-                    style={{ display: 'block', width: '100%', height: '56px' }}
+                    className="h-8 w-full md:h-14"
+                    style={{ display: 'block' }}
                 >
                     <path
                         d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z"
@@ -284,4 +325,4 @@ export default function HeroSection() {
             </div>
         </section>
     );
-}
+});

@@ -314,72 +314,72 @@ Controller42a740574ecbfbac32f8cc353fc32db9.head = (options?: RouteQueryOptions):
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-const Controller1e07876ccfc70d544e0ae39413fd0721 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controller1e07876ccfc70d544e0ae39413fd0721.url(options),
+const Controller30577f290beec2f7e645688887f0890c = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller30577f290beec2f7e645688887f0890c.url(options),
     method: 'get',
 })
 
-Controller1e07876ccfc70d544e0ae39413fd0721.definition = {
+Controller30577f290beec2f7e645688887f0890c.definition = {
     methods: ["get","head"],
-    url: '/c2-problem-1',
+    url: '/c3-problem',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-Controller1e07876ccfc70d544e0ae39413fd0721.url = (options?: RouteQueryOptions) => {
-    return Controller1e07876ccfc70d544e0ae39413fd0721.definition.url + queryParams(options)
+Controller30577f290beec2f7e645688887f0890c.url = (options?: RouteQueryOptions) => {
+    return Controller30577f290beec2f7e645688887f0890c.definition.url + queryParams(options)
 }
 
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-Controller1e07876ccfc70d544e0ae39413fd0721.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controller1e07876ccfc70d544e0ae39413fd0721.url(options),
+Controller30577f290beec2f7e645688887f0890c.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller30577f290beec2f7e645688887f0890c.url(options),
     method: 'get',
 })
 /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-Controller1e07876ccfc70d544e0ae39413fd0721.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: Controller1e07876ccfc70d544e0ae39413fd0721.url(options),
+Controller30577f290beec2f7e645688887f0890c.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: Controller30577f290beec2f7e645688887f0890c.url(options),
     method: 'head',
 })
 
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-    const Controller1e07876ccfc70d544e0ae39413fd0721Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: Controller1e07876ccfc70d544e0ae39413fd0721.url(options),
+    const Controller30577f290beec2f7e645688887f0890cForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: Controller30577f290beec2f7e645688887f0890c.url(options),
         method: 'get',
     })
 
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-        Controller1e07876ccfc70d544e0ae39413fd0721Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controller1e07876ccfc70d544e0ae39413fd0721.url(options),
+        Controller30577f290beec2f7e645688887f0890cForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: Controller30577f290beec2f7e645688887f0890c.url(options),
             method: 'get',
         })
             /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-1'
+ * @route '/c3-problem'
  */
-        Controller1e07876ccfc70d544e0ae39413fd0721Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controller1e07876ccfc70d544e0ae39413fd0721.url({
+        Controller30577f290beec2f7e645688887f0890cForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: Controller30577f290beec2f7e645688887f0890c.url({
                         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
                             _method: 'HEAD',
                             ...(options?.query ?? options?.mergeQuery ?? {}),
@@ -388,163 +388,7 @@ Controller1e07876ccfc70d544e0ae39413fd0721.head = (options?: RouteQueryOptions):
             method: 'get',
         })
     
-    Controller1e07876ccfc70d544e0ae39413fd0721.form = Controller1e07876ccfc70d544e0ae39413fd0721Form
-    /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-const Controllerba142e09543ee234c2dc3051e5192123 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controllerba142e09543ee234c2dc3051e5192123.url(options),
-    method: 'get',
-})
-
-Controllerba142e09543ee234c2dc3051e5192123.definition = {
-    methods: ["get","head"],
-    url: '/c2-problem-2',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-Controllerba142e09543ee234c2dc3051e5192123.url = (options?: RouteQueryOptions) => {
-    return Controllerba142e09543ee234c2dc3051e5192123.definition.url + queryParams(options)
-}
-
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-Controllerba142e09543ee234c2dc3051e5192123.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controllerba142e09543ee234c2dc3051e5192123.url(options),
-    method: 'get',
-})
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-Controllerba142e09543ee234c2dc3051e5192123.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: Controllerba142e09543ee234c2dc3051e5192123.url(options),
-    method: 'head',
-})
-
-    /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-    const Controllerba142e09543ee234c2dc3051e5192123Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: Controllerba142e09543ee234c2dc3051e5192123.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-        Controllerba142e09543ee234c2dc3051e5192123Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controllerba142e09543ee234c2dc3051e5192123.url(options),
-            method: 'get',
-        })
-            /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-2'
- */
-        Controllerba142e09543ee234c2dc3051e5192123Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controllerba142e09543ee234c2dc3051e5192123.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    Controllerba142e09543ee234c2dc3051e5192123.form = Controllerba142e09543ee234c2dc3051e5192123Form
-    /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-const Controller894630bbf34bdbd769e751758b7ea5cf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controller894630bbf34bdbd769e751758b7ea5cf.url(options),
-    method: 'get',
-})
-
-Controller894630bbf34bdbd769e751758b7ea5cf.definition = {
-    methods: ["get","head"],
-    url: '/c2-problem-3',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-Controller894630bbf34bdbd769e751758b7ea5cf.url = (options?: RouteQueryOptions) => {
-    return Controller894630bbf34bdbd769e751758b7ea5cf.definition.url + queryParams(options)
-}
-
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-Controller894630bbf34bdbd769e751758b7ea5cf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: Controller894630bbf34bdbd769e751758b7ea5cf.url(options),
-    method: 'get',
-})
-/**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-Controller894630bbf34bdbd769e751758b7ea5cf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: Controller894630bbf34bdbd769e751758b7ea5cf.url(options),
-    method: 'head',
-})
-
-    /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-    const Controller894630bbf34bdbd769e751758b7ea5cfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: Controller894630bbf34bdbd769e751758b7ea5cf.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-        Controller894630bbf34bdbd769e751758b7ea5cfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controller894630bbf34bdbd769e751758b7ea5cf.url(options),
-            method: 'get',
-        })
-            /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
- * @route '/c2-problem-3'
- */
-        Controller894630bbf34bdbd769e751758b7ea5cfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: Controller894630bbf34bdbd769e751758b7ea5cf.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    Controller894630bbf34bdbd769e751758b7ea5cf.form = Controller894630bbf34bdbd769e751758b7ea5cfForm
+    Controller30577f290beec2f7e645688887f0890c.form = Controller30577f290beec2f7e645688887f0890cForm
     /**
 * @see \Inertia\Controller::__invoke
  * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
@@ -634,9 +478,7 @@ const Controller = {
     '/bio-ig-toefl-hack': Controller40a01a1699aa81065f0aa8fdda0f8426,
     '/toefl-hack': Controlleref596e3b2ff77794a2ffd983d4e27298,
     '/dashboard': Controller42a740574ecbfbac32f8cc353fc32db9,
-    '/c2-problem-1': Controller1e07876ccfc70d544e0ae39413fd0721,
-    '/c2-problem-2': Controllerba142e09543ee234c2dc3051e5192123,
-    '/c2-problem-3': Controller894630bbf34bdbd769e751758b7ea5cf,
+    '/c3-problem': Controller30577f290beec2f7e645688887f0890c,
     '/settings/appearance': Controllere19ee86e9cf603ce1a59a1ec5d21dec5,
 }
 
