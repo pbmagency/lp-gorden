@@ -8,8 +8,8 @@ import HeroSectionV1 from '@/components/sections/HeroSectionV1';
 
 
 // Below-the-fold — lazy load to reduce initial bundle size
-const AgitationSection = lazy(
-    () => import('@/components/sections/AgitationSection'),
+const AgitationSectionV1 = lazy(
+    () => import('@/components/sections/AgitationSectionV1V2'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(
@@ -73,7 +73,7 @@ export default function Landing() {
 
                 {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
-                    <AgitationSection />
+                    <AgitationSectionV1 />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <ValueSection />
