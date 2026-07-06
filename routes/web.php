@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 // ── Public landing page ───────────────────────────────────────────────────────
 Route::inertia('/', 'landing')->name('home');
-Route::inertia('/variant-1', 'landingV1');
-Route::inertia('/variant-2', 'landingV2');
+// ── Cycle 4 Test Social Proof ─────────────────────
+Route::inertia('/c4-sp-1', 'cycle4/sp-test-1')->name('cycle4.sp.v1');
+Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');
 
 Route::inertia('/bio-ig-toefl-hack', 'landing')->name('home2');
 Route::inertia('/toefl-hack', 'landing')->name('home3');

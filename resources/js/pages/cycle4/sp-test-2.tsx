@@ -4,12 +4,12 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately (critical rendering path)
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSectionV2 from '@/components/sections/HeroSectionV2';
+import HeroSection2 from '@/components/sections/cycle4-test-sp/HeroSection2';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
 // Below-the-fold — lazy load to reduce initial bundle size
-const AgitationSectionV2 = lazy(
-    () => import('@/components/sections/AgitationSectionV1V2'),
+const AgitationSection = lazy(
+    () => import('@/components/sections/cycle4-test-sp/AgitationSection'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(
@@ -68,12 +68,12 @@ export default function Landing() {
                 {/* Above-the-fold: rendered immediately */}
                 <UrgencyBanner />
                 <Navbar />
-                <HeroSectionV2 />
+                <HeroSection2 />
                 
 
                 {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
-                    <AgitationSectionV2 />
+                    <AgitationSection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <ValueSection />
