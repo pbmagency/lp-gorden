@@ -110,7 +110,7 @@ export default memo(function HeroSection() {
                             </span>{' '}
                             Untuk LPDP Dan CPNS Yang{' '}
                             <span style={{ color: '#D70808' }}>
-                                Sisa 1 Bulan Lagi{' '}
+                                Sisa 3 Minggu Lagi{' '}
                             </span>
                         </h1>
 
