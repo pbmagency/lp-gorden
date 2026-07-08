@@ -450,7 +450,7 @@ class AbTestingService
 
     private function batchBouncedCounts(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
     {
-        // Bounced = visited but NOT engaged (engagement = dwell_ping AND scroll >= 25%)
+        // Bounced = visited but had NO engagement event at all
         $rows = DB::table('user_analytics as v')
             ->select([
                 DB::raw("json_extract(v.event_data, '$.landing_source') as landing_source"),
@@ -461,22 +461,11 @@ class AbTestingService
             ->whereRaw("json_extract(v.event_data, '$.landing_source') IS NOT NULL")
             ->whereRaw("json_extract(v.event_data, '$.landing_source') NOT IN ('', 'unknown')")
             ->when($sourceFilter && $sourceFilter !== 'all', fn($q) => $q->where('v.referral_source', $sourceFilter))
-            ->where(function ($q) use ($startDate, $endDate) {
-                // NOT engaged = missing dwell_ping OR missing scroll >= 25%
-                $q->whereNotExists(function ($sub) use ($startDate, $endDate) {
-                    $sub->from('user_analytics as e')
-                        ->whereColumn('e.session_id', 'v.session_id')
-                        ->where('e.event_type', 'engagement')
-                        ->whereRaw("json_extract(e.event_data, '$.type') = 'dwell_ping'")
-                        ->whereBetween('e.created_at', [$startDate, $endDate]);
-                })
-                    ->orWhereNotExists(function ($sub) use ($startDate, $endDate) {
-                        $sub->from('user_analytics as s')
-                            ->whereColumn('s.session_id', 'v.session_id')
-                            ->where('s.event_type', 'scroll')
-                            ->whereRaw("CAST(json_extract(s.event_data, '$.depth') AS DECIMAL(10,2)) >= 25")
-                            ->whereBetween('s.created_at', [$startDate, $endDate]);
-                    });
+            ->whereNotExists(function ($q) use ($startDate, $endDate) {
+                $q->from('user_analytics as e')
+                    ->whereColumn('e.session_id', 'v.session_id')
+                    ->where('e.event_type', 'engagement')
+                    ->whereBetween('e.created_at', [$startDate, $endDate]);
             })
             ->groupBy('landing_source')
             ->get();
