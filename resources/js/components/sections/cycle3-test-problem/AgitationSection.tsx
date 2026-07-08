@@ -18,7 +18,7 @@ const afterItems = [
 
 export default function AgitationSection() {
     return (
-        <SectionWrapper bg="cultured" className="py-14 md:py-20">
+        <SectionWrapper bg="cultured" className="py-14 md:py-20" id="agitation">
             <div className="mx-auto max-w-2xl">
                 {/* Tag */}
                 <div className="mb-8 text-center md:mb-10">

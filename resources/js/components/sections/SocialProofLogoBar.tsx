@@ -9,13 +9,13 @@ const logos = [
 
 export default function SocialProofLogoBar() {
     return (
-        <div
+        <section
             className="w-full px-4 py-8"
+            id="social-proof-bar"
             style={{
                 backgroundColor: '#F9F9F9',
                 borderBottom: '1px solid #e5e7eb',
             }}
-            id="social-proof-bar"
         >
             <p
                 className="mb-6 text-center text-xs font-bold tracking-widest uppercase"
@@ -48,6 +48,6 @@ export default function SocialProofLogoBar() {
                     </div>
                 ))}
             </div>
-        </div>
+        </section>
     );
 }

@@ -202,7 +202,7 @@ export default function SocialProofSection() {
         setReviewIndex((i) => (i !== null ? (i + 1) % 19 : null));
 
     return (
-        <div id="testimonials">
+        <section id="testimonials">
             {/* Stats bar */}
             <div style={{ backgroundColor: '#151515' }} className="py-10">
                 <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -658,6 +658,6 @@ export default function SocialProofSection() {
                     </button>
                 </div>
             )}
-        </div>
+        </section>
     );
 }

@@ -93,20 +93,34 @@ export function useSectionTracking() {
 
         observerRef.current = observer;
 
-        // Auto-discover all <section id="..."> elements (rAF ensures DOM is fully painted)
-        requestAnimationFrame(() => {
-            const sections =
-                document.querySelectorAll<HTMLElement>('section[id]');
-            sections.forEach((el) => {
+        /**
+         * Scan the DOM for any <section id="..."> elements that haven't been
+         * seen yet and start observing them. Called on initial paint AND every
+         * time the MutationObserver detects new nodes (e.g. lazy-loaded sections).
+         */
+        const scanAndObserve = () => {
+            document.querySelectorAll<HTMLElement>('section[id]').forEach((el) => {
                 const storageKey = `${SECTION_SEEN_PREFIX}${el.id}`;
                 if (!sessionStorage.getItem(storageKey)) {
                     observer.observe(el);
                 }
             });
+        };
+
+        // Initial scan after first paint
+        requestAnimationFrame(scanAndObserve);
+
+        // Watch for lazy-loaded sections being inserted into the DOM so they
+        // are picked up without requiring a full re-mount of this hook.
+        const mutationObserver = new MutationObserver(scanAndObserve);
+        mutationObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
         });
 
         return () => {
             observer.disconnect();
+            mutationObserver.disconnect();
             // Cancel all pending dwell timers on unmount
             dwellTimers.current.forEach(clearTimeout);
             dwellTimers.current.clear();
