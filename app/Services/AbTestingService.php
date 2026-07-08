@@ -13,47 +13,53 @@ class AbTestingService
 
     public function getPerformanceMatrix(Carbon $startDate, Carbon $endDate, ?string $sourceFilter = null): array
     {
+        // Base event counts (visit, engagement, payment, cta_click)
         $counts = $this->batchEventCounts(
             $startDate,
             $endDate,
             $sourceFilter,
-            ['visit', 'engagement', 'initiate_checkout', 'lead', 'payment', 'cta_click']
+            ['visit', 'engagement', 'payment', 'cta_click']
         );
 
         if (empty($counts)) {
             return [];
         }
 
+        // Frontend sends event_type='conversion' with subtypes:
+        //   - 'checkout_redirect' → Initiate Checkout stage
+        //   - 'wa_inquiry'        → Lead stage
+        $conversionCounts = $this->batchConversionSubtypeCounts($startDate, $endDate, $sourceFilter);
+
         $bouncedBySource = $this->batchBouncedCounts($startDate, $endDate, $sourceFilter);
         $revenueBySource = $this->batchRevenue($startDate, $endDate, $sourceFilter);
 
         $matrix = [];
         foreach ($counts as $source => $typeCounts) {
-            $visits = $typeCounts['visit'] ?? 0;
-            $engaged = $typeCounts['engagement'] ?? 0;
-            $initiateCheckouts = $typeCounts['initiate_checkout'] ?? 0;
-            $leads = $typeCounts['lead'] ?? 0;
-            $payments = $typeCounts['payment'] ?? 0;
-            $ctaClicks = $typeCounts['cta_click'] ?? 0;
+            $visits            = $typeCounts['visit']      ?? 0;
+            $engaged           = $typeCounts['engagement'] ?? 0;
+            $payments          = $typeCounts['payment']    ?? 0;
+            $ctaClicks         = $typeCounts['cta_click']  ?? 0;
+            $initiateCheckouts = $conversionCounts[$source]['checkout_redirect'] ?? 0;
+            $leads             = $conversionCounts[$source]['wa_inquiry']        ?? 0;
 
             $bounced = $bouncedBySource[$source] ?? ($visits - $engaged);
             $revenue = (float) ($revenueBySource[$source] ?? 0);
 
             $matrix[] = [
-                'landing_source' => $source,
-                'visits' => $visits,
-                'bounce_rate' => round($this->safePct($bounced, $visits), 2),
-                'intent_rate' => round($this->safePct($ctaClicks, $visits), 2),
-                'initiate_checkout_rate' => round($this->safePct($initiateCheckouts, $visits), 2),
-                'lead_cr' => round($this->safePct($leads, $visits), 2),
-                'strict_cr' => round($this->safePct($payments, $visits), 2),
-                'rpv' => $visits > 0 ? round($revenue / $visits, 2) : 0,
-                'revenue' => $revenue,
-                'initiate_checkouts' => $initiateCheckouts,
-                'leads' => $leads,
-                'conversions' => $leads,
-                'payments' => $payments,
-                'cta_clicks' => $ctaClicks,
+                'landing_source'        => $source,
+                'visits'                => $visits,
+                'bounce_rate'           => round($this->safePct($bounced, $visits), 2),
+                'intent_rate'           => round($this->safePct($ctaClicks, $visits), 2),
+                'initiate_checkout_rate'=> round($this->safePct($initiateCheckouts, $visits), 2),
+                'lead_cr'               => round($this->safePct($leads, $visits), 2),
+                'strict_cr'             => round($this->safePct($payments, $visits), 2),
+                'rpv'                   => $visits > 0 ? round($revenue / $visits, 2) : 0,
+                'revenue'               => $revenue,
+                'initiate_checkouts'    => $initiateCheckouts,
+                'leads'                 => $leads,
+                'conversions'           => $leads,
+                'payments'              => $payments,
+                'cta_clicks'            => $ctaClicks,
             ];
         }
 
@@ -68,31 +74,36 @@ class AbTestingService
             $startDate,
             $endDate,
             $sourceFilter,
-            ['visit', 'engagement', 'cta_click', 'initiate_checkout', 'lead', 'payment']
+            ['visit', 'engagement', 'cta_click', 'payment']
         );
 
         if (empty($counts)) {
             return [];
         }
 
+        // Frontend sends event_type='conversion' with subtypes:
+        //   - 'checkout_redirect' → Initiate Checkout
+        //   - 'wa_inquiry'        → Lead
+        $conversionCounts = $this->batchConversionSubtypeCounts($startDate, $endDate, $sourceFilter);
+
         $funnel = [];
         foreach ($counts as $source => $typeCounts) {
-            $visits = $typeCounts['visit'] ?? 0;
-            $engaged = $typeCounts['engagement'] ?? 0;
-            $intent = $typeCounts['cta_click'] ?? 0;
-            $initiateCheckouts = $typeCounts['initiate_checkout'] ?? 0;
-            $leads = $typeCounts['lead'] ?? 0;
-            $sales = $typeCounts['payment'] ?? 0;
+            $visits            = $typeCounts['visit']      ?? 0;
+            $engaged           = $typeCounts['engagement'] ?? 0;
+            $intent            = $typeCounts['cta_click']  ?? 0;
+            $initiateCheckouts = $conversionCounts[$source]['checkout_redirect'] ?? 0;
+            $leads             = $conversionCounts[$source]['wa_inquiry']        ?? 0;
+            $sales             = $typeCounts['payment']    ?? 0;
 
             $funnel[] = [
                 'landing_source' => $source,
                 'steps' => [
-                    ['stage' => 'Visits',  'count' => $visits,  'percentage' => 100],
-                    ['stage' => 'Engaged', 'count' => $engaged, 'percentage' => round($this->safePct($engaged, $visits), 1)],
-                    ['stage' => 'Intent',  'count' => $intent,  'percentage' => round($this->safePct($intent, $visits), 1)],
-                    ['stage' => 'Initiate Checkout', 'count' => $initiateCheckouts, 'percentage' => round($this->safePct($initiateCheckouts, $visits), 1)],
-                    ['stage' => 'Leads',   'count' => $leads,   'percentage' => round($this->safePct($leads, $visits), 1)],
-                    ['stage' => 'Sales',   'count' => $sales,   'percentage' => round($this->safePct($sales, $visits), 1)],
+                    ['stage' => 'Visits',            'count' => $visits,            'percentage' => 100],
+                    ['stage' => 'Engaged',            'count' => $engaged,           'percentage' => round($this->safePct($engaged,           $visits), 1)],
+                    ['stage' => 'Intent',             'count' => $intent,            'percentage' => round($this->safePct($intent,            $visits), 1)],
+                    ['stage' => 'Initiate Checkout',  'count' => $initiateCheckouts, 'percentage' => round($this->safePct($initiateCheckouts, $visits), 1)],
+                    ['stage' => 'Leads',              'count' => $leads,             'percentage' => round($this->safePct($leads,             $visits), 1)],
+                    ['stage' => 'Sales',              'count' => $sales,             'percentage' => round($this->safePct($sales,             $visits), 1)],
                 ],
             ];
         }
@@ -154,8 +165,10 @@ class AbTestingService
 
         $ctaClicks = $query->get();
 
+        // Frontend sends wa_inquiry as a 'conversion' event — treat as Lead
         $leadSessions = DB::table('user_analytics')
-            ->where('event_type', 'lead')
+            ->where('event_type', 'conversion')
+            ->whereRaw("json_extract(event_data, '$.type') = 'wa_inquiry'")
             ->whereBetween('created_at', [$startDate, $endDate])
             ->distinct()
             ->pluck('session_id');
@@ -551,6 +564,11 @@ class AbTestingService
         return array_map(fn($ids) => collect(array_unique($ids)), $result);
     }
 
+    /**
+     * Returns session IDs that fired a 'wa_inquiry' conversion event, grouped by landing source.
+     * Frontend sends event_type='conversion' with event_data.type='wa_inquiry' when the user
+     * clicks the WhatsApp CTA — this is the Lead signal.
+     */
     private function batchLeadSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
     {
         $rows = DB::table('user_analytics')
@@ -558,7 +576,8 @@ class AbTestingService
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
                 'session_id',
             ])
-            ->where('event_type', 'lead')
+            ->where('event_type', 'conversion')
+            ->whereRaw("json_extract(event_data, '$.type') = 'wa_inquiry'")
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
             ->when($sourceFilter && $sourceFilter !== 'all', fn($q) => $q->where('referral_source', $sourceFilter))
@@ -572,6 +591,42 @@ class AbTestingService
         }
 
         return array_map(fn($ids) => collect(array_unique($ids)), $result);
+    }
+
+    /**
+     * Count 'conversion' events grouped by landing_source AND event_data.type.
+     *
+     * Frontend subtypes:
+     *  - 'wa_inquiry'        → user clicked WhatsApp CTA (Lead)
+     *  - 'checkout_redirect' → user clicked Pay button (Initiate Checkout)
+     *
+     * Returns: [ '/landing-path' => [ 'wa_inquiry' => N, 'checkout_redirect' => M ], ... ]
+     */
+    private function batchConversionSubtypeCounts(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
+    {
+        $rows = DB::table('user_analytics')
+            ->select([
+                DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
+                DB::raw("json_extract(event_data, '$.type') as conversion_type"),
+                DB::raw('COUNT(DISTINCT session_id) as cnt'),
+            ])
+            ->where('event_type', 'conversion')
+            ->whereRaw("json_extract(event_data, '$.type') IN ('wa_inquiry', 'checkout_redirect')")
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
+            ->whereRaw("json_extract(event_data, '$.landing_source') NOT IN ('', 'unknown')")
+            ->when($sourceFilter && $sourceFilter !== 'all', fn($q) => $q->where('referral_source', $sourceFilter))
+            ->groupBy('landing_source', 'conversion_type')
+            ->get();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $key  = $this->normalizeLandingSource($row->landing_source);
+            $type = trim($row->conversion_type, '"');
+            $result[$key][$type] = $row->cnt;
+        }
+
+        return $result;
     }
 
     private function batchVisitSessionsWithUserAgent(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
