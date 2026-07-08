@@ -4,12 +4,12 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately (critical rendering path)
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection from '@/components/sections/HeroSection';
+import HeroSection2 from '@/components/sections/cycle4-test-sp/HeroSection2';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
 
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
-    () => import('@/components/sections/cycle3-test-problem/AgitationSection'),
+    () => import('@/components/sections/cycle4-test-sp/AgitationSection'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(
@@ -25,7 +25,6 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { waUrl } from '@/lib/wa-number';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
-import { useSectionTracking } from '@/hooks/use-section-tracking';
 
 // Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
@@ -46,7 +45,6 @@ export default function Landing() {
 
     useScrollTracking();
     useDwellTime();
-    useSectionTracking();
 
     useEffect(() => {
         trackVisit();
@@ -70,8 +68,8 @@ export default function Landing() {
                 {/* Above-the-fold: rendered immediately */}
                 <UrgencyBanner />
                 <Navbar />
-                <HeroSection />
-                <SocialProofLogoBar />
+                <HeroSection2 />
+                
 
                 {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
@@ -80,6 +78,7 @@ export default function Landing() {
                 <Suspense fallback={<SectionSkeleton />}>
                     <ValueSection />
                 </Suspense>
+                <SocialProofLogoBar />
                 <Suspense fallback={<SectionSkeleton />}>
                     <SocialProofSection />
                 </Suspense>

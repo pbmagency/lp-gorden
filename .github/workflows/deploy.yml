@@ -12,9 +12,9 @@ jobs:
     env:
       SERVER_IP: '72.61.210.213'
       SERVER_USER: 'root'
-      TARGET_DIR_LARAVEL: '/home/fullbrightindonesia.org/laravel-toefl'
-      TARGET_DIR_PUBLIC: '/home/fullbrightindonesia.org/toefl'
       DOMAIN_USERNAME: 'fullb5357'
+      TARGET_DIR_LARAVEL: '/home/fullbrightindonesia.org/laravel-toefl'
+      TARGET_DIR_PUBLIC: '/home/fullbrightindonesia.org/public_html'
 
     steps:
       - name: Checkout Code
@@ -23,7 +23,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
 
       - name: Install Composer Dependencies
         run: |
@@ -108,7 +108,10 @@ jobs:
             cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
 
             cd ${{ env.TARGET_DIR_PUBLIC }}
-            ln -sfn ../laravel/storage/app/public storage
+
+            ln -sfn \
+            ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public \
+            storage
 
             cd ${{ env.TARGET_DIR_LARAVEL }}
             php artisan optimize:clear
