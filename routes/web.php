@@ -21,7 +21,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
 
-// ── Cycle 3 Test Problem ──────────────────────────────────────────────────────
 Route::inertia('/c3-problem', 'cycle3/agitation-test')->name('cycle3.agitation');
 
 // ── Admin routes ──────────────────────────────────────────────────────────────
