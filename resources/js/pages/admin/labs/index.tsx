@@ -1,3 +1,43 @@
+import { Head, router, useHttp } from '@inertiajs/react';
+import { format, parse } from 'date-fns';
+import {
+    Activity,
+    AlertTriangle,
+    ArrowUpDown,
+    BarChart3,
+    CheckCircle,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    Eye,
+    Filter,
+    FlaskConical,
+    Globe,
+    MousePointerClick,
+    RefreshCw,
+    ShoppingCart,
+    Target,
+    TrendingUp,
+    Trophy,
+    Users,
+    X,
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from 'recharts';
+import { DateRangePicker } from '@/components/date-range-picker';
+import { AudienceSegmentation } from '@/components/labs/audience-segmentation';
+import { CtaAnalysis } from '@/components/labs/cta-analysis';
+import { DeviceComparison } from '@/components/labs/device-comparison';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,46 +70,8 @@ import type {
     LabsPageProps,
     MatrixItem,
     QualityMetrics,
+    SectionHeatmapItem,
 } from '@/types/analytics';
-
-import { DateRangePicker } from '@/components/date-range-picker';
-import { AudienceSegmentation } from '@/components/labs/audience-segmentation';
-import { CtaAnalysis } from '@/components/labs/cta-analysis';
-import { DeviceComparison } from '@/components/labs/device-comparison';
-import { Head, router, useHttp } from '@inertiajs/react';
-import { format, parse } from 'date-fns';
-import {
-    Activity,
-    AlertTriangle,
-    ArrowUpDown,
-    BarChart3,
-    CheckCircle,
-    ChevronLeft,
-    ChevronRight,
-    Clock,
-    Eye,
-    Filter,
-    FlaskConical,
-    MousePointerClick,
-    RefreshCw,
-    Target,
-    TrendingUp,
-    Trophy,
-    Users,
-    X,
-} from 'lucide-react';
-import { useMemo, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from 'recharts';
 
 // ==================== HELPERS ====================
 
@@ -77,15 +79,25 @@ const transformFunnelData = (
     funnel: FunnelItem[],
     selectedSources: string[],
 ) => {
-    if (funnel.length === 0 || selectedSources.length === 0) return [];
+    if (funnel.length === 0 || selectedSources.length === 0) {
+        return [];
+    }
 
-    const stages = ['Visits', 'Engaged', 'Intent', 'Leads', 'Sales'];
+    const stages = [
+        'Visits',
+        'Engaged',
+        'Intent',
+        'Initiate Checkout',
+        'Leads',
+        'Sales',
+    ];
 
     return stages.map((stage) => {
         const dataPoint: Record<string, string | number> = { name: stage };
 
         selectedSources.forEach((source) => {
             const funnelItem = funnel.find((f) => f.landing_source === source);
+
             if (funnelItem) {
                 const steps = toSafeArray(funnelItem.steps);
                 const step = steps.find((s) => s.stage === stage);
@@ -115,6 +127,7 @@ export default function LabsIndex({
     cta: rawCta,
     readers: rawReaders,
     heatmap: rawHeatmap,
+    section_heatmap: rawSectionHeatmap,
     availableSources: rawAvailableSources,
     filters,
 }: LabsPageProps) {
@@ -126,6 +139,7 @@ export default function LabsIndex({
     const cta = toSafeArray(rawCta);
     const readers = toSafeArray(rawReaders);
     const heatmap = toSafeArray(rawHeatmap);
+    const sectionHeatmap = toSafeArray<SectionHeatmapItem>(rawSectionHeatmap);
     const availableSources = toSafeArray<string>(rawAvailableSources);
 
     // useHttp for cache-clear (replaces deprecated axios)
@@ -152,8 +166,102 @@ export default function LabsIndex({
                 to: parse(filters.end_date, 'yyyy-MM-dd', new Date()),
             };
         }
+
         return undefined;
     });
+
+    // ── Page Filter (localStorage persisted) ──────────────────
+    // Normalize any landing_source to a clean pathname (strip protocol+domain if present)
+    const normalizePath = (source: string): string => {
+        try {
+            // If it looks like a full URL, extract just the pathname
+            if (source.startsWith('http://') || source.startsWith('https://')) {
+                return new URL(source).pathname;
+            }
+        } catch {
+            // ignore invalid URLs
+        }
+        // Already a path — ensure it starts with /
+        return source.startsWith('/') ? source : `/${source}`;
+    };
+
+    const availablePages = useMemo(
+        () =>
+            [
+                ...new Set(matrix.map((m) => normalizePath(m.landing_source))),
+            ].sort(),
+        [matrix],
+    );
+
+    const [selectedPages, setSelectedPages] = useState<string[]>(() => {
+        if (typeof window === 'undefined') return [];
+        try {
+            const stored = localStorage.getItem('labs_page_filter');
+            if (stored) {
+                const parsed = JSON.parse(stored) as string[];
+                // Only keep pages that still exist in the data
+                return parsed.filter((p) => availablePages.includes(p));
+            }
+        } catch {
+            // ignore malformed JSON
+        }
+        return []; // empty = show all
+    });
+
+    // Persist page filter to localStorage
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        localStorage.setItem('labs_page_filter', JSON.stringify(selectedPages));
+    }, [selectedPages]);
+
+    const togglePage = (page: string) => {
+        setSelectedPages((prev) =>
+            prev.includes(page)
+                ? prev.filter((p) => p !== page)
+                : [...prev, page],
+        );
+    };
+
+    const clearPageFilter = () => setSelectedPages([]);
+
+    // ── Filtered data (page filter applied) ──────────────────
+    const isPageFiltered = selectedPages.length > 0;
+    // Normalize both sides so /test-v1 matches whether stored as path or full URL
+    const pageMatch = (source: string) =>
+        !isPageFiltered || selectedPages.includes(normalizePath(source));
+
+    const filteredMatrix = useMemo(
+        () => matrix.filter((m) => pageMatch(m.landing_source)),
+        [matrix, selectedPages],
+    );
+    const filteredFunnel = useMemo(
+        () => safeFunnel.filter((f) => pageMatch(f.landing_source)),
+        [safeFunnel, selectedPages],
+    );
+    const filteredQuality = useMemo(
+        () => quality.filter((q: any) => pageMatch(q.landing_source)),
+        [quality, selectedPages],
+    );
+    const filteredDevices = useMemo(
+        () => devices.filter((d: any) => pageMatch(d.landing_source)),
+        [devices, selectedPages],
+    );
+    const filteredCta = useMemo(
+        () => cta.filter((c: any) => pageMatch(c.landing_source)),
+        [cta, selectedPages],
+    );
+    const filteredReaders = useMemo(
+        () => readers.filter((r: any) => pageMatch(r.landing_source)),
+        [readers, selectedPages],
+    );
+    const filteredHeatmap = useMemo(
+        () => heatmap.filter((h: any) => pageMatch(h.landing_source)),
+        [heatmap, selectedPages],
+    );
+    const filteredSectionHeatmap = useMemo(
+        () => sectionHeatmap.filter((s) => pageMatch(s.landing_source)),
+        [sectionHeatmap, selectedPages],
+    );
 
     const triggerToast = (message: string, type: 'success' | 'error') => {
         setToastMessage(message);
@@ -177,27 +285,33 @@ export default function LabsIndex({
 
     // Find winner (highest RPV)
     const winner = useMemo(() => {
-        if (matrix.length === 0) return null;
-        return matrix.reduce((prev, curr) =>
+        if (filteredMatrix.length === 0) {
+            return null;
+        }
+
+        return filteredMatrix.reduce((prev, curr) =>
             curr.rpv > prev.rpv ? curr : prev,
         );
-    }, [matrix]);
+    }, [filteredMatrix]);
 
     // Sorted matrix data
     const sortedMatrix = useMemo(() => {
-        return [...matrix].sort((a, b) => {
+        return [...filteredMatrix].sort((a, b) => {
             const aVal = a[sortColumn];
             const bVal = b[sortColumn];
+
             if (sortDirection === 'asc') {
                 return (aVal as number) > (bVal as number) ? 1 : -1;
             }
+
             return (aVal as number) < (bVal as number) ? 1 : -1;
         });
-    }, [matrix, sortColumn, sortDirection]);
+    }, [filteredMatrix, sortColumn, sortDirection]);
 
     // Paginated matrix
     const paginatedMatrix = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
+
         return sortedMatrix.slice(startIndex, startIndex + itemsPerPage);
     }, [sortedMatrix, currentPage]);
 
@@ -205,8 +319,8 @@ export default function LabsIndex({
 
     // Transform funnel data for chart
     const chartData = useMemo(() => {
-        return transformFunnelData(safeFunnel, selectedFunnelSources);
-    }, [safeFunnel, selectedFunnelSources]);
+        return transformFunnelData(filteredFunnel, selectedFunnelSources);
+    }, [filteredFunnel, selectedFunnelSources]);
 
     // Handlers
     const handleRangeChange = (value: string) => {
@@ -245,6 +359,7 @@ export default function LabsIndex({
 
     const handleDateUpdate = (date: DateRange | undefined) => {
         setDateRange(date);
+
         // Only trigger router if both dates are selected
         if (date?.from && date?.to) {
             router.get(
@@ -270,11 +385,13 @@ export default function LabsIndex({
             range: filters.range,
             source: sourceValue,
         };
+
         // Preserve custom date range parameters
         if (filters.range === 'custom') {
             params.start_date = filters.start_date;
             params.end_date = filters.end_date;
         }
+
         router.get('/admin/labs', params, {
             preserveState: true,
             preserveScroll: true,
@@ -287,11 +404,13 @@ export default function LabsIndex({
             range: filters.range,
             source: undefined,
         };
+
         // Preserve custom date range parameters
         if (filters.range === 'custom') {
             params.start_date = filters.start_date;
             params.end_date = filters.end_date;
         }
+
         router.get('/admin/labs', params, {
             preserveState: true,
             preserveScroll: true,
@@ -418,6 +537,68 @@ export default function LabsIndex({
                             )}
                         </div>
 
+                        {/* Page / URL Filter */}
+                        {availablePages.length > 1 && (
+                            <div className="flex items-center gap-2">
+                                <Globe className="h-4 w-4 text-muted-foreground" />
+                                <Select
+                                    value={
+                                        selectedPages.length === 1
+                                            ? selectedPages[0]
+                                            : '__multi__'
+                                    }
+                                    onValueChange={(val) => {
+                                        if (val === '__all__') {
+                                            clearPageFilter();
+                                        } else {
+                                            togglePage(val);
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue>
+                                            {selectedPages.length === 0
+                                                ? 'All Pages'
+                                                : selectedPages.length === 1
+                                                  ? selectedPages[0]
+                                                  : `${selectedPages.length} pages`}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="__all__">
+                                            All Pages
+                                        </SelectItem>
+                                        {availablePages.map((page) => (
+                                            <SelectItem key={page} value={page}>
+                                                <span className="flex items-center gap-2">
+                                                    <span
+                                                        className={`inline-block h-2 w-2 rounded-full ${
+                                                            selectedPages.includes(
+                                                                page,
+                                                            )
+                                                                ? 'bg-primary'
+                                                                : 'bg-muted-foreground/30'
+                                                        }`}
+                                                    />
+                                                    {page}
+                                                </span>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {isPageFiltered && (
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={clearPageFilter}
+                                        className="h-8 w-8"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+
                         {/* Date Range Dropdown */}
                         <Select
                             value={filters.range}
@@ -481,6 +662,13 @@ export default function LabsIndex({
                             {filters.source === 'direct'
                                 ? 'Direct Traffic'
                                 : filters.source}
+                        </Badge>
+                    )}
+                    {isPageFiltered && (
+                        <Badge variant="secondary" className="gap-1">
+                            <Globe className="h-3 w-3" />
+                            {selectedPages.length} page
+                            {selectedPages.length > 1 ? 's' : ''} selected
                         </Badge>
                     )}
                 </div>
@@ -562,6 +750,20 @@ export default function LabsIndex({
                                                     >
                                                         <MousePointerClick className="h-4 w-4" />{' '}
                                                         Intent
+                                                        <ArrowUpDown className="h-3 w-3" />
+                                                    </button>
+                                                </th>
+                                                <th className="p-4 text-left text-sm font-medium text-muted-foreground">
+                                                    <button
+                                                        onClick={() =>
+                                                            handleSort(
+                                                                'initiate_checkout_rate',
+                                                            )
+                                                        }
+                                                        className="flex items-center gap-1 hover:text-foreground"
+                                                    >
+                                                        <ShoppingCart className="h-4 w-4" />{' '}
+                                                        Initiate Checkout
                                                         <ArrowUpDown className="h-3 w-3" />
                                                     </button>
                                                 </th>
@@ -670,6 +872,13 @@ export default function LabsIndex({
                                                             )}
                                                             %
                                                         </td>
+                                                        <td className="p-4 text-foreground">
+                                                            {formatPercent(
+                                                                item.initiate_checkout_rate,
+                                                                2,
+                                                            )}
+                                                            %
+                                                        </td>
                                                         <td className="p-4">
                                                             <Badge variant="secondary">
                                                                 {formatPercent(
@@ -766,6 +975,18 @@ export default function LabsIndex({
                                                                 {formatPercent(
                                                                     item.bounce_rate,
                                                                     1,
+                                                                )}
+                                                                %
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-muted-foreground">
+                                                                Checkout:
+                                                            </span>{' '}
+                                                            <span className="text-foreground">
+                                                                {formatPercent(
+                                                                    item.initiate_checkout_rate,
+                                                                    2,
                                                                 )}
                                                                 %
                                                             </span>
@@ -885,7 +1106,7 @@ export default function LabsIndex({
                             <CardContent className="space-y-6">
                                 {/* Source Selector */}
                                 <div className="flex flex-wrap gap-4">
-                                    {safeFunnel.map((f, index) => (
+                                    {filteredFunnel.map((f, index) => (
                                         <div
                                             key={f.landing_source}
                                             className="flex items-center space-x-2"
@@ -1022,6 +1243,7 @@ export default function LabsIndex({
                                                     'Visits',
                                                     'Engaged',
                                                     'Intent',
+                                                    'Initiate Checkout',
                                                     'Leads',
                                                     'Sales',
                                                 ].map((stage) => (
@@ -1035,7 +1257,7 @@ export default function LabsIndex({
                                                         {selectedFunnelSources.map(
                                                             (source) => {
                                                                 const funnelItem =
-                                                                    safeFunnel.find(
+                                                                    filteredFunnel.find(
                                                                         (f) =>
                                                                             f.landing_source ===
                                                                             source,
@@ -1050,6 +1272,7 @@ export default function LabsIndex({
                                                                             s.stage ===
                                                                             stage,
                                                                     );
+
                                                                 return (
                                                                     <td
                                                                         key={
@@ -1087,19 +1310,24 @@ export default function LabsIndex({
                         </Card>
 
                         {/* ==================== SECTION C: DEVICE PERFORMANCE ==================== */}
-                        {devices && devices.length > 0 && (
-                            <DeviceComparison data={devices} />
+                        {filteredDevices && filteredDevices.length > 0 && (
+                            <DeviceComparison data={filteredDevices} />
                         )}
 
                         {/* ==================== SECTION D: CTA ANALYSIS ==================== */}
-                        {cta && cta.length > 0 && <CtaAnalysis data={cta} />}
+                        {filteredCta && filteredCta.length > 0 && (
+                            <CtaAnalysis data={filteredCta} />
+                        )}
 
                         {/* ==================== SECTION E: AUDIENCE SEGMENTATION ==================== */}
-                        {((readers && readers.length > 0) ||
-                            (heatmap && heatmap.length > 0)) && (
+                        {((filteredReaders && filteredReaders.length > 0) ||
+                            (filteredHeatmap && filteredHeatmap.length > 0) ||
+                            (filteredSectionHeatmap &&
+                                filteredSectionHeatmap.length > 0)) && (
                             <AudienceSegmentation
-                                readers={readers || []}
-                                heatmap={heatmap || []}
+                                readers={filteredReaders || []}
+                                heatmap={filteredHeatmap || []}
+                                sectionHeatmap={filteredSectionHeatmap || []}
                             />
                         )}
 
@@ -1112,31 +1340,29 @@ export default function LabsIndex({
                                         Behavior Analysis
                                     </h2>
                                     <p className="text-sm text-muted-foreground">
-                                        Buyers vs Non-Buyers engagement
-                                        comparison
+                                        Leads vs Non-Leads engagement comparison
                                     </p>
                                 </div>
                             </div>
 
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {quality.map((item) => {
+                                {filteredQuality.map((item) => {
                                     const defaultMetrics: QualityMetrics = {
                                         count: 0,
                                         avg_scroll_depth: 0,
                                         avg_dwell_time: 0,
                                     };
-                                    const buyers =
-                                        item.buyers ?? defaultMetrics;
-                                    const nonBuyers =
-                                        item.non_buyers ?? defaultMetrics;
+                                    const leads = item.leads ?? defaultMetrics;
+                                    const nonLeads =
+                                        item.non_leads ?? defaultMetrics;
 
                                     const scrollGap = Math.abs(
-                                        buyers.avg_scroll_depth -
-                                            nonBuyers.avg_scroll_depth,
+                                        leads.avg_scroll_depth -
+                                            nonLeads.avg_scroll_depth,
                                     );
                                     const dwellGap = Math.abs(
-                                        buyers.avg_dwell_time -
-                                            nonBuyers.avg_dwell_time,
+                                        leads.avg_dwell_time -
+                                            nonLeads.avg_dwell_time,
                                     );
                                     const hasSignificantGap =
                                         scrollGap > 30 || dwellGap > 60;
@@ -1177,12 +1403,12 @@ export default function LabsIndex({
                                                     <div className="space-y-1">
                                                         <div className="flex items-center justify-between text-xs">
                                                             <span className="text-primary">
-                                                                Buyers (
-                                                                {buyers.count})
+                                                                Leads (
+                                                                {leads.count})
                                                             </span>
                                                             <span className="font-medium text-foreground">
                                                                 {formatPercent(
-                                                                    buyers.avg_scroll_depth,
+                                                                    leads.avg_scroll_depth,
                                                                     1,
                                                                 )}
                                                                 %
@@ -1192,21 +1418,19 @@ export default function LabsIndex({
                                                             <div
                                                                 className="h-full rounded-full bg-primary transition-all"
                                                                 style={{
-                                                                    width: `${Math.min(buyers.avg_scroll_depth, 100)}%`,
+                                                                    width: `${Math.min(leads.avg_scroll_depth, 100)}%`,
                                                                 }}
                                                             />
                                                         </div>
                                                         <div className="flex items-center justify-between text-xs">
                                                             <span className="text-muted-foreground">
                                                                 Others (
-                                                                {
-                                                                    nonBuyers.count
-                                                                }
+                                                                {nonLeads.count}
                                                                 )
                                                             </span>
                                                             <span className="text-foreground">
                                                                 {formatPercent(
-                                                                    nonBuyers.avg_scroll_depth,
+                                                                    nonLeads.avg_scroll_depth,
                                                                     1,
                                                                 )}
                                                                 %
@@ -1216,7 +1440,7 @@ export default function LabsIndex({
                                                             <div
                                                                 className="h-full rounded-full bg-muted-foreground transition-all"
                                                                 style={{
-                                                                    width: `${Math.min(nonBuyers.avg_scroll_depth, 100)}%`,
+                                                                    width: `${Math.min(nonLeads.avg_scroll_depth, 100)}%`,
                                                                 }}
                                                             />
                                                         </div>
@@ -1235,11 +1459,11 @@ export default function LabsIndex({
                                                         <div className="text-center">
                                                             <div className="text-lg font-bold text-primary">
                                                                 {formatDuration(
-                                                                    buyers.avg_dwell_time,
+                                                                    leads.avg_dwell_time,
                                                                 )}
                                                             </div>
                                                             <div className="text-xs text-muted-foreground">
-                                                                Buyers
+                                                                Leads
                                                             </div>
                                                         </div>
                                                         <div className="text-xl text-muted-foreground">
@@ -1248,7 +1472,7 @@ export default function LabsIndex({
                                                         <div className="text-center">
                                                             <div className="text-lg font-bold text-foreground">
                                                                 {formatDuration(
-                                                                    nonBuyers.avg_dwell_time,
+                                                                    nonLeads.avg_dwell_time,
                                                                 )}
                                                             </div>
                                                             <div className="text-xs text-muted-foreground">

@@ -25,6 +25,7 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { waUrl } from '@/lib/wa-number';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
+import { useSectionTracking } from '@/hooks/use-section-tracking';
 
 // Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
@@ -45,6 +46,7 @@ export default function Landing() {
 
     useScrollTracking();
     useDwellTime();
+    useSectionTracking();
 
     useEffect(() => {
         trackVisit();

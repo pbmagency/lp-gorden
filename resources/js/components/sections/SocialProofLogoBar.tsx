@@ -15,6 +15,7 @@ export default function SocialProofLogoBar() {
                 backgroundColor: '#F9F9F9',
                 borderBottom: '1px solid #e5e7eb',
             }}
+            id="social-proof-bar"
         >
             <p
                 className="mb-6 text-center text-xs font-bold tracking-widest uppercase"
