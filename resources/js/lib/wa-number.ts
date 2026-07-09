@@ -1,6 +1,5 @@
 const CS_LIST = [
-    { name: 'Ms. Aini',   number: '6281959486507', weight: 40 },
-    { name: 'Ms. Fini',   number: '6285255499299', weight: 40 },
+    { name: 'Ms. Aini',   number: '6281959486507', weight: 60 },
     { name: 'Mr. Choiri', number: '6288744875322', weight: 20 },
 ];
 
