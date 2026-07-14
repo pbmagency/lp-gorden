@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // ── Public landing page ───────────────────────────────────────────────────────
 Route::inertia('/', 'landing')->name('home');
+Route::inertia('/c1-test', 'test-hero/test1')->name('cycle2.agitation2');
 // ── Cycle 4 Test Social Proof ─────────────────────
 Route::inertia('/c4-sp-1', 'cycle4/sp-test-1')->name('cycle4.sp.v1');
 Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');
