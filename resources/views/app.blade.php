@@ -17,16 +17,10 @@
         })();
     </script>
 
-    {{-- Critical inline styles prevent flash of wrong background before CSS loads --}}
     <style>
         html { background-color: oklch(1 0 0); }
         html.dark { background-color: oklch(0.145 0 0); }
     </style>
-
-    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.bunny.net">
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-    <link rel="dns-prefetch" href="https://connect.facebook.net">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -35,7 +29,41 @@
 
     <link rel="preload" href="/logo/Primary%20Logo.webp" as="image" fetchpriority="high">
 
-    <!-- Microsoft Clarity — deferred -->
+    @viteReactRefresh
+    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+    <x-inertia::head>
+        <title>{{ config('app.name') }}</title>
+    </x-inertia::head>
+</head>
+
+<body class="font-sans antialiased">
+    <x-inertia::app />
+
+    <!-- SSR Skeleton: Triggers LCP and FCP instantly before React boots -->
+    <div id="ssr-skeleton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; background: #fff; z-index: 999999; padding-top: 6rem; padding-left: 1rem; padding-right: 1rem; box-sizing: border-box;">
+        <div style="max-width: 72rem; margin: 0 auto;">
+            <h1 style="font-size: 2.25rem; font-weight: 900; line-height: 1.25; color: #151515; font-family: 'Nunito', system-ui, sans-serif;">
+                Capai <span style="color: #D70808">TOEFL 500+ Dalam 15 Hari</span> Untuk LPDP Dan CPNS Yang <span style="color: #D70808">Sisa 3 Minggu Lagi</span>
+            </h1>
+        </div>
+    </div>
+
+    <script>
+        // Delete the skeleton the exact millisecond React finishes booting
+        const observer = new MutationObserver((mutations, obs) => {
+            const app = document.getElementById('app');
+            if (app && app.children.length > 0) {
+                setTimeout(() => {
+                    const skeleton = document.getElementById('ssr-skeleton');
+                    if (skeleton) skeleton.remove();
+                }, 50);
+                obs.disconnect();
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+
+    <!-- Microsoft Clarity -->
     <script>
         window.addEventListener('load', function() {
             (function(c, l, a, r, i, t, y) {
@@ -48,7 +76,7 @@
         });
     </script>
 
-    <!-- Meta Pixel — deferred -->
+    <!-- Meta Pixel -->
     <script>
         window.addEventListener('load', function() {
             !function(f,b,e,v,n,t,s)
@@ -68,16 +96,6 @@
     </script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id={{ config('services.meta.pixel_id', 'YOUR_PIXEL_ID') }}&ev=PageView&noscript=1" /></noscript>
-
-    @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
-    <x-inertia::head>
-        <title>{{ config('app.name') }}</title>
-    </x-inertia::head>
-</head>
-
-<body class="font-sans antialiased">
-    <x-inertia::app />
 </body>
 
 </html>
