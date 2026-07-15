@@ -17,10 +17,11 @@
         })();
     </script>
 
-    {{-- Critical inline styles prevent flash of wrong background before CSS loads --}}
+    {{-- Critical inline styles: background + font to prevent any flash before CSS arrives --}}
     <style>
         html { background-color: oklch(1 0 0); }
         html.dark { background-color: oklch(0.145 0 0); }
+        body { font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif; }
     </style>
 
     <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
@@ -33,10 +34,12 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- LCP image — highest priority --}}
-    <link rel="preload" href="/logo/Primary Logo.webp" as="image" fetchpriority="high">
+    {{-- LCP image — highest fetch priority so browser starts downloading immediately --}}
+    <link rel="preload" href="/logo/Primary%20Logo.webp" as="image" fetchpriority="high">
 
-    {{-- Load CSS async to unblock FCP/LCP (630ms blocking removed) --}}
+    {{-- CSS loaded async: removes the 630ms render-blocking penalty.
+         IMPORTANT: do NOT include app.css in @vite() below — that would
+         re-add a blocking <link rel="stylesheet"> and undo this. --}}
     <link rel="preload" href="{{ Vite::asset('resources/css/app.css') }}" as="style"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
@@ -46,13 +49,13 @@
     <!-- Microsoft Clarity — deferred -->
     <script>
         window.addEventListener('load', function() {
-            (function(c, l, a, r, i, t, y) {
-                c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
-                t = l.createElement(r); t.async = 1;
-                t.src = "https://www.clarity.ms/tag/" + i;
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, "clarity", "script", "wv3d64uo3o");
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;
+                t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t,y);
+            })(window,document,"clarity","script","wv3d64uo3o");
         });
     </script>
 
@@ -67,23 +70,22 @@
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window,document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '{{ config('services.meta.pixel_id', 'YOUR_PIXEL_ID') }}');
-            window.__META_PAGE_VIEW_EVENT_ID = crypto.randomUUID
-                ? crypto.randomUUID()
-                : Date.now() + '-' + Math.random().toString(36).substring(2, 11);
-            fbq('track', 'PageView', {}, { eventID: window.__META_PAGE_VIEW_EVENT_ID });
+            fbq('init','{{ config('services.meta.pixel_id','YOUR_PIXEL_ID') }}');
+            window.__META_PAGE_VIEW_EVENT_ID=crypto.randomUUID
+                ?crypto.randomUUID()
+                :Date.now()+'-'+Math.random().toString(36).substring(2,11);
+            fbq('track','PageView',{},{eventID:window.__META_PAGE_VIEW_EVENT_ID});
         });
     </script>
     <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id={{ config('services.meta.pixel_id', 'YOUR_PIXEL_ID') }}&ev=PageView&noscript=1" /></noscript>
+        src="https://www.facebook.com/tr?id={{ config('services.meta.pixel_id','YOUR_PIXEL_ID') }}&ev=PageView&noscript=1"></noscript>
 
     @fonts
 
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
-    <x-inertia::head>
-        <title>{{ config('app.name') }}</title>
-    </x-inertia::head>
+    {{-- CSS intentionally excluded here — it is loaded async above --}}
+    @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+    @inertiaHead
 </head>
 
 <body class="font-sans antialiased">

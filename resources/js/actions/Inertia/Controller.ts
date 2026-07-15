@@ -242,6 +242,86 @@ Controller4a0b0d88bdc2d7c679100b961a65db14.form = Controller4a0b0d88bdc2d7c67910
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+const Controller59e3aec23fdf295dce50340e57424969 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller59e3aec23fdf295dce50340e57424969.url(options),
+    method: 'get',
+})
+
+Controller59e3aec23fdf295dce50340e57424969.definition = {
+    methods: ["get","head"],
+    url: '/c5-hero',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+Controller59e3aec23fdf295dce50340e57424969.url = (options?: RouteQueryOptions) => {
+    return Controller59e3aec23fdf295dce50340e57424969.definition.url + queryParams(options)
+}
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+Controller59e3aec23fdf295dce50340e57424969.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller59e3aec23fdf295dce50340e57424969.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+Controller59e3aec23fdf295dce50340e57424969.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: Controller59e3aec23fdf295dce50340e57424969.url(options),
+    method: 'head',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+const Controller59e3aec23fdf295dce50340e57424969Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller59e3aec23fdf295dce50340e57424969.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+Controller59e3aec23fdf295dce50340e57424969Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller59e3aec23fdf295dce50340e57424969.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c5-hero'
+*/
+Controller59e3aec23fdf295dce50340e57424969Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller59e3aec23fdf295dce50340e57424969.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+Controller59e3aec23fdf295dce50340e57424969.form = Controller59e3aec23fdf295dce50340e57424969Form
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
 * @route '/bio-ig-toefl-hack'
 */
 const Controller40a01a1699aa81065f0aa8fdda0f8426 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -649,6 +729,7 @@ const Controller = {
     '/': Controller980bb49ee7ae63891f1d891d2fbcf1c9,
     '/c4-sp-1': Controller7337523198342044b0077fe0715c4957,
     '/c4-sp-2': Controller4a0b0d88bdc2d7c679100b961a65db14,
+    '/c5-hero': Controller59e3aec23fdf295dce50340e57424969,
     '/bio-ig-toefl-hack': Controller40a01a1699aa81065f0aa8fdda0f8426,
     '/toefl-hack': Controlleref596e3b2ff77794a2ffd983d4e27298,
     '/dashboard': Controller42a740574ecbfbac32f8cc353fc32db9,
