@@ -33,15 +33,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- LCP image — highest priority --}}
-    <link rel="preload" href="/logo/Primary Logo.webp" as="image" fetchpriority="high">
-
-    {{-- Load CSS async to unblock FCP/LCP (630ms blocking removed) --}}
-    <link rel="preload" href="{{ Vite::asset('resources/css/app.css') }}" as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="{{ Vite::asset('resources/css/app.css') }}">
-    </noscript>
+    {{-- LCP image — highest priority, correctly URL encoded --}}
+    <link rel="preload" href="/logo/Primary%20Logo.webp" as="image" fetchpriority="high">
 
     <!-- Microsoft Clarity — deferred -->
     <script>

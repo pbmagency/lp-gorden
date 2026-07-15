@@ -1,10 +1,9 @@
 import { useEffect, useState, memo } from 'react';
-import LpButton from '@/components/ui/lp-button';
 
 const FullBrightLogo = memo(() => {
     return (
         <img
-            src="/logo/Primary Logo.webp"
+            src="/logo/Primary%20Logo.webp"
             alt="Full Bright Indonesia"
             width={160}
             height={48}

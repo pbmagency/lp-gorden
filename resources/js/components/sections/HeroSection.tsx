@@ -74,21 +74,21 @@ export default memo(function HeroSection() {
                                     <img
                                         src="/people/People 1.webp"
                                         alt="alumni"
-                                        loading="lazy"
+                                        
                                         decoding="async"
                                         className="h-5 w-5 rounded-full border-2 border-white object-cover"
                                     />
                                     <img
                                         src="/people/People 2.webp"
                                         alt="alumni"
-                                        loading="lazy"
+                                        
                                         decoding="async"
                                         className="h-5 w-5 rounded-full border-2 border-white object-cover"
                                     />
                                     <img
                                         src="/people/People 3.webp"
                                         alt="alumni"
-                                        loading="lazy"
+                                        
                                         decoding="async"
                                         className="h-5 w-5 rounded-full border-2 border-white object-cover"
                                     />
