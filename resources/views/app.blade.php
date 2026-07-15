@@ -45,6 +45,8 @@
 
     {{-- Preload logo — the true LCP candidate on the landing page --}}
     <link rel="preload" href="/logo/Primary Logo.webp" as="image" fetchpriority="high">
+    {{-- Preload main CSS — keeps it on the critical path with high priority --}}
+    <link rel="preload" href="{{ Vite::asset('resources/css/app.css') }}" as="style" fetchpriority="high">
 
     <!-- Microsoft Clarity — deferred so it doesn't block page rendering / LCP -->
     <script>
