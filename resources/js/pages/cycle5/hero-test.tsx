@@ -4,7 +4,7 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately (critical rendering path)
 import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection1 from '@/components/sections/cycle4-test-sp/HeroSection1';
+import HeroSection1 from '@/components/sections/cycle5/HeroSection1';
 
 
 // Below-the-fold — lazy load to reduce initial bundle size
@@ -32,7 +32,7 @@ function SectionSkeleton() {
 }
 
 export default function Landing() {
-    const { trackCTA, trackVisit } = useAnalytics();
+    const {  trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
