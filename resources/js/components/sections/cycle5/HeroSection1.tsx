@@ -98,7 +98,7 @@ export default memo(function HeroSection() {
 
                         {/* b. Headline */}
                         <h1
-                            className="text-3xl leading-tight font-black sm:text-5xl lg:text-[2.75rem]"
+                            className="text-4xl leading-tight font-black sm:text-4xl lg:text-[2.75rem]"
                             style={{
                                 fontFamily: 'var(--font-heading)',
                                 color: '#151515',
