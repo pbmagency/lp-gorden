@@ -33,7 +33,6 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- LCP image — highest priority, correctly URL encoded --}}
     <link rel="preload" href="/logo/Primary%20Logo.webp" as="image" fetchpriority="high">
 
     <!-- Microsoft Clarity — deferred -->
@@ -69,8 +68,6 @@
     </script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id={{ config('services.meta.pixel_id', 'YOUR_PIXEL_ID') }}&ev=PageView&noscript=1" /></noscript>
-
-    @fonts
 
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
