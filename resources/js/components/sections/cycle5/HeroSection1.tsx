@@ -98,7 +98,7 @@ export default memo(function HeroSection() {
 
                         {/* b. Headline */}
                         <h1
-                            className="text-3xl leading-tight font-black sm:text-4xl lg:text-[2.75rem]"
+                            className="text-3xl leading-tight font-black sm:text-5xl lg:text-[2.75rem]"
                             style={{
                                 fontFamily: 'var(--font-heading)',
                                 color: '#151515',
@@ -116,7 +116,7 @@ export default memo(function HeroSection() {
 
                         {/* c. Sub-copy */}
                         <p
-                            className="text-base leading-relaxed"
+                            className="text-base leading-relaxed pt-2"
                             style={{ color: '#3d3d3d' }}
                         >
                             <strong style={{ color: '#151515' }}>
@@ -133,7 +133,7 @@ export default memo(function HeroSection() {
                         </p>
 
                         {/* d. Trust badges */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 pt-3">
                             {[
                                 'Lembaga Resmi ITP & IIEF',
                                 '13+ Tahun Pengalaman',
