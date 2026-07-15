@@ -116,7 +116,7 @@ export default memo(function HeroSection() {
 
                         {/* c. Sub-copy */}
                         <p
-                            className="text-base leading-relaxed pt-2"
+                            className="text-lg leading-relaxed pt-2"
                             style={{ color: '#3d3d3d' }}
                         >
                             <strong style={{ color: '#151515' }}>
