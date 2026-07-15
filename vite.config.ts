@@ -31,7 +31,6 @@ export default defineConfig({
             phpBinary: 'C:\\Users\\User\\.config\\herd\\bin\\php84\\php.exe',
             generateTypes: true,
         })] : []),
-        // Pre-compress assets for OpenLiteSpeed to serve directly
         compression({ algorithm: 'gzip', exclude: [/\.(br)$/, /\.(gz)$/] }),
         compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] }),
     ],
@@ -39,33 +38,21 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks(id) {
-                    // React core — most critical, separate chunk
+                    // React core — always needed, long-lived cache
                     if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
                         return 'react-vendor';
                     }
-                    // Inertia — needed early for hydration
-                    if (id.includes('node_modules/@inertiajs/')) {
-                        return 'inertia-vendor';
-                    }
-                    // Radix UI components — large UI primitives
-                    if (id.includes('node_modules/@radix-ui/')) {
-                        return 'radix-vendor';
-                    }
-                    // Recharts — heavy charting library, only used in admin/dashboard
-                    if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) {
-                        return 'charts-vendor';
-                    }
-                    // Lucide icons — medium sized, shared across app
+                    // Lucide icons — shared across pages
                     if (id.includes('node_modules/lucide-react')) {
                         return 'icons-vendor';
                     }
+                    // NOTE: recharts/d3 intentionally excluded here.
+                    // It is only used on admin pages which are separate Inertia
+                    // entry points — Vite will code-split it naturally so it
+                    // never loads on the landing page.
                 },
             },
         },
-        // Raise chunk size warning threshold (default 500kB is too conservative)
         chunkSizeWarningLimit: 1000,
     },
 });
-
-
-

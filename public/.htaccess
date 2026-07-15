@@ -50,9 +50,10 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-    # Vite-built assets: hash in filename → immutable caching
+   # Vite-built assets: hash in filename → immutable caching
     <FilesMatch "\.(js|css|woff2|woff)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
+        Header append Vary Accept-Encoding
     </FilesMatch>
 
     # Static images (no hash, but long TTL is fine for landing page assets)
