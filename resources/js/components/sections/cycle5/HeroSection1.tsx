@@ -106,7 +106,7 @@ export default memo(function HeroSection() {
                         >
                             LPDP Ditutup{' '}
                             <span style={{ color: '#D70808' }}>
-                                3 Minggu Lagi
+                                2 Minggu Lagi
                             </span>{' '}
                             Tapi Skor TOEFL-mu Masih Belum{' '}
                             <span style={{ color: '#D70808' }}>
