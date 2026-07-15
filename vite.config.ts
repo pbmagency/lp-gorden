@@ -42,7 +42,10 @@ export default defineConfig({
                     if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
                         return 'react-vendor';
                     }
-                    
+                    // Lucide icons — shared across pages
+                    if (id.includes('node_modules/lucide-react')) {
+                        return 'icons-vendor';
+                    }
                     // NOTE: recharts/d3 intentionally excluded here.
                     // It is only used on admin pages which are separate Inertia
                     // entry points — Vite will code-split it naturally so it
