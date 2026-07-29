@@ -10,11 +10,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SERVER_IP: "72.61.142.238"
-      SERVER_USER: "root"
-      TARGET_DIR_LARAVEL: "/home/pbmagency.id/laravel-sub1"
-      TARGET_DIR_PUBLIC: "/home/pbmagency.id/sub1"
-      DOMAIN_USERNAME: "pbmag2242"
+      SERVER_IP: '72.61.210.213'
+      SERVER_USER: 'root'
+      DOMAIN_USERNAME: 'fullb5357'
+      TARGET_DIR_LARAVEL: '/home/fullbrightindonesia.org/laravel-toefl'
+      TARGET_DIR_PUBLIC: '/home/fullbrightindonesia.org/toefl'
 
     steps:
       - name: Checkout Code
@@ -23,7 +23,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: '8.4'
 
       - name: Install Composer Dependencies
         run: |
@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install NPM & Build Inertia React
         run: |
@@ -42,7 +42,7 @@ jobs:
       - name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY_VPS2 }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add Server to Known Hosts
         run: |
@@ -50,17 +50,21 @@ jobs:
           chmod 700 ~/.ssh
           for attempt in 1 2 3; do
             keyscan_error_file="$(mktemp)"
+
             if ssh-keyscan -T 30 -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts 2>"$keyscan_error_file"; then
               rm -f "$keyscan_error_file"
               break
             fi
+
             echo "ssh-keyscan attempt $attempt failed:"
             cat "$keyscan_error_file"
             rm -f "$keyscan_error_file"
+
             if [ "$attempt" -eq 3 ]; then
               echo "Failed to fetch SSH host key for ${{ env.SERVER_IP }} after 3 attempts."
               exit 1
             else
+              echo "ssh-keyscan attempt $attempt failed, retrying in 5 seconds..."
               sleep 5
             fi
           done
@@ -91,14 +95,6 @@ jobs:
           ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}
 
       # ---------------------------------------------------------
-      # SYNC 3: Upload storage/app/public (images, misc assets)
-      # ---------------------------------------------------------
-      - name: Sync Storage Public Assets
-        run: |
-          rsync -avz \
-          ./storage/app/public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}/storage/app/public
-
-      # ---------------------------------------------------------
       # POST-DEPLOYMENT
       # ---------------------------------------------------------
       - name: Run Artisan & Move Manifest
@@ -106,13 +102,16 @@ jobs:
         with:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
-          key: ${{ secrets.DEPLOY_KEY_VPS2 }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/public/build
             cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
 
             cd ${{ env.TARGET_DIR_PUBLIC }}
-            ln -sfn ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public storage
+
+            ln -sfn \
+            ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public \
+            storage
 
             cd ${{ env.TARGET_DIR_LARAVEL }}
             php artisan optimize:clear
