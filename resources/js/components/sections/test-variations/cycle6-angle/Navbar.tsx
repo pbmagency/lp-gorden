@@ -2,16 +2,24 @@ import { useEffect, useState, memo } from 'react';
 
 const FullBrightLogo = memo(() => {
     return (
-        <img
-            src="/logo/Logo-Fullbright.webp"
-            alt="Full Bright Indonesia"
-            width={56}
-            height={56}
-            className="h-12 w-12 object-contain"
-            fetchPriority="high"
-            loading="eager"
-            decoding="sync"
-        />
+        <span className="relative block h-12 w-36 overflow-hidden">
+            <img
+                src="/logo/Logo-Fullbright.webp"
+                alt="Full Bright Indonesia"
+                width={1080}
+                height={1080}
+                className="absolute max-w-none object-contain"
+                style={{
+                    width: 210,
+                    height: 210,
+                    left: -33,
+                    top: -80,
+                }}
+                fetchPriority="high"
+                loading="eager"
+                decoding="sync"
+            />
+        </span>
     );
 });
 
