@@ -190,7 +190,7 @@ export default memo(function HeroSection() {
                     </div>
 
                     {/* Right column — score card, desktop only */}
-                    <div className="mt-6 flex justify-center lg:mt-0 lg:justify-end">
+                    <div className="hidden justify-center lg:flex lg:justify-end">
                         <div className="w-full max-w-[360px]">
                             <div className="relative">
                                 <div
