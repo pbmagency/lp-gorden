@@ -3,11 +3,11 @@ import { useEffect, useState, memo } from 'react';
 const FullBrightLogo = memo(() => {
     return (
         <img
-            src="/logo/Primary%20Logo.webp"
+            src="/logo/Logo-Fullbright.webp"
             alt="Full Bright Indonesia"
-            width={160}
-            height={48}
-            className="h-auto w-40 object-contain"
+            width={56}
+            height={56}
+            className="h-12 w-12 object-contain"
             fetchPriority="high"
             loading="eager"
             decoding="sync"
