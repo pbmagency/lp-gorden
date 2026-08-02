@@ -8,6 +8,7 @@ import {
 import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
+import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },
@@ -158,6 +159,7 @@ function PhotoLightbox({
     );
 }
 
+// We correctly have 19 reviews here as requested
 const reviewPhotos = Array.from(
     { length: 19 },
     (_, i) => `/review/Riview (${i + 1}).webp`,
@@ -290,8 +292,6 @@ export default function SocialProofSection() {
                                     width={260}
                                     height={463}
                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    loading="lazy"
-                                    decoding="async"
                                 />
                                 <div
                                     className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
@@ -330,7 +330,6 @@ export default function SocialProofSection() {
                         className="infinite-track"
                         style={{ animationDuration: '35s' }}
                     >
-                        {/* CHANGED: length 2 -> 4 so it won't abruptly jump on wide screens */}
                         {Array.from({ length: 4 }, () => waScreenshots)
                             .flat()
                             .map((img, i) => (
@@ -357,8 +356,7 @@ export default function SocialProofSection() {
                                             width={130}
                                             height={231}
                                             className="h-full w-full object-cover"
-                                            loading="lazy"
-                                            decoding="async"
+                                            // FIXED: Removed loading="lazy" to prevent blank boxes in infinite scroll
                                         />
                                     </div>
                                     {img.score && (
@@ -542,7 +540,6 @@ export default function SocialProofSection() {
                                     alignItems: 'center',
                                 }}
                             >
-                                {/* CHANGED: length 2 -> 4 to fix the jumping scroll */}
                                 {Array.from({ length: 4 }, () => reviewPhotos)
                                     .flat()
                                     .map((src, i) => (
@@ -551,19 +548,17 @@ export default function SocialProofSection() {
                                             className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
                                             style={{
                                                 width: '280px',
-                                                aspectRatio: '1/1', /* FIXED: Forces every image to be identical perfect squares! */
+                                                aspectRatio: '1/1', 
                                                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                             }}
                                             onClick={() => openReview(i)}
                                         >
-                                            {/* FIXED: object-cover properly crops the image so it fits uniformly inside the square */}
                                             <div className="relative h-full w-full">
                                                 <img
                                                     src={src}
                                                     alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
                                                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                    loading="lazy"
-                                                    decoding="async"
+                                                    // FIXED: Removed loading="lazy" to prevent blank boxes in infinite scroll
                                                 />
                                                 <div
                                                     className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
