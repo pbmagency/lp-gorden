@@ -2,34 +2,34 @@ import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately (critical rendering path)
-import HeroSection from '@/components/sections/test-variations/cycle6-angle/HeroSection';
-import Navbar from '@/components/sections/test-variations/cycle6-angle/Navbar';
-import UrgencyBanner from '@/components/sections/test-variations/cycle6-angle/UrgencyBanner';
+import HeroSection from '@/components/sections/test-variations/cycle6-angle-2/HeroSection';
+import Navbar from '@/components/sections/test-variations/cycle6-angle-2/Navbar';
+import UrgencyBanner from '@/components/sections/test-variations/cycle6-angle-2/UrgencyBanner';
 
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/AgitationSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/AgitationSection'),
 );
 const ValueSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/ValueSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/ValueSection'),
 );
 const SocialProofSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/SocialProofSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/SocialProofSection'),
 );
 const PricingSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/PricingSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/PricingSection'),
 );
 const FAQSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/FAQSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/FAQSection'),
 );
 const FreeTrialSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle/FreeTrialSection'),
+        import('@/components/sections/test-variations/cycle6-angle-2/FreeTrialSection'),
 );
 const LogoBar = lazy(
     () =>
