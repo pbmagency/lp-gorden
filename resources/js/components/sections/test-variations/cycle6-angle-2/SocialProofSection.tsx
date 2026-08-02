@@ -8,7 +8,6 @@ import {
 import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
-import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },
@@ -240,21 +239,6 @@ export default function SocialProofSection() {
                 </div>
             </div>
 
-            {/* <SectionWrapper bg="cultured" className="py-20 md:py-24">
-                <div className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>🏆 Skor Resmi — Terkonfirmasi dari Score Report ETS</div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                        Lihat Sendiri Skor yang <span style={{ color: '#D70808' }}>Berhasil Diraih Alumni</span>
-                    </h2>
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-                    {scoreResults.map((r) => <ScoreCard key={r.name} {...r} />)}
-                </div>
-                <div className="text-center">
-                    <LpButton href="#pricing" size="lg">Raih Skorku Sekarang →</LpButton>
-                    <SocialProofMicro />
-                </div>
-            </SectionWrapper> */}
             <SectionWrapper bg="white" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
                     <div
@@ -346,7 +330,8 @@ export default function SocialProofSection() {
                         className="infinite-track"
                         style={{ animationDuration: '35s' }}
                     >
-                        {Array.from({ length: 2 }, () => waScreenshots)
+                        {/* CHANGED: length 2 -> 4 so it won't abruptly jump on wide screens */}
+                        {Array.from({ length: 4 }, () => waScreenshots)
                             .flat()
                             .map((img, i) => (
                                 <div
@@ -532,7 +517,7 @@ export default function SocialProofSection() {
                     </div>
                 </div>
 
-                                {/* Review alumni carousel — deferred until idle */}
+                {/* Review alumni carousel — deferred until idle */}
                 {reviewReady && (
                     <div className="mt-12 mb-2">
                         <p
@@ -557,23 +542,26 @@ export default function SocialProofSection() {
                                     alignItems: 'center',
                                 }}
                             >
-                                {Array.from({ length: 2 }, () => reviewPhotos)
+                                {/* CHANGED: length 2 -> 4 to fix the jumping scroll */}
+                                {Array.from({ length: 4 }, () => reviewPhotos)
                                     .flat()
                                     .map((src, i) => (
                                         <div
                                             key={i}
                                             className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
                                             style={{
-                                                width: '280px', /* Made wider to fit Google reviews nicely */
+                                                width: '280px',
+                                                aspectRatio: '1/1', /* FIXED: Forces every image to be identical perfect squares! */
                                                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                             }}
                                             onClick={() => openReview(i)}
                                         >
-                                            <div className="relative">
+                                            {/* FIXED: object-cover properly crops the image so it fits uniformly inside the square */}
+                                            <div className="relative h-full w-full">
                                                 <img
                                                     src={src}
                                                     alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
-                                                    className="h-auto w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                                                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                     loading="lazy"
                                                     decoding="async"
                                                 />
