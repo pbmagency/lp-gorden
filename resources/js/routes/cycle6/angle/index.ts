@@ -1,75 +1,75 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from '../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-export const test = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: test.url(options),
+export const v1 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: v1.url(options),
     method: 'get',
 })
 
-test.definition = {
+v1.definition = {
     methods: ["get","head"],
-    url: '/c5-hero',
+    url: '/c6-angle',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-test.url = (options?: RouteQueryOptions) => {
-    return test.definition.url + queryParams(options)
+v1.url = (options?: RouteQueryOptions) => {
+    return v1.definition.url + queryParams(options)
 }
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-test.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: test.url(options),
+v1.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: v1.url(options),
     method: 'get',
 })
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-test.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: test.url(options),
+v1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: v1.url(options),
     method: 'head',
 })
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-const testForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: test.url(options),
+const v1Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: v1.url(options),
     method: 'get',
 })
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-testForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: test.url(options),
+v1Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: v1.url(options),
     method: 'get',
 })
 
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
-* @route '/c5-hero'
+* @route '/c6-angle'
 */
-testForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: test.url({
+v1Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: v1.url({
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',
             ...(options?.query ?? options?.mergeQuery ?? {}),
@@ -78,10 +78,10 @@ testForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     method: 'get',
 })
 
-test.form = testForm
+v1.form = v1Form
 
-const hero = {
-    test: Object.assign(test, test),
+const angle = {
+    v1: Object.assign(v1, v1),
 }
 
-export default hero
+export default angle
