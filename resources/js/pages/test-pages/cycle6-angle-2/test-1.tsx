@@ -93,7 +93,9 @@ export default function Cycle6Angle() {
                 <Navbar />
                 <HeroSection />
                 {/* Below-the-fold: lazy loaded after hydration */}
-                <LogoBar />
+                <Suspense fallback={<SectionSkeleton />}>
+                    <LogoBar />
+                </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
                 </Suspense>

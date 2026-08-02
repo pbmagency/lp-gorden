@@ -1,19 +1,20 @@
 import { ArrowDown } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 
-// Variant ID: c6-angle-1
+// Variant ID: c6-angle-2
 // Cycle: 6 | Role: Challenger
 
 const beforeItems = [
-    '"Yang penting essay kuat, TOEFL nomor dua."',
-    '"Belajar TOEFL sendiri dari YouTube juga cukup."',
-    '"Nanti aja ngejar skor TOEFL pas deadline sudah dekat"',
+    '"Deadline masih Januari, masih lama kok."',
+    '"Bulan depan aja mulai belajarnya, sekarang masih santai."',
+    '"Skor TOEFL kan bisa dikebut dalam seminggu."',
 ];
 
 const afterItems = [
-    'Submission ditolak karena syarat TOEFL belum tercapai.',
-    'Skor stuck di 450 meski sudah belajar sendiri berminggu-minggu.',
-    'Terpaksa mengubur impian kuliah ke luar negeri gara-gara TOEFL.',
+    'Baru sadar ternyata TOEFL jauh lebih susah dari yang dibayangkan.',
+    'Waktu belajar mepet, jadi materi dikebut asal-asalan, tidak maksimal.',
+    'Hasil TOEFL keluar jelek, jauh dari skor target yang dibutuhkan.',
+    'Akhirnya gagal submission beasiswa karena waktu sudah habis, skor belum cukup.',
 ];
 
 export default function AgitationSection() {
@@ -30,7 +31,7 @@ export default function AgitationSection() {
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        <span>😩</span> Submission Ditolak Gara-Gara TOEFL?
+                        <span>⏰</span> Fakta Yang Harus Diketahui
                     </div>
 
                     {/* Headline */}
@@ -41,11 +42,10 @@ export default function AgitationSection() {
                             color: '#151515',
                         }}
                     >
-                        Banyak Pejuang Beasiswa Luar Negeri Baru Sadar TOEFL Itu
-                        Rintangan Terbesar{' '}
                         <span style={{ color: '#D70808' }}>
-                            Setelah Submission Ditolak.
-                        </span>
+                            82% Pejuang Beasiswa Gagal
+                        </span>{' '}
+                        Karena Persiapan TOEFL-nya Mepet
                     </h2>
 
                     {/* Subheadline */}
@@ -53,8 +53,7 @@ export default function AgitationSection() {
                         className="mx-auto max-w-xl text-base leading-relaxed"
                         style={{ color: '#3d3d3d' }}
                     >
-                        Yang awalnya dikira cukup belajar sendiri, ternyata
-                        butuh strategi submission yang tepat.
+                        Yang awalnya dikira masih ada banyak waktu, ternyata skor TOEFL butuh persiapan lebih lama untuk naik signifikan.
                     </p>
                 </div>
 
@@ -157,15 +156,13 @@ export default function AgitationSection() {
                         className="text-xl leading-relaxed md:text-[22px]"
                         style={{ color: '#3d3d3d' }}
                     >
-                        Kabar baiknya, submission yang ditolak bukan akhir dari
-                        cerita.
+                        Kabar baiknya, hampir semua yang berhasil dapat beasiswa punya satu kesamaan.
                     </p>
                     <p
                         className="text-xl leading-relaxed font-semibold md:text-[22px]"
                         style={{ color: '#151515' }}
                     >
-                        Selama kamu mulai sekarang dengan strategi dan bimbingan
-                        yang tepat
+                        Mereka mempersiapkan TOEFL dari jauh-jauh hari, bukan mepet.
                     </p>
 
                     <div className="flex justify-center pt-2">

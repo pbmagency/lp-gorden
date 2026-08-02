@@ -1,29 +1,38 @@
-import { BookOpen, Clock, Target, TrendingUp, Users, Zap } from 'lucide-react';
+import { BookOpen, Target, Trophy, RefreshCcw, Brain, Users, Clock, TrendingUp } from 'lucide-react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 const pillars = [
     {
-        Icon: Target,
-        accentColor: '#D70808',
-        borderColor: '#D70808',
-        title: 'TOEFL Pattern Recognition Method™',
-        desc: 'Belajar pola soal yang paling sering muncul agar target skor untuk submission lebih cepat tercapai, tanpa menghabiskan waktu mempelajari semua materi.',
+        Icon: Trophy,
+        iconColor: '#EA580C', // Orange
+        iconBg: '#FFEDD5',
+        title: 'Mengurangi Risiko Gugur di Tahap Seleksi',
+        pillLeft: '5-6 Bulan',
+        pillLeftColor: '#D70808',
+        pillRight: 'lebih awal, bisa dapat LoA duluan',
+        desc: 'Sertifikat yang siap lebih dulu bisa dipakai daftar kampus tujuan. Kamu bisa dapat LoA Unconditional dan skip ujian seleksi bakat LPDP.',
     },
     {
-        Icon: Zap,
-        accentColor: '#151515',
-        borderColor: '#151515',
-        title: 'Shortcut Structure Framework™',
-        desc: 'Roadmap belajar disesuaikan dengan target beasiswa dan waktu submission, sehingga kamu fokus pada materi yang paling berdampak untuk mencapai skor.',
+        Icon: RefreshCcw,
+        iconColor: '#EA580C', // Orange
+        iconBg: '#FFEDD5',
+        title: 'Tidak Perlu Panik Kalau Harus Tes Ulang',
+        pillLeft: '2-3x',
+        pillLeftColor: '#151515',
+        pillRight: 'kesempatan retest',
+        desc: 'Lolos target skor dalam sekali tes itu hampir mustahil. Hasil resmi baru keluar 3-14 hari kerja, dan tes ulang harus tunggu beberapa minggu.',
     },
     {
-        Icon: TrendingUp,
-        accentColor: '#D70808',
-        borderColor: '#D70808',
-        title: 'Score-Focused Learning System™',
-        desc: 'Setiap sesi belajar difokuskan pada target skor yang dibutuhkan untuk submission, sehingga progresmu selalu mengarah ke tujuan yang jelas.',
+        Icon: Brain,
+        iconColor: '#DB2777', // Pink
+        iconBg: '#FCE7F3',
+        title: 'Menaikkan Skor TOEFL Butuh Waktu',
+        pillLeft: '5-6 Bulan',
+        pillLeftColor: '#D70808',
+        pillRight: 'waktu belajar & simulasi',
+        desc: 'Bahasa adalah skill yang dilatih bertahap, bukan dihafal semalam. Waktu ini cukup untuk belajar, latihan, dan simulasi sebelum tes asli.',
     },
 ];
 
@@ -82,7 +91,7 @@ export default function ValueSection() {
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        💡 Metode Eksklusif Full Bright
+                        <span>🚫</span> MINDSETMU BIKIN GAGAL DAPAT BEASISWA
                     </div>
                     <h2
                         className="mb-5 text-2xl font-black sm:text-3xl md:text-4xl"
@@ -91,145 +100,156 @@ export default function ValueSection() {
                             color: '#151515',
                         }}
                     >
-                        Bukan Cuma Belajar Grammar,{' '}
+                        Mindsetmu Sekarang Menentukan{' '}
                         <span style={{ color: '#D70808' }}>
-                            Tapi Ada Strategi Submission
-                        </span>{' '}
-                        yang Jelas.
+                            Peluang Kamu Diterima Beasiswa
+                        </span>
                     </h2>
                     <p
                         className="mx-auto max-w-xl text-base leading-relaxed"
                         style={{ color: '#3d3d3d' }}
                     >
-                        Ini cara Full Bright membantu{' '}
-                        <strong style={{ color: '#151515' }}>
-                            45.000+ orang
-                        </strong>{' '}
-                        mengubah submission yang tadinya ditolak jadi diterima
-                        di kampus impian mereka.
+                        TOEFL itu <strong style={{ color: '#151515' }}>bagian tersulit</strong> dari submission. Kamu <strong style={{ color: '#151515' }}>harus amankan skormu dari jauh hari</strong> agar kamu bisa <strong style={{ color: '#151515' }}>lolos beasiswa</strong> seperti 45.000+ alumni kami.
                     </p>
                 </div>
 
                 <div className="mb-14 grid gap-4 sm:grid-cols-2">
                     {/* Cara Lama — kiri */}
-                    <div className="flex flex-col gap-3 rounded-2xl border-2 border-gray-200 bg-gray-50 p-6">
-                        <div className="mb-1 flex items-center gap-2">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-300">
-                                <BookOpen size={16} color="white" />
+                    <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+                        <div className="mb-1 flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-200 text-gray-500">
+                                <BookOpen size={20} />
                             </div>
                             <p
-                                className="text-sm font-black text-gray-400"
+                                className="text-base font-black text-gray-500"
                                 style={{ fontFamily: 'var(--font-heading)' }}
                             >
-                                Cara Lama ✗
+                                Mindset Orang yang Gagal Beasiswa ✗
                             </p>
                         </div>
-                        {[
-                            'Belajar grammar random tanpa strategi submission',
-                            'Submit apply apa adanya, berharap TOEFL kepake',
-                            'Tidak ada yang mengevaluasi progress tiap minggu',
-                            'Skor stuck, deadline submission makin dekat',
-                        ].map((t) => (
-                            <div
-                                key={t}
-                                className="flex items-center gap-2 text-sm text-gray-400"
-                            >
-                                <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300" />
-                                {t}
-                            </div>
-                        ))}
+                        <div className="flex flex-col gap-3">
+                            {[
+                                'Menganggap TOEFL tinggal dikebut beberapa hari',
+                                'Fokus urus syarat lain dulu, TOEFL belakangan',
+                                'Baru serius belajar kalau deadline sudah di depan mata',
+                                'Submit dengan skor pas-pasan, berharap masih diterima',
+                            ].map((t) => (
+                                <div
+                                    key={t}
+                                    className="flex items-start gap-3 text-sm text-gray-500 sm:text-base"
+                                >
+                                    <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                                    {t}
+                                </div>
+                            ))}
+                        </div>
                     </div>
+
                     {/* Metode Full Bright — kanan */}
                     <div
-                        className="flex flex-col gap-3 rounded-2xl border-2 p-6"
+                        className="flex flex-col gap-4 rounded-3xl border p-6 sm:p-8"
                         style={{
-                            borderColor: '#D70808',
-                            backgroundColor: '#FFF0F0',
+                            borderColor: '#ffb3b3',
+                            backgroundColor: '#FFFAFA',
                         }}
                     >
-                        <div className="mb-1 flex items-center gap-2">
+                        <div className="mb-1 flex items-center gap-3">
                             <div
-                                className="flex h-8 w-8 items-center justify-center rounded-lg"
+                                className="flex h-10 w-10 items-center justify-center rounded-xl"
                                 style={{ backgroundColor: '#D70808' }}
                             >
-                                <Target size={16} color="white" />
+                                <Target size={20} color="white" />
                             </div>
                             <p
-                                className="text-sm font-black"
+                                className="text-base font-black"
                                 style={{
                                     color: '#D70808',
                                     fontFamily: 'var(--font-heading)',
                                 }}
                             >
-                                Metode Full Bright ✓
+                                Mindset Orang yang Lolos Beasiswa ✓
                             </p>
                         </div>
-                        {[
-                            'Strategi submit disesuaikan jurusan & rencana kontribusi',
-                            'Evaluasi progress mingguan, bukan asal jalan sendiri',
-                            'Dibimbing sampai skor target tercapai',
-                            'Sudah membantu 45.000+ alumni lolos beasiswa',
-                        ].map((t) => (
-                            <div
-                                key={t}
-                                className="flex items-center gap-2 text-sm"
-                                style={{ color: '#151515' }}
-                            >
+                        <div className="flex flex-col gap-3">
+                            {[
+                                'TOEFL diselesaikan dari jauh hari, bukan dikebut',
+                                'Begitu TOEFL beres, syarat tersulit submission sudah selesai',
+                                'Skor 500+ tercapai dengan tenang, bukan panik di akhir',
+                                'Peluang lolos beasiswa jauh lebih besar sejak awal',
+                            ].map((t) => (
                                 <div
-                                    className="h-1.5 w-1.5 shrink-0 rounded-full"
-                                    style={{ backgroundColor: '#D70808' }}
-                                />
-                                {t}
-                            </div>
-                        ))}
+                                    key={t}
+                                    className="flex items-start gap-3 text-sm sm:text-base"
+                                    style={{ color: '#151515' }}
+                                >
+                                    <div
+                                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                                        style={{ backgroundColor: '#D70808' }}
+                                    />
+                                    {t}
+                                </div>
+                            ))}
+                        </div>
                     </div>
+                </div>
+
+                <div className="mx-auto mb-10 max-w-2xl text-center">
+                    <p className="mb-3 text-sm font-medium italic text-gray-400 sm:text-base">
+                        "Kan masih ada waktu 5-6 bulan lagi, bulan depan aja
+                        persiapannya..."
+                    </p>
+                    <p
+                        className="text-lg font-bold sm:text-xl"
+                        style={{ color: '#151515' }}
+                    >
+                        Justru{' '}
+                        <span style={{ color: '#D70808' }}>
+                            5-6 bulan itu waktu persiapan yang paling pas
+                        </span>
+                        , bukan alasan untuk menunda
+                    </p>
                 </div>
 
                 <div className="mb-10 grid gap-6 md:grid-cols-3">
                     {pillars.map(
-                        ({ Icon, accentColor, borderColor, title, desc }) => (
+                        ({ Icon, iconColor, iconBg, title, pillLeft, pillLeftColor, pillRight, desc }) => (
                             <div
                                 key={title}
-                                className="flex cursor-default flex-col gap-5 rounded-2xl border border-gray-100 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-gray-200 hover:shadow-[0_20px_56px_rgba(0,0,0,0.1)]"
-                                style={{
-                                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                                    borderLeft: `4px solid ${borderColor}`,
-                                }}
+                                className="flex flex-col gap-5 rounded-3xl border border-gray-100 bg-gray-50/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.05)]"
                             >
-                                <div
-                                    className="flex h-12 w-12 items-center justify-center rounded-2xl"
-                                    style={{
-                                        backgroundColor:
-                                            accentColor === '#D70808'
-                                                ? '#FFF0F0'
-                                                : '#F3F3F3',
-                                    }}
-                                >
-                                    <Icon
-                                        size={22}
-                                        color={accentColor}
-                                        strokeWidth={2.5}
-                                    />
+                                <div className="flex items-start gap-4 sm:items-center">
+                                    <div
+                                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
+                                        style={{ backgroundColor: iconBg }}
+                                    >
+                                        <Icon size={24} color={iconColor} strokeWidth={2.5} />
+                                    </div>
+                                    <h3
+                                        className="text-sm leading-snug font-bold sm:text-base"
+                                        style={{ color: '#151515' }}
+                                    >
+                                        {title}
+                                    </h3>
                                 </div>
-                                <h3
-                                    className="text-base leading-snug font-black"
-                                    style={{
-                                        fontFamily: 'var(--font-heading)',
-                                        color: '#151515',
-                                    }}
-                                >
-                                    {title}
-                                </h3>
-                                <p
-                                    className="text-sm leading-relaxed"
-                                    style={{ color: '#3d3d3d' }}
-                                >
+
+                                <div className="inline-flex w-max items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 shadow-sm">
+                                    <span className="text-sm font-black" style={{ color: pillLeftColor }}>
+                                        {pillLeft}
+                                    </span>
+                                    <div className="h-4 w-px bg-gray-200" />
+                                    <span className="text-xs font-semibold text-gray-500">
+                                        {pillRight}
+                                    </span>
+                                </div>
+
+                                <p className="text-sm leading-relaxed text-gray-500">
                                     {desc}
                                 </p>
                             </div>
                         ),
                     )}
                 </div>
+                
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
                         <LpButton href="#pricing" size="md">

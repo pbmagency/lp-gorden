@@ -5,11 +5,12 @@ const alumniUniversitiesRaw = [
     { name: 'Logo 2', logo: '/logo/logo2.webp' },
     { name: 'Logo 3', logo: '/logo/logo3.webp' },
     { name: 'Logo 4', logo: '/logo/logo4.webp' },
-    { name: 'Logo 5', logo: '/logo/logo5.svg' },
+    { name: 'Logo 5', logo: '/logo/logo5.webp' },
     { name: 'Logo 6', logo: '/logo/logo6.webp' },
     { name: 'Logo 7', logo: '/logo/logo7.webp' },
     { name: 'Logo 8', logo: '/logo/logo8.webp' },
     { name: 'Logo 9', logo: '/logo/logo9.webp' },
+    { name: 'Logo 10', logo: '/logo/logo10.webp' },
 ];
 
 const alumniUniversitiesData = [...alumniUniversitiesRaw, ...alumniUniversitiesRaw];
