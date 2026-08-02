@@ -226,7 +226,8 @@ function FeatureList({
     const buttonColor = isBundling ? '#16a34a' : '#D70808';
 
     return (
-        <div className="mb-3 flex flex-1 flex-col">
+        // REMOVED `flex-1` here so it doesn't create a huge gap below the button!
+        <div className="mb-3 flex flex-col">
             <ul className="flex flex-col gap-2">
                 {features.map((f, i) => {
                     const isHidden = !expanded && i >= 3;
