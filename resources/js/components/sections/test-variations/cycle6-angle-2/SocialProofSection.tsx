@@ -8,7 +8,7 @@ import {
 import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
-import SocialProofMicro from '@/components/ui/social-proof-micro';
+
 
 const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },

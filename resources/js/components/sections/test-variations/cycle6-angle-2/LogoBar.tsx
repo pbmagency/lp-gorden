@@ -13,7 +13,13 @@ const alumniUniversitiesRaw = [
     { name: 'Logo 10', logo: '/logo/logo10.webp' },
 ];
 
-const alumniUniversitiesData = [...alumniUniversitiesRaw, ...alumniUniversitiesRaw];
+// Changed to repeat 4 times so it doesn't jump on ultra-wide screens!
+const alumniUniversitiesData = [
+    ...alumniUniversitiesRaw, 
+    ...alumniUniversitiesRaw,
+    ...alumniUniversitiesRaw,
+    ...alumniUniversitiesRaw,
+];
 
 export default memo(function LogoBar() {
     return (
@@ -28,7 +34,8 @@ export default memo(function LogoBar() {
                     WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)'
                 }}
             >
-                <div className="infinite-track">
+                {/* CHANGED: Added animationDuration inline style to make it slide much faster */}
+                <div className="infinite-track" style={{ animationDuration: '15s' }}>
                     {alumniUniversitiesData.map((u, i) => (
                         <div
                             key={`${u.name}-${i}`}

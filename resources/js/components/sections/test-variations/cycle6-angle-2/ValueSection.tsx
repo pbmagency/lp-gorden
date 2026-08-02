@@ -194,7 +194,8 @@ export default function ValueSection() {
                 </div>
 
                 <div className="mx-auto mb-10 max-w-2xl text-center">
-                    <p className="mb-3 text-sm font-medium italic text-gray-400 sm:text-base">
+                    {/* CHANGED: text-sm sm:text-base -> text-base sm:text-lg */}
+                    <p className="mb-3 text-base font-medium italic text-gray-400 sm:text-lg">
                         "Kan masih ada waktu 5-6 bulan lagi, bulan depan aja
                         persiapannya..."
                     </p>
@@ -224,8 +225,9 @@ export default function ValueSection() {
                                     >
                                         <Icon size={24} color={iconColor} strokeWidth={2.5} />
                                     </div>
+                                    {/* CHANGED: text-sm sm:text-base -> text-base sm:text-lg */}
                                     <h3
-                                        className="text-sm leading-snug font-bold sm:text-base"
+                                        className="text-base leading-snug font-bold sm:text-lg"
                                         style={{ color: '#151515' }}
                                     >
                                         {title}
