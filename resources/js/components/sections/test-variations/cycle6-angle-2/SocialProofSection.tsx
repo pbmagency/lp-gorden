@@ -255,7 +255,6 @@ export default function SocialProofSection() {
                     <SocialProofMicro />
                 </div>
             </SectionWrapper> */}
-
             <SectionWrapper bg="white" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
                     <div
@@ -277,7 +276,7 @@ export default function SocialProofSection() {
                     >
                         Lihat Bagaimana Alumni Kami,{' '}
                         <span style={{ color: '#D70808' }}>
-                            Meraih Target Skor Kampus Impian
+                            Meraih Target Skor Untuk Beasiswa
                         </span>
                     </h2>
                     <p className="text-sm" style={{ color: '#9ca3af' }}>
@@ -533,17 +532,17 @@ export default function SocialProofSection() {
                     </div>
                 </div>
 
-                {/* Review alumni carousel — deferred until idle */}
+                                {/* Review alumni carousel — deferred until idle */}
                 {reviewReady && (
                     <div className="mt-12 mb-2">
                         <p
-                            className="mb-5 text-center text-xs font-black tracking-widest uppercase"
+                            className="mb-6 text-center text-xs font-black tracking-widest uppercase"
                             style={{ color: '#9ca3af' }}
                         >
                             Review Alumni di Google & Media Sosial
                         </p>
                         <div
-                            className="overflow-hidden"
+                            className="overflow-hidden py-4"
                             style={{
                                 maskImage:
                                     'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
@@ -555,7 +554,7 @@ export default function SocialProofSection() {
                                 className="infinite-track"
                                 style={{
                                     animationDuration: '60s',
-                                    alignItems: 'flex-start',
+                                    alignItems: 'center',
                                 }}
                             >
                                 {Array.from({ length: 2 }, () => reviewPhotos)
@@ -563,11 +562,10 @@ export default function SocialProofSection() {
                                     .map((src, i) => (
                                         <div
                                             key={i}
-                                            className="group mx-2 shrink-0 cursor-pointer overflow-hidden rounded-2xl"
+                                            className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
                                             style={{
-                                                maxWidth: '200px',
-                                                boxShadow:
-                                                    '0 4px 16px rgba(0,0,0,0.12)',
+                                                width: '280px', /* Made wider to fit Google reviews nicely */
+                                                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                             }}
                                             onClick={() => openReview(i)}
                                         >
@@ -575,20 +573,17 @@ export default function SocialProofSection() {
                                                 <img
                                                     src={src}
                                                     alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
-                                                    width={200}
-                                                    height={300}
-                                                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                                                    className="h-auto w-full object-contain transition-transform duration-300 group-hover:scale-105"
                                                     loading="lazy"
                                                     decoding="async"
                                                 />
                                                 <div
                                                     className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                                                     style={{
-                                                        backgroundColor:
-                                                            'rgba(0,0,0,0.25)',
+                                                        backgroundColor: 'rgba(0,0,0,0.25)',
                                                     }}
                                                 >
-                                                    <span className="rounded-full bg-black/50 px-3 py-1 text-xs font-bold text-white">
+                                                    <span className="rounded-full bg-black/60 px-4 py-1.5 text-xs font-bold tracking-wide text-white">
                                                         Perbesar
                                                     </span>
                                                 </div>
@@ -600,11 +595,10 @@ export default function SocialProofSection() {
                     </div>
                 )}
 
-                <div className="mt-10 text-center">
-                    <LpButton href="#pricing" size="md">
+                <div className="mt-10 mb-6 text-center">
+                    <LpButton href="#pricing" size="lg">
                         Gabung Sekarang →
                     </LpButton>
-                    <SocialProofMicro />
                 </div>
             </SectionWrapper>
 
@@ -653,7 +647,7 @@ export default function SocialProofSection() {
                             className="max-h-[85vh] w-auto max-w-[90vw] rounded-2xl object-contain"
                             style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
                         />
-                        <p className="text-xs text-white/40">
+                        <p className="text-xs font-medium tracking-widest text-white/50">
                             {reviewIndex + 1} / 19
                         </p>
                     </div>

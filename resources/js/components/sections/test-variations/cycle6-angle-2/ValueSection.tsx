@@ -45,7 +45,7 @@ const whyPoints = [
     {
         Icon: TrendingUp,
         title: 'Alumni Lulus Beasiswa ke Luar Negeri',
-        why: 'UK, Jerman, Australia: bukti nyata strategi submission ini bekerja, bukan sekadar janji.',
+        why: 'UK, Jerman, Australia: bukti nyata metode belajar bertahap ini bekerja, bukan sekadar janji.',
     },
     {
         Icon: Users,
@@ -54,8 +54,8 @@ const whyPoints = [
     },
     {
         Icon: Clock,
-        title: 'Evaluasi Progress Mingguan, Fleksibel',
-        why: 'Progress belajarmu dipantau tiap minggu, cocok untuk mahasiswa dan karyawan sibuk yang mengejar deadline submission.',
+        title: 'Cukup 1 Jam Sehari, Mulai dari Sekarang',
+        why: 'Tidak perlu menunggu waktu luang besar. 1 jam sehari dari sekarang jauh lebih ringan daripada belajar maraton menjelang deadline.',
     },
 ];
 
@@ -267,7 +267,7 @@ export default function ValueSection() {
                 </div>
             </SectionWrapper>
 
-            <SectionWrapper bg="cultured" className="py-20 md:py-24">
+                        <SectionWrapper bg="cultured" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
                     <div
                         className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
@@ -277,7 +277,7 @@ export default function ValueSection() {
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        🏅 Mengapa Full Bright?
+                        <span>🏅</span> Mengapa Full Bright?
                     </div>
                     <h2
                         className="text-2xl font-black sm:text-3xl md:text-4xl"
@@ -291,29 +291,30 @@ export default function ValueSection() {
                         Memilih Full Bright?
                     </h2>
                 </div>
-                <div className="mx-auto mb-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+                
+                <div className="mx-auto mb-12 grid max-w-5xl gap-4 sm:grid-cols-2 lg:gap-6">
                     {whyPoints.map(({ Icon, title, why }) => (
                         <div
                             key={title}
-                            className="flex items-start gap-4 rounded-2xl bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                            style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}
+                            className="flex items-start gap-4 sm:gap-5 rounded-3xl bg-white p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}
                         >
                             <div
-                                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
                                 style={{ backgroundColor: '#D70808' }}
                             >
-                                <Icon size={16} color="white" />
+                                <Icon size={22} color="white" />
                             </div>
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1.5">
                                 <p
-                                    className="text-sm leading-snug font-bold"
+                                    className="text-base leading-snug font-bold"
                                     style={{ color: '#151515' }}
                                 >
                                     {title}
                                 </p>
                                 <p
-                                    className="text-xs leading-relaxed"
-                                    style={{ color: '#6b7280' }}
+                                    className="text-sm leading-relaxed"
+                                    style={{ color: '#8a8a8a' }}
                                 >
                                     {why}
                                 </p>
@@ -321,6 +322,7 @@ export default function ValueSection() {
                         </div>
                     ))}
                 </div>
+                
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
                         <LpButton href="#pricing" size="md">
