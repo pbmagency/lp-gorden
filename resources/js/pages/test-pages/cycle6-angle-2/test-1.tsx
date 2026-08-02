@@ -31,6 +31,10 @@ const FreeTrialSection = lazy(
     () =>
         import('@/components/sections/test-variations/cycle6-angle/FreeTrialSection'),
 );
+const LogoBar = lazy(
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle-2/LogoBar'),
+);
 const Footer = lazy(() => import('@/components/sections/Footer'));
 
 import { useAnalytics } from '@/hooks/use-analytics';
@@ -89,6 +93,7 @@ export default function Cycle6Angle() {
                 <Navbar />
                 <HeroSection />
                 {/* Below-the-fold: lazy loaded after hydration */}
+                <LogoBar />
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
                 </Suspense>
