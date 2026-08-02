@@ -221,9 +221,12 @@ function FeatureList({
     // On middle card, hiddenClass will hide items on all screens.
     const hiddenClass = collapseOnDesktop ? 'hidden' : 'hidden md:flex';
     const buttonHiddenClass = collapseOnDesktop ? 'flex' : 'flex md:hidden';
+    
+    // Set color to Green for Bundling, Red for the others
+    const buttonColor = isBundling ? '#16a34a' : '#D70808';
 
     return (
-        <div className="mb-6 flex flex-1 flex-col">
+        <div className="mb-3 flex flex-1 flex-col">
             <ul className="flex flex-col gap-2">
                 {features.map((f, i) => {
                     const isHidden = !expanded && i >= 3;
@@ -289,13 +292,26 @@ function FeatureList({
                     );
                 })}
             </ul>
+            
+            {/* Show "Lihat semua fitur" if NOT expanded */}
             {!expanded && features.length > 3 && (
                 <button
                     onClick={() => setExpanded(true)}
-                    className={`mt-4 items-center gap-1 text-left text-xs font-bold hover:underline ${buttonHiddenClass}`}
-                    style={{ color: '#16a34a' }}
+                    className={`mt-2 items-center gap-1 text-left text-xs font-bold hover:underline ${buttonHiddenClass}`}
+                    style={{ color: buttonColor }}
                 >
                     Lihat semua fitur ({features.length - 3}+) ↓
+                </button>
+            )}
+
+            {/* Show "Sembunyikan fitur" if EXPANDED */}
+            {expanded && features.length > 3 && (
+                <button
+                    onClick={() => setExpanded(false)}
+                    className={`mt-2 items-center gap-1 text-left text-xs font-bold hover:underline ${buttonHiddenClass}`}
+                    style={{ color: buttonColor }}
+                >
+                    Sembunyikan fitur ↑
                 </button>
             )}
         </div>
@@ -652,7 +668,7 @@ export default function PricingSection() {
                         <FeatureList features={bundlingFeatures} collapseOnDesktop={true} isBundling={true} />
 
                         {/* Guarantees inside Bundling */}
-                        <div className="mb-6 flex flex-col gap-3">
+                        <div className="mb-5 flex flex-col gap-3">
                             {guarantees.map(({ Icon, title, desc }) => (
                                 <div
                                     key={title}

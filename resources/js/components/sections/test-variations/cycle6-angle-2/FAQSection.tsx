@@ -200,17 +200,18 @@ export default function FAQSection() {
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        ❓ FAQ
+                        ❓ Masih Ragu?
                     </div>
                     <h2
                         className="mb-5 text-2xl font-black sm:text-3xl md:text-4xl"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',
+                            fontWeight: 'bold',
                         }}
                     >
-                        Pertanyaan yang Sering Ditanyakan{' '}
-                        <span style={{ color: '#D70808' }}>Sebelum Daftar</span>
+                        Apakah Kamu Benar-Benar{' '}
+                        <strong style={{ color: '#D70808' }}>Butuh Ini Sekarang?</strong>
                     </h2>
                 </div>
 
