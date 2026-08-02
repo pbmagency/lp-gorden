@@ -13,8 +13,8 @@ jobs:
       SERVER_IP: '72.61.210.213'
       SERVER_USER: 'root'
       DOMAIN_USERNAME: 'fullb5357'
-      TARGET_DIR_LARAVEL: '/home/fullbrightindonesia.org/laravel-toefl'
-      TARGET_DIR_PUBLIC: '/home/fullbrightindonesia.org/toefl'
+      TARGET_DIR_LARAVEL: '/home/pbmagency.id/laravel-sub1'
+      TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub1'
 
     steps:
       - name: Checkout Code
