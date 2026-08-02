@@ -30,6 +30,8 @@ type FeatureItem =
 
 const starterFeatures: FeatureItem[] = [
     { type: 'check', text: 'LIVE ZOOM 10 Hari' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 170 Soal)' },
+    { type: 'check', text: 'Post Test (Full Test) 1x' },
     { type: 'check', text: 'Evaluasi Progress Mingguan' },
     { type: 'check', text: 'Strategi Submit Sesuai Jurusan & Rencana Kontribusi' },
     { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
@@ -38,8 +40,6 @@ const starterFeatures: FeatureItem[] = [
     { type: 'check', text: 'E-Book Listening dan Reading (190+ Soal)' },
     { type: 'check', text: 'Grup WA Diskusi' },
     { type: 'check', text: 'Placement Test / Pre-Test' },
-    { type: 'check', text: 'Post Test (Full Test) 1x' },
-    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 170 Soal)' },
     { type: 'check', text: '10+ Link Soal Tambahan saat LIVE ZOOM' },
     { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
     { type: 'globe', text: 'Konsultasi Kampus Luar Negeri, urus LoA, Visa, dll.' },
@@ -50,6 +50,8 @@ const starterFeatures: FeatureItem[] = [
 
 const intermediateFeatures: FeatureItem[] = [
     { type: 'check', text: 'LIVE ZOOM 15 Hari' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 210 Soal)' },
+    { type: 'check', text: 'Progress Test & Post Test (Full Test) 2x' },
     { type: 'check', text: 'Evaluasi Progress Mingguan' },
     { type: 'check', text: 'Strategi Submit Sesuai Jurusan & Rencana Kontribusi' },
     { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
@@ -58,8 +60,6 @@ const intermediateFeatures: FeatureItem[] = [
     { type: 'check', text: 'E-Book Listening dan Reading (300+ Soal)' },
     { type: 'check', text: 'Grup WA Diskusi' },
     { type: 'check', text: 'Placement Test / Pre-Test' },
-    { type: 'check', text: 'Progress Test & Post Test (Full Test) 2x' },
-    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 210 Soal)' },
     { type: 'check', text: '15 Link Soal Tambahan saat LIVE ZOOM' },
     { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
     { type: 'globe', text: 'Konsultasi Kampus Luar Negeri, urus LoA, Visa, dll.' },
@@ -70,6 +70,8 @@ const intermediateFeatures: FeatureItem[] = [
 
 const bundlingFeatures: FeatureItem[] = [
     { type: 'check', text: 'LIVE ZOOM 25 Hari' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 380 Soal)' },
+    { type: 'check', text: 'Progress Test & Post Test (Full Test) 3x' },
     { type: 'check', text: 'Evaluasi Progress Mingguan' },
     { type: 'check', text: 'Strategi Submit Sesuai Jurusan & Rencana Kontribusi' },
     { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
@@ -78,8 +80,6 @@ const bundlingFeatures: FeatureItem[] = [
     { type: 'check', text: 'E-Book Listening dan Reading (500+ Soal)' },
     { type: 'check', text: 'Grup WA Diskusi' },
     { type: 'check', text: 'Placement Test / Pre-Test' },
-    { type: 'check', text: 'Progress Test & Post Test (Full Test) 3x' },
-    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 380 Soal)' },
     { type: 'check', text: '25 Link Soal Tambahan saat LIVE ZOOM' },
     { type: 'check', text: 'Free mengulang 1 bulan jika belum capai skor 500+' },
     { type: 'globe', text: 'Webinar Beasiswa Luar Negeri' },
@@ -485,8 +485,9 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
+                        {/* CHANGED: text-xs -> text-sm */}
                         <p
-                            className="mb-4 text-xs font-semibold"
+                            className="mb-4 text-sm font-semibold"
                             style={{ color: '#9ca3af' }}
                         >
                             Target Skor:{' '}
@@ -609,8 +610,9 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
+                        {/* CHANGED: text-xs -> text-sm */}
                         <p
-                            className="mb-4 text-xs font-semibold"
+                            className="mb-4 text-sm font-semibold"
                             style={{ color: '#9ca3af' }}
                         >
                             Target Skor:{' '}
@@ -765,8 +767,9 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
+                        {/* CHANGED: text-xs -> text-sm */}
                         <p
-                            className="mb-4 text-xs font-semibold"
+                            className="mb-4 text-sm font-semibold"
                             style={{ color: '#9ca3af' }}
                         >
                             Target Skor:{' '}

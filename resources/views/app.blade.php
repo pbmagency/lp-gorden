@@ -43,7 +43,8 @@
     <div id="ssr-skeleton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; background: #fff; z-index: 999999; padding-top: 6rem; padding-left: 1rem; padding-right: 1rem; box-sizing: border-box;">
         <div style="max-width: 72rem; margin: 0 auto;">
             <h1 style="font-size: 2.25rem; font-weight: 900; line-height: 1.25; color: #151515; font-family: 'Nunito', system-ui, sans-serif;">
-                @if (($page['component'] ?? '') === 'test-pages/cycle6-angle/test-1')
+                {{-- CHANGED: Updated the condition to match ANY cycle6 route instead of just test-1 --}}
+                @if (str_contains($page['component'] ?? '', 'cycle6'))
                     Capai <span style="color: #D70808">Skor TOEFL 500+</span> Agar <span style="color: #D70808">Submission Beasiswamu Tidak Gagal</span> Hanya Karena TOEFL
                 @else
                     Capai <span style="color: #D70808">TOEFL 500+ Dalam 15 Hari</span> Untuk LPDP Dan CPNS Yang <span style="color: #D70808">Sisa 3 Minggu Lagi</span>
