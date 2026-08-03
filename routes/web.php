@@ -13,7 +13,7 @@ Route::inertia('/c5-hero', 'cycle5/hero-test')->name('cyccle5.hero.test');
 Route::inertia('/c6-angle', 'test-pages/cycle6-angle/test-1')->name('cycle6.angle.v1');
 Route::inertia('/c6-angle-2', 'test-pages/cycle6-angle-2/test-1')->name('cycle6.angle.v2');
 Route::inertia('/bio-ig-toefl-hack', 'landing')->name('home2');
-Route::inertia('/toefl-hack', 'landing')->name('home3');
+Route::inertia('/toefl-hack', 'test-pages/cycle6-angle/test-1')->name('home3');
 
 // ── Analytics tracking endpoint (public, uses session CSRF) ──────────────────
 Route::post('/analytics/track', [AnalyticsController::class, 'track'])->name('analytics.track');
