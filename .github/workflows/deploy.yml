@@ -25,7 +25,8 @@ jobs:
         with:
           php-version: '8.4'
 
-      - name: Install Composer Dependencies
+      # We keep this step here just in case your Vite/NPM build requires Laravel's packages to exist
+      - name: Install Composer Dependencies (Runner)
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
@@ -82,6 +83,7 @@ jobs:
           --exclude='/.git/' \
           --exclude='/node_modules/' \
           --exclude='/public/' \
+          --exclude='/vendor/' \
           ./ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}
 
       # ---------------------------------------------------------
@@ -114,6 +116,10 @@ jobs:
             storage
 
             cd ${{ env.TARGET_DIR_LARAVEL }}
+            
+            # --- CHANGED: Run composer install directly on the server ---
+            composer install --no-dev --optimize-autoloader --no-interaction
+            
             php artisan optimize:clear
             php artisan migrate --force
 
