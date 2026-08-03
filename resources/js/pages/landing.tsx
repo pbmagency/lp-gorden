@@ -2,45 +2,60 @@ import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately (critical rendering path)
-import UrgencyBanner from '@/components/sections/UrgencyBanner';
-import Navbar from '@/components/sections/Navbar';
-import HeroSection from '@/components/sections/HeroSection';
-
+import HeroSection from '@/components/sections/test-variations/cycle6-angle/HeroSection';
+import Navbar from '@/components/sections/test-variations/cycle6-angle/Navbar';
+import UrgencyBanner from '@/components/sections/test-variations/cycle6-angle/UrgencyBanner';
 
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
-    () => import('@/components/sections/cycle3-test-problem/AgitationSection'),
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/AgitationSection'),
 );
-const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
+const ValueSection = lazy(
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/ValueSection'),
+);
 const SocialProofSection = lazy(
-    () => import('@/components/sections/SocialProofSection'),
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/SocialProofSection'),
 );
 const PricingSection = lazy(
-    () => import('@/components/sections/PricingSection'),
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/PricingSection'),
 );
-const FAQSection = lazy(() => import('@/components/sections/FAQSection'));
+const FAQSection = lazy(
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/FAQSection'),
+);
+const FreeTrialSection = lazy(
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle/FreeTrialSection'),
+);
 const Footer = lazy(() => import('@/components/sections/Footer'));
 
 import { useAnalytics } from '@/hooks/use-analytics';
-import { waUrl } from '@/lib/wa-number';
-import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
+import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useSectionTracking } from '@/hooks/use-section-tracking';
+import { waUrl } from '@/lib/wa-number';
 
 // Minimal non-visible skeleton — prevents layout shift while sections load
 function SectionSkeleton() {
     return <div aria-hidden="true" style={{ minHeight: '1px' }} />;
 }
 
-export default function Landing() {
+export default function Cycle6Angle() {
     const { trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
         const wasDark = html.classList.contains('dark');
         html.classList.remove('dark');
+
         return () => {
-            if (wasDark) html.classList.add('dark');
+            if (wasDark) {
+                html.classList.add('dark');
+            }
         };
     }, []);
 
@@ -55,14 +70,16 @@ export default function Landing() {
     return (
         <>
             <Head>
-                <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
+                <title>
+                    Kelas TOEFL Skor 500+ untuk Submission Beasiswa Luar Negeri
+                </title>
                 <meta
                     name="description"
-                    content="Kelas TOEFL Skor 500+ untuk LPDP dan Kerja"
+                    content="Persiapkan skor TOEFL 500+ untuk submission beasiswa luar negeri dengan strategi belajar terarah dan evaluasi progress mingguan."
                 />
                 <meta
                     name="keywords"
-                    content="belajar TOEFL online, kursus TOEFL ITP, TOEFL LPDP, TOEFL CPNS, TOEFL BUMN, Full Bright Indonesia"
+                    content="belajar TOEFL online, kursus TOEFL ITP, TOEFL beasiswa luar negeri, submission beasiswa, skor TOEFL 500, Full Bright Indonesia"
                 />
             </Head>
 
@@ -85,6 +102,9 @@ export default function Landing() {
                     <PricingSection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
+                    <FreeTrialSection />
+                </Suspense>
+                <Suspense fallback={<SectionSkeleton />}>
                     <FAQSection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
@@ -94,7 +114,7 @@ export default function Landing() {
                 {/* Floating WhatsApp Button */}
                 <a
                     href={waUrl(
-                        'Halo Admin Full Bright Indonesia. Saya lihat iklan. Saya minat mau daftar kelas TOEFL.',
+                        'Halo Admin Full Bright Indonesia. Saya lihat iklan. Submission beasiswa luar negeri saya butuh skor TOEFL, saya minat daftar kelas.',
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
