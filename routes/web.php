@@ -20,7 +20,7 @@ Route::post('/analytics/track', [AnalyticsController::class, 'track'])->name('an
 
 // ── Authenticated routes ──────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::redirect('dashboard', '/admin')->name('dashboard');
 });
 
 Route::inertia('/c3-problem', 'cycle3/agitation-test')->name('cycle3.agitation');
