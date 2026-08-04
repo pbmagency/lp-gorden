@@ -712,7 +712,11 @@ class AbTestingService
      */
     private function normalizeLandingSource(string $raw): string
     {
-        $clean = trim($raw, '"');
+        $decoded = json_decode($raw, true);
+        $clean = is_string($decoded) ? $decoded : trim($raw, '"');
+
+        // MySQL may return an unquoted JSON-escaped path from grouped expressions.
+        $clean = str_replace('\/', '/', $clean);
 
         // Strip protocol + domain if someone stored a full URL
         if (filter_var($clean, FILTER_VALIDATE_URL)) {
