@@ -15,7 +15,7 @@ const alumniUniversitiesRaw = [
 
 // Changed to repeat 4 times so it doesn't jump on ultra-wide screens!
 const alumniUniversitiesData = [
-    ...alumniUniversitiesRaw, 
+    ...alumniUniversitiesRaw,
     ...alumniUniversitiesRaw,
     ...alumniUniversitiesRaw,
     ...alumniUniversitiesRaw,

@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CacheLandingPage
 {
+    private const CSRF_PLACEHOLDER = '__LANDING_CSRF_TOKEN__';
+
     // INCREASED: Changed from 300 seconds (5 mins) to 7 days (604800 seconds).
     // This virtually guarantees a cache hit for TTFB in the green line.
     // It is safe because the cache key updates automatically on deployment.
@@ -26,20 +28,30 @@ class CacheLandingPage
             return $next($request);
         }
 
-        $cacheKey = 'landing_page_html:'.self::manifestVersion();
+        $cacheKey = 'landing_page_html_v2:'.self::manifestVersion();
 
         if (Cache::has($cacheKey)) {
             /** @var string $html */
             $html = Cache::get($cacheKey);
 
-            return response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+            return response(
+                str_replace(self::CSRF_PLACEHOLDER, csrf_token(), $html),
+                200,
+                ['Content-Type' => 'text/html; charset=UTF-8'],
+            );
         }
 
         /** @var Response $response */
         $response = $next($request);
 
         if ($response->getStatusCode() === 200) {
-            Cache::put($cacheKey, $response->getContent(), self::TTL_SECONDS);
+            $cacheableHtml = str_replace(
+                csrf_token(),
+                self::CSRF_PLACEHOLDER,
+                $response->getContent(),
+            );
+
+            Cache::put($cacheKey, $cacheableHtml, self::TTL_SECONDS);
         }
 
         return $response;

@@ -45,7 +45,7 @@ function SectionSkeleton() {
 }
 
 export default function Cycle6Angle() {
-    const { trackVisit } = useAnalytics();
+    const { trackCTA, trackConversion, trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
@@ -118,7 +118,7 @@ export default function Cycle6Angle() {
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => {
+                    onClick={(event) => {
                         try {
                             (
                                 window as {
@@ -135,6 +135,15 @@ export default function Cycle6Angle() {
                         } catch {
                             /* fbq not loaded */
                         }
+
+                        trackCTA(
+                            'floating_whatsapp',
+                            'Floating WhatsApp',
+                            event.currentTarget.href,
+                        );
+                        trackConversion('wa_inquiry', {
+                            location: 'floating_whatsapp',
+                        });
                     }}
                     className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{

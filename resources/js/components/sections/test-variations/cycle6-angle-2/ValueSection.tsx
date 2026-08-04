@@ -253,11 +253,11 @@ export default function ValueSection() {
                         ),
                     )}
                 </div>
-                
+
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton 
-                            href="#pricing" 
+                        <LpButton
+                            href="#pricing"
                             size="md"
                             onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
                         >
@@ -300,7 +300,7 @@ export default function ValueSection() {
                         Memilih Full Bright?
                     </h2>
                 </div>
-                
+
                 <div className="mx-auto mb-12 grid max-w-5xl gap-4 sm:grid-cols-2 lg:gap-6">
                     {whyPoints.map(({ Icon, title, why }) => (
                         <div
@@ -331,11 +331,11 @@ export default function ValueSection() {
                         </div>
                     ))}
                 </div>
-                
+
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton 
-                            href="#pricing" 
+                        <LpButton
+                            href="#pricing"
                             size="md"
                             onClick={() => trackCTA('value_bottom', 'Gabung Sekarang →', '#pricing')}
                         >

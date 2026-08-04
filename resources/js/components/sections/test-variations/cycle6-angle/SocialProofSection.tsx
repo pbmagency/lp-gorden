@@ -603,8 +603,8 @@ export default function SocialProofSection() {
                 )}
 
                 <div className="mt-10 text-center">
-                    <LpButton 
-                        href="#pricing" 
+                    <LpButton
+                        href="#pricing"
                         size="md"
                         onClick={() => trackCTA('social_proof_primary', 'Gabung Sekarang →', '#pricing')}
                     >

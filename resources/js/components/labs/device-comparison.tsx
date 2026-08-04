@@ -1,10 +1,20 @@
+import { AlertTriangle, Monitor, Smartphone } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { formatPercent, safeNumber, toSafeArray } from '@/lib/safe-data';
 import type { DeviceComparisonProps, DeviceMetrics } from '@/types/analytics';
-import { AlertTriangle, Monitor, Smartphone } from 'lucide-react';
 
-const DEFAULT_DEVICE: DeviceMetrics = { visits: 0, payments: 0, conversion_rate: 0 };
+const DEFAULT_DEVICE: DeviceMetrics = {
+    visits: 0,
+    leads: 0,
+    conversion_rate: 0,
+};
 
 export function DeviceComparison({ data }: DeviceComparisonProps) {
     const safeData = toSafeArray(data);
@@ -13,8 +23,10 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
         return (
             <Card className="py-12 text-center">
                 <CardContent>
-                    <Smartphone className="text-muted-foreground mx-auto mb-4 h-10 w-10" />
-                    <p className="text-muted-foreground">No device performance data available</p>
+                    <Smartphone className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
+                    <p className="text-muted-foreground">
+                        No device performance data available
+                    </p>
                 </CardContent>
             </Card>
         );
@@ -23,10 +35,14 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
     return (
         <div className="space-y-4">
             <div className="flex items-center gap-3">
-                <Smartphone className="text-primary h-5 w-5" />
+                <Smartphone className="h-5 w-5 text-primary" />
                 <div>
-                    <h2 className="text-foreground text-xl font-semibold">Device Performance</h2>
-                    <p className="text-muted-foreground text-sm">Mobile vs Desktop conversion comparison</p>
+                    <h2 className="text-xl font-semibold text-foreground">
+                        Device Performance
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                        Mobile vs Desktop conversion comparison
+                    </p>
                 </div>
             </div>
 
@@ -38,19 +54,29 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                     const mobileRate = safeNumber(mobile.conversion_rate);
                     const desktopRate = safeNumber(desktop.conversion_rate);
                     const gap = desktopRate - mobileRate;
-                    const isMobileUnderperforming = mobileRate < desktopRate * 0.5 && desktopRate > 0;
+                    const isMobileUnderperforming =
+                        mobileRate < desktopRate * 0.5 && desktopRate > 0;
                     const maxRate = Math.max(mobileRate, desktopRate, 0.01);
 
                     return (
                         <Card
                             key={item.landing_source}
-                            className={isMobileUnderperforming ? 'border-destructive/50 bg-destructive/5' : ''}
+                            className={
+                                isMobileUnderperforming
+                                    ? 'border-destructive/50 bg-destructive/5'
+                                    : ''
+                            }
                         >
                             <CardHeader className="pb-3">
                                 <div className="flex items-center justify-between">
-                                    <CardTitle className="font-mono text-sm">{item.landing_source}</CardTitle>
+                                    <CardTitle className="font-mono text-sm">
+                                        {item.landing_source}
+                                    </CardTitle>
                                     {isMobileUnderperforming && (
-                                        <Badge variant="destructive" className="gap-1 text-xs">
+                                        <Badge
+                                            variant="destructive"
+                                            className="gap-1 text-xs"
+                                        >
                                             <AlertTriangle className="h-3 w-3" />
                                             Mobile Issue
                                         </Badge>
@@ -67,22 +93,35 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="flex items-center gap-2">
-                                            <Smartphone className="text-primary h-4 w-4" />
-                                            <span className="text-muted-foreground">Mobile</span>
+                                            <Smartphone className="h-4 w-4 text-primary" />
+                                            <span className="text-muted-foreground">
+                                                Mobile
+                                            </span>
                                         </span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-muted-foreground text-xs">
-                                                {safeNumber(mobile.visits).toLocaleString()} visits
+                                            <span className="text-xs text-muted-foreground">
+                                                {safeNumber(
+                                                    mobile.leads,
+                                                ).toLocaleString()}{' '}
+                                                leads /{' '}
+                                                {safeNumber(
+                                                    mobile.visits,
+                                                ).toLocaleString()}{' '}
+                                                visits
                                             </span>
-                                            <span className={`font-bold ${isMobileUnderperforming ? 'text-destructive' : 'text-foreground'}`}>
+                                            <span
+                                                className={`font-bold ${isMobileUnderperforming ? 'text-destructive' : 'text-foreground'}`}
+                                            >
                                                 {formatPercent(mobileRate, 2)}%
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="bg-muted h-3 w-full overflow-hidden rounded-full">
+                                    <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
                                         <div
                                             className={`h-full rounded-full transition-all ${isMobileUnderperforming ? 'bg-destructive' : 'bg-primary'}`}
-                                            style={{ width: `${(mobileRate / maxRate) * 100}%` }}
+                                            style={{
+                                                width: `${(mobileRate / maxRate) * 100}%`,
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -91,31 +130,55 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="flex items-center gap-2">
-                                            <Monitor className="text-chart-2 h-4 w-4" />
-                                            <span className="text-muted-foreground">Desktop</span>
+                                            <Monitor className="h-4 w-4 text-chart-2" />
+                                            <span className="text-muted-foreground">
+                                                Desktop
+                                            </span>
                                         </span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-muted-foreground text-xs">
-                                                {safeNumber(desktop.visits).toLocaleString()} visits
+                                            <span className="text-xs text-muted-foreground">
+                                                {safeNumber(
+                                                    desktop.leads,
+                                                ).toLocaleString()}{' '}
+                                                leads /{' '}
+                                                {safeNumber(
+                                                    desktop.visits,
+                                                ).toLocaleString()}{' '}
+                                                visits
                                             </span>
-                                            <span className="text-foreground font-bold">{formatPercent(desktopRate, 2)}%</span>
+                                            <span className="font-bold text-foreground">
+                                                {formatPercent(desktopRate, 2)}%
+                                            </span>
                                         </div>
                                     </div>
-                                    <div className="bg-muted h-3 w-full overflow-hidden rounded-full">
+                                    <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
                                         <div
-                                            className="bg-chart-2 h-full rounded-full transition-all"
-                                            style={{ width: `${(desktopRate / maxRate) * 100}%` }}
+                                            className="h-full rounded-full bg-chart-2 transition-all"
+                                            style={{
+                                                width: `${(desktopRate / maxRate) * 100}%`,
+                                            }}
                                         />
                                     </div>
                                 </div>
 
                                 {/* Gap Indicator */}
                                 {gap !== 0 && (
-                                    <div className="border-border flex items-center justify-between border-t pt-3 text-xs">
-                                        <span className="text-muted-foreground">Gap</span>
-                                        <span className={gap > 0 ? 'text-destructive' : 'text-chart-4'}>
+                                    <div className="flex items-center justify-between border-t border-border pt-3 text-xs">
+                                        <span className="text-muted-foreground">
+                                            Gap
+                                        </span>
+                                        <span
+                                            className={
+                                                gap > 0
+                                                    ? 'text-destructive'
+                                                    : 'text-chart-4'
+                                            }
+                                        >
                                             {gap > 0 ? '+' : ''}
-                                            {formatPercent(gap, 2)}% {gap > 0 ? 'Desktop leads' : 'Mobile leads'}
+                                            {formatPercent(gap, 2)}%{' '}
+                                            {gap > 0
+                                                ? 'Desktop leads'
+                                                : 'Mobile leads'}
                                         </span>
                                     </div>
                                 )}

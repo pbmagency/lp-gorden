@@ -234,8 +234,8 @@ export default function ValueSection() {
                 </div>
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton 
-                            href="#pricing" 
+                        <LpButton
+                            href="#pricing"
                             size="md"
                             onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
                         >
@@ -310,8 +310,8 @@ export default function ValueSection() {
                 </div>
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton 
-                            href="#pricing" 
+                        <LpButton
+                            href="#pricing"
                             size="md"
                             onClick={() => trackCTA('value_bottom', 'Gabung Sekarang →', '#pricing')}
                         >

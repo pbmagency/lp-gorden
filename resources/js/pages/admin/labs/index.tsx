@@ -22,7 +22,7 @@ import {
     Users,
     X,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import {
     Bar,
@@ -88,8 +88,8 @@ const transformFunnelData = (
         'Engaged',
         'Intent',
         'Initiate Checkout',
-        'Leads',
-        'Sales',
+        'WhatsApp Leads',
+        'Payments',
     ];
 
     return stages.map((stage) => {
@@ -129,6 +129,8 @@ export default function LabsIndex({
     heatmap: rawHeatmap,
     section_heatmap: rawSectionHeatmap,
     availableSources: rawAvailableSources,
+    capabilities,
+    minimumWinnerVisits,
     filters,
 }: LabsPageProps) {
     // Normalise all props — PHP Collections can serialize as objects
@@ -151,7 +153,7 @@ export default function LabsIndex({
     });
     // State
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [sortColumn, setSortColumn] = useState<keyof MatrixItem>('rpv');
+    const [sortColumn, setSortColumn] = useState<keyof MatrixItem>('lead_cr');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const [currentPage, setCurrentPage] = useState(1);
     const [showToast, setShowToast] = useState(false);
@@ -172,7 +174,7 @@ export default function LabsIndex({
 
     // ── Page Filter (localStorage persisted) ──────────────────
     // Normalize any landing_source to a clean pathname (strip protocol+domain if present)
-    const normalizePath = (source: string): string => {
+    const normalizePath = useCallback((source: string): string => {
         try {
             // If it looks like a full URL, extract just the pathname
             if (source.startsWith('http://') || source.startsWith('https://')) {
@@ -181,36 +183,46 @@ export default function LabsIndex({
         } catch {
             // ignore invalid URLs
         }
+
         // Already a path — ensure it starts with /
         return source.startsWith('/') ? source : `/${source}`;
-    };
+    }, []);
 
     const availablePages = useMemo(
         () =>
             [
                 ...new Set(matrix.map((m) => normalizePath(m.landing_source))),
             ].sort(),
-        [matrix],
+        [matrix, normalizePath],
     );
 
     const [selectedPages, setSelectedPages] = useState<string[]>(() => {
-        if (typeof window === 'undefined') return [];
+        if (typeof window === 'undefined') {
+            return [];
+        }
+
         try {
             const stored = localStorage.getItem('labs_page_filter');
+
             if (stored) {
                 const parsed = JSON.parse(stored) as string[];
+
                 // Only keep pages that still exist in the data
                 return parsed.filter((p) => availablePages.includes(p));
             }
         } catch {
             // ignore malformed JSON
         }
+
         return []; // empty = show all
     });
 
     // Persist page filter to localStorage
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         localStorage.setItem('labs_page_filter', JSON.stringify(selectedPages));
     }, [selectedPages]);
 
@@ -227,40 +239,43 @@ export default function LabsIndex({
     // ── Filtered data (page filter applied) ──────────────────
     const isPageFiltered = selectedPages.length > 0;
     // Normalize both sides so /test-v1 matches whether stored as path or full URL
-    const pageMatch = (source: string) =>
-        !isPageFiltered || selectedPages.includes(normalizePath(source));
+    const pageMatch = useCallback(
+        (source: string) =>
+            !isPageFiltered || selectedPages.includes(normalizePath(source)),
+        [isPageFiltered, normalizePath, selectedPages],
+    );
 
     const filteredMatrix = useMemo(
         () => matrix.filter((m) => pageMatch(m.landing_source)),
-        [matrix, selectedPages],
+        [matrix, pageMatch],
     );
     const filteredFunnel = useMemo(
         () => safeFunnel.filter((f) => pageMatch(f.landing_source)),
-        [safeFunnel, selectedPages],
+        [pageMatch, safeFunnel],
     );
     const filteredQuality = useMemo(
         () => quality.filter((q: any) => pageMatch(q.landing_source)),
-        [quality, selectedPages],
+        [pageMatch, quality],
     );
     const filteredDevices = useMemo(
         () => devices.filter((d: any) => pageMatch(d.landing_source)),
-        [devices, selectedPages],
+        [devices, pageMatch],
     );
     const filteredCta = useMemo(
         () => cta.filter((c: any) => pageMatch(c.landing_source)),
-        [cta, selectedPages],
+        [cta, pageMatch],
     );
     const filteredReaders = useMemo(
         () => readers.filter((r: any) => pageMatch(r.landing_source)),
-        [readers, selectedPages],
+        [pageMatch, readers],
     );
     const filteredHeatmap = useMemo(
         () => heatmap.filter((h: any) => pageMatch(h.landing_source)),
-        [heatmap, selectedPages],
+        [heatmap, pageMatch],
     );
     const filteredSectionHeatmap = useMemo(
         () => sectionHeatmap.filter((s) => pageMatch(s.landing_source)),
-        [sectionHeatmap, selectedPages],
+        [pageMatch, sectionHeatmap],
     );
 
     const triggerToast = (message: string, type: 'success' | 'error') => {
@@ -277,22 +292,27 @@ export default function LabsIndex({
     const [selectedFunnelSources, setSelectedFunnelSources] = useState<
         string[]
     >(() => {
-        // Default: Top 2 by RPV
+        // Default: Top 2 by the primary metric (Lead CR)
         return matrix.slice(0, 2).map((m) => m.landing_source);
     });
 
     const itemsPerPage = 10;
 
-    // Find winner (highest RPV)
+    // TOEFL's primary measurable outcome is a WhatsApp lead.
     const winner = useMemo(() => {
-        if (filteredMatrix.length === 0) {
+        const eligibleVariants = filteredMatrix.filter(
+            (variant) =>
+                variant.visits >= minimumWinnerVisits && variant.leads > 0,
+        );
+
+        if (eligibleVariants.length === 0) {
             return null;
         }
 
-        return filteredMatrix.reduce((prev, curr) =>
-            curr.rpv > prev.rpv ? curr : prev,
+        return eligibleVariants.reduce((prev, curr) =>
+            curr.lead_cr > prev.lead_cr ? curr : prev,
         );
-    }, [filteredMatrix]);
+    }, [filteredMatrix, minimumWinnerVisits]);
 
     // Sorted matrix data
     const sortedMatrix = useMemo(() => {
@@ -700,8 +720,16 @@ export default function LabsIndex({
                                         </CardTitle>
                                         <CardDescription>
                                             Landing page comparison sorted by
-                                            Revenue Per Visit
+                                            WhatsApp Lead CR
                                         </CardDescription>
+                                        {!winner && (
+                                            <p className="mt-1 text-xs text-amber-500">
+                                                Insufficient data: winner
+                                                requires at least{' '}
+                                                {minimumWinnerVisits} visits and
+                                                one WhatsApp lead.
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </CardHeader>
@@ -743,7 +771,7 @@ export default function LabsIndex({
                                                     <button
                                                         onClick={() =>
                                                             handleSort(
-                                                                'conversions',
+                                                                'intent_rate',
                                                             )
                                                         }
                                                         className="flex items-center gap-1 hover:text-foreground"
@@ -890,26 +918,31 @@ export default function LabsIndex({
                                                         </td>
                                                         <td className="p-4">
                                                             <Badge variant="outline">
-                                                                {formatPercent(
-                                                                    item.strict_cr,
-                                                                    2,
-                                                                )}
-                                                                %
+                                                                {capabilities.payment
+                                                                    ? `${formatPercent(
+                                                                          item.strict_cr,
+                                                                          2,
+                                                                      )}%`
+                                                                    : '—'}
                                                             </Badge>
                                                         </td>
                                                         <td className="p-4">
                                                             <span
                                                                 className={`font-bold ${isWinner ? 'text-chart-4' : 'text-foreground'}`}
                                                             >
-                                                                {formatCurrency(
-                                                                    item.rpv,
-                                                                )}
+                                                                {capabilities.revenue
+                                                                    ? formatCurrency(
+                                                                          item.rpv,
+                                                                      )
+                                                                    : '—'}
                                                             </span>
                                                         </td>
                                                         <td className="p-4 text-foreground">
-                                                            {formatCurrency(
-                                                                item.revenue,
-                                                            )}
+                                                            {capabilities.revenue
+                                                                ? formatCurrency(
+                                                                      item.revenue,
+                                                                  )
+                                                                : '—'}
                                                         </td>
                                                     </tr>
                                                 );
@@ -1008,11 +1041,12 @@ export default function LabsIndex({
                                                                 Sales CR:
                                                             </span>{' '}
                                                             <Badge variant="outline">
-                                                                {formatPercent(
-                                                                    item.strict_cr,
-                                                                    2,
-                                                                )}
-                                                                %
+                                                                {capabilities.payment
+                                                                    ? `${formatPercent(
+                                                                          item.strict_cr,
+                                                                          2,
+                                                                      )}%`
+                                                                    : '—'}
                                                             </Badge>
                                                         </div>
                                                         <div>
@@ -1022,9 +1056,11 @@ export default function LabsIndex({
                                                             <span
                                                                 className={`font-bold ${isWinner ? 'text-chart-4' : 'text-foreground'}`}
                                                             >
-                                                                {formatCurrency(
-                                                                    item.rpv,
-                                                                )}
+                                                                {capabilities.revenue
+                                                                    ? formatCurrency(
+                                                                          item.rpv,
+                                                                      )
+                                                                    : '—'}
                                                             </span>
                                                         </div>
                                                         <div>
@@ -1032,9 +1068,11 @@ export default function LabsIndex({
                                                                 Revenue:
                                                             </span>{' '}
                                                             <span className="text-foreground">
-                                                                {formatCurrency(
-                                                                    item.revenue,
-                                                                )}
+                                                                {capabilities.revenue
+                                                                    ? formatCurrency(
+                                                                          item.revenue,
+                                                                      )
+                                                                    : '—'}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1244,8 +1282,8 @@ export default function LabsIndex({
                                                     'Engaged',
                                                     'Intent',
                                                     'Initiate Checkout',
-                                                    'Leads',
-                                                    'Sales',
+                                                    'WhatsApp Leads',
+                                                    'Payments',
                                                 ].map((stage) => (
                                                     <tr
                                                         key={stage}

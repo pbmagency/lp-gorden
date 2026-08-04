@@ -550,7 +550,7 @@ export default function SocialProofSection() {
                                             className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
                                             style={{
                                                 width: '280px',
-                                                aspectRatio: '1/1', 
+                                                aspectRatio: '1/1',
                                                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                             }}
                                             onClick={() => openReview(i)}
@@ -581,8 +581,8 @@ export default function SocialProofSection() {
                 )}
 
                 <div className="mt-10 mb-6 text-center">
-                    <LpButton 
-                        href="#pricing" 
+                    <LpButton
+                        href="#pricing"
                         size="lg"
                         onClick={() => trackCTA('social_proof_primary', 'Gabung Sekarang →', '#pricing')}
                     >

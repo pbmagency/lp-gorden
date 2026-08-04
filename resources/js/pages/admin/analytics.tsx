@@ -1,3 +1,15 @@
+import { Head, router } from '@inertiajs/react';
+import {
+    CreditCard,
+    DollarSign,
+    Download,
+    Eye,
+    MessageCircle,
+    ShoppingCart,
+    Target,
+    TrendingUp,
+} from 'lucide-react';
+import { useState } from 'react';
 import { ConversionFunnel } from '@/components/analytics/conversion-funnel';
 import { MetricCard } from '@/components/analytics/metric-card';
 import { ReferralChart } from '@/components/analytics/referral-chart';
@@ -11,21 +23,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/admin-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
-import {
-    CreditCard,
-    DollarSign,
-    Download,
-    Eye,
-    Target,
-    TrendingUp,
-} from 'lucide-react';
-import { useState } from 'react';
+import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/admin' },
-    { title: 'Analytics' },
+    { title: 'Analytics', href: '/admin' },
 ];
 
 interface AnalyticsProps {
@@ -33,11 +35,16 @@ interface AnalyticsProps {
         total_visits: number;
         unique_visitors: number;
         engagement_rate: number;
-        conversion_rate: number;
-        conversion_to_payment_rate: number;
+        engaged: number;
+        intent: number;
+        intent_rate: number;
+        initiate_checkouts: number;
+        initiate_checkout_rate: number;
+        leads: number;
+        lead_rate: number;
+        lead_to_payment_rate: number;
         payment_rate: number;
         total_revenue: number;
-        registrations: number;
         payments: number;
     };
     chartData: Record<string, any[]>;
@@ -49,7 +56,16 @@ interface AnalyticsProps {
         stage: string;
         count: number;
         percentage: number;
+        transition_percentage: number;
+        from_stage: string | null;
+        branch: 'main' | 'checkout' | 'lead';
     }>;
+    capabilities: {
+        initiate_checkout: boolean;
+        lead: boolean;
+        payment: boolean;
+        revenue: boolean;
+    };
     dateRange: string;
 }
 
@@ -58,24 +74,18 @@ export default function Analytics({
     chartData,
     referralData,
     conversionFunnel,
+    capabilities,
     dateRange,
 }: AnalyticsProps) {
     const [selectedRange, setSelectedRange] = useState(dateRange);
 
     const handleRangeChange = (range: string) => {
         setSelectedRange(range);
-        router.get(
-            route('admin.analytics'),
-            { range },
-            { preserveState: true },
-        );
+        router.get('/admin', { range }, { preserveState: true });
     };
 
     const handleExport = () => {
-        window.open(
-            route('admin.analytics.export', { range: selectedRange }),
-            '_blank',
-        );
+        window.open(`/admin/export?range=${selectedRange}`, '_blank');
     };
 
     const formatCurrency = (amount: number) => {
@@ -97,11 +107,11 @@ export default function Analytics({
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
                                 <h1 className="text-3xl font-bold text-foreground">
-                                    Analytics Dashboard
+                                    Analytics & A/B Dashboard
                                 </h1>
                                 <p className="mt-2 text-muted-foreground">
-                                    Comprehensive insights into user behavior
-                                    and conversion metrics
+                                    Comprehensive insights into tracked user
+                                    behavior and conversion metrics
                                 </p>
                             </div>
 
@@ -158,31 +168,67 @@ export default function Analytics({
                                 title="Engagement Rate"
                                 value={`${stats.engagement_rate}%`}
                                 icon={TrendingUp}
-                                description="15+ second dwell time"
+                                description={`${stats.engaged} engaged sessions (15s OR 25% scroll OR action)`}
                             />
                             <MetricCard
-                                title="Conversion Rate"
-                                value={`${stats.conversion_rate}%`}
+                                title="Intent Rate"
+                                value={`${stats.intent_rate}%`}
                                 icon={Target}
-                                description={`${stats.registrations} registrations`}
+                                description={`${stats.intent} sessions clicked a CTA`}
                             />
                             <MetricCard
-                                title="Conversion to Payment Rate"
-                                value={`${stats.conversion_to_payment_rate}%`}
+                                title="Initiate Checkout"
+                                value={`${stats.initiate_checkout_rate}%`}
+                                icon={ShoppingCart}
+                                description={`${stats.initiate_checkouts} external payment redirects`}
+                            />
+                            <MetricCard
+                                title="WhatsApp Lead Rate"
+                                value={`${stats.lead_rate}%`}
+                                icon={MessageCircle}
+                                description={`${stats.leads} WhatsApp inquiries`}
+                            />
+                            <MetricCard
+                                title="Lead to Payment Rate"
+                                value={
+                                    capabilities.payment
+                                        ? `${stats.lead_to_payment_rate}%`
+                                        : '—'
+                                }
                                 icon={CreditCard}
-                                description={`${stats.payments} successful payments`}
+                                description={
+                                    capabilities.payment
+                                        ? `${stats.payments} verified payments`
+                                        : 'Payment callback is not tracked'
+                                }
                             />
                             <MetricCard
                                 title="Visit to Payment Rate"
-                                value={`${stats.payment_rate}%`}
+                                value={
+                                    capabilities.payment
+                                        ? `${stats.payment_rate}%`
+                                        : '—'
+                                }
                                 icon={CreditCard}
-                                description={`${stats.payments} successful payments`}
+                                description={
+                                    capabilities.payment
+                                        ? `${stats.payments} verified payments`
+                                        : 'Payment callback is not tracked'
+                                }
                             />
                             <MetricCard
                                 title="Total Revenue"
-                                value={formatCurrency(stats.total_revenue)}
+                                value={
+                                    capabilities.revenue
+                                        ? formatCurrency(stats.total_revenue)
+                                        : '—'
+                                }
                                 icon={DollarSign}
-                                description={`${stats.payments}x payments`}
+                                description={
+                                    capabilities.revenue
+                                        ? `${stats.payments} verified payments`
+                                        : 'Revenue is not tracked'
+                                }
                             />
                         </div>
                     </div>
@@ -219,29 +265,22 @@ export default function Analytics({
 
                             <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4">
                                 <div className="font-semibold text-green-400">
-                                    Revenue per Visit
+                                    Primary Conversion
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {stats.total_visits > 0
-                                        ? formatCurrency(
-                                              stats.total_revenue /
-                                                  stats.total_visits,
-                                          )
-                                        : 'Rp 0'}
+                                    WhatsApp lead rate: {stats.lead_rate}% (
+                                    {stats.leads} leads)
                                 </div>
                             </div>
 
                             <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-4">
                                 <div className="font-semibold text-blue-400">
-                                    Avg. Revenue per User
+                                    Payment Tracking
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {stats.unique_visitors > 0
-                                        ? formatCurrency(
-                                              stats.total_revenue /
-                                                  stats.unique_visitors,
-                                          )
-                                        : 'Rp 0'}
+                                    {capabilities.payment
+                                        ? `${stats.payments} verified payments`
+                                        : 'Not available — waiting for a verified callback/API'}
                                 </div>
                             </div>
                         </div>

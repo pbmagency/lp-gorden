@@ -221,7 +221,7 @@ function FeatureList({
     // On middle card, hiddenClass will hide items on all screens.
     const hiddenClass = collapseOnDesktop ? 'hidden' : 'hidden md:flex';
     const buttonHiddenClass = collapseOnDesktop ? 'flex' : 'flex md:hidden';
-    
+
     // Set color to Green for Bundling, Red for the others
     const buttonColor = isBundling ? '#16a34a' : '#D70808';
 
@@ -231,7 +231,7 @@ function FeatureList({
             <ul className="flex flex-col gap-2">
                 {features.map((f, i) => {
                     const isHidden = !expanded && i >= 3;
-                    
+
                     let finalClass = '';
                     if (isHidden) {
                         finalClass = collapseOnDesktop
@@ -293,7 +293,7 @@ function FeatureList({
                     );
                 })}
             </ul>
-            
+
             {/* Show "Lihat semua fitur" if NOT expanded */}
             {!expanded && features.length > 3 && (
                 <button
@@ -320,7 +320,7 @@ function FeatureList({
 }
 
 export default function PricingSection() {
-    const { trackCTA, trackConversion } = useAnalytics();
+    const { trackCTA, trackInitiateCheckout, trackConversion } = useAnalytics();
 
     const handlePayClick = (
         level: 'Starter' | 'Intermediate' | 'Bundling',
@@ -358,15 +358,12 @@ export default function PricingSection() {
             /* fbq not loaded */
         }
 
-        trackCTA(
+        trackCTA(`pay_${level.toLowerCase()}`, `Bayar ${level}`, pgUrl);
+        trackInitiateCheckout(
             `pay_${level.toLowerCase()}`,
-            `Bayar ${level}`,
-            pgUrl,
-            'AddToCart',
+            { level, package: level, price, destination: pgUrl },
             eventId,
-            { level },
         );
-        trackConversion('checkout_redirect', { package: level, price });
     };
 
     const handleWaClick = (
@@ -401,15 +398,12 @@ export default function PricingSection() {
             /* fbq not loaded */
         }
 
-        trackCTA(
-            `pricing_${level.toLowerCase()}`,
-            `Daftar ${level}`,
-            waUrl,
-            'AddToCart',
-            eventId,
-            { level },
-        );
-        trackConversion('wa_inquiry', { package: level, price });
+        trackCTA(`pricing_${level.toLowerCase()}`, `Daftar ${level}`, waUrl);
+        trackConversion('wa_registration', {
+            location: `pricing_${level.toLowerCase()}`,
+            package: level,
+            price,
+        });
         window.open(waUrl, '_blank', 'noopener,noreferrer');
     };
 
@@ -536,7 +530,7 @@ export default function PricingSection() {
                                 Rp 250.000
                             </p>
                         </div>
-                        
+
                         <FeatureList features={starterFeatures} collapseOnDesktop={false} />
 
                         <PayButton
@@ -819,7 +813,7 @@ export default function PricingSection() {
                                 Rp 350.000
                             </p>
                         </div>
-                        
+
                         <FeatureList features={intermediateFeatures} collapseOnDesktop={false} />
 
                         <PayButton
