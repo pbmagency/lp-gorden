@@ -191,6 +191,16 @@ class AnalyticsMetricsTest extends TestCase
         $this->assertSame(50.0, $sections['harga']['drop_from_prev']);
     }
 
+    public function test_mysql_json_escaped_landing_sources_are_normalized(): void
+    {
+        $service = app(AbTestingService::class);
+        $method = new \ReflectionMethod($service, 'normalizeLandingSource');
+
+        $this->assertSame('/', $method->invoke($service, '"\/"'));
+        $this->assertSame('/c6-angle-2', $method->invoke($service, '"\/c6-angle-2"'));
+        $this->assertSame('/c6-angle-2', $method->invoke($service, '\/c6-angle-2'));
+    }
+
     private function event(
         string $sessionId,
         string $eventType,
