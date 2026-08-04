@@ -15,6 +15,9 @@ export interface MatrixItem {
     revenue: number;
     conversions: number;
     intent_rate: number;
+    initiate_checkout_rate: number;
+    initiate_checkouts: number;
+    leads: number;
     payments: number;
     cta_clicks: number;
 }
@@ -25,6 +28,9 @@ export interface FunnelStep {
     stage: string;
     count: number;
     percentage: number;
+    branch?: 'main' | 'checkout' | 'lead';
+    from_stage?: string | null;
+    transition_percentage?: number;
 }
 
 export interface FunnelItem {
@@ -42,15 +48,15 @@ export interface QualityMetrics {
 
 export interface QualityItem {
     landing_source: string;
-    buyers: QualityMetrics;
-    non_buyers: QualityMetrics;
+    leads: QualityMetrics;
+    non_leads: QualityMetrics;
 }
 
 // ── Device Performance ──────────────────────────────────────
 
 export interface DeviceMetrics {
     visits: number;
-    payments: number;
+    leads: number;
     conversion_rate: number;
 }
 
@@ -104,6 +110,19 @@ export interface HeatmapData {
     depth_analysis: DepthAnalysis[];
 }
 
+export interface SectionViewData {
+    id: string;
+    name: string;
+    views: number;
+    pct: number;
+    drop_from_prev: number;
+}
+
+export interface SectionHeatmapItem {
+    landing_source: string;
+    sections: SectionViewData[];
+}
+
 // ── Filters ─────────────────────────────────────────────────
 
 export interface LabsFilters {
@@ -123,7 +142,15 @@ export interface LabsPageProps {
     cta: CtaData[];
     readers: ReaderData[];
     heatmap: HeatmapData[];
+    section_heatmap: SectionHeatmapItem[];
     availableSources: string[];
+    capabilities: {
+        initiate_checkout: boolean;
+        lead: boolean;
+        payment: boolean;
+        revenue: boolean;
+    };
+    minimumWinnerVisits: number;
     filters: LabsFilters;
 }
 
@@ -140,4 +167,5 @@ export interface CtaAnalysisProps {
 export interface AudienceSegmentationProps {
     readers: ReaderData[];
     heatmap: HeatmapData[];
+    sectionHeatmap: SectionHeatmapItem[];
 }

@@ -229,7 +229,7 @@ function WaButton({ onClick, label }: { onClick: () => void; label: string }) {
 }
 
 export default function PricingSection() {
-    const { trackCTA, trackConversion } = useAnalytics();
+    const { trackCTA, trackInitiateCheckout, trackConversion } = useAnalytics();
 
     const handlePayClick = (
         level: 'Starter' | 'Intermediate' | 'Bundling',
@@ -267,15 +267,12 @@ export default function PricingSection() {
             /* fbq not loaded */
         }
 
-        trackCTA(
+        trackCTA(`pay_${level.toLowerCase()}`, `Bayar ${level}`, pgUrl);
+        trackInitiateCheckout(
             `pay_${level.toLowerCase()}`,
-            `Bayar ${level}`,
-            pgUrl,
-            'AddToCart',
+            { level, package: level, price, destination: pgUrl },
             eventId,
-            { level },
         );
-        trackConversion('checkout_redirect', { package: level, price });
     };
 
     const handleWaClick = (
@@ -310,15 +307,12 @@ export default function PricingSection() {
             /* fbq not loaded */
         }
 
-        trackCTA(
-            `pricing_${level.toLowerCase()}`,
-            `Daftar ${level}`,
-            waUrl,
-            'AddToCart',
-            eventId,
-            { level },
-        );
-        trackConversion('wa_inquiry', { package: level, price });
+        trackCTA(`pricing_${level.toLowerCase()}`, `Daftar ${level}`, waUrl);
+        trackConversion('wa_registration', {
+            location: `pricing_${level.toLowerCase()}`,
+            package: level,
+            price,
+        });
         window.open(waUrl, '_blank', 'noopener,noreferrer');
     };
 

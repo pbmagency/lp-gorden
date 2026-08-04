@@ -175,7 +175,10 @@ function FAQItem({ q, a, node }: { q: string; a: string; node?: ReactNode }) {
 
 export default function FAQSection() {
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
-    const { trackCTA } = useAnalytics();
+    const { trackCTA, trackConversion } = useAnalytics();
+    const inquiryUrl = waUrl(
+        'Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL. Saya mau tanya-tanya dulu.',
+    );
     const filtered = activeCategory
         ? faqs.filter((f) => f.category === activeCategory)
         : faqs;
@@ -272,9 +275,7 @@ export default function FAQSection() {
                     </p>
                     <div className="mb-1 flex flex-col justify-center gap-3 sm:flex-row">
                         <LpButton
-                            href={waUrl(
-                                'Halo Admin Full Bright Indonesia. Saya minat mau daftar kelas TOEFL. Saya mau tanya-tanya dulu.',
-                            )}
+                            href={inquiryUrl}
                             size="md"
                             onClick={() => {
                                 try {
@@ -297,8 +298,11 @@ export default function FAQSection() {
                                 trackCTA(
                                     'faq_primary',
                                     'Chat Via WA',
-                                    '#pricing',
+                                    inquiryUrl,
                                 );
+                                trackConversion('wa_inquiry', {
+                                    location: 'faq_primary',
+                                });
                             }}
                         >
                             Chat Via WA →

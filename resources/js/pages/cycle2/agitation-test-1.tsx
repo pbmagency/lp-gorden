@@ -2,10 +2,10 @@ import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately
-import UrgencyBanner from '@/components/sections/UrgencyBanner';
 import Navbar from '@/components/sections/Navbar';
-import HeroSection2 from '@/components/sections/test-hero/HeroSection2';
 import SocialProofLogoBar from '@/components/sections/SocialProofLogoBar';
+import HeroSection2 from '@/components/sections/test-hero/HeroSection2';
+import UrgencyBanner from '@/components/sections/UrgencyBanner';
 
 // Below-the-fold — lazy load
 const AgitationSection = lazy(
@@ -22,28 +22,33 @@ const FAQSection = lazy(() => import('@/components/sections/FAQSection'));
 const Footer = lazy(() => import('@/components/sections/Footer'));
 
 import { useAnalytics } from '@/hooks/use-analytics';
-import { waUrl } from '@/lib/wa-number';
-import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
+import { useScrollTracking } from '@/hooks/use-scroll-tracking';
+import { useSectionTracking } from '@/hooks/use-section-tracking';
+import { waUrl } from '@/lib/wa-number';
 
 function SectionSkeleton() {
     return <div aria-hidden="true" style={{ minHeight: '1px' }} />;
 }
 
 export default function AgitationTest1() {
-    const { trackVisit } = useAnalytics();
+    const { trackCTA, trackConversion, trackVisit } = useAnalytics();
 
     useEffect(() => {
         const html = document.documentElement;
         const wasDark = html.classList.contains('dark');
         html.classList.remove('dark');
+
         return () => {
-            if (wasDark) html.classList.add('dark');
+            if (wasDark) {
+                html.classList.add('dark');
+            }
         };
     }, []);
 
     useScrollTracking();
     useDwellTime();
+    useSectionTracking();
 
     useEffect(() => {
         trackVisit();
@@ -91,7 +96,7 @@ export default function AgitationTest1() {
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => {
+                    onClick={(event) => {
                         try {
                             (
                                 window as {
@@ -108,6 +113,15 @@ export default function AgitationTest1() {
                         } catch {
                             /* fbq not loaded */
                         }
+
+                        trackCTA(
+                            'floating_whatsapp',
+                            'Floating WhatsApp',
+                            event.currentTarget.href,
+                        );
+                        trackConversion('wa_inquiry', {
+                            location: 'floating_whatsapp',
+                        });
                     }}
                     className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95"
                     style={{
