@@ -2,6 +2,7 @@ import { BookOpen, Clock, Target, TrendingUp, Users, Zap } from 'lucide-react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const pillars = [
     {
@@ -51,6 +52,7 @@ const whyPoints = [
 ];
 
 export default function ValueSection() {
+    const { trackCTA } = useAnalytics();
     return (
         <>
             <div
@@ -232,13 +234,18 @@ export default function ValueSection() {
                 </div>
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton href="#pricing" size="md">
+                        <LpButton 
+                            href="#pricing" 
+                            size="md"
+                            onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
+                        >
                             Gabung Sekarang →
                         </LpButton>
                         <LpButton
                             href="#testimonials"
                             variant="ghost"
                             size="md"
+                            onClick={() => trackCTA('value_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
                         >
                             Lihat Bukti Alumni →
                         </LpButton>
@@ -303,13 +310,18 @@ export default function ValueSection() {
                 </div>
                 <div className="text-center">
                     <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton href="#pricing" size="md">
+                        <LpButton 
+                            href="#pricing" 
+                            size="md"
+                            onClick={() => trackCTA('value_bottom', 'Gabung Sekarang →', '#pricing')}
+                        >
                             Gabung Sekarang →
                         </LpButton>
                         <LpButton
                             href="#testimonials"
                             variant="ghost"
                             size="md"
+                            onClick={() => trackCTA('value_bottom_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
                         >
                             Lihat Bukti Alumni →
                         </LpButton>

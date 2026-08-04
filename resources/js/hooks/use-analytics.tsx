@@ -113,8 +113,7 @@ export function useAnalytics() {
 
     const trackVisit = useCallback(() => {
         const eventId =
-            ((window as Record<string, unknown>)
-                .__META_PAGE_VIEW_EVENT_ID as string) || generateEventId();
+            ((window as any).__META_PAGE_VIEW_EVENT_ID as string) || generateEventId();
         track({
             event_type: 'visit',
             event_data: {

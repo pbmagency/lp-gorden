@@ -1,4 +1,5 @@
 import { useEffect, useState, memo } from 'react';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const FullBrightLogo = memo(() => {
     return (
@@ -25,6 +26,7 @@ const FullBrightLogo = memo(() => {
 
 const Navbar = memo(() => {
     const [scrolled, setScrolled] = useState(false);
+    const { trackCTA } = useAnalytics();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 12);
@@ -49,6 +51,7 @@ const Navbar = memo(() => {
 
                 <a
                     href="#pricing"
+                    onClick={() => trackCTA('navbar', 'Amankan Seat', '#pricing')}
                     className="group flex flex-col justify-center gap-px rounded-full bg-[#D70808] px-4 py-[7px] shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110"
                 >
                     <span className="text-[13px] leading-[1.2] font-extrabold whitespace-nowrap text-white">
