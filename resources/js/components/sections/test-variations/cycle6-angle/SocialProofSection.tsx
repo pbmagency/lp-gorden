@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },
@@ -165,6 +166,7 @@ const reviewPhotos = Array.from(
 );
 
 export default function SocialProofSection() {
+    const { trackCTA } = useAnalytics();
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const [reviewIndex, setReviewIndex] = useState<number | null>(null);
     const [reviewReady, setReviewReady] = useState(false);
@@ -601,7 +603,11 @@ export default function SocialProofSection() {
                 )}
 
                 <div className="mt-10 text-center">
-                    <LpButton href="#pricing" size="md">
+                    <LpButton
+                        href="#pricing"
+                        size="md"
+                        onClick={() => trackCTA('social_proof_primary', 'Gabung Sekarang →', '#pricing')}
+                    >
                         Gabung Sekarang →
                     </LpButton>
                     <SocialProofMicro />

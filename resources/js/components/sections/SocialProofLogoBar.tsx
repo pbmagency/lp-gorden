@@ -35,7 +35,6 @@ export default function SocialProofLogoBar() {
                             alt={logo.alt}
                             loading="lazy"
                             className="h-auto max-h-full w-auto max-w-full object-contain select-none"
-                            loading="lazy"
                             decoding="async"
                             style={{
                                 filter: 'grayscale(100%)',

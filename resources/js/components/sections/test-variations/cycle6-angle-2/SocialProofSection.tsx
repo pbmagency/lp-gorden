@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import {
     Star,
     MessageCircle,
@@ -6,22 +5,27 @@ import {
     ChevronLeft,
     ChevronRight,
 } from 'lucide-react';
-import SectionWrapper from '@/components/ui/section-wrapper';
+import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
-import SocialProofMicro from '@/components/ui/social-proof-micro';
+import SectionWrapper from '@/components/ui/section-wrapper';
+import { useAnalytics } from '@/hooks/use-analytics';
+
 
 const statsBar = [
     { value: '45.000+', label: 'Alumni Sukses' },
     { value: '4.9/5', label: 'Rating Rata-rata' },
     { value: '13+', label: 'Tahun Pengalaman' },
-    {
-        value: '95%',
-        label: 'Skor Naik Signifikan',
-        micro: 'Berdasarkan data alumni batch 2024–2025',
-    },
+    { value: '95%', label: 'Skor Naik Signifikan' },
 ];
 
-const waScreenshots = [
+interface WaScreenshot {
+    src: string;
+    score: string;
+    name?: string;
+    label?: string;
+}
+
+const waScreenshots: WaScreenshot[] = [
     { src: '/image/toefl1.webp', score: '547' },
     { src: '/image/toefl9.webp', score: '560' },
     { src: '/image/toefl3.webp', score: '563' },
@@ -88,6 +92,7 @@ function PhotoLightbox({
     onNext: () => void;
 }) {
     const photo = photos[index];
+
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center"
@@ -117,21 +122,24 @@ function PhotoLightbox({
             >
                 <img
                     src={photo.src}
-                    alt={`Bukti skor TOEFL ${photo.score}`}
+                    alt={photo.name ?? `Bukti skor TOEFL ${photo.score}`}
                     width={340}
                     height={604}
                     className="max-h-[80vh] w-full max-w-[340px] rounded-2xl object-contain"
                     style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
                 />
                 <div className="text-center">
-                    <p
-                        className="text-base font-black text-white"
-                        style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                        Bukti Skor TOEFL
-                    </p>
+                    {photo.name && (
+                        <p
+                            className="text-base font-black text-white"
+                            style={{ fontFamily: 'var(--font-heading)' }}
+                        >
+                            {photo.name}
+                        </p>
+                    )}
                     <p className="text-sm text-white/60">
-                        {photo.score ? 'Skor ' + photo.score : ''}
+                        {photo.score ? `Skor ${photo.score}` : ''}
+                        {photo.label ? ` · ${photo.label}` : ''}
                     </p>
                 </div>
                 <p className="text-xs text-white/40">
@@ -152,12 +160,14 @@ function PhotoLightbox({
     );
 }
 
+// We correctly have 19 reviews here as requested
 const reviewPhotos = Array.from(
     { length: 19 },
     (_, i) => `/review/Riview (${i + 1}).webp`,
 );
 
 export default function SocialProofSection() {
+    const { trackCTA } = useAnalytics();
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const [reviewIndex, setReviewIndex] = useState<number | null>(null);
     const [reviewReady, setReviewReady] = useState(false);
@@ -176,17 +186,25 @@ export default function SocialProofSection() {
         );
 
     useEffect(() => {
-        const id = typeof window.requestIdleCallback === 'function'
-            ? window.requestIdleCallback(() => setReviewReady(true), {
+        const idleWindow = window as unknown as {
+            requestIdleCallback?: (
+                callback: () => void,
+                options?: { timeout: number },
+            ) => number;
+            cancelIdleCallback?: (id: number) => void;
+        };
+        const id = idleWindow.requestIdleCallback
+            ? idleWindow.requestIdleCallback(() => setReviewReady(true), {
                   timeout: 2000,
               })
             : (setTimeout(
                   () => setReviewReady(true),
                   1500,
               ) as unknown as number);
+
         return () => {
-            if (typeof window.requestIdleCallback === 'function') {
-                window.cancelIdleCallback(id);
+            if (idleWindow.cancelIdleCallback) {
+                idleWindow.cancelIdleCallback(id);
             } else {
                 clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
             }
@@ -219,32 +237,11 @@ export default function SocialProofSection() {
                                 <p className="mt-1.5 text-xs font-medium tracking-wide opacity-75">
                                     {s.label}
                                 </p>
-                                {s.micro && (
-                                    <p className="mt-1 text-[10px] italic opacity-50">
-                                        {s.micro}
-                                    </p>
-                                )}
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-
-            {/* <SectionWrapper bg="cultured" className="py-20 md:py-24">
-                <div className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: '#FFF0F0', color: '#D70808', border: '1px solid #ffb3b3' }}>🏆 Skor Resmi — Terkonfirmasi dari Score Report ETS</div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5" style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}>
-                        Lihat Sendiri Skor yang <span style={{ color: '#D70808' }}>Berhasil Diraih Alumni</span>
-                    </h2>
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-                    {scoreResults.map((r) => <ScoreCard key={r.name} {...r} />)}
-                </div>
-                <div className="text-center">
-                    <LpButton href="#pricing" size="lg">Raih Skorku Sekarang →</LpButton>
-                    <SocialProofMicro />
-                </div>
-            </SectionWrapper> */}
 
             <SectionWrapper bg="white" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
@@ -265,8 +262,10 @@ export default function SocialProofSection() {
                             color: '#151515',
                         }}
                     >
-                        Hasil Skor TOEFL dari{' '}
-                        <span style={{ color: '#D70808' }}>Alumni Kami</span>
+                        Lihat Bagaimana Alumni Kami,{' '}
+                        <span style={{ color: '#D70808' }}>
+                            Meraih Target Skor Untuk Beasiswa
+                        </span>
                     </h2>
                     <p className="text-sm" style={{ color: '#9ca3af' }}>
                         Klik foto untuk memperbesar
@@ -295,8 +294,6 @@ export default function SocialProofSection() {
                                     width={260}
                                     height={463}
                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    loading="lazy"
-                                    decoding="async"
                                 />
                                 <div
                                     className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
@@ -335,7 +332,7 @@ export default function SocialProofSection() {
                         className="infinite-track"
                         style={{ animationDuration: '35s' }}
                     >
-                        {Array.from({ length: 2 }, () => waScreenshots)
+                        {Array.from({ length: 4 }, () => waScreenshots)
                             .flat()
                             .map((img, i) => (
                                 <div
@@ -361,8 +358,7 @@ export default function SocialProofSection() {
                                             width={130}
                                             height={231}
                                             className="h-full w-full object-cover"
-                                            loading="lazy"
-                                            decoding="async"
+                                            // FIXED: Removed loading="lazy" to prevent blank boxes in infinite scroll
                                         />
                                     </div>
                                     {img.score && (
@@ -525,13 +521,13 @@ export default function SocialProofSection() {
                 {reviewReady && (
                     <div className="mt-12 mb-2">
                         <p
-                            className="mb-5 text-center text-xs font-black tracking-widest uppercase"
+                            className="mb-6 text-center text-xs font-black tracking-widest uppercase"
                             style={{ color: '#9ca3af' }}
                         >
                             Review Alumni di Google & Media Sosial
                         </p>
                         <div
-                            className="overflow-hidden"
+                            className="overflow-hidden py-4"
                             style={{
                                 maskImage:
                                     'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
@@ -543,40 +539,36 @@ export default function SocialProofSection() {
                                 className="infinite-track"
                                 style={{
                                     animationDuration: '60s',
-                                    alignItems: 'flex-start',
+                                    alignItems: 'center',
                                 }}
                             >
-                                {Array.from({ length: 2 }, () => reviewPhotos)
+                                {Array.from({ length: 4 }, () => reviewPhotos)
                                     .flat()
                                     .map((src, i) => (
                                         <div
                                             key={i}
-                                            className="group mx-2 shrink-0 cursor-pointer overflow-hidden rounded-2xl"
+                                            className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
                                             style={{
-                                                maxWidth: '200px',
-                                                boxShadow:
-                                                    '0 4px 16px rgba(0,0,0,0.12)',
+                                                width: '280px',
+                                                aspectRatio: '1/1',
+                                                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                             }}
                                             onClick={() => openReview(i)}
                                         >
-                                            <div className="relative">
+                                            <div className="relative h-full w-full">
                                                 <img
                                                     src={src}
                                                     alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
-                                                    width={200}
-                                                    height={300}
-                                                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                                                    loading="lazy"
-                                                    decoding="async"
+                                                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                    // FIXED: Removed loading="lazy" to prevent blank boxes in infinite scroll
                                                 />
                                                 <div
                                                     className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                                                     style={{
-                                                        backgroundColor:
-                                                            'rgba(0,0,0,0.25)',
+                                                        backgroundColor: 'rgba(0,0,0,0.25)',
                                                     }}
                                                 >
-                                                    <span className="rounded-full bg-black/50 px-3 py-1 text-xs font-bold text-white">
+                                                    <span className="rounded-full bg-black/60 px-4 py-1.5 text-xs font-bold tracking-wide text-white">
                                                         Perbesar
                                                     </span>
                                                 </div>
@@ -588,11 +580,14 @@ export default function SocialProofSection() {
                     </div>
                 )}
 
-                <div className="mt-10 text-center">
-                    <LpButton href="#pricing" size="md">
-                        Mulai Belajar Sekarang →
+                <div className="mt-10 mb-6 text-center">
+                    <LpButton
+                        href="#pricing"
+                        size="lg"
+                        onClick={() => trackCTA('social_proof_primary', 'Gabung Sekarang →', '#pricing')}
+                    >
+                        Gabung Sekarang →
                     </LpButton>
-                    <SocialProofMicro />
                 </div>
             </SectionWrapper>
 
@@ -641,7 +636,7 @@ export default function SocialProofSection() {
                             className="max-h-[85vh] w-auto max-w-[90vw] rounded-2xl object-contain"
                             style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
                         />
-                        <p className="text-xs text-white/40">
+                        <p className="text-xs font-medium tracking-widest text-white/50">
                             {reviewIndex + 1} / 19
                         </p>
                     </div>

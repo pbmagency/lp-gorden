@@ -322,6 +322,166 @@ Controller59e3aec23fdf295dce50340e57424969.form = Controller59e3aec23fdf295dce50
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+const Controller11aada95492f5bbaebf2e0b14f4a82b7 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller11aada95492f5bbaebf2e0b14f4a82b7.url(options),
+    method: 'get',
+})
+
+Controller11aada95492f5bbaebf2e0b14f4a82b7.definition = {
+    methods: ["get","head"],
+    url: '/c6-angle',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+Controller11aada95492f5bbaebf2e0b14f4a82b7.url = (options?: RouteQueryOptions) => {
+    return Controller11aada95492f5bbaebf2e0b14f4a82b7.definition.url + queryParams(options)
+}
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+Controller11aada95492f5bbaebf2e0b14f4a82b7.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller11aada95492f5bbaebf2e0b14f4a82b7.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+Controller11aada95492f5bbaebf2e0b14f4a82b7.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: Controller11aada95492f5bbaebf2e0b14f4a82b7.url(options),
+    method: 'head',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+const Controller11aada95492f5bbaebf2e0b14f4a82b7Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller11aada95492f5bbaebf2e0b14f4a82b7.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+Controller11aada95492f5bbaebf2e0b14f4a82b7Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller11aada95492f5bbaebf2e0b14f4a82b7.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle'
+*/
+Controller11aada95492f5bbaebf2e0b14f4a82b7Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller11aada95492f5bbaebf2e0b14f4a82b7.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+Controller11aada95492f5bbaebf2e0b14f4a82b7.form = Controller11aada95492f5bbaebf2e0b14f4a82b7Form
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+const Controller0f1844f999e4cef972eab792d38af7e1 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller0f1844f999e4cef972eab792d38af7e1.url(options),
+    method: 'get',
+})
+
+Controller0f1844f999e4cef972eab792d38af7e1.definition = {
+    methods: ["get","head"],
+    url: '/c6-angle-2',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+Controller0f1844f999e4cef972eab792d38af7e1.url = (options?: RouteQueryOptions) => {
+    return Controller0f1844f999e4cef972eab792d38af7e1.definition.url + queryParams(options)
+}
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+Controller0f1844f999e4cef972eab792d38af7e1.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: Controller0f1844f999e4cef972eab792d38af7e1.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+Controller0f1844f999e4cef972eab792d38af7e1.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: Controller0f1844f999e4cef972eab792d38af7e1.url(options),
+    method: 'head',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+const Controller0f1844f999e4cef972eab792d38af7e1Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller0f1844f999e4cef972eab792d38af7e1.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+Controller0f1844f999e4cef972eab792d38af7e1Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller0f1844f999e4cef972eab792d38af7e1.url(options),
+    method: 'get',
+})
+
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+* @route '/c6-angle-2'
+*/
+Controller0f1844f999e4cef972eab792d38af7e1Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: Controller0f1844f999e4cef972eab792d38af7e1.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+Controller0f1844f999e4cef972eab792d38af7e1.form = Controller0f1844f999e4cef972eab792d38af7e1Form
+/**
+* @see \Inertia\Controller::__invoke
+* @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
 * @route '/bio-ig-toefl-hack'
 */
 const Controller40a01a1699aa81065f0aa8fdda0f8426 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -730,6 +890,8 @@ const Controller = {
     '/c4-sp-1': Controller7337523198342044b0077fe0715c4957,
     '/c4-sp-2': Controller4a0b0d88bdc2d7c679100b961a65db14,
     '/c5-hero': Controller59e3aec23fdf295dce50340e57424969,
+    '/c6-angle': Controller11aada95492f5bbaebf2e0b14f4a82b7,
+    '/c6-angle-2': Controller0f1844f999e4cef972eab792d38af7e1,
     '/bio-ig-toefl-hack': Controller40a01a1699aa81065f0aa8fdda0f8426,
     '/toefl-hack': Controlleref596e3b2ff77794a2ffd983d4e27298,
     '/dashboard': Controller42a740574ecbfbac32f8cc353fc32db9,

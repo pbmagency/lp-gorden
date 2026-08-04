@@ -1,7 +1,7 @@
 import hero from './hero'
 
-const cycle5 = {
+const cyccle5 = {
     hero: Object.assign(hero, hero),
 }
 
-export default cycle5
+export default cyccle5
