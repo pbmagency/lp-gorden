@@ -58,8 +58,7 @@ export default function Landing() {
         <>
             <Head>
                 <title>
-                    Full Bright Indonesia – Spesialis TOEFL &amp; IELTS Sejak
-                    2013 | 45.000+ Alumni
+                    Kelas TOEFL Skor 500+ untuk LPDP dan Kerja
                 </title>
                 <meta
                     name="description"
