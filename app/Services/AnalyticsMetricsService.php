@@ -15,7 +15,6 @@ class AnalyticsMetricsService
     public const FUNNEL_ACTION_EVENTS = [
         'cta_click',
         'initiate_checkout',
-        'conversion',
         'payment',
     ];
 
@@ -42,7 +41,7 @@ class AnalyticsMetricsService
         $intent = $this->eventSessions('cta_click', $startDate, $endDate);
         $directCheckouts = $this->checkoutSessions($startDate, $endDate);
         $whatsAppLeads = $this->whatsAppLeadSessions($startDate, $endDate);
-        $totalLeads = $this->totalLeadSessions($startDate, $endDate);
+        $totalLeads = $directCheckouts + $whatsAppLeads;
 
         return [
             'total_visits' => $totalVisits,
@@ -89,20 +88,40 @@ class AnalyticsMetricsService
         })->all();
     }
 
-    public function applyEngagedEventConditions(Builder $query): Builder
+    public function applyEngagedEventConditions(
+        Builder $query,
+        ?Carbon $startDate = null,
+        ?Carbon $endDate = null,
+    ): Builder {
+        return $query->where(function (Builder $events) use ($startDate, $endDate) {
+            $events->where(function (Builder $dwell) use ($startDate, $endDate) {
+                $dwell->where('event_type', 'engagement')
+                    ->where('event_data->type', 'dwell_ping')
+                    ->where('event_data->duration', '>=', self::DWELL_THRESHOLD_MS)
+                    ->whereExists(function (Builder $scroll) use ($startDate, $endDate) {
+                        $scroll->from('user_analytics as engaged_scrolls')
+                            ->whereColumn('engaged_scrolls.session_id', 'user_analytics.session_id')
+                            ->where('engaged_scrolls.event_type', 'scroll')
+                            ->where('engaged_scrolls.event_data->depth', '>', self::SCROLL_THRESHOLD)
+                            ->when($startDate && $endDate, fn (Builder $query) => $query->whereBetween('engaged_scrolls.created_at', [$startDate, $endDate]));
+                    });
+            })->orWhere(function (Builder $actions) {
+                $this->applyFunnelActionEventConditions($actions);
+            });
+        });
+    }
+
+    public function applyFunnelActionEventConditions(Builder $query): Builder
     {
         return $query->where(function (Builder $events) {
-            $events
-                ->where(function (Builder $dwell) {
-                    $dwell->where('event_type', 'engagement')
-                        ->where('event_data->type', 'dwell_ping')
-                        ->where('event_data->duration', '>=', self::DWELL_THRESHOLD_MS);
-                })
-                ->orWhere(function (Builder $scroll) {
-                    $scroll->where('event_type', 'scroll')
-                        ->where('event_data->depth', '>=', self::SCROLL_THRESHOLD);
-                })
-                ->orWhereIn('event_type', self::FUNNEL_ACTION_EVENTS);
+            $events->whereIn('event_type', self::FUNNEL_ACTION_EVENTS)
+                ->orWhere(function (Builder $conversion) {
+                    $conversion->where('event_type', 'conversion')
+                        ->whereIn('event_data->type', [
+                            ...self::LEAD_CONVERSION_TYPES,
+                            ...self::LEGACY_CHECKOUT_CONVERSION_TYPES,
+                        ]);
+                });
         });
     }
 
@@ -161,26 +180,27 @@ class AnalyticsMetricsService
     public function applyBounceConditions(Builder $query, Carbon $startDate, Carbon $endDate, string $visitAlias): Builder
     {
         return $query
-            ->whereNotExists(function (Builder $event) use ($startDate, $endDate, $visitAlias) {
-                $event->from('user_analytics as dwell')
-                    ->whereColumn('dwell.session_id', "{$visitAlias}.session_id")
-                    ->where('dwell.event_type', 'engagement')
-                    ->where('dwell.event_data->type', 'dwell_ping')
-                    ->where('dwell.event_data->duration', '>=', self::DWELL_THRESHOLD_MS)
-                    ->whereBetween('dwell.created_at', [$startDate, $endDate]);
-            })
-            ->whereNotExists(function (Builder $event) use ($startDate, $endDate, $visitAlias) {
-                $event->from('user_analytics as scrolls')
+            ->whereNotExists(function (Builder $scroll) use ($startDate, $endDate, $visitAlias) {
+                $scroll->from('user_analytics as scrolls')
                     ->whereColumn('scrolls.session_id', "{$visitAlias}.session_id")
                     ->where('scrolls.event_type', 'scroll')
-                    ->where('scrolls.event_data->depth', '>=', self::SCROLL_THRESHOLD)
-                    ->whereBetween('scrolls.created_at', [$startDate, $endDate]);
+                    ->where('scrolls.event_data->depth', '>', self::SCROLL_THRESHOLD)
+                    ->whereBetween('scrolls.created_at', [$startDate, $endDate])
+                    ->whereExists(function (Builder $dwell) use ($startDate, $endDate) {
+                        $dwell->from('user_analytics as dwell')
+                            ->whereColumn('dwell.session_id', 'scrolls.session_id')
+                            ->where('dwell.event_type', 'engagement')
+                            ->where('dwell.event_data->type', 'dwell_ping')
+                            ->where('dwell.event_data->duration', '>=', self::DWELL_THRESHOLD_MS)
+                            ->whereBetween('dwell.created_at', [$startDate, $endDate]);
+                    });
             })
-            ->whereNotExists(function (Builder $event) use ($startDate, $endDate, $visitAlias) {
-                $event->from('user_analytics as actions')
+            ->whereNotExists(function (Builder $action) use ($startDate, $endDate, $visitAlias) {
+                $action->from('user_analytics as actions')
                     ->whereColumn('actions.session_id', "{$visitAlias}.session_id")
-                    ->whereIn('actions.event_type', self::FUNNEL_ACTION_EVENTS)
                     ->whereBetween('actions.created_at', [$startDate, $endDate]);
+
+                $this->applyFunnelActionEventConditions($action);
             });
     }
 
@@ -207,16 +227,6 @@ class AnalyticsMetricsService
             ->whereBetween('created_at', [$startDate, $endDate]);
 
         $this->applyCheckoutEventConditions($query);
-
-        return $query->distinct()->count('session_id');
-    }
-
-    private function totalLeadSessions(Carbon $startDate, Carbon $endDate): int
-    {
-        $query = DB::table('user_analytics')
-            ->whereBetween('created_at', [$startDate, $endDate]);
-
-        $this->applyTotalLeadEventConditions($query);
 
         return $query->distinct()->count('session_id');
     }

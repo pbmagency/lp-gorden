@@ -170,7 +170,7 @@ class AnalyticsController extends Controller
                 DB::raw('COUNT(DISTINCT session_id) as total'),
             )
             ->whereBetween('created_at', [$startDate, $endDate]);
-        $this->metrics->applyEngagedEventConditions($engagedQuery);
+        $this->metrics->applyEngagedEventConditions($engagedQuery, $startDate, $endDate);
 
         $eventData->put('engagement', $engagedQuery
             ->groupBy(DB::raw('DATE(created_at)'))
@@ -185,10 +185,11 @@ class AnalyticsController extends Controller
             ->whereBetween('created_at', [$startDate, $endDate]);
         $this->metrics->applyCheckoutEventConditions($checkoutQuery);
 
-        $eventData->put('direct_checkout', $checkoutQuery
+        $directCheckoutData = $checkoutQuery
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
-            ->get());
+            ->get();
+        $eventData->put('direct_checkout', $directCheckoutData);
 
         $whatsAppLeadQuery = DB::table('user_analytics')
             ->select(
@@ -198,23 +199,22 @@ class AnalyticsController extends Controller
             ->whereBetween('created_at', [$startDate, $endDate]);
         $this->metrics->applyWhatsAppLeadEventConditions($whatsAppLeadQuery);
 
-        $eventData->put('whatsapp_lead', $whatsAppLeadQuery
+        $whatsAppLeadData = $whatsAppLeadQuery
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
-            ->get());
+            ->get();
+        $eventData->put('whatsapp_lead', $whatsAppLeadData);
 
-        $totalLeadQuery = DB::table('user_analytics')
-            ->select(
-                DB::raw('DATE(created_at) as date'),
-                DB::raw('COUNT(DISTINCT session_id) as total'),
-            )
-            ->whereBetween('created_at', [$startDate, $endDate]);
-        $this->metrics->applyTotalLeadEventConditions($totalLeadQuery);
-
-        $eventData->put('total_lead', $totalLeadQuery
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy('date')
-            ->get());
+        $totalLeadData = $directCheckoutData
+            ->concat($whatsAppLeadData)
+            ->groupBy('date')
+            ->map(fn ($rows, $date) => (object) [
+                'date' => $date,
+                'total' => $rows->sum('total'),
+            ])
+            ->sortBy('date')
+            ->values();
+        $eventData->put('total_lead', $totalLeadData);
 
         return $eventData;
     }
