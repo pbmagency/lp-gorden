@@ -170,7 +170,7 @@ class AnalyticsController extends Controller
                 DB::raw('COUNT(DISTINCT session_id) as total'),
             )
             ->whereBetween('created_at', [$startDate, $endDate]);
-        $this->metrics->applyEngagedEventConditions($engagedQuery);
+        $this->metrics->applyEngagedEventConditions($engagedQuery, $startDate, $endDate);
 
         $eventData->put('engagement', $engagedQuery
             ->groupBy(DB::raw('DATE(created_at)'))

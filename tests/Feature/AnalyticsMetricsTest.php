@@ -16,7 +16,7 @@ class AnalyticsMetricsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_engagement_uses_dwell_or_scroll_or_funnel_action(): void
+    public function test_engagement_uses_scroll_and_dwell_or_funnel_action(): void
     {
         $now = Carbon::now();
 
@@ -28,7 +28,12 @@ class AnalyticsMetricsTest extends TestCase
             'type' => 'dwell_ping',
             'duration' => 15000,
         ]);
-        $this->event('scroll', 'scroll', '/', $now, ['depth' => 25]);
+        $this->event('dwell', 'scroll', '/', $now, ['depth' => 26]);
+        $this->event('scroll', 'scroll', '/', $now, ['depth' => 26]);
+        $this->event('scroll', 'engagement', '/', $now, [
+            'type' => 'dwell_ping',
+            'duration' => 15000,
+        ]);
         $this->event('action', 'cta_click', '/', $now, ['location' => 'hero']);
 
         $metrics = app(AnalyticsMetricsService::class);
@@ -61,6 +66,69 @@ class AnalyticsMetricsTest extends TestCase
             3,
             (int) $chartData->get('engagement')->first()->total,
         );
+    }
+
+    public function test_bounce_formula_matches_performance_matrix_and_behavioral_personas(): void
+    {
+        $now = Carbon::now();
+        $sessions = [
+            'none',
+            'dwell-only',
+            'scroll-only',
+            'boundary',
+            'reading',
+            'intent',
+            'checkout',
+            'lead',
+            'payment',
+            'other-conversion',
+        ];
+
+        foreach ($sessions as $sessionId) {
+            $this->event($sessionId, 'visit', '/formula', $now);
+        }
+
+        $this->event('dwell-only', 'engagement', '/formula', $now, [
+            'type' => 'dwell_ping',
+            'duration' => 15000,
+        ]);
+        $this->event('scroll-only', 'scroll', '/formula', $now, ['depth' => 26]);
+        $this->event('boundary', 'scroll', '/formula', $now, ['depth' => 25]);
+        $this->event('boundary', 'engagement', '/formula', $now, [
+            'type' => 'dwell_ping',
+            'duration' => 15000,
+        ]);
+        $this->event('reading', 'scroll', '/formula', $now, ['depth' => 26]);
+        $this->event('reading', 'engagement', '/formula', $now, [
+            'type' => 'dwell_ping',
+            'duration' => 15000,
+        ]);
+        $this->event('intent', 'cta_click', '/formula', $now);
+        $this->event('checkout', 'initiate_checkout', '/formula', $now);
+        $this->event('lead', 'conversion', '/formula', $now, ['type' => 'wa_inquiry']);
+        $this->event('payment', 'payment', '/formula', $now);
+        $this->event('other-conversion', 'conversion', '/formula', $now, ['type' => 'newsletter_signup']);
+
+        $start = $now->copy()->subHour();
+        $end = $now->copy()->addHour();
+        $metrics = app(AnalyticsMetricsService::class);
+        $service = app(AbTestingService::class);
+        $matrix = collect($service->getPerformanceMatrix($start, $end))
+            ->firstWhere('landing_source', '/formula');
+        $reader = collect($service->getReaderSegmentation($start, $end))
+            ->firstWhere('landing_source', '/formula');
+        $bouncer = collect($reader['personas'])->firstWhere('name', 'Bouncers');
+
+        $engagedQuery = DB::table('user_analytics')
+            ->whereBetween('created_at', [$start, $end]);
+        $metrics->applyEngagedEventConditions($engagedQuery, $start, $end);
+
+        $this->assertSame(5, $metrics->bouncedSessions($start, $end));
+        $this->assertSame(5, $engagedQuery->distinct()->count('session_id'));
+        $this->assertSame(50.0, $matrix['bounce_rate']);
+        $this->assertSame(10, $reader['total_sessions']);
+        $this->assertSame(5, $bouncer['count']);
+        $this->assertSame(50.0, $bouncer['percentage']);
     }
 
     public function test_checkout_lead_and_untracked_payment_are_not_conflated(): void

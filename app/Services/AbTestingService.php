@@ -212,7 +212,11 @@ class AbTestingService
                 $depth = $scrollDepths[$sessionId] ?? 0;
                 $dwell = $dwellTimes[$sessionId] ?? 0;
 
-                if ($depth < 25 && $dwell < 15 && ! $actions->contains($sessionId)) {
+                $engagedByReading = $depth > AnalyticsMetricsService::SCROLL_THRESHOLD
+                    && $dwell >= AnalyticsMetricsService::DWELL_THRESHOLD_MS / 1000;
+                $engaged = $engagedByReading || $actions->contains($sessionId);
+
+                if (! $engaged) {
                     $personas['bouncers']++;
                 } elseif ($dwell > 120) {
                     $personas['deep_readers']++;
@@ -228,7 +232,7 @@ class AbTestingService
                 'landing_source' => $src,
                 'total_sessions' => $total,
                 'personas' => [
-                    ['name' => 'Bouncers',     'description' => 'No 25% scroll, 15s dwell, or funnel action', 'count' => $personas['bouncers'],     'percentage' => round($this->safeDiv($personas['bouncers'], $total) * 100, 1)],
+                    ['name' => 'Bouncers',     'description' => 'No funnel action and scroll <=25% or dwell <15s', 'count' => $personas['bouncers'],     'percentage' => round($this->safeDiv($personas['bouncers'], $total) * 100, 1)],
                     ['name' => 'Skimmers',     'description' => 'High scroll (>75%) but quick read (<60s)', 'count' => $personas['skimmers'],     'percentage' => round($this->safeDiv($personas['skimmers'], $total) * 100, 1)],
                     ['name' => 'Deep Readers', 'description' => 'Extended engagement (>120s)',              'count' => $personas['deep_readers'], 'percentage' => round($this->safeDiv($personas['deep_readers'], $total) * 100, 1)],
                     ['name' => 'Casuals',      'description' => 'Moderate engagement',                     'count' => $personas['casuals'],      'percentage' => round($this->safeDiv($personas['casuals'], $total) * 100, 1)],
@@ -515,6 +519,7 @@ class AbTestingService
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
                 'session_id',
             ])
+            ->where('event_type', 'visit')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
             ->whereRaw("json_extract(event_data, '$.landing_source') NOT IN ('', 'unknown')")
@@ -598,12 +603,14 @@ class AbTestingService
                 DB::raw('json_extract(event_data, \'$.landing_source\') as landing_source'),
                 'session_id',
             ])
-            ->whereIn('event_type', AnalyticsMetricsService::FUNNEL_ACTION_EVENTS)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw('json_extract(event_data, \'$.landing_source\') IS NOT NULL')
             ->when($sourceFilter && $sourceFilter !== 'all', fn ($query) => $query->where('referral_source', $sourceFilter))
-            ->distinct()
-            ->get();
+            ->distinct();
+
+        $this->metrics->applyFunnelActionEventConditions($rows);
+
+        $rows = $rows->get();
 
         $result = [];
         foreach ($rows as $row) {

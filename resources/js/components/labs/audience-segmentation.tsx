@@ -233,8 +233,8 @@ export function AudienceSegmentation({
                                             Bouncers
                                         </span>
                                         <span>
-                                            Scroll &lt; 25% & Dwell &lt; 15s
-                                            (Immediate exit)
+                                            No funnel action AND (Scroll ≤25% OR
+                                            Dwell &lt;15s)
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
