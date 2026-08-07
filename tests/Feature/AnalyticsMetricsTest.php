@@ -88,22 +88,23 @@ class AnalyticsMetricsTest extends TestCase
         $funnel = collect($metrics->dashboardFunnel($start, $end))->keyBy('stage');
         $splitFunnel = app(AbTestingService::class)->getSplitFunnel($start, $end);
 
-        $this->assertSame(1, $stats['initiate_checkouts']);
-        $this->assertSame(1, $stats['leads']);
-        $this->assertSame(0, $stats['payments']);
-        $this->assertSame(0.0, $stats['total_revenue']);
-        $this->assertSame(1, $matrix[0]['initiate_checkouts']);
-        $this->assertSame(1, $matrix[0]['leads']);
+        $this->assertSame(1, $stats['direct_checkouts']);
+        $this->assertSame(1, $stats['whatsapp_leads']);
+        $this->assertSame(2, $stats['total_leads']);
+        $this->assertSame(100.0, $stats['total_leads_from_intent_rate']);
+        $this->assertSame(1, $matrix[0]['direct_checkouts']);
+        $this->assertSame(1, $matrix[0]['whatsapp_leads']);
+        $this->assertSame(2, $matrix[0]['total_leads']);
         $this->assertSame(0.0, $matrix[0]['bounce_rate']);
-        $this->assertSame(0, $matrix[0]['payments']);
-        $this->assertSame(0, $matrix[0]['revenue']);
-        $this->assertSame('Intent', $funnel['Initiate Checkout']['from_stage']);
-        $this->assertSame('checkout', $funnel['Initiate Checkout']['branch']);
+        $this->assertSame('Intent', $funnel['Direct Checkout']['from_stage']);
+        $this->assertSame('checkout', $funnel['Direct Checkout']['branch']);
         $this->assertSame('Intent', $funnel['WhatsApp Leads']['from_stage']);
         $this->assertSame('lead', $funnel['WhatsApp Leads']['branch']);
         $this->assertSame(50.0, $funnel['WhatsApp Leads']['transition_percentage']);
+        $this->assertSame('total', $funnel['Total Leads']['branch']);
+        $this->assertSame(100.0, $funnel['Total Leads']['transition_percentage']);
         $this->assertSame(
-            ['Visits', 'Engaged', 'Intent', 'Initiate Checkout', 'WhatsApp Leads', 'Payments'],
+            ['Visits', 'Engaged', 'Intent', 'Direct Checkout', 'WhatsApp Leads', 'Total Leads'],
             collect($splitFunnel[0]['steps'])->pluck('stage')->all(),
         );
         $this->assertSame(
@@ -141,10 +142,13 @@ class AnalyticsMetricsTest extends TestCase
             $end,
         );
 
-        $this->assertSame(3, $stats['leads']);
-        $this->assertSame(75.0, $stats['lead_rate']);
-        $this->assertSame(3, $matrix[0]['leads']);
-        $this->assertSame(3, (int) $chartData->get('conversion')->first()->total);
+        $this->assertSame(3, $stats['whatsapp_leads']);
+        $this->assertSame(75.0, $stats['whatsapp_lead_rate']);
+        $this->assertSame(4, $stats['total_leads']);
+        $this->assertSame(3, $matrix[0]['whatsapp_leads']);
+        $this->assertSame(4, $matrix[0]['total_leads']);
+        $this->assertSame(3, (int) $chartData->get('whatsapp_lead')->first()->total);
+        $this->assertSame(4, (int) $chartData->get('total_lead')->first()->total);
     }
 
     public function test_deleting_a_user_keeps_their_anonymous_analytics_history(): void
@@ -165,6 +169,91 @@ class AnalyticsMetricsTest extends TestCase
             'session_id' => 'retained-session',
             'user_id' => null,
         ]);
+    }
+
+    public function test_total_leads_are_a_deduplicated_union_across_all_labs_analysis(): void
+    {
+        $now = Carbon::now();
+
+        foreach (['direct', 'whatsapp', 'both'] as $sessionId) {
+            $this->event($sessionId, 'visit', '/template', $now);
+            $this->event($sessionId, 'cta_click', '/template', $now, [
+                'location' => $sessionId,
+            ]);
+        }
+
+        $this->event('direct', 'initiate_checkout', '/template', $now);
+        $this->event('whatsapp', 'conversion', '/template', $now, ['type' => 'wa_inquiry']);
+        $this->event('both', 'initiate_checkout', '/template', $now);
+        $this->event('both', 'conversion', '/template', $now, ['type' => 'wa_registration']);
+
+        $start = $now->copy()->subHour();
+        $end = $now->copy()->addHour();
+        $stats = app(AnalyticsMetricsService::class)->dashboardStats($start, $end);
+        $service = app(AbTestingService::class);
+        $matrix = $service->getPerformanceMatrix($start, $end);
+        $quality = $service->getQualityAnalysis($start, $end);
+        $devices = $service->getDevicePerformance($start, $end);
+        $cta = $service->getCtaPerformance($start, $end);
+
+        $this->assertSame(2, $stats['direct_checkouts']);
+        $this->assertSame(2, $stats['whatsapp_leads']);
+        $this->assertSame(3, $stats['total_leads']);
+        $this->assertSame(100.0, $stats['total_leads_from_intent_rate']);
+        $this->assertSame(3, $matrix[0]['total_leads']);
+        $this->assertSame(100.0, $matrix[0]['total_lead_rate']);
+        $this->assertSame(3, $quality[0]['total_leads']['count']);
+        $this->assertSame(0, $quality[0]['others']['count']);
+        $this->assertSame(3, $devices[0]['desktop']['total_leads']);
+        $this->assertSame(100.0, $devices[0]['desktop']['total_lead_rate']);
+        $this->assertSame(
+            [100.0, 100.0, 100.0],
+            collect($cta[0]['cta_locations'])->pluck('total_lead_rate')->all(),
+        );
+    }
+
+    public function test_legacy_checkout_redirects_roll_up_without_becoming_leads_or_double_counting(): void
+    {
+        $now = Carbon::now();
+
+        foreach (['legacy', 'current', 'dual-written'] as $sessionId) {
+            $this->event($sessionId, 'visit', '/c6-angle', $now);
+        }
+
+        $this->event('legacy', 'conversion', '/c6-angle', $now, ['type' => 'checkout_redirect']);
+        $this->event('current', 'initiate_checkout', '/c6-angle', $now);
+        $this->event('dual-written', 'conversion', '/c6-angle', $now, ['type' => 'checkout_redirect']);
+        $this->event('dual-written', 'initiate_checkout', '/c6-angle', $now);
+
+        $start = $now->copy()->subHour();
+        $end = $now->copy()->addHour();
+        $metrics = app(AnalyticsMetricsService::class);
+        $stats = $metrics->dashboardStats($start, $end);
+        $matrix = app(AbTestingService::class)->getPerformanceMatrix($start, $end);
+        $splitFunnel = app(AbTestingService::class)->getSplitFunnel($start, $end);
+
+        $chartMethod = new \ReflectionMethod(
+            AnalyticsController::class,
+            'getChartData',
+        );
+        $chartData = $chartMethod->invoke(
+            app(AnalyticsController::class),
+            $start,
+            $end,
+        );
+
+        $this->assertSame(3, $stats['direct_checkouts']);
+        $this->assertSame(0, $stats['whatsapp_leads']);
+        $this->assertSame(3, $stats['total_leads']);
+        $this->assertSame(3, $matrix[0]['direct_checkouts']);
+        $this->assertSame(0, $matrix[0]['whatsapp_leads']);
+        $this->assertSame(3, $matrix[0]['total_leads']);
+        $this->assertSame(
+            3,
+            collect($splitFunnel[0]['steps'])->firstWhere('stage', 'Direct Checkout')['count'],
+        );
+        $this->assertSame(3, (int) $chartData->get('direct_checkout')->first()->total);
+        $this->assertSame(3, (int) $chartData->get('total_lead')->first()->total);
     }
 
     public function test_section_heatmap_uses_pbm_visibility_order(): void

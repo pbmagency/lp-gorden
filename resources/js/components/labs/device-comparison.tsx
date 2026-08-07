@@ -12,8 +12,8 @@ import type { DeviceComparisonProps, DeviceMetrics } from '@/types/analytics';
 
 const DEFAULT_DEVICE: DeviceMetrics = {
     visits: 0,
-    leads: 0,
-    conversion_rate: 0,
+    total_leads: 0,
+    total_lead_rate: 0,
 };
 
 export function DeviceComparison({ data }: DeviceComparisonProps) {
@@ -41,7 +41,7 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                         Device Performance
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                        Mobile vs Desktop conversion comparison
+                        Mobile vs Desktop Total Lead Rate comparison
                     </p>
                 </div>
             </div>
@@ -51,8 +51,8 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                     const mobile = item.mobile ?? DEFAULT_DEVICE;
                     const desktop = item.desktop ?? DEFAULT_DEVICE;
 
-                    const mobileRate = safeNumber(mobile.conversion_rate);
-                    const desktopRate = safeNumber(desktop.conversion_rate);
+                    const mobileRate = safeNumber(mobile.total_lead_rate);
+                    const desktopRate = safeNumber(desktop.total_lead_rate);
                     const gap = desktopRate - mobileRate;
                     const isMobileUnderperforming =
                         mobileRate < desktopRate * 0.5 && desktopRate > 0;
@@ -84,7 +84,7 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                 </div>
                                 <CardDescription>
                                     {isMobileUnderperforming
-                                        ? 'Mobile conversion is significantly lower'
+                                        ? 'Mobile Total Lead Rate is significantly lower'
                                         : 'Device performance comparison'}
                                 </CardDescription>
                             </CardHeader>
@@ -101,9 +101,9 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs text-muted-foreground">
                                                 {safeNumber(
-                                                    mobile.leads,
+                                                    mobile.total_leads,
                                                 ).toLocaleString()}{' '}
-                                                leads /{' '}
+                                                total leads /{' '}
                                                 {safeNumber(
                                                     mobile.visits,
                                                 ).toLocaleString()}{' '}
@@ -138,9 +138,9 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs text-muted-foreground">
                                                 {safeNumber(
-                                                    desktop.leads,
+                                                    desktop.total_leads,
                                                 ).toLocaleString()}{' '}
-                                                leads /{' '}
+                                                total leads /{' '}
                                                 {safeNumber(
                                                     desktop.visits,
                                                 ).toLocaleString()}{' '}
@@ -177,8 +177,8 @@ export function DeviceComparison({ data }: DeviceComparisonProps) {
                                             {gap > 0 ? '+' : ''}
                                             {formatPercent(gap, 2)}%{' '}
                                             {gap > 0
-                                                ? 'Desktop leads'
-                                                : 'Mobile leads'}
+                                                ? 'Desktop Total Lead Rate'
+                                                : 'Mobile Total Lead Rate'}
                                         </span>
                                     </div>
                                 )}
