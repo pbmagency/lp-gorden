@@ -1,13 +1,12 @@
 import { Head, router } from '@inertiajs/react';
 import {
-    CreditCard,
-    DollarSign,
     Download,
     Eye,
     MessageCircle,
     ShoppingCart,
     Target,
     TrendingUp,
+    Users,
 } from 'lucide-react';
 import { useState } from 'react';
 import { ConversionFunnel } from '@/components/analytics/conversion-funnel';
@@ -38,14 +37,13 @@ interface AnalyticsProps {
         engaged: number;
         intent: number;
         intent_rate: number;
-        initiate_checkouts: number;
-        initiate_checkout_rate: number;
-        leads: number;
-        lead_rate: number;
-        lead_to_payment_rate: number;
-        payment_rate: number;
-        total_revenue: number;
-        payments: number;
+        direct_checkouts: number;
+        direct_checkout_rate: number;
+        whatsapp_leads: number;
+        whatsapp_lead_rate: number;
+        total_leads: number;
+        total_lead_rate: number;
+        total_leads_from_intent_rate: number;
     };
     chartData: Record<string, any[]>;
     referralData: Array<{
@@ -58,14 +56,8 @@ interface AnalyticsProps {
         percentage: number;
         transition_percentage: number;
         from_stage: string | null;
-        branch: 'main' | 'checkout' | 'lead';
+        branch: 'main' | 'checkout' | 'lead' | 'total';
     }>;
-    capabilities: {
-        initiate_checkout: boolean;
-        lead: boolean;
-        payment: boolean;
-        revenue: boolean;
-    };
     dateRange: string;
 }
 
@@ -74,7 +66,6 @@ export default function Analytics({
     chartData,
     referralData,
     conversionFunnel,
-    capabilities,
     dateRange,
 }: AnalyticsProps) {
     const [selectedRange, setSelectedRange] = useState(dateRange);
@@ -86,14 +77,6 @@ export default function Analytics({
 
     const handleExport = () => {
         window.open(`/admin/export?range=${selectedRange}`, '_blank');
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(amount);
     };
 
     return (
@@ -157,7 +140,7 @@ export default function Analytics({
                         <h2 className="mb-6 text-xl font-semibold text-foreground">
                             Key Performance Indicators
                         </h2>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             <MetricCard
                                 title="Total Visits"
                                 value={stats.total_visits.toLocaleString()}
@@ -177,64 +160,25 @@ export default function Analytics({
                                 description={`${stats.intent} sessions clicked a CTA`}
                             />
                             <MetricCard
-                                title="Initiate Checkout"
-                                value={`${stats.initiate_checkout_rate}%`}
+                                title="Direct Checkout"
+                                value={`${stats.direct_checkout_rate}%`}
                                 icon={ShoppingCart}
-                                description={`${stats.initiate_checkouts} external payment redirects`}
+                                description={`${stats.direct_checkouts} external checkout redirects`}
                             />
                             <MetricCard
                                 title="WhatsApp Lead Rate"
-                                value={`${stats.lead_rate}%`}
+                                value={`${stats.whatsapp_lead_rate}%`}
                                 icon={MessageCircle}
-                                description={`${stats.leads} WhatsApp inquiries`}
+                                description={`${stats.whatsapp_leads} WhatsApp leads`}
                             />
                             <MetricCard
-                                title="Lead to Payment Rate"
-                                value={
-                                    capabilities.payment
-                                        ? `${stats.lead_to_payment_rate}%`
-                                        : '—'
-                                }
-                                icon={CreditCard}
-                                description={
-                                    capabilities.payment
-                                        ? `${stats.payments} verified payments`
-                                        : 'Payment callback is not tracked'
-                                }
-                            />
-                            <MetricCard
-                                title="Visit to Payment Rate"
-                                value={
-                                    capabilities.payment
-                                        ? `${stats.payment_rate}%`
-                                        : '—'
-                                }
-                                icon={CreditCard}
-                                description={
-                                    capabilities.payment
-                                        ? `${stats.payments} verified payments`
-                                        : 'Payment callback is not tracked'
-                                }
-                            />
-                            <MetricCard
-                                title="Total Revenue"
-                                value={
-                                    capabilities.revenue
-                                        ? formatCurrency(stats.total_revenue)
-                                        : '—'
-                                }
-                                icon={DollarSign}
-                                description={
-                                    capabilities.revenue
-                                        ? `${stats.payments} verified payments`
-                                        : 'Revenue is not tracked'
-                                }
+                                title="Total Leads"
+                                value={stats.total_leads.toLocaleString()}
+                                icon={Users}
+                                description={`${stats.total_leads_from_intent_rate}% of Intent · ${stats.total_lead_rate}% of visits`}
                             />
                         </div>
                     </div>
-
-                    {/* Revenue Card */}
-                    {/* <div></div> */}
 
                     {/* Charts Section */}
                     <div className="grid gap-8 lg:grid-cols-2">
@@ -268,19 +212,18 @@ export default function Analytics({
                                     Primary Conversion
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    WhatsApp lead rate: {stats.lead_rate}% (
-                                    {stats.leads} leads)
+                                    Total Lead Rate: {stats.total_lead_rate}% (
+                                    {stats.total_leads} unique leads)
                                 </div>
                             </div>
 
                             <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-4">
                                 <div className="font-semibold text-blue-400">
-                                    Payment Tracking
+                                    Lead Mix
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {capabilities.payment
-                                        ? `${stats.payments} verified payments`
-                                        : 'Not available — waiting for a verified callback/API'}
+                                    {stats.direct_checkouts} Direct Checkout ·{' '}
+                                    {stats.whatsapp_leads} WhatsApp Leads
                                 </div>
                             </div>
                         </div>

@@ -35,11 +35,14 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
                 data.engagement?.find((item) => item.date === date)?.total || 0;
             const intent =
                 data.cta_click?.find((item) => item.date === date)?.total || 0;
-            const checkouts =
-                data.initiate_checkout?.find((item) => item.date === date)
+            const directCheckouts =
+                data.direct_checkout?.find((item) => item.date === date)
                     ?.total || 0;
-            const leads =
-                data.conversion?.find((item) => item.date === date)?.total || 0;
+            const whatsAppLeads =
+                data.whatsapp_lead?.find((item) => item.date === date)?.total ||
+                0;
+            const totalLeads =
+                data.total_lead?.find((item) => item.date === date)?.total || 0;
 
             return {
                 date: new Date(date).toLocaleDateString('id-ID', {
@@ -49,8 +52,9 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
                 visits,
                 engagements,
                 intent,
-                checkouts,
-                leads,
+                directCheckouts,
+                whatsAppLeads,
+                totalLeads,
             };
         });
     }, [data]);
@@ -138,7 +142,8 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
                         />
                         <Line
                             type="monotone"
-                            dataKey="checkouts"
+                            dataKey="directCheckouts"
+                            name="Direct Checkout"
                             stroke="oklch(0.77 0.19 70)"
                             strokeWidth={2}
                             dot={{
@@ -149,11 +154,24 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
                         />
                         <Line
                             type="monotone"
-                            dataKey="leads"
+                            dataKey="whatsAppLeads"
+                            name="WhatsApp Leads"
                             stroke="oklch(0.65 0.18 145)"
                             strokeWidth={2}
                             dot={{
                                 fill: 'oklch(0.65 0.18 145)',
+                                strokeWidth: 2,
+                                r: 4,
+                            }}
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="totalLeads"
+                            name="Total Leads"
+                            stroke="oklch(0.65 0.2 300)"
+                            strokeWidth={2}
+                            dot={{
+                                fill: 'oklch(0.65 0.2 300)',
                                 strokeWidth: 2,
                                 r: 4,
                             }}

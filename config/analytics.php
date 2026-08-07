@@ -8,6 +8,6 @@ return [
         'revenue' => false,
     ],
 
-    'primary_metric' => 'lead_cr',
+    'primary_metric' => 'total_lead_rate',
     'minimum_winner_visits' => 30,
 ];

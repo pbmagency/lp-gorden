@@ -9,16 +9,13 @@ export interface MatrixItem {
     landing_source: string;
     visits: number;
     bounce_rate: number;
-    lead_cr: number;
-    strict_cr: number;
-    rpv: number;
-    revenue: number;
-    conversions: number;
     intent_rate: number;
-    initiate_checkout_rate: number;
-    initiate_checkouts: number;
-    leads: number;
-    payments: number;
+    direct_checkout_rate: number;
+    direct_checkouts: number;
+    whatsapp_lead_rate: number;
+    whatsapp_leads: number;
+    total_lead_rate: number;
+    total_leads: number;
     cta_clicks: number;
 }
 
@@ -28,7 +25,7 @@ export interface FunnelStep {
     stage: string;
     count: number;
     percentage: number;
-    branch?: 'main' | 'checkout' | 'lead';
+    branch?: 'main' | 'checkout' | 'lead' | 'total';
     from_stage?: string | null;
     transition_percentage?: number;
 }
@@ -48,16 +45,16 @@ export interface QualityMetrics {
 
 export interface QualityItem {
     landing_source: string;
-    leads: QualityMetrics;
-    non_leads: QualityMetrics;
+    total_leads: QualityMetrics;
+    others: QualityMetrics;
 }
 
 // ── Device Performance ──────────────────────────────────────
 
 export interface DeviceMetrics {
     visits: number;
-    leads: number;
-    conversion_rate: number;
+    total_leads: number;
+    total_lead_rate: number;
 }
 
 export interface DeviceData {
@@ -71,8 +68,8 @@ export interface DeviceData {
 export interface CtaLocation {
     location: string;
     click_count: number;
-    leads: number;
-    lead_rate: number;
+    total_leads: number;
+    total_lead_rate: number;
 }
 
 export interface CtaData {

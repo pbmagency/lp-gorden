@@ -24,6 +24,10 @@ class AnalyticsMetricsService
         'wa_registration',
     ];
 
+    public const LEGACY_CHECKOUT_CONVERSION_TYPES = [
+        'checkout_redirect',
+    ];
+
     public function capabilities(): array
     {
         return config('analytics.capabilities');
@@ -36,24 +40,9 @@ class AnalyticsMetricsService
         $bounces = $this->bouncedSessions($startDate, $endDate);
         $engaged = max(0, $uniqueVisitors - $bounces);
         $intent = $this->eventSessions('cta_click', $startDate, $endDate);
-        $initiateCheckouts = $this->eventSessions('initiate_checkout', $startDate, $endDate);
-        $leads = $this->leadSessions($startDate, $endDate);
-
-        $payments = 0;
-        $revenue = 0.0;
-
-        if ($this->capabilities()['payment']) {
-            $payments = $this->eventQuery('payment', $startDate, $endDate)
-                ->where('event_data->status', 'success')
-                ->distinct()
-                ->count('session_id');
-        }
-
-        if ($this->capabilities()['revenue']) {
-            $revenue = (float) $this->eventQuery('payment', $startDate, $endDate)
-                ->where('event_data->status', 'success')
-                ->sum(DB::raw("CAST(json_extract(event_data, '$.amount') AS DECIMAL(20, 2))"));
-        }
+        $directCheckouts = $this->checkoutSessions($startDate, $endDate);
+        $whatsAppLeads = $this->whatsAppLeadSessions($startDate, $endDate);
+        $totalLeads = $this->totalLeadSessions($startDate, $endDate);
 
         return [
             'total_visits' => $totalVisits,
@@ -62,14 +51,13 @@ class AnalyticsMetricsService
             'engagement_rate' => round($this->safePct($engaged, $uniqueVisitors), 2),
             'intent' => $intent,
             'intent_rate' => round($this->safePct($intent, $uniqueVisitors), 2),
-            'initiate_checkouts' => $initiateCheckouts,
-            'initiate_checkout_rate' => round($this->safePct($initiateCheckouts, $uniqueVisitors), 2),
-            'leads' => $leads,
-            'lead_rate' => round($this->safePct($leads, $uniqueVisitors), 2),
-            'payments' => $payments,
-            'lead_to_payment_rate' => round($this->safePct($payments, $leads), 2),
-            'payment_rate' => round($this->safePct($payments, $uniqueVisitors), 2),
-            'total_revenue' => $revenue,
+            'direct_checkouts' => $directCheckouts,
+            'direct_checkout_rate' => round($this->safePct($directCheckouts, $uniqueVisitors), 2),
+            'whatsapp_leads' => $whatsAppLeads,
+            'whatsapp_lead_rate' => round($this->safePct($whatsAppLeads, $uniqueVisitors), 2),
+            'total_leads' => $totalLeads,
+            'total_lead_rate' => round($this->safePct($totalLeads, $uniqueVisitors), 2),
+            'total_leads_from_intent_rate' => round($this->safePct($totalLeads, $intent), 2),
         ];
     }
 
@@ -81,9 +69,9 @@ class AnalyticsMetricsService
             ['stage' => 'Visits', 'count' => $visits, 'branch' => 'main', 'from_stage' => null],
             ['stage' => 'Engaged', 'count' => $stats['engaged'], 'branch' => 'main', 'from_stage' => 'Visits'],
             ['stage' => 'Intent', 'count' => $stats['intent'], 'branch' => 'main', 'from_stage' => 'Engaged'],
-            ['stage' => 'Initiate Checkout', 'count' => $stats['initiate_checkouts'], 'branch' => 'checkout', 'from_stage' => 'Intent'],
-            ['stage' => 'Payments', 'count' => $stats['payments'], 'branch' => 'checkout', 'from_stage' => 'Initiate Checkout'],
-            ['stage' => 'WhatsApp Leads', 'count' => $stats['leads'], 'branch' => 'lead', 'from_stage' => 'Intent'],
+            ['stage' => 'Direct Checkout', 'count' => $stats['direct_checkouts'], 'branch' => 'checkout', 'from_stage' => 'Intent'],
+            ['stage' => 'WhatsApp Leads', 'count' => $stats['whatsapp_leads'], 'branch' => 'lead', 'from_stage' => 'Intent'],
+            ['stage' => 'Total Leads', 'count' => $stats['total_leads'], 'branch' => 'total', 'from_stage' => 'Intent'],
         ];
         $counts = collect($steps)->pluck('count', 'stage');
 
@@ -115,6 +103,46 @@ class AnalyticsMetricsService
                         ->where('event_data->depth', '>=', self::SCROLL_THRESHOLD);
                 })
                 ->orWhereIn('event_type', self::FUNNEL_ACTION_EVENTS);
+        });
+    }
+
+    /**
+     * Match both the canonical checkout event and the legacy conversion subtype.
+     *
+     * Checkout redirects were stored as conversion.checkout_redirect before the
+     * dedicated initiate_checkout event was introduced. Keeping both here makes
+     * historical and current dashboard data comparable while DISTINCT session
+     * counts prevent a dual-written event from being counted twice.
+     */
+    public function applyCheckoutEventConditions(Builder $query): Builder
+    {
+        return $query->where(function (Builder $events) {
+            $events->where('event_type', 'initiate_checkout')
+                ->orWhere(function (Builder $legacy) {
+                    $legacy->where('event_type', 'conversion')
+                        ->whereIn('event_data->type', self::LEGACY_CHECKOUT_CONVERSION_TYPES);
+                });
+        });
+    }
+
+    public function applyWhatsAppLeadEventConditions(Builder $query): Builder
+    {
+        return $query->where('event_type', 'conversion')
+            ->whereIn('event_data->type', self::LEAD_CONVERSION_TYPES);
+    }
+
+    public function applyTotalLeadEventConditions(Builder $query): Builder
+    {
+        return $query->where(function (Builder $events) {
+            $events->where('event_type', 'initiate_checkout')
+                ->orWhere(function (Builder $legacyCheckout) {
+                    $legacyCheckout->where('event_type', 'conversion')
+                        ->whereIn('event_data->type', self::LEGACY_CHECKOUT_CONVERSION_TYPES);
+                })
+                ->orWhere(function (Builder $whatsAppLead) {
+                    $whatsAppLead->where('event_type', 'conversion')
+                        ->whereIn('event_data->type', self::LEAD_CONVERSION_TYPES);
+                });
         });
     }
 
@@ -163,12 +191,34 @@ class AnalyticsMetricsService
             ->count('session_id');
     }
 
-    private function leadSessions(Carbon $startDate, Carbon $endDate): int
+    private function whatsAppLeadSessions(Carbon $startDate, Carbon $endDate): int
     {
-        return $this->eventQuery('conversion', $startDate, $endDate)
-            ->whereIn('event_data->type', self::LEAD_CONVERSION_TYPES)
-            ->distinct()
-            ->count('session_id');
+        $query = DB::table('user_analytics')
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        $this->applyWhatsAppLeadEventConditions($query);
+
+        return $query->distinct()->count('session_id');
+    }
+
+    private function checkoutSessions(Carbon $startDate, Carbon $endDate): int
+    {
+        $query = DB::table('user_analytics')
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        $this->applyCheckoutEventConditions($query);
+
+        return $query->distinct()->count('session_id');
+    }
+
+    private function totalLeadSessions(Carbon $startDate, Carbon $endDate): int
+    {
+        $query = DB::table('user_analytics')
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        $this->applyTotalLeadEventConditions($query);
+
+        return $query->distinct()->count('session_id');
     }
 
     private function eventQuery(string $eventType, Carbon $startDate, Carbon $endDate): Builder

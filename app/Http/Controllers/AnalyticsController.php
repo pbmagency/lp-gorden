@@ -158,7 +158,7 @@ class AnalyticsController extends Controller
             'event_type'
         )
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->whereIn('event_type', ['visit', 'cta_click', 'initiate_checkout', 'payment'])
+            ->whereIn('event_type', ['visit', 'cta_click', 'payment'])
             ->groupBy(['date', 'event_type'])
             ->orderBy('date')
             ->get()
@@ -177,14 +177,41 @@ class AnalyticsController extends Controller
             ->orderBy('date')
             ->get());
 
-        $eventData->put('conversion', DB::table('user_analytics')
+        $checkoutQuery = DB::table('user_analytics')
             ->select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('COUNT(DISTINCT session_id) as total'),
             )
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('event_type', 'conversion')
-            ->whereIn('event_data->type', AnalyticsMetricsService::LEAD_CONVERSION_TYPES)
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyCheckoutEventConditions($checkoutQuery);
+
+        $eventData->put('direct_checkout', $checkoutQuery
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get());
+
+        $whatsAppLeadQuery = DB::table('user_analytics')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT session_id) as total'),
+            )
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyWhatsAppLeadEventConditions($whatsAppLeadQuery);
+
+        $eventData->put('whatsapp_lead', $whatsAppLeadQuery
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get());
+
+        $totalLeadQuery = DB::table('user_analytics')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT session_id) as total'),
+            )
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyTotalLeadEventConditions($totalLeadQuery);
+
+        $eventData->put('total_lead', $totalLeadQuery
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get());
