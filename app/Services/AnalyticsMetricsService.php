@@ -42,7 +42,7 @@ class AnalyticsMetricsService
         $intent = $this->eventSessions('cta_click', $startDate, $endDate);
         $directCheckouts = $this->checkoutSessions($startDate, $endDate);
         $whatsAppLeads = $this->whatsAppLeadSessions($startDate, $endDate);
-        $totalLeads = $this->totalLeadSessions($startDate, $endDate);
+        $totalLeads = $directCheckouts + $whatsAppLeads;
 
         return [
             'total_visits' => $totalVisits,
@@ -207,16 +207,6 @@ class AnalyticsMetricsService
             ->whereBetween('created_at', [$startDate, $endDate]);
 
         $this->applyCheckoutEventConditions($query);
-
-        return $query->distinct()->count('session_id');
-    }
-
-    private function totalLeadSessions(Carbon $startDate, Carbon $endDate): int
-    {
-        $query = DB::table('user_analytics')
-            ->whereBetween('created_at', [$startDate, $endDate]);
-
-        $this->applyTotalLeadEventConditions($query);
 
         return $query->distinct()->count('session_id');
     }

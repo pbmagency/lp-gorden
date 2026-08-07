@@ -159,7 +159,7 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
                         Total Leads
                     </h4>
                     <p className="text-xs text-muted-foreground">
-                        Unique Direct Checkout or WhatsApp lead sessions.
+                        Direct Checkout + WhatsApp leads.
                     </p>
                 </div>
                 {totalStages.map((stage) => (

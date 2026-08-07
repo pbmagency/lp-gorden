@@ -171,7 +171,7 @@ class AnalyticsMetricsTest extends TestCase
         ]);
     }
 
-    public function test_total_leads_are_a_deduplicated_union_across_all_labs_analysis(): void
+    public function test_total_leads_add_direct_checkout_and_whatsapp_across_all_labs_analysis(): void
     {
         $now = Carbon::now();
 
@@ -195,21 +195,24 @@ class AnalyticsMetricsTest extends TestCase
         $quality = $service->getQualityAnalysis($start, $end);
         $devices = $service->getDevicePerformance($start, $end);
         $cta = $service->getCtaPerformance($start, $end);
+        $chartMethod = new \ReflectionMethod(AnalyticsController::class, 'getChartData');
+        $chartData = $chartMethod->invoke(app(AnalyticsController::class), $start, $end);
 
         $this->assertSame(2, $stats['direct_checkouts']);
         $this->assertSame(2, $stats['whatsapp_leads']);
-        $this->assertSame(3, $stats['total_leads']);
-        $this->assertSame(100.0, $stats['total_leads_from_intent_rate']);
-        $this->assertSame(3, $matrix[0]['total_leads']);
-        $this->assertSame(100.0, $matrix[0]['total_lead_rate']);
-        $this->assertSame(3, $quality[0]['total_leads']['count']);
+        $this->assertSame(4, $stats['total_leads']);
+        $this->assertSame(4, (int) $chartData->get('total_lead')->first()->total);
+        $this->assertSame(133.33, $stats['total_leads_from_intent_rate']);
+        $this->assertSame(4, $matrix[0]['total_leads']);
+        $this->assertSame(133.33, $matrix[0]['total_lead_rate']);
+        $this->assertSame(4, $quality[0]['total_leads']['count']);
         $this->assertSame(0, $quality[0]['others']['count']);
-        $this->assertSame(3, $devices[0]['desktop']['total_leads']);
-        $this->assertSame(100.0, $devices[0]['desktop']['total_lead_rate']);
-        $this->assertSame(
-            [100.0, 100.0, 100.0],
-            collect($cta[0]['cta_locations'])->pluck('total_lead_rate')->all(),
-        );
+        $this->assertSame(4, $devices[0]['desktop']['total_leads']);
+        $this->assertSame(133.33, $devices[0]['desktop']['total_lead_rate']);
+        $ctaRates = collect($cta[0]['cta_locations'])->pluck('total_lead_rate', 'location');
+        $this->assertSame(100.0, $ctaRates['direct']);
+        $this->assertSame(100.0, $ctaRates['whatsapp']);
+        $this->assertSame(200.0, $ctaRates['both']);
     }
 
     public function test_legacy_checkout_redirects_roll_up_without_becoming_leads_or_double_counting(): void
