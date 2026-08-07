@@ -117,7 +117,7 @@ function PhotoLightbox({
             >
                 <img
                     src={photo.src}
-                    alt={photo.name}
+                    alt={`Bukti skor TOEFL ${photo.score}`}
                     width={340}
                     height={604}
                     className="max-h-[80vh] w-full max-w-[340px] rounded-2xl object-contain"
@@ -128,11 +128,10 @@ function PhotoLightbox({
                         className="text-base font-black text-white"
                         style={{ fontFamily: 'var(--font-heading)' }}
                     >
-                        {photo.name}
+                        Bukti Skor TOEFL
                     </p>
                     <p className="text-sm text-white/60">
-                        {photo.score ? `Skor ${photo.score} · ` : ''}
-                        {photo.label}
+                        {photo.score ? 'Skor ' + photo.score : ''}
                     </p>
                 </div>
                 <p className="text-xs text-white/40">
@@ -177,7 +176,7 @@ export default function SocialProofSection() {
         );
 
     useEffect(() => {
-        const id = window.requestIdleCallback
+        const id = typeof window.requestIdleCallback === 'function'
             ? window.requestIdleCallback(() => setReviewReady(true), {
                   timeout: 2000,
               })
@@ -186,7 +185,7 @@ export default function SocialProofSection() {
                   1500,
               ) as unknown as number);
         return () => {
-            if (window.requestIdleCallback) {
+            if (typeof window.requestIdleCallback === 'function') {
                 window.cancelIdleCallback(id);
             } else {
                 clearTimeout(id as unknown as ReturnType<typeof setTimeout>);

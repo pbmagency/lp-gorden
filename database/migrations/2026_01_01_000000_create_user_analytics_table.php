@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('utm_term')->nullable();
             $table->string('ip_hash')->nullable();
             $table->text('user_agent')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('created_at');
 
             // Composite indexes for fast aggregation queries

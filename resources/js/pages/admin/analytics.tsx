@@ -1,3 +1,14 @@
+import { Head, router } from '@inertiajs/react';
+import {
+    Download,
+    Eye,
+    MessageCircle,
+    ShoppingCart,
+    Target,
+    TrendingUp,
+    Users,
+} from 'lucide-react';
+import { useState } from 'react';
 import { ConversionFunnel } from '@/components/analytics/conversion-funnel';
 import { MetricCard } from '@/components/analytics/metric-card';
 import { ReferralChart } from '@/components/analytics/referral-chart';
@@ -11,21 +22,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/admin-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
-import {
-    CreditCard,
-    DollarSign,
-    Download,
-    Eye,
-    Target,
-    TrendingUp,
-} from 'lucide-react';
-import { useState } from 'react';
+import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/admin' },
-    { title: 'Analytics' },
+    { title: 'Analytics', href: '/admin' },
 ];
 
 interface AnalyticsProps {
@@ -33,12 +34,16 @@ interface AnalyticsProps {
         total_visits: number;
         unique_visitors: number;
         engagement_rate: number;
-        conversion_rate: number;
-        conversion_to_payment_rate: number;
-        payment_rate: number;
-        total_revenue: number;
-        registrations: number;
-        payments: number;
+        engaged: number;
+        intent: number;
+        intent_rate: number;
+        direct_checkouts: number;
+        direct_checkout_rate: number;
+        whatsapp_leads: number;
+        whatsapp_lead_rate: number;
+        total_leads: number;
+        total_lead_rate: number;
+        total_leads_from_intent_rate: number;
     };
     chartData: Record<string, any[]>;
     referralData: Array<{
@@ -49,6 +54,9 @@ interface AnalyticsProps {
         stage: string;
         count: number;
         percentage: number;
+        transition_percentage: number;
+        from_stage: string | null;
+        branch: 'main' | 'checkout' | 'lead' | 'total';
     }>;
     dateRange: string;
 }
@@ -64,26 +72,11 @@ export default function Analytics({
 
     const handleRangeChange = (range: string) => {
         setSelectedRange(range);
-        router.get(
-            route('admin.analytics'),
-            { range },
-            { preserveState: true },
-        );
+        router.get('/admin', { range }, { preserveState: true });
     };
 
     const handleExport = () => {
-        window.open(
-            route('admin.analytics.export', { range: selectedRange }),
-            '_blank',
-        );
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(amount);
+        window.open(`/admin/export?range=${selectedRange}`, '_blank');
     };
 
     return (
@@ -97,11 +90,11 @@ export default function Analytics({
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
                                 <h1 className="text-3xl font-bold text-foreground">
-                                    Analytics Dashboard
+                                    Analytics & A/B Dashboard
                                 </h1>
                                 <p className="mt-2 text-muted-foreground">
-                                    Comprehensive insights into user behavior
-                                    and conversion metrics
+                                    Comprehensive insights into tracked user
+                                    behavior and conversion metrics
                                 </p>
                             </div>
 
@@ -147,7 +140,7 @@ export default function Analytics({
                         <h2 className="mb-6 text-xl font-semibold text-foreground">
                             Key Performance Indicators
                         </h2>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             <MetricCard
                                 title="Total Visits"
                                 value={stats.total_visits.toLocaleString()}
@@ -158,37 +151,34 @@ export default function Analytics({
                                 title="Engagement Rate"
                                 value={`${stats.engagement_rate}%`}
                                 icon={TrendingUp}
-                                description="15+ second dwell time"
+                                description={`${stats.engaged} engaged sessions (15s OR 25% scroll OR action)`}
                             />
                             <MetricCard
-                                title="Conversion Rate"
-                                value={`${stats.conversion_rate}%`}
+                                title="Intent Rate"
+                                value={`${stats.intent_rate}%`}
                                 icon={Target}
-                                description={`${stats.registrations} registrations`}
+                                description={`${stats.intent} sessions clicked a CTA`}
                             />
                             <MetricCard
-                                title="Conversion to Payment Rate"
-                                value={`${stats.conversion_to_payment_rate}%`}
-                                icon={CreditCard}
-                                description={`${stats.payments} successful payments`}
+                                title="Direct Checkout"
+                                value={`${stats.direct_checkout_rate}%`}
+                                icon={ShoppingCart}
+                                description={`${stats.direct_checkouts} external checkout redirects`}
                             />
                             <MetricCard
-                                title="Visit to Payment Rate"
-                                value={`${stats.payment_rate}%`}
-                                icon={CreditCard}
-                                description={`${stats.payments} successful payments`}
+                                title="WhatsApp Lead Rate"
+                                value={`${stats.whatsapp_lead_rate}%`}
+                                icon={MessageCircle}
+                                description={`${stats.whatsapp_leads} WhatsApp leads`}
                             />
                             <MetricCard
-                                title="Total Revenue"
-                                value={formatCurrency(stats.total_revenue)}
-                                icon={DollarSign}
-                                description={`${stats.payments}x payments`}
+                                title="Total Leads"
+                                value={stats.total_leads.toLocaleString()}
+                                icon={Users}
+                                description={`${stats.total_leads_from_intent_rate}% of Intent · ${stats.total_lead_rate}% of visits`}
                             />
                         </div>
                     </div>
-
-                    {/* Revenue Card */}
-                    {/* <div></div> */}
 
                     {/* Charts Section */}
                     <div className="grid gap-8 lg:grid-cols-2">
@@ -219,29 +209,21 @@ export default function Analytics({
 
                             <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4">
                                 <div className="font-semibold text-green-400">
-                                    Revenue per Visit
+                                    Primary Conversion
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {stats.total_visits > 0
-                                        ? formatCurrency(
-                                              stats.total_revenue /
-                                                  stats.total_visits,
-                                          )
-                                        : 'Rp 0'}
+                                    Total Lead Rate: {stats.total_lead_rate}% (
+                                    {stats.total_leads} unique leads)
                                 </div>
                             </div>
 
                             <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-4">
                                 <div className="font-semibold text-blue-400">
-                                    Avg. Revenue per User
+                                    Lead Mix
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {stats.unique_visitors > 0
-                                        ? formatCurrency(
-                                              stats.total_revenue /
-                                                  stats.unique_visitors,
-                                          )
-                                        : 'Rp 0'}
+                                    {stats.direct_checkouts} Direct Checkout ·{' '}
+                                    {stats.whatsapp_leads} WhatsApp Leads
                                 </div>
                             </div>
                         </div>

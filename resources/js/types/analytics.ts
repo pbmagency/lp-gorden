@@ -9,13 +9,13 @@ export interface MatrixItem {
     landing_source: string;
     visits: number;
     bounce_rate: number;
-    lead_cr: number;
-    strict_cr: number;
-    rpv: number;
-    revenue: number;
-    conversions: number;
     intent_rate: number;
-    payments: number;
+    direct_checkout_rate: number;
+    direct_checkouts: number;
+    whatsapp_lead_rate: number;
+    whatsapp_leads: number;
+    total_lead_rate: number;
+    total_leads: number;
     cta_clicks: number;
 }
 
@@ -25,6 +25,9 @@ export interface FunnelStep {
     stage: string;
     count: number;
     percentage: number;
+    branch?: 'main' | 'checkout' | 'lead' | 'total';
+    from_stage?: string | null;
+    transition_percentage?: number;
 }
 
 export interface FunnelItem {
@@ -42,16 +45,16 @@ export interface QualityMetrics {
 
 export interface QualityItem {
     landing_source: string;
-    buyers: QualityMetrics;
-    non_buyers: QualityMetrics;
+    total_leads: QualityMetrics;
+    others: QualityMetrics;
 }
 
 // ── Device Performance ──────────────────────────────────────
 
 export interface DeviceMetrics {
     visits: number;
-    payments: number;
-    conversion_rate: number;
+    total_leads: number;
+    total_lead_rate: number;
 }
 
 export interface DeviceData {
@@ -65,8 +68,8 @@ export interface DeviceData {
 export interface CtaLocation {
     location: string;
     click_count: number;
-    leads: number;
-    lead_rate: number;
+    total_leads: number;
+    total_lead_rate: number;
 }
 
 export interface CtaData {
@@ -104,6 +107,19 @@ export interface HeatmapData {
     depth_analysis: DepthAnalysis[];
 }
 
+export interface SectionViewData {
+    id: string;
+    name: string;
+    views: number;
+    pct: number;
+    drop_from_prev: number;
+}
+
+export interface SectionHeatmapItem {
+    landing_source: string;
+    sections: SectionViewData[];
+}
+
 // ── Filters ─────────────────────────────────────────────────
 
 export interface LabsFilters {
@@ -123,7 +139,15 @@ export interface LabsPageProps {
     cta: CtaData[];
     readers: ReaderData[];
     heatmap: HeatmapData[];
+    section_heatmap: SectionHeatmapItem[];
     availableSources: string[];
+    capabilities: {
+        initiate_checkout: boolean;
+        lead: boolean;
+        payment: boolean;
+        revenue: boolean;
+    };
+    minimumWinnerVisits: number;
     filters: LabsFilters;
 }
 
@@ -140,4 +164,5 @@ export interface CtaAnalysisProps {
 export interface AudienceSegmentationProps {
     readers: ReaderData[];
     heatmap: HeatmapData[];
+    sectionHeatmap: SectionHeatmapItem[];
 }

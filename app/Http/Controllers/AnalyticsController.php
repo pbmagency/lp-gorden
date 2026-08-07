@@ -3,78 +3,136 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserAnalytic;
+use App\Services\AnalyticsMetricsService;
 use App\Services\MetaConversionService;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Log;
+use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AnalyticsController extends Controller
 {
-    public function index(Request $request)
+    public function __construct(private readonly AnalyticsMetricsService $metrics) {}
+
+    public function index(Request $request): Response
     {
-        $dateRange = $request->get('range', '30');
-        $startDate = Carbon::now()->subDays($dateRange);
+        $validated = $request->validate([
+            'range' => ['nullable', Rule::in(['7', '30', '90', '365'])],
+        ]);
+        $dateRange = $validated['range'] ?? '30';
+        $startDate = Carbon::now()->subDays((int) $dateRange)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
 
         return Inertia::render('admin/analytics', [
-            'stats'           => $this->getAnalyticsStats($startDate),
-            'chartData'       => $this->getChartData($startDate),
-            'referralData'    => $this->getReferralData($startDate),
-            'conversionFunnel'=> $this->getConversionFunnel($startDate),
-            'dateRange'       => $dateRange,
+            'stats' => $this->metrics->dashboardStats($startDate, $endDate),
+            'chartData' => $this->getChartData($startDate, $endDate),
+            'referralData' => $this->getReferralData($startDate, $endDate),
+            'conversionFunnel' => $this->metrics->dashboardFunnel($startDate, $endDate),
+            'capabilities' => $this->metrics->capabilities(),
+            'dateRange' => $dateRange,
         ]);
     }
 
-    public function track(Request $request, MetaConversionService $metaService)
+    public function track(Request $request, MetaConversionService $metaService): JsonResponse
     {
-        $sessionId = $request->session()->getId();
-        $ipHash    = hash('sha256', $request->ip().config('app.key'));
-
-        UserAnalytic::create([
-            'session_id'      => $sessionId,
-            'event_type'      => $request->input('event_type'),
-            'event_data'      => $request->input('event_data') ?? [],
-            'referral_source' => $request->input('referral_source'),
-            'utm_source'      => $request->input('utm_source'),
-            'utm_medium'      => $request->input('utm_medium'),
-            'utm_campaign'    => $request->input('utm_campaign'),
-            'utm_content'     => $request->input('utm_content'),
-            'utm_term'        => $request->input('utm_term'),
-            'ip_hash'         => $ipHash,
-            'user_agent'      => $request->userAgent(),
-            'user_id'         => auth()->id(),
-            'created_at'      => now(),
+        $validated = $request->validate([
+            'event_type' => ['required', Rule::in([
+                'visit',
+                'scroll',
+                'engagement',
+                'cta_click',
+                'initiate_checkout',
+                'conversion',
+                'payment',
+                'section_view',
+            ])],
+            'event_data' => ['nullable', 'array'],
+            'event_data.event_id' => ['nullable', 'string', 'max:100'],
+            'event_data.landing_source' => ['nullable', 'string', 'max:255'],
+            'event_data.type' => ['nullable', 'string', 'max:100'],
+            'event_data.depth' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'event_data.duration' => ['nullable', 'numeric', 'min:0'],
+            'event_data.is_initial' => ['nullable', 'boolean'],
+            'event_data.page' => ['nullable', 'string', 'max:2048'],
+            'event_data.timestamp' => ['nullable', 'date'],
+            'event_data.location' => ['nullable', 'string', 'max:100'],
+            'event_data.text' => ['nullable', 'string', 'max:255'],
+            'event_data.destination' => ['nullable', 'string', 'max:2048'],
+            'event_data.section' => ['nullable', 'string', 'max:100'],
+            'event_data.package' => ['nullable', 'string', 'max:100'],
+            'event_data.price' => ['nullable', 'numeric', 'min:0'],
+            'event_data.payment_url' => ['nullable', 'string', 'max:2048'],
+            'event_data.status' => ['nullable', 'string', 'max:50'],
+            'event_data.amount' => ['nullable', 'numeric', 'min:0'],
+            'event_data.currency' => ['nullable', 'string', 'size:3'],
+            'event_data.meta_event' => ['nullable', 'string', 'max:100'],
+            'event_data._fbp' => ['nullable', 'string', 'max:255'],
+            'event_data._fbc' => ['nullable', 'string', 'max:255'],
+            'event_data.order_id' => ['nullable', 'string', 'max:100'],
+            'event_data.email' => ['nullable', 'email', 'max:255'],
+            'event_data.phone' => ['nullable', 'string', 'max:50'],
+            'event_data.name' => ['nullable', 'string', 'max:255'],
+            'referral_source' => ['nullable', 'string', 'max:255'],
+            'utm_source' => ['nullable', 'string', 'max:255'],
+            'utm_medium' => ['nullable', 'string', 'max:255'],
+            'utm_campaign' => ['nullable', 'string', 'max:255'],
+            'utm_content' => ['nullable', 'string', 'max:255'],
+            'utm_term' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $eventId   = $request->input('event_data.event_id');
-        $eventType = $request->input('event_type');
+        $eventData = $validated['event_data'] ?? [];
+        $eventId = $eventData['event_id'] ?? null;
+
+        if ($eventId && UserAnalytic::query()->where('event_data->event_id', $eventId)->exists()) {
+            return response()->json(['success' => true, 'duplicate' => true]);
+        }
+
+        UserAnalytic::create([
+            'session_id' => $request->session()->getId(),
+            'event_type' => $validated['event_type'],
+            'event_data' => $eventData,
+            'referral_source' => $validated['referral_source'] ?? null,
+            'utm_source' => $validated['utm_source'] ?? null,
+            'utm_medium' => $validated['utm_medium'] ?? null,
+            'utm_campaign' => $validated['utm_campaign'] ?? null,
+            'utm_content' => $validated['utm_content'] ?? null,
+            'utm_term' => $validated['utm_term'] ?? null,
+            'ip_hash' => hash('sha256', $request->ip().config('app.key')),
+            'user_agent' => $request->userAgent(),
+            'user_id' => $request->user()?->id,
+            'created_at' => now(),
+        ]);
 
         if ($eventId) {
-            if ($eventType === 'visit') {
+            if ($validated['event_type'] === 'visit') {
                 $metaService->sendPageView($request, $eventId);
             }
 
-            $metaEvent = $request->input('event_data.meta_event');
-            if ($eventType === 'cta_click' && $metaEvent === 'AddToCart') {
-                $metaService->sendAddToCart($request, $eventId, $request->input('event_data'));
+            if ($validated['event_type'] === 'initiate_checkout') {
+                $metaService->sendAddToCart($request, $eventId, $eventData);
             }
         }
 
         return response()->json(['success' => true]);
     }
 
-    public function export(Request $request)
+    public function export(Request $request): StreamedResponse
     {
-        $dateRange = $request->get('range', '30');
-        $startDate = Carbon::now()->subDays($dateRange);
+        $validated = $request->validate([
+            'range' => ['nullable', Rule::in(['7', '30', '90', '365'])],
+        ]);
+        $dateRange = $validated['range'] ?? '30';
+        $startDate = Carbon::now()->subDays((int) $dateRange)->startOfDay();
+        $data = UserAnalytic::where('created_at', '>=', $startDate)->latest('created_at')->get();
 
-        $data    = UserAnalytic::where('created_at', '>=', $startDate)->orderBy('created_at', 'desc')->get();
-        $headers = ['Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment; filename="analytics-export.csv"'];
-
-        $callback = function () use ($data) {
+        return response()->stream(function () use ($data) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Date', 'Event Type', 'Referral Source', 'Event Data', 'User ID']);
+
             foreach ($data as $row) {
                 fputcsv($file, [
                     $row->created_at->format('Y-m-d H:i:s'),
@@ -84,85 +142,92 @@ class AnalyticsController extends Controller
                     $row->user_id,
                 ]);
             }
+
             fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=analytics-export.csv',
+        ]);
     }
 
-    private function getAnalyticsStats(Carbon $startDate): array
+    private function getChartData(Carbon $startDate, Carbon $endDate)
     {
-        $totalVisits = UserAnalytic::where('event_type', 'visit')->where('created_at', '>=', $startDate)->count();
-        $uniqueVisitors = UserAnalytic::where('event_type', 'visit')->where('created_at', '>=', $startDate)->distinct('session_id')->count();
-
-        $engagementRate = UserAnalytic::where('event_type', 'engagement')->where('created_at', '>=', $startDate)
-            ->where('event_data->type', 'dwell_ping')->distinct('session_id')->count();
-
-        $registrations = UserAnalytic::where('event_type', 'conversion')->where('created_at', '>=', $startDate)
-            ->where('event_data->type', 'registration')->distinct('session_id')->count();
-
-        $ctaClicks = UserAnalytic::where('event_type', 'cta_click')->where('created_at', '>=', $startDate)
-            ->distinct('session_id')->count();
-
-        $paymentAnalytics = UserAnalytic::where('event_type', 'payment')->where('created_at', '>=', $startDate)
-            ->where('event_data->status', 'success')->get();
-
-        $payments = $paymentAnalytics->count();
-        $revenue  = $paymentAnalytics->sum(fn ($a) => (float) ($a->event_data['amount'] ?? 0));
-
-        return [
-            'total_visits'               => $totalVisits,
-            'unique_visitors'            => $uniqueVisitors,
-            'engagement_rate'            => $totalVisits > 0 ? round(($engagementRate / $totalVisits) * 100, 2) : 0,
-            'conversion_rate'            => $totalVisits > 0 ? round(($registrations / $totalVisits) * 100, 2) : 0,
-            'conversion_to_payment_rate' => $registrations > 0 ? round(($payments / $registrations) * 100, 2) : 0,
-            'payment_rate'               => $totalVisits > 0 ? round(($payments / $totalVisits) * 100, 2) : 0,
-            'cta_click_rate'             => $totalVisits > 0 ? round(($ctaClicks / $totalVisits) * 100, 2) : 0,
-            'total_revenue'              => $revenue,
-            'registrations'              => $registrations,
-            'payments'                   => $payments,
-        ];
-    }
-
-    private function getChartData(Carbon $startDate)
-    {
-        return UserAnalytic::select(
+        $eventData = UserAnalytic::select(
             DB::raw('DATE(created_at) as date'),
-            DB::raw('COUNT(*) as total'),
+            DB::raw('COUNT(DISTINCT session_id) as total'),
             'event_type'
         )
-            ->where('created_at', '>=', $startDate)
-            ->whereIn('event_type', ['visit', 'engagement', 'cta_click', 'payment'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereIn('event_type', ['visit', 'cta_click', 'payment'])
             ->groupBy(['date', 'event_type'])
             ->orderBy('date')
             ->get()
             ->groupBy('event_type');
+
+        $engagedQuery = DB::table('user_analytics')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT session_id) as total'),
+            )
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyEngagedEventConditions($engagedQuery, $startDate, $endDate);
+
+        $eventData->put('engagement', $engagedQuery
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get());
+
+        $checkoutQuery = DB::table('user_analytics')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT session_id) as total'),
+            )
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyCheckoutEventConditions($checkoutQuery);
+
+        $directCheckoutData = $checkoutQuery
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+        $eventData->put('direct_checkout', $directCheckoutData);
+
+        $whatsAppLeadQuery = DB::table('user_analytics')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT session_id) as total'),
+            )
+            ->whereBetween('created_at', [$startDate, $endDate]);
+        $this->metrics->applyWhatsAppLeadEventConditions($whatsAppLeadQuery);
+
+        $whatsAppLeadData = $whatsAppLeadQuery
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+        $eventData->put('whatsapp_lead', $whatsAppLeadData);
+
+        $totalLeadData = $directCheckoutData
+            ->concat($whatsAppLeadData)
+            ->groupBy('date')
+            ->map(fn ($rows, $date) => (object) [
+                'date' => $date,
+                'total' => $rows->sum('total'),
+            ])
+            ->sortBy('date')
+            ->values();
+        $eventData->put('total_lead', $totalLeadData);
+
+        return $eventData;
     }
 
-    private function getReferralData(Carbon $startDate)
+    private function getReferralData(Carbon $startDate, Carbon $endDate)
     {
-        return UserAnalytic::select('referral_source', DB::raw('COUNT(*) as count'))
+        return UserAnalytic::select('referral_source', DB::raw('COUNT(DISTINCT session_id) as count'))
             ->where('event_type', 'visit')
-            ->where('created_at', '>=', $startDate)
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->whereNotNull('referral_source')
             ->groupBy('referral_source')
             ->orderByDesc('count')
             ->limit(10)
             ->get();
-    }
-
-    private function getConversionFunnel(Carbon $startDate): array
-    {
-        $visits   = UserAnalytic::where('event_type', 'visit')->where('created_at', '>=', $startDate)->distinct('session_id')->count();
-        $engaged  = UserAnalytic::where('event_type', 'engagement')->where('created_at', '>=', $startDate)->where('event_data->type', 'dwell_ping')->distinct('session_id')->count();
-        $intent   = UserAnalytic::where('event_type', 'cta_click')->where('created_at', '>=', $startDate)->distinct('session_id')->count();
-        $payments = UserAnalytic::where('event_type', 'payment')->where('created_at', '>=', $startDate)->where('event_data->status', 'success')->distinct('session_id')->count();
-
-        return [
-            ['stage' => 'Visits',  'count' => $visits,   'percentage' => 100],
-            ['stage' => 'Engaged', 'count' => $engaged,  'percentage' => $visits > 0 ? round(($engaged / $visits) * 100, 1) : 0],
-            ['stage' => 'Intent',  'count' => $intent,   'percentage' => $visits > 0 ? round(($intent / $visits) * 100, 1) : 0],
-            ['stage' => 'Paid',    'count' => $payments, 'percentage' => $visits > 0 ? round(($payments / $visits) * 100, 1) : 0],
-        ];
     }
 }
