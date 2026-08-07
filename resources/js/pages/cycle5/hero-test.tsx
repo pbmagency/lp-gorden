@@ -57,10 +57,10 @@ export default function Landing() {
     return (
         <>
             <Head>
-                <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
+                <title>Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja</title>
                 <meta
                     name="description"
-                    content="Kelas TOEFL Skor 500+ untuk LPDP dan Kerja"
+                    content="Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja"
                 />
                 <meta
                     name="keywords"

@@ -57,7 +57,7 @@ export default function AgitationTest3() {
     return (
         <>
             <Head>
-                <title>Kelas TOEFL Skor 500+ untuk LPDP dan Kerja</title>
+                <title>Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja</title>
                 <meta
                     name="description"
                     content="Testing AgitationSection 3 variant"

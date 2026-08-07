@@ -68,7 +68,7 @@
                 ? crypto.randomUUID()
                 : Date.now() + '-' + Math.random().toString(36).substring(2, 11);
             fbq('track', 'PageView', {}, { eventID: window.__META_PAGE_VIEW_EVENT_ID });
-            // 👇 THIS IS THE NEW LINE YOU NEED TO ADD 👇
+            //THIS IS THE NEW LINE YOU NEED TO ADD
             fbq('track', 'ViewContent', {}, { eventID: window.__META_PAGE_VIEW_EVENT_ID });
         });
     </script>

@@ -58,7 +58,7 @@ export default function Landing() {
         <>
             <Head>
                 <title>
-                    Kelas TOEFL Skor 500+ untuk LPDP dan Kerja
+                    Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja
                 </title>
                 <meta
                     name="description"
