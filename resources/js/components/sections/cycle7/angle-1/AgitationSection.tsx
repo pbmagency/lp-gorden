@@ -4,121 +4,169 @@ import SectionWrapper from '@/components/ui/section-wrapper';
 // Variant ID: c6-angle-2
 // Cycle: 6 | Role: Challenger
 
-const tableData = [
-    {
-        do: 'Hafal ratusan rumus grammar',
-        whyFails: 'Tidak keluar di tes TOEFL, buang-buang waktu',
-    },
-    {
-        do: 'Belajar tiap hari tanpa struktur',
-        whyFails: 'Tidak tahu bagian mana yang keluar di tes TOEFL',
-    },
-    {
-        do: 'Coba soal acak dari internet',
-        whyFails: 'Tidak mencerminkan pola soal asli',
-    },
-    {
-        do: 'Belajar tanpa target skor jelas',
-        whyFails: 'Tidak tahu sudah cukup atau belum untuk submission',
-    },
+const beforeItems = [
+    '"Deadline masih Januari, masih lama kok."',
+    '"Bulan depan aja mulai belajarnya, sekarang masih santai."',
+    '"Skor TOEFL kan bisa dikebut dalam seminggu."',
+];
+
+const afterItems = [
+    'Baru sadar ternyata TOEFL jauh lebih susah dari yang dibayangkan.',
+    'Waktu belajar mepet, jadi materi dikebut asal-asalan, tidak maksimal.',
+    'Hasil TOEFL keluar jelek, jauh dari skor target yang dibutuhkan.',
+    'Akhirnya gagal submission beasiswa karena waktu sudah habis, skor belum cukup.',
 ];
 
 export default function AgitationSection() {
     return (
         <SectionWrapper bg="cultured" className="py-14 md:py-20" id="agitation">
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-2xl">
                 {/* Tag */}
                 <div className="mb-8 text-center md:mb-10">
                     <div
-                        className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-1.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase"
+                        className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
                         style={{
+                            backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        UDAH BELAJAR MATI-MATIAN, SKOR MASIH SEGITU?
+                        <span>⏰</span> Fakta Yang Harus Diketahui
                     </div>
 
                     {/* Headline */}
                     <h2
-                        className="mb-3 text-3xl leading-tight font-black sm:text-4xl md:mb-4 md:text-[2.5rem]"
+                        className="mb-3 text-2xl leading-tight font-black sm:text-3xl md:mb-4 md:text-4xl"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',
                         }}
                     >
-                        Submission Gagal Bukan Karena <br className="hidden sm:block" />
                         <span style={{ color: '#D70808' }}>
-                            Kurang Keras Belajar TOEFL
-                        </span>
+                            82% Pejuang Beasiswa Gagal
+                        </span>{' '}
+                        Karena Persiapan TOEFL-nya Mepet
                     </h2>
 
                     {/* Subheadline */}
                     <p
-                        className="mx-auto max-w-2xl text-sm leading-relaxed sm:text-base md:text-lg"
-                        style={{ color: '#666666' }}
+                        className="mx-auto max-w-xl text-base leading-relaxed"
+                        style={{ color: '#3d3d3d' }}
                     >
-                        Kebanyakan pejuang beasiswa belajar TOEFL dengan cara yang salah, bukan untuk kejar skor demi submission.
+                        Yang awalnya dikira masih ada banyak waktu, ternyata skor TOEFL butuh persiapan lebih lama untuk naik signifikan.
                     </p>
                 </div>
 
-                {/* Table Block */}
-                <div className="mx-auto mb-10 max-w-3xl overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 md:mb-12">
-                    {/* Header */}
-                    <div className="grid grid-cols-1 gap-2 border-b border-gray-200 bg-white p-5 sm:grid-cols-2 sm:gap-6 md:px-8 md:py-6">
-                        <div className="text-sm font-bold md:text-base" style={{ color: '#151515' }}>
-                            Yang Selama Ini Kamu Lakukan
-                        </div>
-                        <div className="text-sm font-bold md:text-base" style={{ color: '#151515' }}>
-                            Kenapa Cara Ini Bikin Submission Gagal
-                        </div>
+                {/* Before / After Block */}
+                <div
+                    className="mb-10 overflow-hidden rounded-2xl md:mb-12"
+                    style={{ border: '1px solid #e0e0e0' }}
+                >
+                    {/* "Before" Column */}
+                    <div
+                        style={{ backgroundColor: '#ffffff' }}
+                        className="p-5 md:p-7"
+                    >
+                        <p
+                            className="mb-4 text-xs font-bold tracking-widest uppercase"
+                            style={{ color: '#9a9a9a' }}
+                        >
+                            Mungkin Awalnya berpikir...
+                        </p>
+                        <ul className="space-y-3">
+                            {beforeItems.map((item, i) => (
+                                <li key={i} className="flex items-start gap-3">
+                                    <span
+                                        className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-black"
+                                        style={{
+                                            backgroundColor: '#FFF0F0',
+                                            color: '#D70808',
+                                        }}
+                                    >
+                                        ✗
+                                    </span>
+                                    <p
+                                        className="text-sm leading-snug font-medium sm:text-base"
+                                        style={{ color: '#3d3d3d' }}
+                                    >
+                                        {item}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    {/* Rows */}
-                    <div className="flex flex-col">
-                        {tableData.map((item, i) => (
-                            <div 
-                                key={i} 
-                                className="grid grid-cols-1 gap-2 border-b border-gray-100 p-5 last:border-b-0 sm:grid-cols-2 sm:gap-6 md:px-8 md:py-5"
-                            >
-                                <div className="flex text-sm text-gray-500 sm:items-center">
-                                    {item.do}
-                                </div>
-                                <div className="flex text-sm text-gray-500 sm:items-center">
-                                    {item.whyFails}
-                                </div>
-                            </div>
-                        ))}
+                    {/* Divider */}
+                    <div
+                        className="flex items-center gap-3 px-5 py-3 md:px-7"
+                        style={{
+                            backgroundColor: '#F7F7F7',
+                            borderTop: '1px solid #e0e0e0',
+                            borderBottom: '1px solid #e0e0e0',
+                        }}
+                    >
+                        <div
+                            className="h-px flex-1"
+                            style={{ backgroundColor: '#e0e0e0' }}
+                        />
+                        <span
+                            className="flex-shrink-0 text-xs font-bold tracking-widest uppercase"
+                            style={{ color: '#9a9a9a' }}
+                        >
+                            Setelah dijalani...
+                        </span>
+                        <div
+                            className="h-px flex-1"
+                            style={{ backgroundColor: '#e0e0e0' }}
+                        />
+                    </div>
+
+                    {/* "After" Column */}
+                    <div
+                        style={{ backgroundColor: '#FFFAFA' }}
+                        className="p-5 md:p-7"
+                    >
+                        <ul className="space-y-3">
+                            {afterItems.map((item, i) => (
+                                <li key={i} className="flex items-start gap-3">
+                                    <span
+                                        className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-black"
+                                        style={{
+                                            backgroundColor: '#FFE0E0',
+                                            color: '#D70808',
+                                        }}
+                                    >
+                                        !
+                                    </span>
+                                    <p
+                                        className="text-sm leading-snug font-medium sm:text-base"
+                                        style={{ color: '#3d3d3d' }}
+                                    >
+                                        {item}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
 
                 {/* Closing Bridge */}
                 <div className="space-y-3 text-center">
                     <p
-                        className="text-sm leading-relaxed md:text-base"
-                        style={{ color: '#666666' }}
+                        className="text-xl leading-relaxed md:text-[22px]"
+                        style={{ color: '#3d3d3d' }}
                     >
-                        Padahal dengan strategi yang tepat, skor bisa naik signifikan tanpa perlu waktu lama.
+                        Kabar baiknya, hampir semua yang berhasil dapat beasiswa punya satu kesamaan.
                     </p>
                     <p
-                        className="text-base font-bold leading-relaxed md:text-lg"
+                        className="text-xl leading-relaxed font-semibold md:text-[22px]"
                         style={{ color: '#151515' }}
                     >
-                        Kalau kamu mau lolos beasiswa, cara belajar kamu harus segera diubah
+                        Mereka mempersiapkan TOEFL dari jauh-jauh hari, bukan mepet.
                     </p>
 
                     <div className="flex justify-center pt-2">
-                        {/* Clickable Down Arrow */}
-                        <a 
-                            href="#pricing"
-                            className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
-                            }}
-                        >
-                            <ArrowDown size={20} className="text-gray-500 animate-bounce" />
-                        </a>
+                        <ArrowDown size={22} style={{ color: '#D70808' }} />
                     </div>
                 </div>
             </div>
