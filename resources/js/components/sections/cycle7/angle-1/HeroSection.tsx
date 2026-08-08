@@ -157,7 +157,8 @@ export default memo(function HeroSection() {
                     </div>
 
                     {/* Right column — score card */}
-                    <div className="mt-6 flex justify-center lg:mt-0">
+                    {/* 👇 Added 'hidden lg:flex' here to hide it completely on mobile sizes 👇 */}
+                    <div className="hidden justify-center lg:flex">
                         <div className="relative w-full max-w-[360px]">
                             <div className="rounded-[24px] bg-[linear-gradient(145deg,#3d6ab0_0%,#1e3a6e_100%)] p-8 text-white shadow-[0_24px_80px_rgba(30,58,110,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]">
                                 <p className="mb-2 text-sm font-semibold opacity-75">

@@ -36,12 +36,12 @@ const waScreenshots: WaScreenshot[] = [
 ];
 
 const carouselItems = [
-    { name: 'Kak Rani', score: 547 },
-    { name: 'Kak Ayu', score: 543 },
-    { name: 'Mbak Widya', score: 563 },
-    { name: 'Pak Yohanes', score: 560 },
-    { name: 'Kak Uly Sinaga', score: 507 },
-    { name: 'Kak Nadia Ayu', score: 513 },
+    { name: 'Kak Rani', score: 547, photo: '/people/People 1.webp' },
+    { name: 'Kak Ayu', score: 543, photo: '/people/People 2.webp' },
+    { name: 'Mbak Widya', score: 563, photo: '/people/People 3.webp' },
+    { name: 'Pak Yohanes', score: 560, photo: '/people/People 1.webp' },
+    { name: 'Kak Uly Sinaga', score: 507, photo: '/people/People 2.webp' },
+    { name: 'Kak Nadia Ayu', score: 513, photo: '/people/People 3.webp' },
 ];
 
 const internationalTestimonials = [
@@ -256,9 +256,9 @@ export default function SocialProofSection() {
                             color: '#151515',
                         }}
                     >
-                        Lihat Bagaimana Strategi Kami Membantu Alumni<br />
+                        Lihat Bagaimana Mindset yang Benar<br />
                         <span style={{ color: '#D70808' }}>
-                            Meraih Target Skor Untuk Beasiswa
+                            Berhasil Membuat Alumni Meraih Target Skor
                         </span>
                     </h2>
                     <p className="text-sm" style={{ color: '#9ca3af' }}>
@@ -436,6 +436,11 @@ export default function SocialProofSection() {
                                         boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                                     }}
                                 >
+                                    <img 
+                                        src={item.photo} 
+                                        alt={item.name} 
+                                        className="h-9 w-9 shrink-0 rounded-full object-cover"
+                                    />
                                     <div
                                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
                                         style={{
@@ -560,7 +565,7 @@ export default function SocialProofSection() {
                             color: '#151515',
                         }}
                     >
-                        Keberhasilan alumni selama ini bukan karena mereka pintar, tapi karena mereka <span style={{ color: '#D70808' }}>gunakan metode yang tepat</span>.
+                        Keberhasilan alumni selama ini bukan karena mereka pintar, tapi karena mereka <span style={{ color: '#D70808' }}>punya mindset yang tepat.</span>.
                     </p>
                     <LpButton
                         href="#pricing"

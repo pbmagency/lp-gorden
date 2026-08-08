@@ -36,14 +36,13 @@ const waScreenshots: WaScreenshot[] = [
 ];
 
 const carouselItems = [
-    { name: 'Kak Rani', score: 547 },
-    { name: 'Kak Ayu', score: 543 },
-    { name: 'Mbak Widya', score: 563 },
-    { name: 'Pak Yohanes', score: 560 },
-    { name: 'Kak Uly Sinaga', score: 507 },
-    { name: 'Kak Nadia Ayu', score: 513 },
+    { name: 'Kak Rani', score: 547, photo: '/people/People 1.webp' },
+    { name: 'Kak Ayu', score: 543, photo: '/people/People 2.webp' },
+    { name: 'Mbak Widya', score: 563, photo: '/people/People 3.webp' },
+    { name: 'Pak Yohanes', score: 560, photo: '/people/People 1.webp' },
+    { name: 'Kak Uly Sinaga', score: 507, photo: '/people/People 2.webp' },
+    { name: 'Kak Nadia Ayu', score: 513, photo: '/people/People 3.webp' },
 ];
-
 const internationalTestimonials = [
     {
         title: 'Sangat Terjangkau Untuk Mahasiswa',
@@ -436,6 +435,11 @@ export default function SocialProofSection() {
                                         boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                                     }}
                                 >
+                                    <img 
+                                        src={item.photo} 
+                                        alt={item.name} 
+                                        className="h-9 w-9 shrink-0 rounded-full object-cover"
+                                    />
                                     <div
                                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
                                         style={{
