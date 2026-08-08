@@ -16,12 +16,13 @@ const ValueSection = lazy(
 );
 const SocialProofSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle-2/SocialProofSection'),
+        import('@/components/sections/cycle7/angle-1/SocialProofSection'),
 );
 const PricingSection = lazy(
     () =>
         import('@/components/sections/test-variations/cycle6-angle-2/PricingSection'),
 );
+
 const FAQSection = lazy(
     () =>
         import('@/components/sections/test-variations/cycle6-angle-2/FAQSection'),
