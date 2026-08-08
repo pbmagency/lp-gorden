@@ -22,7 +22,8 @@ export default function AgitationSection() {
                     </div>
 
                     {/* Headline */}
-                    <h2 className="mb-5 font-['var(--font-heading)'] text-3xl font-black leading-tight text-[#151515] sm:text-4xl md:text-[2.5rem]">
+                    {/* 👇 Reduced text-3xl to text-2xl and adjusted line height for mobile 👇 */}
+                    <h2 className="mb-5 font-['var(--font-heading)'] text-2xl font-black leading-[1.3] text-[#151515] sm:text-3xl md:text-[2.5rem] md:leading-tight">
                         Bukan Karena Kurang Mampu, <br className="hidden sm:block" />
                         <span className="text-[#D70808]">
                             Tapi Salah Langkah dari Awal.

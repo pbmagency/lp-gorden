@@ -2,6 +2,7 @@ import { ShieldCheck, Star, Award, Users, ArrowDown } from 'lucide-react';
 import { memo } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import { useAnalytics } from '@/hooks/use-analytics';
+import SocialProofMicro from '@/components/ui/social-proof-micro';
 // Note: We removed <SocialProofMicro /> because we are now using the exact hardcoded rating line from the HTML model
 
 const stats = [
@@ -26,12 +27,12 @@ export default memo(function HeroSection() {
             <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[#D70808] opacity-[0.07] blur-[120px]" />
             <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#151515] opacity-[0.05] blur-[100px]" />
 
-            <div className="mx-auto max-w-6xl px-6 pb-4 pt-10">
-                <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+            <div className="mx-auto max-w-6xl px-6 pb-4 pt-10 max-[499px]:pb-6 max-[499px]:pt-6">
+                <div className="grid items-center gap-10 min-[900px]:grid-cols-[1fr_auto]">
                     {/* Left column */}
                     <div className="flex flex-col gap-4">
                         {/* a. Badges */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 max-[499px]:flex-col max-[499px]:items-start">
                             <div className="inline-flex w-fit items-center gap-2 rounded-full border-[1.5px] border-[#151515] bg-transparent px-4 py-1.5 text-xs font-bold uppercase tracking-[0.05em] text-[#374151]">
                                 <div className="flex items-center gap-[2px]">
                                     <Star size={12} fill="#F59E0B" color="#F59E0B" />
@@ -64,7 +65,7 @@ export default memo(function HeroSection() {
                         </div>
 
                         {/* b. Headline */}
-                        <h1 className="font-['var(--font-heading)'] text-[clamp(30px,4vw,44px)] font-black leading-[1.15] text-[#151515]">
+                        <h1 className="font-['var(--font-heading)'] text-[clamp(32px,4vw,44px)] font-black leading-[1.15] text-[#151515] max-[499px]:text-[32px]">
                             Serius Soal Beasiswa?
                             <br />
                             Capai{' '}
@@ -90,7 +91,7 @@ export default memo(function HeroSection() {
                         </p>
 
                         {/* d. Trust badges */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 max-[499px]:hidden">
                             {['Lembaga Resmi ITP & IIEF', '13+ Tahun Pengalaman'].map(
                                 (b) => (
                                     <span
@@ -124,7 +125,7 @@ export default memo(function HeroSection() {
                                     href="#testimonials"
                                     variant="outline"
                                     size="md"
-                                    className="rounded-[16px] border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-bold text-[#151515]"
+                                    className="rounded-[16px] border-2 border-[#151515] bg-transparent px-7 py-3.5 text-[16px] font-bold text-[#151515]"
                                     onClick={() =>
                                         trackCTA(
                                             'hero_secondary',
@@ -137,28 +138,13 @@ export default memo(function HeroSection() {
                                 </LpButton>
                             </div>
 
-                            <div className="flex flex-wrap items-center justify-start gap-x-3 gap-y-2">
-                                <span className="flex items-center gap-1 text-xs font-semibold text-[#6b7280]">
-                                    ★★★★★{' '}
-                                    <span className="ml-1">
-                                        4.9/5 Google Review
-                                    </span>
-                                </span>
-                                <span className="text-xs text-[#6b7280]">•</span>
-                                <span className="text-xs font-semibold text-[#6b7280]">
-                                    45.000+ Alumni Sukses
-                                </span>
-                                <span className="text-xs text-[#6b7280]">•</span>
-                                <span className="text-xs font-semibold text-[#6b7280]">
-                                    🛡 Garansi 100%
-                                </span>
-                            </div>
+                            <SocialProofMicro />
                         </div>
                     </div>
 
                     {/* Right column — score card */}
-                    {/* 👇 Added 'hidden lg:flex' here to hide it completely on mobile sizes 👇 */}
-                    <div className="hidden justify-center lg:flex">
+                    {/* 👇 Hidden on <900px screens based on model breakpoints 👇 */}
+                    <div className="hidden justify-center min-[900px]:flex">
                         <div className="relative w-full max-w-[360px]">
                             <div className="rounded-[24px] bg-[linear-gradient(145deg,#3d6ab0_0%,#1e3a6e_100%)] p-8 text-white shadow-[0_24px_80px_rgba(30,58,110,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]">
                                 <p className="mb-2 text-sm font-semibold opacity-75">

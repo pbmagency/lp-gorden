@@ -2,6 +2,7 @@ import { BookOpen, Target, Trophy, RefreshCcw, TrendingUp, Zap } from 'lucide-re
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import { useAnalytics } from '@/hooks/use-analytics';
+import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 const pillars = [
     {
@@ -61,7 +62,8 @@ export default function ValueSection() {
                     <div className="mb-6 inline-flex items-center justify-center rounded-full border border-[#ffb3b3] bg-white px-5 py-2 text-[10px] font-bold uppercase tracking-[0.08em] text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.04)] sm:text-xs">
                         ⚠️ MINDSETMU BIKIN GAGAL DAPAT BEASISWA
                     </div>
-                    <h2 className="mb-4 font-['var(--font-heading)'] text-3xl font-black leading-tight text-[#151515] sm:text-4xl md:text-[2.5rem]">
+                    {/* 👇 Reduced text-3xl to text-2xl and adjusted line height for mobile 👇 */}
+                    <h2 className="mb-4 font-['var(--font-heading)'] text-2xl font-black leading-[1.3] text-[#151515] sm:text-3xl md:text-[2.5rem] md:leading-tight">
                         Mindsetmu Sekarang Menentukan <span className="text-[#D70808]">Peluang Kamu Diterima<br className="hidden sm:block" /> Beasiswa</span>
                     </h2>
                     <p className="mx-auto max-w-2xl text-sm leading-relaxed text-[#666666] sm:text-base md:text-[17px]">
@@ -155,6 +157,7 @@ export default function ValueSection() {
                     )}
                 </div>
 
+
                 {/* 5. Preparation Header */}
                 <div className="mb-10 text-center">
                     <p className="mx-auto mb-4 max-w-2xl text-[15px] italic text-[#666666]">
@@ -191,6 +194,30 @@ export default function ValueSection() {
                         </div>
                     ))}
                 </div>
+                                <div className="text-center">
+                                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                                        <LpButton
+                                            href="#pricing"
+                                            size="md"
+                                            className="bg-[#E60000] text-white hover:bg-[#CC0000]"
+                                            onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
+                                        >
+                                            Gabung Sekarang →
+                                        </LpButton>
+                                        <LpButton
+                                            href="#testimonials"
+                                            variant="outline"
+                                            size="md"
+                                            className="border-[#E60000] text-[#151515] bg-white hover:bg-gray-50"
+                                            onClick={() => trackCTA('value_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
+                                        >
+                                            Lihat Bukti Alumni →
+                                        </LpButton>
+                                    </div>
+                                    <div className="mt-4">
+                                        <SocialProofMicro />
+                                    </div>
+                                </div>
 
                 {/* 7. CTA Buttons */}
                 <div className="text-center">

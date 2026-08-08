@@ -181,6 +181,18 @@ export default function SocialProofSection() {
     const prevGoogleCarousel = () => setGoogleIndex((i) => (i - 1 + 19) % 19);
     const nextGoogleCarousel = () => setGoogleIndex((i) => (i + 1) % 19);
 
+    useEffect(() => {
+        // Pause auto-sliding if the user is currently viewing a review in the lightbox
+        if (reviewIndex !== null) return;
+
+        // Auto slide every 3 seconds (3000 ms)
+        const interval = setInterval(() => {
+            setGoogleIndex((i) => (i + 1) % 19);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [reviewIndex]);
+
     const prevIdx = (googleIndex - 1 + 19) % 19;
     const centerIdx = googleIndex;
     const nextIdx = (googleIndex + 1) % 19;
@@ -440,15 +452,6 @@ export default function SocialProofSection() {
                                         alt={item.name} 
                                         className="h-9 w-9 shrink-0 rounded-full object-cover"
                                     />
-                                    <div
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
-                                        style={{
-                                            backgroundColor: avatarBg(i),
-                                            fontFamily: 'var(--font-heading)',
-                                        }}
-                                    >
-                                        {item.name[0]}
-                                    </div>
                                     <div className="min-w-0 flex-1">
                                         <p
                                             className="truncate text-xs font-black"

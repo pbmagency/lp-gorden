@@ -1,4 +1,4 @@
-import { BookOpen, Target, Trophy, RefreshCcw, Brain, Users, Clock, TrendingUp, Zap } from 'lucide-react';
+import { BookOpen, Target, Users, Clock, TrendingUp, Zap } from 'lucide-react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
@@ -89,8 +89,9 @@ export default function ValueSection() {
                     >
                         <span>💡</span> METODE EKSKLUSIF FULL BRIGHT
                     </div>
+                    {/* 👇 Added leading-[1.3] for tighter wrap on mobile 👇 */}
                     <h2
-                        className="mb-4 text-2xl font-black sm:text-3xl md:text-4xl"
+                        className="mb-4 text-2xl font-black leading-[1.3] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',
@@ -252,8 +253,9 @@ export default function ValueSection() {
                     >
                         <span>🏅</span> Mengapa Full Bright?
                     </div>
+                    {/* 👇 Added leading-[1.3] here as well for consistency 👇 */}
                     <h2
-                        className="text-2xl font-black sm:text-3xl md:text-4xl"
+                        className="text-2xl font-black leading-[1.3] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',

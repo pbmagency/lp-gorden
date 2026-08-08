@@ -40,8 +40,9 @@ export default function AgitationSection() {
                     </div>
 
                     {/* Headline */}
+                    {/* 👇 Reduced text-3xl to text-2xl and adjusted line height for mobile 👇 */}
                     <h2
-                        className="mb-4 text-3xl font-black leading-[1.25] sm:text-4xl md:mb-5 md:text-[2.5rem]"
+                        className="mb-4 text-2xl font-black leading-[1.3] sm:text-3xl md:mb-5 md:text-[2.5rem] md:leading-[1.25]"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',
@@ -95,15 +96,15 @@ export default function AgitationSection() {
                 </div>
 
                 {/* Closing Bridge */}
-                <div className="space-y-3 text-center">
+                <div className="space-y-3 text-center px-2">
                     <p
-                        className="text-[14px] leading-relaxed md:text-base"
+                        className="text-[16px] leading-relaxed md:text-lg"
                         style={{ color: '#666666' }}
                     >
                         Padahal dengan strategi yang tepat, skor bisa naik signifikan tanpa perlu waktu lama.
                     </p>
                     <p
-                        className="text-[15px] font-bold leading-relaxed md:text-lg"
+                        className="text-[17px] font-bold leading-relaxed md:text-[20px]"
                         style={{ color: '#151515' }}
                     >
                         Kalau kamu mau lolos beasiswa, cara belajar kamu harus segera diubah
