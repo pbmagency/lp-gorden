@@ -63,15 +63,10 @@ const internationalTestimonials = [
     },
 ];
 
-function Stars() {
-    return (
-        <div className="flex gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} size={13} fill="#F59E0B" color="#F59E0B" />
-            ))}
-        </div>
-    );
-}
+const reviewPhotos = Array.from(
+    { length: 19 },
+    (_, i) => `/review/Riview (${i + 1}).webp`,
+);
 
 function avatarBg(i: number) {
     return i % 2 === 0 ? '#151515' : '#D70808';
@@ -119,29 +114,25 @@ function PhotoLightbox({
                 className="flex flex-col items-center gap-4 px-16"
                 onClick={(e) => e.stopPropagation()}
             >
-                <img
-                    src={photo.src}
-                    alt={photo.name ?? `Bukti skor TOEFL ${photo.score}`}
-                    width={340}
-                    height={604}
-                    className="max-h-[80vh] w-full max-w-[340px] rounded-2xl object-contain"
-                    style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
+                <div
+                    role="img"
+                    aria-label="Score"
+                    style={{
+                        height: '80vh',
+                        width: '340px',
+                        maxWidth: '80vw',
+                        borderRadius: '16px',
+                        backgroundImage: `url('${photo.src}')`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        boxShadow: '0 24px 80px rgba(0,0,0,0.6)'
+                    }}
                 />
-                <div className="text-center">
-                    {photo.name && (
-                        <p
-                            className="text-base font-black text-white"
-                            style={{ fontFamily: 'var(--font-heading)' }}
-                        >
-                            {photo.name}
-                        </p>
-                    )}
-                    <p className="text-sm text-white/60">
-                        {photo.score ? `Skor ${photo.score}` : ''}
-                        {photo.label ? ` · ${photo.label}` : ''}
-                    </p>
-                </div>
-                <p className="text-xs text-white/40">
+                <p className="m-0 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                    Skor {photo.score}
+                </p>
+                <p className="m-0 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
                     {index + 1} / {photos.length}
                 </p>
             </div>
@@ -159,18 +150,11 @@ function PhotoLightbox({
     );
 }
 
-// We correctly have 19 reviews here as requested
-const reviewPhotos = Array.from(
-    { length: 19 },
-    (_, i) => `/review/Riview (${i + 1}).webp`,
-);
-
 export default function SocialProofSection() {
     const { trackCTA } = useAnalytics();
+    
+    // Lightbox for Score Photos
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-    const [reviewIndex, setReviewIndex] = useState<number | null>(null);
-    const [reviewReady, setReviewReady] = useState(false);
-
     const openLightbox = (i: number) => setLightboxIndex(i);
     const closeLightbox = () => setLightboxIndex(null);
     const prevPhoto = () =>
@@ -184,6 +168,25 @@ export default function SocialProofSection() {
             i !== null ? (i + 1) % waScreenshots.length : null,
         );
 
+    // Lightbox for Review Photos
+    const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+    const openReview = (i: number) => setReviewIndex(i % 19);
+    const closeReview = () => setReviewIndex(null);
+    const prevReview = () =>
+        setReviewIndex((i) => (i !== null ? (i - 1 + 19) % 19 : null));
+    const nextReview = () =>
+        setReviewIndex((i) => (i !== null ? (i + 1) % 19 : null));
+
+    // Google Carousel specific state
+    const [googleIndex, setGoogleIndex] = useState(0);
+    const prevGoogleCarousel = () => setGoogleIndex((i) => (i - 1 + 19) % 19);
+    const nextGoogleCarousel = () => setGoogleIndex((i) => (i + 1) % 19);
+
+    const prevIdx = (googleIndex - 1 + 19) % 19;
+    const centerIdx = googleIndex;
+    const nextIdx = (googleIndex + 1) % 19;
+
+    const [reviewReady, setReviewReady] = useState(false);
     useEffect(() => {
         const idleWindow = window as unknown as {
             requestIdleCallback?: (
@@ -210,35 +213,27 @@ export default function SocialProofSection() {
         };
     }, []);
 
-    const openReview = (i: number) => setReviewIndex(i % 19);
-    const closeReview = () => setReviewIndex(null);
-    const prevReview = () =>
-        setReviewIndex((i) => (i !== null ? (i - 1 + 19) % 19 : null));
-    const nextReview = () =>
-        setReviewIndex((i) => (i !== null ? (i + 1) % 19 : null));
-
     return (
         <section id="testimonials">
             {/* Stats bar */}
-            <div style={{ backgroundColor: '#151515' }} className="py-10">
-                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 gap-8 text-center text-white md:grid-cols-4">
-                        {statsBar.map((s) => (
-                            <div key={s.label}>
-                                <p
-                                    className="text-4xl font-black tracking-tight md:text-5xl"
-                                    style={{
-                                        fontFamily: 'var(--font-heading)',
-                                    }}
-                                >
-                                    {s.value}
-                                </p>
-                                <p className="mt-1.5 text-xs font-medium tracking-wide opacity-75">
-                                    {s.label}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+            <div style={{ backgroundColor: '#151515' }} className="px-6 py-10">
+                <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 text-center text-white md:grid-cols-4">
+                    {statsBar.map((s) => (
+                        <div key={s.label}>
+                            <p
+                                className="text-4xl font-black tracking-tight md:text-5xl"
+                                style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    letterSpacing: '-0.02em',
+                                }}
+                            >
+                                {s.value}
+                            </p>
+                            <p className="mt-1.5 text-xs font-medium tracking-wide opacity-75">
+                                {s.label}
+                            </p>
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -252,7 +247,7 @@ export default function SocialProofSection() {
                             border: '1px solid #ffb3b3',
                         }}
                     >
-                        <MessageCircle size={13} /> Testimoni Alumni Kami
+                        💬 Testimoni Alumni Kami
                     </div>
                     <h2
                         className="mb-4 text-2xl font-black sm:text-3xl md:text-4xl"
@@ -271,48 +266,30 @@ export default function SocialProofSection() {
                     </p>
                 </div>
 
-                {/* Top 3 photos — grid with captions, clickable lightbox */}
-                <div className="mx-auto mb-6 grid max-w-3xl grid-cols-3 gap-3">
+                {/* Top 3 photos (Vertical List) */}
+                <div className="mx-auto mb-6 flex max-w-[420px] flex-col">
                     {waScreenshots.slice(0, 3).map((img, i) => (
                         <div
-                            key={img.src}
-                            className="flex cursor-pointer flex-col items-center gap-2"
+                            key={i}
+                            className="flex cursor-pointer flex-col items-center gap-2.5 border-b border-gray-200 py-5"
                             onClick={() => openLightbox(i)}
                         >
-                            <div
-                                className="group relative w-full overflow-hidden"
-                                style={{
-                                    borderRadius: '14px',
-                                    boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
-                                    aspectRatio: '9/16',
-                                }}
+                            <p
+                                className="m-0 text-lg font-extrabold"
+                                style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                             >
-                                <img
-                                    src={img.src}
-                                    alt={`Score Report Alumni Skor ${img.score}`}
-                                    width={260}
-                                    height={463}
-                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                />
-                                <div
-                                    className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                                    style={{
-                                        backgroundColor: 'rgba(0,0,0,0.25)',
-                                    }}
-                                >
-                                    <span className="rounded-full bg-black/50 px-3 py-1 text-xs font-bold text-white">
-                                        Perbesar
-                                    </span>
-                                </div>
-                            </div>
-                            {img.score && (
-                                <p
-                                    className="text-center text-xs font-bold"
-                                    style={{ color: '#151515' }}
-                                >
-                                    Skor {img.score}
-                                </p>
-                            )}
+                                Skor <span style={{ color: '#D70808' }}>{img.score}</span>
+                            </p>
+                            <div
+                                className="w-full overflow-hidden rounded-[14px]"
+                                style={{
+                                    boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
+                                    aspectRatio: '1/1',
+                                    backgroundImage: `url('${img.src}')`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}
+                            />
                         </div>
                     ))}
                 </div>
@@ -328,7 +305,7 @@ export default function SocialProofSection() {
                     }}
                 >
                     <div
-                        className="infinite-track"
+                        className="infinite-track flex w-max"
                         style={{ animationDuration: '35s' }}
                     >
                         {Array.from({ length: 4 }, () => waScreenshots)
@@ -336,37 +313,25 @@ export default function SocialProofSection() {
                             .map((img, i) => (
                                 <div
                                     key={i}
-                                    className="mx-2 flex shrink-0 cursor-pointer flex-col items-center gap-1.5"
-                                    onClick={() =>
-                                        openLightbox(i % waScreenshots.length)
-                                    }
+                                    className="mx-2 flex shrink-0 cursor-pointer flex-col items-center gap-2"
+                                    onClick={() => openLightbox(i % waScreenshots.length)}
                                 >
-                                    <div
-                                        className="relative overflow-hidden"
-                                        style={{
-                                            width: '130px',
-                                            borderRadius: '12px',
-                                            boxShadow:
-                                                '0 4px 16px rgba(0,0,0,0.15)',
-                                            aspectRatio: '9/16',
-                                        }}
+                                    <p
+                                        className="m-0 text-base font-extrabold"
+                                        style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                                     >
-                                        <img
-                                            src={img.src}
-                                            alt={`Score Report Alumni Skor ${img.score}`}
-                                            width={130}
-                                            height={231}
-                                            className="h-full w-full object-cover"
-                                        />
-                                    </div>
-                                    {img.score && (
-                                        <p
-                                            className="text-center text-[10px] font-bold"
-                                            style={{ color: '#151515' }}
-                                        >
-                                            Skor {img.score}
-                                        </p>
-                                    )}
+                                        Skor <span style={{ color: '#D70808' }}>{img.score}</span>
+                                    </p>
+                                    <div
+                                        className="w-[130px] overflow-hidden rounded-xl"
+                                        style={{
+                                            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                                            aspectRatio: '9/16',
+                                            backgroundImage: `url('${img.src}')`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                        }}
+                                    />
                                 </div>
                             ))}
                     </div>
@@ -378,11 +343,10 @@ export default function SocialProofSection() {
                         className="mb-6 text-center text-xs font-bold tracking-widest uppercase"
                         style={{ color: '#9ca3af' }}
                     >
-                        Testimoni Alumni yang Sukses Masuk Universitas Luar
-                        Negeri
+                        Testimoni Alumni yang Sukses Masuk Universitas Luar Negeri
                     </p>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {internationalTestimonials.map((t, i) => (
+                        {internationalTestimonials.map((t) => (
                             <div
                                 key={t.name}
                                 className="flex min-w-0 flex-col gap-3 rounded-2xl border border-gray-100 p-5"
@@ -413,32 +377,21 @@ export default function SocialProofSection() {
                                     "{t.text}"
                                 </p>
                                 <div className="flex items-center gap-3 border-t border-gray-100 pt-2">
-                                    {t.avatar ? (
-                                        <img
-                                            src={t.avatar}
-                                            alt={t.name}
-                                            width={40}
-                                            height={40}
-                                            className="h-10 w-10 shrink-0 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <div
-                                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
-                                            style={{
-                                                backgroundColor: avatarBg(i),
-                                                fontFamily:
-                                                    'var(--font-heading)',
-                                            }}
-                                        >
-                                            {t.name[0]}
-                                        </div>
-                                    )}
+                                    <div
+                                        role="img"
+                                        aria-label={t.name}
+                                        className="h-10 w-10 shrink-0 rounded-full"
+                                        style={{
+                                            backgroundImage: `url('${t.avatar}')`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center'
+                                        }}
+                                    />
                                     <div className="min-w-0 flex-1">
                                         <p
                                             className="truncate text-sm font-black"
                                             style={{
-                                                fontFamily:
-                                                    'var(--font-heading)',
+                                                fontFamily: 'var(--font-heading)',
                                                 color: '#151515',
                                             }}
                                         >
@@ -451,14 +404,14 @@ export default function SocialProofSection() {
                                             {t.role}
                                         </p>
                                     </div>
-                                    <Stars />
+                                    <span style={{ color: '#F59E0B', fontSize: '12px' }}>★★★★★</span>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Score carousel — name only, no source */}
+                {/* Score carousel */}
                 <div
                     className="mt-10 overflow-hidden"
                     style={{
@@ -469,7 +422,7 @@ export default function SocialProofSection() {
                     }}
                 >
                     <div
-                        className="infinite-track"
+                        className="infinite-track flex w-max"
                         style={{ animationDuration: '40s' }}
                     >
                         {Array.from({ length: 4 }, () => carouselItems)
@@ -480,8 +433,7 @@ export default function SocialProofSection() {
                                     className="mx-3 flex shrink-0 items-center gap-3 rounded-2xl border border-gray-100 bg-white px-5 py-4"
                                     style={{
                                         width: '220px',
-                                        boxShadow:
-                                            '0 2px 12px rgba(0,0,0,0.06)',
+                                        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                                     }}
                                 >
                                     <div
@@ -515,7 +467,7 @@ export default function SocialProofSection() {
                     </div>
                 </div>
 
-                {/* Review alumni carousel — deferred until idle */}
+                {/* Review Google Manual Carousel — deferred until idle */}
                 {reviewReady && (
                     <div className="mt-12 mb-2">
                         <div className="mb-6 flex items-center justify-center gap-2">
@@ -531,55 +483,71 @@ export default function SocialProofSection() {
                                 <b className="font-bold">3.620</b> Google Reviews
                             </span>
                         </div>
-                        <div
-                            className="overflow-hidden py-4"
-                            style={{
-                                maskImage:
-                                    'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
-                                WebkitMaskImage:
-                                    'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
-                            }}
-                        >
-                            <div
-                                className="infinite-track"
-                                style={{
-                                    animationDuration: '60s',
-                                    alignItems: 'center',
-                                }}
+                        
+                        <div className="relative mx-auto flex h-[220px] max-w-3xl items-center justify-center overflow-hidden">
+                            <button
+                                onClick={prevGoogleCarousel}
+                                aria-label="Sebelumnya"
+                                className="absolute left-0 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-base shadow-sm hover:bg-gray-50"
+                                style={{ color: '#151515' }}
                             >
-                                {Array.from({ length: 4 }, () => reviewPhotos)
-                                    .flat()
-                                    .map((src, i) => (
-                                        <div
-                                            key={i}
-                                            className="group mx-3 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white"
-                                            style={{
-                                                width: '280px',
-                                                aspectRatio: '1/1',
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                                            }}
-                                            onClick={() => openReview(i)}
-                                        >
-                                            <div className="relative h-full w-full">
-                                                <img
-                                                    src={src}
-                                                    alt={`Review Alumni Full Bright ${(i % 19) + 1}`}
-                                                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                />
-                                                <div
-                                                    className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                                                    style={{
-                                                        backgroundColor: 'rgba(0,0,0,0.25)',
-                                                    }}
-                                                >
-                                                    <span className="rounded-full bg-black/60 px-4 py-1.5 text-xs font-bold tracking-wide text-white">
-                                                        Perbesar
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
+                                ‹
+                            </button>
+                            
+                            {/* Previous Slide */}
+                            <div
+                                onClick={() => openReview(prevIdx)}
+                                className="absolute cursor-pointer overflow-hidden rounded-2xl opacity-50 shadow-lg transition-all duration-500"
+                                style={{
+                                    left: 'calc(50% - 260px)',
+                                    width: '160px',
+                                    height: '210px',
+                                    zIndex: 1,
+                                    backgroundImage: `url('${reviewPhotos[prevIdx]}')`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}
+                            />
+                            
+                            {/* Center Slide */}
+                            <img
+                                src={reviewPhotos[centerIdx]}
+                                onClick={() => openReview(centerIdx)}
+                                alt="Google Review Center"
+                                className="absolute cursor-pointer rounded-2xl object-contain shadow-xl transition-all duration-300"
+                                style={{
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    height: '210px',
+                                    width: 'auto',
+                                    maxWidth: '340px',
+                                    zIndex: 2,
+                                }}
+                            />
+
+                            {/* Next Slide */}
+                            <div
+                                onClick={() => openReview(nextIdx)}
+                                className="absolute cursor-pointer overflow-hidden rounded-2xl opacity-50 shadow-lg transition-all duration-500"
+                                style={{
+                                    left: 'calc(50% + 100px)',
+                                    width: '160px',
+                                    height: '210px',
+                                    zIndex: 1,
+                                    backgroundImage: `url('${reviewPhotos[nextIdx]}')`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}
+                            />
+
+                            <button
+                                onClick={nextGoogleCarousel}
+                                aria-label="Selanjutnya"
+                                className="absolute right-0 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-base shadow-sm hover:bg-gray-50"
+                                style={{ color: '#151515' }}
+                            >
+                                ›
+                            </button>
                         </div>
                     </div>
                 )}
@@ -604,7 +572,7 @@ export default function SocialProofSection() {
                 </div>
             </SectionWrapper>
 
-            {/* Lightbox score */}
+            {/* Lightbox for Score Photos */}
             {lightboxIndex !== null && (
                 <PhotoLightbox
                     photos={waScreenshots}
@@ -615,7 +583,7 @@ export default function SocialProofSection() {
                 />
             )}
 
-            {/* Lightbox review */}
+            {/* Lightbox for Google Reviews */}
             {reviewIndex !== null && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center"
@@ -643,13 +611,22 @@ export default function SocialProofSection() {
                         className="flex flex-col items-center gap-4 px-16"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <img
-                            src={reviewPhotos[reviewIndex]}
-                            alt={`Review Alumni ${reviewIndex + 1}`}
-                            className="max-h-[85vh] w-auto max-w-[90vw] rounded-2xl object-contain"
-                            style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
+                        <div
+                            role="img"
+                            aria-label="Review"
+                            style={{
+                                height: '85vh',
+                                width: '400px',
+                                maxWidth: '90vw',
+                                borderRadius: '16px',
+                                backgroundImage: `url('${reviewPhotos[reviewIndex]}')`,
+                                backgroundSize: 'contain',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center',
+                                boxShadow: '0 24px 80px rgba(0,0,0,0.6)'
+                            }}
                         />
-                        <p className="text-xs font-medium tracking-widest text-white/50">
+                        <p className="m-0 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
                             {reviewIndex + 1} / 19
                         </p>
                     </div>
