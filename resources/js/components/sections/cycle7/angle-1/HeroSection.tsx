@@ -3,7 +3,6 @@ import { memo } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import { useAnalytics } from '@/hooks/use-analytics';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
-// Note: We removed <SocialProofMicro /> because we are now using the exact hardcoded rating line from the HTML model
 
 const stats = [
     { icon: <Users size={18} />, value: '45.000+', label: 'Alumni Sukses' },
@@ -69,7 +68,6 @@ export default memo(function HeroSection() {
                             Serius Soal Beasiswa?
                             <br />
                             Capai{' '}
-                            {/* This is where we translated the exact HTML highlight logic to Tailwind */}
                             <span className="box-decoration-clone bg-[linear-gradient(#F5B700,#F5B700)] bg-[length:100%_12px] bg-[position:0_100%] bg-no-repeat px-[2px] [-webkit-box-decoration-break:clone]">
                                 TOEFL 500+ dalam <br className="hidden sm:block" /> 15 Hari Buat Submission
                             </span>
@@ -122,12 +120,12 @@ export default memo(function HeroSection() {
                                     Mulai Persiapan Beasiswa →
                                 </LpButton>
                                 
-                                {/* 👇 Changed variant="outline" to variant="ghost" to fix the red color override 👇 */}
+                                {/* 👇 This explicitly uses variant="outline" for the red border, and !text-[#151515] to force black text 👇 */}
                                 <LpButton
                                     href="#testimonials"
-                                    variant="ghost"
+                                    variant="outline"
                                     size="md"
-                                    className="rounded-[16px] px-7 py-3.5 text-[16px] font-bold"
+                                    className="rounded-[16px] px-7 py-3.5 text-[16px] font-bold !text-[#151515]"
                                     onClick={() =>
                                         trackCTA(
                                             'hero_secondary',
@@ -145,7 +143,6 @@ export default memo(function HeroSection() {
                     </div>
 
                     {/* Right column — score card */}
-                    {/* 👇 Hidden on <900px screens based on model breakpoints 👇 */}
                     <div className="hidden justify-center min-[900px]:flex">
                         <div className="relative w-full max-w-[360px]">
                             <div className="rounded-[24px] bg-[linear-gradient(145deg,#3d6ab0_0%,#1e3a6e_100%)] p-8 text-white shadow-[0_24px_80px_rgba(30,58,110,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]">
