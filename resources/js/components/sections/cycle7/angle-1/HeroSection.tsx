@@ -21,26 +21,13 @@ export default memo(function HeroSection() {
     return (
         <section
             id="hero"
-            className="relative overflow-hidden"
-            style={{
-                background: 'linear-gradient(160deg, #fff 55%, #FFF5F5 100%)',
-            }}
+            className="relative overflow-hidden bg-[linear-gradient(160deg,#fff_55%,#FFF5F5_100%)]"
         >
             <div
-                className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full md:-top-24 md:-right-24"
-                style={{
-                    backgroundColor: '#D70808',
-                    filter: 'blur(120px)',
-                    opacity: 0.07,
-                }}
+                className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#D70808] blur-[120px] opacity-[0.07] md:-top-24 md:-right-24"
             />
             <div
-                className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full md:-bottom-16 md:-left-16"
-                style={{
-                    backgroundColor: '#151515',
-                    filter: 'blur(100px)',
-                    opacity: 0.05,
-                }}
+                className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full bg-[#151515] blur-[100px] opacity-[0.05] md:-bottom-16 md:-left-16"
             />
 
             <div className="mx-auto max-w-6xl px-4 pt-10 pb-14 sm:px-6 lg:px-8">
@@ -50,12 +37,7 @@ export default memo(function HeroSection() {
                         {/* a. Badges */}
                         <div className="flex flex-wrap gap-2">
                             <div
-                                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-wide"
-                                style={{
-                                    backgroundColor: '#FFFFFF',
-                                    color: '#151515',
-                                    border: '1px solid #D1D5DB',
-                                }}
+                                className="inline-flex items-center gap-2 rounded-full border border-[#D1D5DB] bg-white px-4 py-1.5 text-xs font-bold tracking-wide text-[#151515]"
                             >
                                 <div className="flex items-center gap-1">
                                     {Array.from({ length: 5 }).map((_, i) => (
@@ -95,37 +77,30 @@ export default memo(function HeroSection() {
 
                         {/* b. Headline */}
                         <h1
-                            className="text-3xl leading-tight font-black sm:text-4xl lg:text-[2.75rem]"
-                            style={{
-                                fontFamily: 'var(--font-heading)',
-                                color: '#151515',
-                            }}
+                            className="font-['var(--font-heading)'] text-3xl leading-tight font-black text-[#151515] sm:text-4xl lg:text-[2.75rem]"
                         >
                             <span className="block mb-2">Serius Soal Beasiswa?</span>
                             Capai{' '}
                             <span className="relative inline-block whitespace-nowrap">
                                 <span className="relative z-10">TOEFL 500+ dalam</span>
                                 <span
-                                    className="absolute bottom-1 left-0 -z-10 h-3 sm:h-4 w-full"
-                                    style={{ backgroundColor: '#FFD700' }}
+                                    className="absolute bottom-1 left-0 z-0 h-3 w-full bg-[#FFD700] sm:h-4"
                                 />
                             </span>{' '}
                             <br className="hidden sm:block" />
                             <span className="relative inline-block whitespace-nowrap sm:mt-2">
                                 <span className="relative z-10">15 Hari Buat Submission</span>
                                 <span
-                                    className="absolute bottom-1 left-0 -z-10 h-3 sm:h-4 w-full"
-                                    style={{ backgroundColor: '#FFD700' }}
+                                    className="absolute bottom-1 left-0 z-0 h-3 w-full bg-[#FFD700] sm:h-4"
                                 />
                             </span>
                         </h1>
 
                         {/* c. Sub-copy */}
                         <p
-                            className="text-base leading-relaxed"
-                            style={{ color: '#3d3d3d' }}
+                            className="text-base leading-relaxed text-[#3d3d3d]"
                         >
-                            Persiapkan <strong style={{ color: '#151515' }}>dari sekarang</strong> dengan strategi <strong style={{ color: '#151515' }}>belajar 1 jam sehari</strong> yang telah membantu <strong style={{ color: '#151515' }}>45.000+ alumni</strong> meraih <strong style={{ color: '#151515' }}>beasiswa impian</strong> mereka.
+                            Persiapkan <strong className="text-[#151515]">dari sekarang</strong> dengan strategi <strong className="text-[#151515]">belajar 1 jam sehari</strong> yang telah membantu <strong className="text-[#151515]">45.000+ alumni</strong> meraih <strong className="text-[#151515]">beasiswa impian</strong> mereka.
                         </p>
 
                         {/* d. Trust badges */}
@@ -136,11 +111,7 @@ export default memo(function HeroSection() {
                             ].map((b) => (
                                 <span
                                     key={b}
-                                    className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold"
-                                    style={{
-                                        backgroundColor: '#F3F4F6',
-                                        color: '#374151',
-                                    }}
+                                    className="inline-flex items-center gap-1 rounded-full bg-[#F3F4F6] px-3 py-1.5 text-xs font-semibold text-[#374151]"
                                 >
                                     ✓ {b}
                                 </span>
@@ -169,7 +140,7 @@ export default memo(function HeroSection() {
                                 variant="outline"
                                 size="md"
                                 fullWidth
-                                className="sm:w-auto border-[#E60000] text-[#151515] bg-white hover:bg-gray-50"
+                                className="sm:w-auto border-[#E60000] bg-white text-[#151515] hover:bg-gray-50"
                                 onClick={() =>
                                     trackCTA(
                                         'hero_secondary',
@@ -190,13 +161,7 @@ export default memo(function HeroSection() {
                         <div className="w-full max-w-[360px]">
                             <div className="relative">
                                 <div
-                                    className="rounded-3xl p-8 text-white"
-                                    style={{
-                                        background:
-                                            'linear-gradient(145deg, #3d6ab0 0%, #1e3a6e 100%)',
-                                        boxShadow:
-                                            '0 24px 80px rgba(30,58,110,0.45), inset 0 1px 0 rgba(255,255,255,0.15)',
-                                    }}
+                                    className="rounded-3xl bg-[linear-gradient(145deg,#3d6ab0_0%,#1e3a6e_100%)] p-8 text-white shadow-[0_24px_80px_rgba(30,58,110,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]"
                                 >
                                     <p className="mb-2 text-sm font-semibold opacity-75">
                                         Rata-rata skor TOEFL alumni kami menuju
@@ -204,19 +169,13 @@ export default memo(function HeroSection() {
                                     </p>
                                     <div className="mb-2 flex items-end gap-3">
                                         <p
-                                            className="text-6xl font-black"
-                                            style={{
-                                                fontFamily:
-                                                    'var(--font-heading)',
-                                                color: '#F59E0B',
-                                            }}
+                                            className="font-['var(--font-heading)'] text-6xl font-black text-[#F59E0B]"
                                         >
                                             600
                                         </p>
                                         <div className="pb-1">
                                             <p
-                                                className="text-sm font-black"
-                                                style={{ color: '#4ade80' }}
+                                                className="text-sm font-black text-[#4ade80]"
                                             >
                                                 +100 poin
                                             </p>
@@ -226,28 +185,16 @@ export default memo(function HeroSection() {
                                         </div>
                                     </div>
                                     <div
-                                        className="mb-6 h-px"
-                                        style={{
-                                            backgroundColor:
-                                                'rgba(255,255,255,0.15)',
-                                        }}
+                                        className="mb-6 h-px bg-[rgba(255,255,255,0.15)]"
                                     />
                                     <div className="grid grid-cols-2 gap-3">
                                         {stats.map((s) => (
                                             <div
                                                 key={s.label}
-                                                className="rounded-2xl p-3 text-center"
-                                                style={{
-                                                    backgroundColor:
-                                                        'rgba(255,255,255,0.1)',
-                                                }}
+                                                className="rounded-2xl bg-[rgba(255,255,255,0.1)] p-3 text-center"
                                             >
                                                 <p
-                                                    className="mb-0.5 text-xl font-black"
-                                                    style={{
-                                                        fontFamily:
-                                                            'var(--font-heading)',
-                                                    }}
+                                                    className="font-['var(--font-heading)'] mb-0.5 text-xl font-black"
                                                 >
                                                     {s.value}
                                                 </p>
@@ -260,30 +207,18 @@ export default memo(function HeroSection() {
                                 </div>
 
                                 <div
-                                    className="absolute -bottom-5 -left-4 flex max-w-[220px] items-center gap-3 rounded-2xl bg-white px-4 py-3"
-                                    style={{
-                                        boxShadow:
-                                            '0 8px 32px rgba(0,0,0,0.14)',
-                                    }}
+                                    className="absolute -bottom-5 -left-4 flex max-w-[220px] items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.14)]"
                                 >
                                     <span className="text-2xl">🎓</span>
                                     <p
-                                        className="text-xs leading-snug font-black"
-                                        style={{
-                                            color: '#151515',
-                                            fontFamily: 'var(--font-heading)',
-                                        }}
+                                        className="font-['var(--font-heading)'] text-xs leading-snug font-black text-[#151515]"
                                     >
                                         Alumni kami tersebar di seluruh dunia
                                     </p>
                                 </div>
 
                                 <div
-                                    className="absolute -top-4 -right-4 flex items-center gap-1.5 rounded-2xl bg-white px-3 py-2"
-                                    style={{
-                                        boxShadow:
-                                            '0 8px 32px rgba(0,0,0,0.12)',
-                                    }}
+                                    className="absolute -top-4 -right-4 flex items-center gap-1.5 rounded-2xl bg-white px-3 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
                                 >
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <Star
@@ -294,8 +229,7 @@ export default memo(function HeroSection() {
                                         />
                                     ))}
                                     <span
-                                        className="ml-1 text-xs font-black"
-                                        style={{ color: '#151515' }}
+                                        className="ml-1 text-xs font-black text-[#151515]"
                                     >
                                         4.9
                                     </span>
@@ -309,8 +243,7 @@ export default memo(function HeroSection() {
             <div className="flex justify-center pb-8 pt-4">
                 <a 
                     href="#pricing"
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
-                    style={{ border: '1px solid #E5E7EB' }}
+                    className="flex h-12 w-12 animate-bounce cursor-pointer items-center justify-center rounded-full border border-[#E5E7EB] bg-slate-100 transition-colors hover:bg-slate-200"
                     onClick={(e) => {
                         e.preventDefault();
                         document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
@@ -320,12 +253,11 @@ export default memo(function HeroSection() {
                 </a>
             </div>
 
-            <div style={{ lineHeight: 0, marginBottom: '-1px' }}>
+            <div className="-mb-[1px] leading-[0]">
                 <svg
                     viewBox="0 0 1440 56"
                     preserveAspectRatio="none"
-                    className="h-8 w-full md:h-14"
-                    style={{ display: 'block' }}
+                    className="block h-8 w-full md:h-14"
                 >
                     <path
                         d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z"

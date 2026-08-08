@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CheckCircle2, Globe, Lock, Shield, Star, XCircle } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
@@ -137,30 +136,26 @@ function PayButton({
     onClick?: () => void;
     green?: boolean;
 }) {
-    const bg = green ? '#16a34a' : '#D70808';
-    const shadow = green
-        ? '0 6px 24px rgba(22,163,74,0.4)'
-        : '0 6px 24px rgba(215,8,8,0.4)';
-    const hover = green
+    const bgClass = green ? 'bg-[#16a34a]' : 'bg-[#D70808]';
+    const shadowClass = green
+        ? 'shadow-[0_6px_24px_rgba(22,163,74,0.4)]'
+        : 'shadow-[0_6px_24px_rgba(215,8,8,0.4)]';
+    const hoverClass = green
         ? 'hover:shadow-[0_12px_32px_rgba(22,163,74,0.5)]'
         : 'hover:shadow-[0_12px_32px_rgba(215,8,8,0.5)]';
 
     return (
-        <div className="flex flex-col gap-1.5 mt-auto">
+        <div className="mt-auto flex flex-col gap-1.5">
             <a
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onClick}
-                className={`inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 sm:text-base ${hover} active:translate-y-0 active:shadow-none`}
-                style={{ backgroundColor: bg, boxShadow: shadow }}
+                className={`inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 sm:text-base active:translate-y-0 active:shadow-none ${bgClass} ${shadowClass} ${hoverClass}`}
             >
                 {label}
             </a>
-            <p
-                className="flex items-center justify-center gap-1 text-center text-[11px]"
-                style={{ color: '#9ca3af' }}
-            >
+            <p className="flex items-center justify-center gap-1 text-center text-[11px] text-[#9ca3af]">
                 <Lock size={10} strokeWidth={2.5} /> Pembayaran aman &
                 terenkripsi
             </p>
@@ -171,20 +166,9 @@ function PayButton({
 function OrDivider() {
     return (
         <div className="my-3 flex items-center gap-3">
-            <div
-                className="h-px flex-1"
-                style={{ backgroundColor: '#e5e7eb' }}
-            />
-            <span
-                className="text-xs font-semibold"
-                style={{ color: '#9ca3af' }}
-            >
-                atau
-            </span>
-            <div
-                className="h-px flex-1"
-                style={{ backgroundColor: '#e5e7eb' }}
-            />
+            <div className="h-px flex-1 bg-[#e5e7eb]" />
+            <span className="text-xs font-semibold text-[#9ca3af]">atau</span>
+            <div className="h-px flex-1 bg-[#e5e7eb]" />
         </div>
     );
 }
@@ -193,62 +177,30 @@ function WaButton({ onClick, label }: { onClick: () => void; label: string }) {
     return (
         <button
             onClick={onClick}
-            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
-            style={{
-                backgroundColor: 'transparent',
-                border: '1.5px solid #25D366',
-                color: '#16a34a',
-            }}
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-[1.5px] border-[#25D366] bg-transparent px-5 py-3 text-sm font-bold text-[#16a34a] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
         >
             <WhatsAppIcon size={15} color="#25D366" /> {label}
         </button>
     );
 }
 
-// Collapsible feature list component
+// Collapsible logic removed - showing all features unconditionally
 function FeatureList({
     features,
-    collapseOnDesktop,
     isBundling,
 }: {
     features: FeatureItem[];
-    collapseOnDesktop: boolean;
     isBundling?: boolean;
 }) {
-    const [expanded, setExpanded] = useState(false);
-
-    // On side cards, hiddenClass will hide items on mobile, but show on desktop (md:flex).
-    // On middle card, hiddenClass will hide items on all screens.
-    const hiddenClass = collapseOnDesktop ? 'hidden' : 'hidden md:flex';
-    const buttonHiddenClass = collapseOnDesktop ? 'flex' : 'flex md:hidden';
-
-    // Set color to Green for Bundling, Red for the others
-    const buttonColor = isBundling ? '#16a34a' : '#D70808';
-
     return (
-        // REMOVED `flex-1` here so it doesn't create a huge gap below the button!
         <div className="mb-3 flex flex-col">
             <ul className="flex flex-col gap-2">
                 {features.map((f, i) => {
-                    const isHidden = !expanded && i >= 3;
-
-                    let finalClass = '';
-                    if (isHidden) {
-                        finalClass = collapseOnDesktop
-                            ? 'hidden'
-                            : f.type === 'label'
-                              ? 'hidden md:block'
-                              : 'hidden md:flex';
-                    } else {
-                        finalClass = f.type === 'label' ? 'block' : 'flex';
-                    }
-
                     if (f.type === 'label') {
                         return (
                             <li
                                 key={i}
-                                className={`mt-2 text-[10px] font-black tracking-widest uppercase ${finalClass}`}
-                                style={{ color: isBundling ? '#16a34a' : '#D70808' }}
+                                className={`mt-2 block text-[10px] font-black tracking-widest uppercase ${isBundling ? 'text-[#16a34a]' : 'text-[#D70808]'}`}
                             >
                                 {f.text}
                             </li>
@@ -259,8 +211,7 @@ function FeatureList({
                         return (
                             <li
                                 key={i}
-                                className={`items-start gap-2 text-xs md:text-sm ${finalClass} ${f.bold ? 'font-bold' : ''}`}
-                                style={{ color: f.bold ? '#151515' : '#3d3d3d' }}
+                                className={`flex items-start gap-2 text-xs md:text-sm ${f.bold ? 'font-bold text-[#151515]' : 'text-[#3d3d3d]'}`}
                             >
                                 <Globe size={14} className="mt-0.5 shrink-0" color="#3b82f6" />
                                 <span>{f.text}</span>
@@ -272,8 +223,7 @@ function FeatureList({
                         return (
                             <li
                                 key={i}
-                                className={`mt-2 items-start gap-2 border-t border-gray-100 pt-3 text-xs md:text-sm ${finalClass} ${f.bold ? 'font-bold' : ''}`}
-                                style={{ color: '#9ca3af' }}
+                                className={`mt-2 flex items-start gap-2 border-t border-gray-100 pt-3 text-xs md:text-sm text-[#9ca3af] ${f.bold ? 'font-bold' : ''}`}
                             >
                                 <XCircle size={14} className="mt-0.5 shrink-0" color="#d1d5db" />
                                 <span>{f.text}</span>
@@ -284,8 +234,7 @@ function FeatureList({
                     return (
                         <li
                             key={i}
-                            className={`items-start gap-2 text-xs md:text-sm ${finalClass} ${f.bold ? 'font-bold' : ''}`}
-                            style={{ color: f.bold ? '#151515' : '#3d3d3d' }}
+                            className={`flex items-start gap-2 text-xs md:text-sm ${f.bold ? 'font-bold text-[#151515]' : 'text-[#3d3d3d]'}`}
                         >
                             <CheckCircle2 size={14} className="mt-0.5 shrink-0" color="#16a34a" />
                             <span>{f.text}</span>
@@ -293,28 +242,6 @@ function FeatureList({
                     );
                 })}
             </ul>
-
-            {/* Show "Lihat semua fitur" if NOT expanded */}
-            {!expanded && features.length > 3 && (
-                <button
-                    onClick={() => setExpanded(true)}
-                    className={`mt-2 items-center gap-1 text-left text-xs font-bold hover:underline ${buttonHiddenClass}`}
-                    style={{ color: buttonColor }}
-                >
-                    Lihat semua fitur ({features.length - 3}+) ↓
-                </button>
-            )}
-
-            {/* Show "Sembunyikan fitur" if EXPANDED */}
-            {expanded && features.length > 3 && (
-                <button
-                    onClick={() => setExpanded(false)}
-                    className={`mt-2 items-center gap-1 text-left text-xs font-bold hover:underline ${buttonHiddenClass}`}
-                    style={{ color: buttonColor }}
-                >
-                    Sembunyikan fitur ↑
-                </button>
-            )}
         </div>
     );
 }
@@ -416,30 +343,14 @@ export default function PricingSection() {
             >
                 {/* ── Updated Header ── */}
                 <div className="mb-14 text-center">
-                    <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
-                        style={{
-                            backgroundColor: '#FFF0F0',
-                            color: '#D70808',
-                            border: '1px solid #ffb3b3',
-                        }}
-                    >
+                    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-1.5 text-xs font-bold tracking-widest uppercase text-[#D70808]">
                         <span>⏳</span> Mulai dari Sekarang, Bukan Nanti
                     </div>
-                    <h2
-                        className="mb-4 text-3xl font-black md:text-4xl lg:text-5xl"
-                        style={{
-                            fontFamily: 'var(--font-heading)',
-                            color: '#151515',
-                        }}
-                    >
+                    <h2 className="font-['var(--font-heading)'] mb-4 text-3xl font-black text-[#151515] md:text-4xl lg:text-5xl">
                         Persiapkan Sekarang,{' '}
-                        <span style={{ color: '#D70808' }}>Jangan Ditunda</span>
+                        <span className="text-[#D70808]">Jangan Ditunda</span>
                     </h2>
-                    <p
-                        className="mx-auto max-w-2xl text-base leading-relaxed"
-                        style={{ color: '#3d3d3d' }}
-                    >
+                    <p className="mx-auto max-w-2xl text-base leading-relaxed text-[#3d3d3d]">
                         Semakin cepat kamu mulai, semakin besar peluang kamu diterima
                         beasiswa karena skor 500+ tercapai sebelum deadline submission.
                     </p>
@@ -447,91 +358,45 @@ export default function PricingSection() {
 
                 <div className="mx-auto mb-14 grid max-w-6xl gap-6 md:grid-cols-3">
                     {/* ── Starter ── */}
-                    <div
-                        className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 md:p-7 transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]"
-                        style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
-                    >
+                    <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
                         <div className="mb-1 flex items-start justify-between">
                             <div>
-                                <p
-                                    className="mb-1 text-[10px] font-bold tracking-widest uppercase"
-                                    style={{ color: '#9ca3af' }}
-                                >
+                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#9ca3af]">
                                     Paket
                                 </p>
-                                <h3
-                                    className="text-2xl font-black"
-                                    style={{
-                                        fontFamily: 'var(--font-heading)',
-                                        color: '#151515',
-                                    }}
-                                >
+                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
                                     Starter
                                 </h3>
                             </div>
-                            <span
-                                className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold"
-                                style={{
-                                    backgroundColor: '#F0FDF4',
-                                    color: '#16a34a',
-                                }}
-                            >
+                            <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        {/* CHANGED: text-xs -> text-sm */}
-                        <p
-                            className="mb-4 text-sm font-semibold"
-                            style={{ color: '#9ca3af' }}
-                        >
+                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
                             Target Skor:{' '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#16a34a' }}
-                            >
+                            <span className="font-black text-[#16a34a]">
                                 450+
                             </span>
                             {' - '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#151515' }}
-                            >
+                            <span className="font-black text-[#151515]">
                                 10 Hari (2 Minggu)
                             </span>
                         </p>
-                        <div
-                            className="mb-5 rounded-2xl p-4"
-                            style={{
-                                backgroundColor: '#FFF0F0',
-                                border: '1.5px solid #ffb3b3',
-                            }}
-                        >
+                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-sm font-semibold line-through"
-                                    style={{ color: '#9ca3af' }}
-                                >
+                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
                                     Rp 1.000.000
                                 </span>
-                                <span
-                                    className="rounded-full px-2 py-0.5 text-[10px] font-black text-white"
-                                    style={{ backgroundColor: '#D70808' }}
-                                >
+                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     HEMAT 75%
                                 </span>
                             </div>
-                            <p
-                                className="text-3xl font-black"
-                                style={{
-                                    fontFamily: 'var(--font-heading)',
-                                    color: '#D70808',
-                                }}
-                            >
+                            <p className="font-['var(--font-heading)'] text-3xl font-black text-[#D70808]">
                                 Rp 250.000
                             </p>
                         </div>
 
-                        <FeatureList features={starterFeatures} collapseOnDesktop={false} />
+                        <FeatureList features={starterFeatures} />
 
                         <PayButton
                             href={PG_STARTER}
@@ -551,150 +416,70 @@ export default function PricingSection() {
                     </div>
 
                     {/* ── Bundling ── HIGHLIGHTED */}
-                    <div
-                        className="relative flex flex-col overflow-hidden rounded-3xl p-6 md:p-7"
-                        style={{
-                            border: '2px solid #16a34a',
-                            boxShadow:
-                                '0 16px 56px rgba(22,163,74,0.2), 0 0 0 1px rgba(22,163,74,0.08)',
-                            background:
-                                'linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%)',
-                        }}
-                    >
-                        <div
-                            className="absolute top-0 right-0 rounded-bl-2xl px-4 py-2 text-[10px] font-black text-white"
-                            style={{
-                                backgroundColor: '#16a34a',
-                                fontFamily: 'var(--font-heading)',
-                            }}
-                        >
+                    <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#16a34a] bg-[linear-gradient(165deg,#ffffff_0%,#f0fdf4_100%)] p-6 shadow-[0_16px_56px_rgba(22,163,74,0.2),0_0_0_1px_rgba(22,163,74,0.08)] md:p-7">
+                        <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#16a34a] px-4 py-2 text-[10px] font-black text-white">
                             ⭐ PALING HEMAT
                         </div>
                         <div className="mt-4 mb-1 flex items-start justify-between">
                             <div>
-                                <p
-                                    className="mb-1 text-[10px] font-bold tracking-widest uppercase"
-                                    style={{ color: '#D70808' }}
-                                >
+                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#D70808]">
                                     Paket
                                 </p>
-                                <h3
-                                    className="text-2xl font-black"
-                                    style={{
-                                        fontFamily: 'var(--font-heading)',
-                                        color: '#151515',
-                                    }}
-                                >
+                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
                                     Bundling
                                 </h3>
-                                <p
-                                    className="mt-0.5 text-[11px] font-semibold"
-                                    style={{ color: '#D70808' }}
-                                >
+                                <p className="mt-0.5 text-[11px] font-semibold text-[#D70808]">
                                     Starter + Intermediate
                                 </p>
                             </div>
-                            <span
-                                className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold"
-                                style={{
-                                    backgroundColor: '#FFF0F0',
-                                    color: '#D70808',
-                                }}
-                            >
+                            <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-2.5 py-1 text-[10px] font-semibold text-[#D70808]">
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        {/* CHANGED: text-xs -> text-sm */}
-                        <p
-                            className="mb-4 text-sm font-semibold"
-                            style={{ color: '#9ca3af' }}
-                        >
+                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
                             Target Skor:{' '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#D70808' }}
-                            >
+                            <span className="font-black text-[#D70808]">
                                 500+
                             </span>
                             {' - '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#151515' }}
-                            >
+                            <span className="font-black text-[#151515]">
                                 25 Hari Total
                             </span>
                         </p>
-                        <div
-                            className="mb-5 rounded-2xl p-4"
-                            style={{
-                                backgroundColor: '#FFF0F0',
-                                border: '1.5px solid #ffb3b3',
-                            }}
-                        >
+                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-sm font-semibold line-through"
-                                    style={{ color: '#9ca3af' }}
-                                >
+                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
                                     Rp 1.875.000
                                 </span>
-                                <span
-                                    className="rounded-full px-2 py-0.5 text-[10px] font-black text-white"
-                                    style={{ backgroundColor: '#D70808' }}
-                                >
+                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     DISKON 80%
                                 </span>
                             </div>
-                            <p
-                                className="mb-1 text-3xl font-black"
-                                style={{
-                                    fontFamily: 'var(--font-heading)',
-                                    color: '#D70808',
-                                }}
-                            >
+                            <p className="font-['var(--font-heading)'] mb-1 text-3xl font-black text-[#D70808]">
                                 Rp 375.000
                             </p>
-                            <p
-                                className="text-[11px] font-semibold"
-                                style={{ color: '#D70808' }}
-                            >
+                            <p className="text-[11px] font-semibold text-[#D70808]">
                                 Hemat Rp 1.500.000 dari harga normal!
                             </p>
                         </div>
 
-                        <FeatureList features={bundlingFeatures} collapseOnDesktop={true} isBundling={true} />
+                        <FeatureList features={bundlingFeatures} isBundling={true} />
 
                         {/* Guarantees inside Bundling */}
                         <div className="mb-5 flex flex-col gap-3">
                             {guarantees.map(({ Icon, title, desc }) => (
                                 <div
                                     key={title}
-                                    className="flex items-start gap-3 rounded-2xl p-4"
-                                    style={{
-                                        backgroundColor: '#F9FAFB',
-                                        border: '1px solid #f3f4f6',
-                                    }}
+                                    className="flex items-start gap-3 rounded-2xl border border-[#f3f4f6] bg-[#F9FAFB] p-4"
                                 >
-                                    <div
-                                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                                        style={{ backgroundColor: '#FEF3C7' }}
-                                    >
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FEF3C7]">
                                         <Icon size={18} color="#D97706" fill="#D97706" />
                                     </div>
                                     <div>
-                                        <p
-                                            className="mb-1 text-[13px] font-black leading-tight"
-                                            style={{
-                                                fontFamily: 'var(--font-heading)',
-                                                color: '#151515',
-                                            }}
-                                        >
+                                        <p className="font-['var(--font-heading)'] mb-1 text-[13px] font-black leading-tight text-[#151515]">
                                             {title}
                                         </p>
-                                        <p
-                                            className="text-[11px] leading-relaxed"
-                                            style={{ color: '#6B7280' }}
-                                        >
+                                        <p className="text-[11px] leading-relaxed text-[#6B7280]">
                                             {desc}
                                         </p>
                                     </div>
@@ -710,10 +495,7 @@ export default function PricingSection() {
                             }
                             green
                         />
-                        <p
-                            className="mt-2 text-center text-[10px]"
-                            style={{ color: '#D70808', fontWeight: 600 }}
-                        >
+                        <p className="mt-2 text-center text-[10px] font-[600] text-[#D70808]">
                             * Centang opsi Bundle saat checkout
                         </p>
                         <OrDivider />
@@ -729,92 +511,46 @@ export default function PricingSection() {
                     </div>
 
                     {/* ── Intermediate ── */}
-                    <div
-                        className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 md:p-7 transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]"
-                        style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
-                    >
+                    <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
                         <div className="mb-1 flex items-start justify-between">
                             <div>
-                                <p
-                                    className="mb-1 text-[10px] font-bold tracking-widest uppercase"
-                                    style={{ color: '#9ca3af' }}
-                                >
+                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#9ca3af]">
                                     Paket
                                 </p>
-                                <h3
-                                    className="text-2xl font-black"
-                                    style={{
-                                        fontFamily: 'var(--font-heading)',
-                                        color: '#151515',
-                                    }}
-                                >
+                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
                                     Intermediate
                                 </h3>
                             </div>
-                            <span
-                                className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold"
-                                style={{
-                                    backgroundColor: '#F0FDF4',
-                                    color: '#16a34a',
-                                }}
-                            >
+                            <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        {/* CHANGED: text-xs -> text-sm */}
-                        <p
-                            className="mb-4 text-sm font-semibold"
-                            style={{ color: '#9ca3af' }}
-                        >
+                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
                             Target Skor:{' '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#16a34a' }}
-                            >
+                            <span className="font-black text-[#16a34a]">
                                 500+
                             </span>
                             {' - '}
-                            <span
-                                className="font-black"
-                                style={{ color: '#151515' }}
-                            >
+                            <span className="font-black text-[#151515]">
                                 15 Hari
                             </span>
                             {' - Min. 430'}
                         </p>
-                        <div
-                            className="mb-5 rounded-2xl p-4"
-                            style={{
-                                backgroundColor: '#FFF0F0',
-                                border: '1.5px solid #ffb3b3',
-                            }}
-                        >
+                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-sm font-semibold line-through"
-                                    style={{ color: '#9ca3af' }}
-                                >
+                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
                                     Rp 1.400.000
                                 </span>
-                                <span
-                                    className="rounded-full px-2 py-0.5 text-[10px] font-black text-white"
-                                    style={{ backgroundColor: '#D70808' }}
-                                >
+                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     DISKON 75%
                                 </span>
                             </div>
-                            <p
-                                className="text-3xl font-black"
-                                style={{
-                                    fontFamily: 'var(--font-heading)',
-                                    color: '#D70808',
-                                }}
-                            >
+                            <p className="font-['var(--font-heading)'] text-3xl font-black text-[#D70808]">
                                 Rp 350.000
                             </p>
                         </div>
 
-                        <FeatureList features={intermediateFeatures} collapseOnDesktop={false} />
+                        <FeatureList features={intermediateFeatures} />
 
                         <PayButton
                             href={PG_INTER}
@@ -837,44 +573,23 @@ export default function PricingSection() {
                 </div>
 
                 {/* Legalitas */}
-                <div
-                    className="mx-auto mb-8 max-w-2xl rounded-2xl px-6 py-4"
-                    style={{
-                        backgroundColor: '#F3F3F3',
-                        border: '1px solid #e5e7eb',
-                    }}
-                >
-                    <p
-                        className="mb-3 text-xs font-black tracking-widest uppercase"
-                        style={{ color: '#9ca3af' }}
-                    >
+                <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
+                    <p className="mb-3 text-xs font-black tracking-widest uppercase text-[#9ca3af]">
                         Legalitas Resmi
                     </p>
                     <div className="flex flex-col gap-1.5">
-                        <span
-                            className="text-xs font-semibold"
-                            style={{ color: '#151515' }}
-                        >
+                        <span className="text-xs font-semibold text-[#151515]">
                             ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun
                             2020
                         </span>
-                        <span
-                            className="text-xs font-semibold"
-                            style={{ color: '#151515' }}
-                        >
+                        <span className="text-xs font-semibold text-[#151515]">
                             ✓ SK Izin Operasional LKP
                             503/20177/LKP/DPM-PTSP/8/2024
                         </span>
-                        <span
-                            className="text-xs font-semibold"
-                            style={{ color: '#151515' }}
-                        >
+                        <span className="text-xs font-semibold text-[#151515]">
                             ✓ NPSN Nomor K9998700
                         </span>
-                        <span
-                            className="text-xs font-semibold"
-                            style={{ color: '#151515' }}
-                        >
+                        <span className="text-xs font-semibold text-[#151515]">
                             ✓ Bekerja sama dengan IIEF Jakarta
                         </span>
                     </div>
@@ -882,8 +597,7 @@ export default function PricingSection() {
                         href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-block text-xs font-semibold hover:underline"
-                        style={{ color: '#D70808' }}
+                        className="mt-3 inline-block text-xs font-semibold text-[#D70808] hover:underline"
                     >
                         Info Detail Legalitas →
                     </a>
