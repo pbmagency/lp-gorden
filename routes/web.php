@@ -12,6 +12,8 @@ Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');
 Route::inertia('/c5-hero', 'cycle5/hero-test')->name('cycle5.hero.test');
 Route::inertia('/c6-angle', 'cycle6/angle-1')->name('cycle6.angle.v1');
 Route::inertia('/c6-angle-2', 'cycle6/angle-2')->name('cycle6.angle.v2');
+Route::inertia('/c7-angle-1', 'cycle7/angle-1')->name('cycle7.angle.v1');
+Route::inertia('/c7-angle-2', 'cycle7/angle-2')->name('cycle7.angle.v2');
 Route::inertia('/bio-ig-toefl-hack', 'cycle6/angle-1')->name('home2');
 Route::inertia('/toefl-hack', 'cycle6/angle-1')->name('home3');
 
