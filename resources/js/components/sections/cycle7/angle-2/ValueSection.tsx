@@ -219,29 +219,6 @@ export default function ValueSection() {
                                     </div>
                                 </div>
 
-                {/* 7. CTA Buttons */}
-                <div className="text-center">
-                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                        <LpButton
-                            href="#pricing"
-                            size="md"
-                            className="rounded-[16px] bg-[#D70808] text-white shadow-[0_4px_20px_rgba(215,8,8,0.35)] hover:bg-[#b30606]"
-                            onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
-                        >
-                            Gabung Sekarang →
-                        </LpButton>
-                        <LpButton
-                            href="#testimonials"
-                            variant="outline"
-                            size="md"
-                            className="rounded-[16px] border-2 border-[#D70808] bg-transparent text-[#151515] hover:bg-[#FFF0F0]"
-                            onClick={() => trackCTA('value_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
-                        >
-                            Lihat Bukti Alumni →
-                        </LpButton>
-                    </div>
-                </div>
-
             </div>
         </SectionWrapper>
     );

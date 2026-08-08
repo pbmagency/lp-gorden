@@ -121,11 +121,13 @@ export default memo(function HeroSection() {
                                 >
                                     Mulai Persiapan Beasiswa →
                                 </LpButton>
+                                
+                                {/* 👇 Changed variant="outline" to variant="ghost" to fix the red color override 👇 */}
                                 <LpButton
                                     href="#testimonials"
-                                    variant="outline"
+                                    variant="ghost"
                                     size="md"
-                                    className="rounded-[16px] border-2 border-[#151515] bg-transparent px-7 py-3.5 text-[16px] font-bold text-[#151515]"
+                                    className="rounded-[16px] px-7 py-3.5 text-[16px] font-bold"
                                     onClick={() =>
                                         trackCTA(
                                             'hero_secondary',
