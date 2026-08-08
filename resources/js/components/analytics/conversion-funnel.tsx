@@ -6,7 +6,7 @@ interface FunnelStage {
     percentage: number;
     transition_percentage?: number;
     from_stage?: string | null;
-    branch?: 'main' | 'checkout' | 'lead';
+    branch?: 'main' | 'checkout' | 'lead' | 'total';
 }
 
 interface ConversionFunnelProps {
@@ -17,7 +17,7 @@ interface ConversionFunnelProps {
 interface StageBarProps {
     stage: FunnelStage;
     maxCount: number;
-    accent?: 'default' | 'checkout' | 'lead';
+    accent?: 'default' | 'checkout' | 'lead' | 'total';
 }
 
 function StageBar({ stage, maxCount, accent = 'default' }: StageBarProps) {
@@ -56,6 +56,8 @@ function StageBar({ stage, maxCount, accent = 'default' }: StageBarProps) {
                             'bg-gradient-to-r from-blue-500/60 via-blue-500 to-blue-400',
                         accent === 'lead' &&
                             'bg-gradient-to-r from-emerald-500/60 via-emerald-500 to-emerald-400',
+                        accent === 'total' &&
+                            'bg-gradient-to-r from-violet-500/60 via-violet-500 to-fuchsia-400',
                     )}
                     style={{ width: `${width}%` }}
                 />
@@ -71,6 +73,7 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
     );
     const checkoutStages = data.filter((stage) => stage.branch === 'checkout');
     const leadStages = data.filter((stage) => stage.branch === 'lead');
+    const totalStages = data.filter((stage) => stage.branch === 'total');
 
     return (
         <div
@@ -85,8 +88,8 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
                     Conversion Journey
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                    Checkout and WhatsApp are independent branches after CTA
-                    intent
+                    Direct Checkout and WhatsApp are independent lead branches
+                    after CTA intent
                 </p>
             </div>
 
@@ -113,11 +116,10 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
                 <div className="space-y-4 rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
                     <div>
                         <h4 className="font-semibold text-blue-400">
-                            External Payment Gateway
+                            Direct Checkout
                         </h4>
                         <p className="text-xs text-muted-foreground">
-                            Payment remains empty until a verified callback is
-                            available.
+                            Redirects directly to an external checkout page.
                         </p>
                     </div>
                     {checkoutStages.map((stage) => (
@@ -133,10 +135,11 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
                 <div className="space-y-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
                     <div>
                         <h4 className="font-semibold text-emerald-400">
-                            WhatsApp Inquiry
+                            WhatsApp Leads
                         </h4>
                         <p className="text-xs text-muted-foreground">
-                            Lead proxy measured independently from checkout.
+                            Leads from pricing, floating, and other WhatsApp
+                            CTAs.
                         </p>
                     </div>
                     {leadStages.map((stage) => (
@@ -148,6 +151,25 @@ export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
                         />
                     ))}
                 </div>
+            </div>
+
+            <div className="mt-4 space-y-4 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4">
+                <div>
+                    <h4 className="font-semibold text-violet-400">
+                        Total Leads
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                        Direct Checkout + WhatsApp leads.
+                    </p>
+                </div>
+                {totalStages.map((stage) => (
+                    <StageBar
+                        key={stage.stage}
+                        stage={stage}
+                        maxCount={maxCount}
+                        accent="total"
+                    />
+                ))}
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ import UrgencyBanner from '@/components/sections/UrgencyBanner';
 
 // Below-the-fold — lazy load
 const AgitationSection = lazy(
-    () => import('@/components/sections/cycle2-test-problem/AgitationSection2'),
+    () => import('@/components/sections/AgitationSection'),
 );
 const ValueSection = lazy(() => import('@/components/sections/ValueSection'));
 const SocialProofSection = lazy(

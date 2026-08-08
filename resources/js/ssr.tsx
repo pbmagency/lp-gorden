@@ -1,7 +1,8 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
-import { type ComponentType } from 'react';
+import type { ComponentType } from 'react';
 import ReactDOMServer from 'react-dom/server';
+import AppProviders from '@/components/app-providers';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -31,10 +32,15 @@ createServer((page) =>
         },
         resolve: (name) => {
             const pages = import.meta.glob('./pages/**/*.tsx', { eager: true });
+
             return pages[`./pages/${name}.tsx`] as { default: ComponentType };
         },
         setup({ App, props }) {
-            return <App {...props} />;
+            return (
+                <AppProviders>
+                    <App {...props} />
+                </AppProviders>
+            );
         },
     }),
 );

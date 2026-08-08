@@ -19,7 +19,7 @@ class AbTestingService
             $startDate,
             $endDate,
             $sourceFilter,
-            ['visit', 'conversion', 'payment', 'cta_click', 'initiate_checkout']
+            ['visit', 'conversion', 'cta_click', 'initiate_checkout']
         );
 
         if (empty($counts)) {
@@ -27,42 +27,34 @@ class AbTestingService
         }
 
         $bouncedBySource = $this->batchBouncedCounts($startDate, $endDate, $sourceFilter);
-        $revenueBySource = $this->batchRevenue($startDate, $endDate, $sourceFilter);
+        $checkoutCounts = $this->batchCheckoutCounts($startDate, $endDate, $sourceFilter);
 
         $matrix = [];
         foreach ($counts as $source => $typeCounts) {
             $visits = $typeCounts['visit'] ?? 0;
-            $conversions = $typeCounts['conversion'] ?? 0;
-            $initiateCheckouts = $typeCounts['initiate_checkout'] ?? 0;
-            $payments = $this->metrics->capabilities()['payment']
-                ? ($typeCounts['payment'] ?? 0)
-                : 0;
+            $whatsAppLeads = $typeCounts['conversion'] ?? 0;
+            $directCheckouts = $checkoutCounts[$source] ?? 0;
+            $totalLeads = $directCheckouts + $whatsAppLeads;
             $ctaClicks = $typeCounts['cta_click'] ?? 0;
 
             $bounced = $bouncedBySource[$source] ?? 0;
-            $revenue = $this->metrics->capabilities()['revenue']
-                ? (float) ($revenueBySource[$source] ?? 0)
-                : 0;
 
             $matrix[] = [
                 'landing_source' => $source,
                 'visits' => $visits,
                 'bounce_rate' => round($this->safePct($bounced, $visits), 2),
                 'intent_rate' => round($this->safePct($ctaClicks, $visits), 2),
-                'initiate_checkout_rate' => round($this->safePct($initiateCheckouts, $visits), 2),
-                'lead_cr' => round($this->safePct($conversions, $visits), 2),
-                'strict_cr' => round($this->safePct($payments, $visits), 2),
-                'rpv' => $visits > 0 ? round($revenue / $visits, 2) : 0,
-                'revenue' => $revenue,
-                'initiate_checkouts' => $initiateCheckouts,
-                'leads' => $conversions,
-                'conversions' => $conversions,
-                'payments' => $payments,
+                'direct_checkout_rate' => round($this->safePct($directCheckouts, $visits), 2),
+                'whatsapp_lead_rate' => round($this->safePct($whatsAppLeads, $visits), 2),
+                'total_lead_rate' => round($this->safePct($totalLeads, $visits), 2),
+                'direct_checkouts' => $directCheckouts,
+                'whatsapp_leads' => $whatsAppLeads,
+                'total_leads' => $totalLeads,
                 'cta_clicks' => $ctaClicks,
             ];
         }
 
-        usort($matrix, fn ($a, $b) => $b['lead_cr'] <=> $a['lead_cr']);
+        usort($matrix, fn ($a, $b) => $b['total_lead_rate'] <=> $a['total_lead_rate']);
 
         return $matrix;
     }
@@ -73,7 +65,7 @@ class AbTestingService
             $startDate,
             $endDate,
             $sourceFilter,
-            ['visit', 'cta_click', 'initiate_checkout', 'conversion', 'payment']
+            ['visit', 'cta_click', 'initiate_checkout', 'conversion']
         );
 
         if (empty($counts)) {
@@ -81,16 +73,15 @@ class AbTestingService
         }
 
         $bouncedBySource = $this->batchBouncedCounts($startDate, $endDate, $sourceFilter);
+        $checkoutCounts = $this->batchCheckoutCounts($startDate, $endDate, $sourceFilter);
         $funnel = [];
         foreach ($counts as $source => $typeCounts) {
             $visits = $typeCounts['visit'] ?? 0;
             $engaged = max(0, $visits - ($bouncedBySource[$source] ?? 0));
             $intent = $typeCounts['cta_click'] ?? 0;
-            $conversions = $typeCounts['conversion'] ?? 0;
-            $initiateCheckouts = $typeCounts['initiate_checkout'] ?? 0;
-            $sales = $this->metrics->capabilities()['payment']
-                ? ($typeCounts['payment'] ?? 0)
-                : 0;
+            $whatsAppLeads = $typeCounts['conversion'] ?? 0;
+            $directCheckouts = $checkoutCounts[$source] ?? 0;
+            $totalLeads = $directCheckouts + $whatsAppLeads;
 
             $funnel[] = [
                 'landing_source' => $source,
@@ -98,9 +89,9 @@ class AbTestingService
                     ['stage' => 'Visits',           'count' => $visits,      'percentage' => 100],
                     ['stage' => 'Engaged',           'count' => $engaged,     'percentage' => round($this->safePct($engaged, $visits), 1)],
                     ['stage' => 'Intent',            'count' => $intent,      'percentage' => round($this->safePct($intent, $visits), 1)],
-                    ['stage' => 'Initiate Checkout', 'count' => $initiateCheckouts, 'percentage' => round($this->safePct($initiateCheckouts, $visits), 1)],
-                    ['stage' => 'WhatsApp Leads',       'count' => $conversions, 'percentage' => round($this->safePct($conversions, $visits), 1)],
-                    ['stage' => 'Payments',             'count' => $sales,       'percentage' => round($this->safePct($sales, $visits), 1)],
+                    ['stage' => 'Direct Checkout', 'count' => $directCheckouts, 'percentage' => round($this->safePct($directCheckouts, $visits), 1)],
+                    ['stage' => 'WhatsApp Leads',  'count' => $whatsAppLeads,   'percentage' => round($this->safePct($whatsAppLeads, $visits), 1)],
+                    ['stage' => 'Total Leads',     'count' => $totalLeads,      'percentage' => round($this->safePct($totalLeads, $visits), 1)],
                 ],
             ];
         }
@@ -116,13 +107,15 @@ class AbTestingService
         }
 
         $visitData = $this->batchVisitSessionsWithUserAgent($startDate, $endDate, $sourceFilter);
-        $leadSessions = $this->batchLeadSessionIds($startDate, $endDate, $sourceFilter);
+        $checkoutSessions = $this->batchCheckoutSessionIds($startDate, $endDate, $sourceFilter);
+        $whatsAppLeadSessions = $this->batchWhatsAppLeadSessionIds($startDate, $endDate, $sourceFilter);
 
         $performance = [];
         foreach ($sources as $source) {
             $src = $this->normalizeLandingSource($source->landing_source);
             $visits = $visitData[$src] ?? collect();
-            $leads = $leadSessions[$src] ?? collect();
+            $checkoutLeads = $checkoutSessions[$src] ?? collect();
+            $whatsAppLeads = $whatsAppLeadSessions[$src] ?? collect();
 
             $mobile = $visits->filter(fn ($r) => $this->isMobileDevice($r->user_agent));
             $desktop = $visits->reject(fn ($r) => $this->isMobileDevice($r->user_agent));
@@ -130,13 +123,15 @@ class AbTestingService
             $mobileIds = $mobile->pluck('session_id')->unique();
             $desktopIds = $desktop->pluck('session_id')->unique();
 
-            $mobLeads = $leads->intersect($mobileIds)->count();
-            $deskLeads = $leads->intersect($desktopIds)->count();
+            $mobLeads = $checkoutLeads->intersect($mobileIds)->count()
+                + $whatsAppLeads->intersect($mobileIds)->count();
+            $deskLeads = $checkoutLeads->intersect($desktopIds)->count()
+                + $whatsAppLeads->intersect($desktopIds)->count();
 
             $performance[] = [
                 'landing_source' => $src,
-                'mobile' => ['visits' => $mobileIds->count(),  'leads' => $mobLeads,  'conversion_rate' => round($this->safeDiv($mobLeads, $mobileIds->count()) * 100, 2)],
-                'desktop' => ['visits' => $desktopIds->count(), 'leads' => $deskLeads, 'conversion_rate' => round($this->safeDiv($deskLeads, $desktopIds->count()) * 100, 2)],
+                'mobile' => ['visits' => $mobileIds->count(),  'total_leads' => $mobLeads,  'total_lead_rate' => round($this->safeDiv($mobLeads, $mobileIds->count()) * 100, 2)],
+                'desktop' => ['visits' => $desktopIds->count(), 'total_leads' => $deskLeads, 'total_lead_rate' => round($this->safeDiv($deskLeads, $desktopIds->count()) * 100, 2)],
             ];
         }
 
@@ -162,26 +157,24 @@ class AbTestingService
 
         $ctaClicks = $query->get();
 
-        // In TOEFL, both inquiries and registration chats are WhatsApp leads.
-        $leadSessions = DB::table('user_analytics')
-            ->where('event_type', 'conversion')
-            ->whereIn('event_data->type', AnalyticsMetricsService::LEAD_CONVERSION_TYPES)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->distinct()
-            ->pluck('session_id');
+        $checkoutSessions = $this->batchCheckoutSessionIds($startDate, $endDate, $sourceFilter);
+        $whatsAppLeadSessions = $this->batchWhatsAppLeadSessionIds($startDate, $endDate, $sourceFilter);
 
-        return $ctaClicks->groupBy(fn ($row) => $this->normalizeLandingSource($row->landing_source))->map(function ($sourceClicks, $landingSource) use ($leadSessions) {
-            $locations = $sourceClicks->groupBy('cta_location')->map(function ($locationClicks, $location) use ($leadSessions) {
+        return $ctaClicks->groupBy(fn ($row) => $this->normalizeLandingSource($row->landing_source))->map(function ($sourceClicks, $landingSource) use ($checkoutSessions, $whatsAppLeadSessions) {
+            $checkoutLeads = $checkoutSessions[$landingSource] ?? collect();
+            $whatsAppLeads = $whatsAppLeadSessions[$landingSource] ?? collect();
+            $locations = $sourceClicks->groupBy('cta_location')->map(function ($locationClicks, $location) use ($checkoutLeads, $whatsAppLeads) {
                 $uniqueSessions = $locationClicks->pluck('session_id')->unique();
-                $leads = $uniqueSessions->intersect($leadSessions)->count();
+                $totalLeads = $uniqueSessions->intersect($checkoutLeads)->count()
+                    + $uniqueSessions->intersect($whatsAppLeads)->count();
 
                 return [
                     'location' => $location,
                     'click_count' => $uniqueSessions->count(),
-                    'leads' => $leads,
-                    'lead_rate' => round($this->safeDiv($leads, $uniqueSessions->count()) * 100, 2),
+                    'total_leads' => $totalLeads,
+                    'total_lead_rate' => round($this->safeDiv($totalLeads, $uniqueSessions->count()) * 100, 2),
                 ];
-            })->sortByDesc('leads')->values()->all();
+            })->sortByDesc('total_leads')->values()->all();
 
             return [
                 'landing_source' => $landingSource,
@@ -219,7 +212,12 @@ class AbTestingService
                 $depth = $scrollDepths[$sessionId] ?? 0;
                 $dwell = $dwellTimes[$sessionId] ?? 0;
 
-                if ($depth < 25 && $dwell < 15 && ! $actions->contains($sessionId)) {
+                // Engaged = Scroll > 25% OR Dwell ≥ 15s OR Funnel Action (any one is sufficient)
+                $engaged = $depth > AnalyticsMetricsService::SCROLL_THRESHOLD
+                    || $dwell >= AnalyticsMetricsService::DWELL_THRESHOLD_MS / 1000
+                    || $actions->contains($sessionId);
+
+                if (! $engaged) {
                     $personas['bouncers']++;
                 } elseif ($dwell > 120) {
                     $personas['deep_readers']++;
@@ -235,7 +233,7 @@ class AbTestingService
                 'landing_source' => $src,
                 'total_sessions' => $total,
                 'personas' => [
-                    ['name' => 'Bouncers',     'description' => 'No 25% scroll, 15s dwell, or funnel action', 'count' => $personas['bouncers'],     'percentage' => round($this->safeDiv($personas['bouncers'], $total) * 100, 1)],
+                    ['name' => 'Bouncers',     'description' => 'No funnel action and scroll <=25% and dwell <15s', 'count' => $personas['bouncers'],     'percentage' => round($this->safeDiv($personas['bouncers'], $total) * 100, 1)],
                     ['name' => 'Skimmers',     'description' => 'High scroll (>75%) but quick read (<60s)', 'count' => $personas['skimmers'],     'percentage' => round($this->safeDiv($personas['skimmers'], $total) * 100, 1)],
                     ['name' => 'Deep Readers', 'description' => 'Extended engagement (>120s)',              'count' => $personas['deep_readers'], 'percentage' => round($this->safeDiv($personas['deep_readers'], $total) * 100, 1)],
                     ['name' => 'Casuals',      'description' => 'Moderate engagement',                     'count' => $personas['casuals'],      'percentage' => round($this->safeDiv($personas['casuals'], $total) * 100, 1)],
@@ -304,7 +302,9 @@ class AbTestingService
         }
 
         $allSessions = $this->batchAllSessions($startDate, $endDate, $sourceFilter);
-        $leadSessions = $this->batchLeadSessionIds($startDate, $endDate, $sourceFilter);
+        $totalLeadSessions = $this->batchTotalLeadSessionIds($startDate, $endDate, $sourceFilter);
+        $checkoutSessions = $this->batchCheckoutSessionIds($startDate, $endDate, $sourceFilter);
+        $whatsAppLeadSessions = $this->batchWhatsAppLeadSessionIds($startDate, $endDate, $sourceFilter);
         $scrollDepths = $this->batchMaxScrollDepth($startDate, $endDate, $sourceFilter);
         $dwellTimes = $this->batchTotalDwellTime($startDate, $endDate, $sourceFilter);
 
@@ -312,13 +312,15 @@ class AbTestingService
         foreach ($sources as $source) {
             $src = $this->normalizeLandingSource($source->landing_source);
             $sessions = $allSessions[$src] ?? collect();
-            $leads = $leadSessions[$src] ?? collect();
+            $leads = $totalLeadSessions[$src] ?? collect();
             $nonLeads = $sessions->diff($leads);
+            $totalLeadCount = ($checkoutSessions[$src] ?? collect())->count()
+                + ($whatsAppLeadSessions[$src] ?? collect())->count();
 
             $analysis[] = [
                 'landing_source' => $src,
-                'leads' => $this->calcQualityMetrics($leads, $scrollDepths, $dwellTimes),
-                'non_leads' => $this->calcQualityMetrics($nonLeads, $scrollDepths, $dwellTimes),
+                'total_leads' => $this->calcQualityMetrics($leads, $scrollDepths, $dwellTimes, $totalLeadCount),
+                'others' => $this->calcQualityMetrics($nonLeads, $scrollDepths, $dwellTimes),
             ];
         }
 
@@ -488,28 +490,27 @@ class AbTestingService
         ])->all();
     }
 
-    private function batchRevenue(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
+    private function batchCheckoutCounts(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
     {
-        if (! $this->metrics->capabilities()['revenue']) {
-            return [];
-        }
-
         $rows = DB::table('user_analytics')
             ->select([
-                DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
-                DB::raw("SUM(CAST(json_extract(event_data, '$.amount') AS DECIMAL(20,4))) as revenue"),
+                DB::raw('json_extract(event_data, \'$.landing_source\') as landing_source'),
+                DB::raw('COUNT(DISTINCT session_id) as cnt'),
             ])
-            ->where('event_type', 'payment')
-            ->whereRaw("json_extract(event_data, '$.status') = 'success'")
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
-            ->when($sourceFilter && $sourceFilter !== 'all', fn ($q) => $q->where('referral_source', $sourceFilter))
-            ->groupBy('landing_source')
-            ->get();
+            ->whereRaw('json_extract(event_data, \'$.landing_source\') IS NOT NULL')
+            ->whereRaw('json_extract(event_data, \'$.landing_source\') NOT IN (\'\', \'unknown\')')
+            ->when($sourceFilter && $sourceFilter !== 'all', fn ($query) => $query->where('referral_source', $sourceFilter));
 
-        return $rows->mapWithKeys(fn ($row) => [
-            $this->normalizeLandingSource($row->landing_source) => $row->revenue,
-        ])->all();
+        $this->metrics->applyCheckoutEventConditions($rows);
+
+        return $rows
+            ->groupBy('landing_source')
+            ->get()
+            ->mapWithKeys(fn ($row) => [
+                $this->normalizeLandingSource($row->landing_source) => (int) $row->cnt,
+            ])
+            ->all();
     }
 
     private function batchAllSessions(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
@@ -519,6 +520,7 @@ class AbTestingService
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
                 'session_id',
             ])
+            ->where('event_type', 'visit')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
             ->whereRaw("json_extract(event_data, '$.landing_source') NOT IN ('', 'unknown')")
@@ -535,46 +537,56 @@ class AbTestingService
         return array_map(fn ($ids) => collect(array_unique($ids)), $result);
     }
 
-    private function batchPaymentSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
+    private function batchTotalLeadSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
     {
-        $rows = DB::table('user_analytics')
-            ->select([
-                DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
-                'session_id',
-            ])
-            ->where('event_type', 'payment')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
-            ->when($sourceFilter && $sourceFilter !== 'all', fn ($q) => $q->where('referral_source', $sourceFilter))
-            ->distinct()
-            ->get();
-
-        $result = [];
-        foreach ($rows as $row) {
-            $key = $this->normalizeLandingSource($row->landing_source);
-            $result[$key][] = $row->session_id;
-        }
-
-        return array_map(fn ($ids) => collect(array_unique($ids)), $result);
+        return $this->batchLeadSessionIds(
+            $startDate,
+            $endDate,
+            $sourceFilter,
+            fn ($query) => $this->metrics->applyTotalLeadEventConditions($query),
+        );
     }
 
-    /**
-     * Returns session IDs that fired a lead conversion, grouped by landing source.
-     */
-    private function batchLeadSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
+    private function batchCheckoutSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
     {
+        return $this->batchLeadSessionIds(
+            $startDate,
+            $endDate,
+            $sourceFilter,
+            fn ($query) => $this->metrics->applyCheckoutEventConditions($query),
+        );
+    }
+
+    private function batchWhatsAppLeadSessionIds(Carbon $startDate, Carbon $endDate, ?string $sourceFilter): array
+    {
+        return $this->batchLeadSessionIds(
+            $startDate,
+            $endDate,
+            $sourceFilter,
+            fn ($query) => $this->metrics->applyWhatsAppLeadEventConditions($query),
+        );
+    }
+
+    private function batchLeadSessionIds(
+        Carbon $startDate,
+        Carbon $endDate,
+        ?string $sourceFilter,
+        callable $applyConditions,
+    ): array {
         $rows = DB::table('user_analytics')
             ->select([
                 DB::raw("json_extract(event_data, '$.landing_source') as landing_source"),
                 'session_id',
             ])
-            ->where('event_type', 'conversion')
-            ->whereIn('event_data->type', AnalyticsMetricsService::LEAD_CONVERSION_TYPES)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw("json_extract(event_data, '$.landing_source') IS NOT NULL")
+            ->whereRaw("json_extract(event_data, '$.landing_source') NOT IN ('', 'unknown')")
             ->when($sourceFilter && $sourceFilter !== 'all', fn ($q) => $q->where('referral_source', $sourceFilter))
-            ->distinct()
-            ->get();
+            ->distinct();
+
+        $applyConditions($rows);
+
+        $rows = $rows->get();
 
         $result = [];
         foreach ($rows as $row) {
@@ -592,12 +604,14 @@ class AbTestingService
                 DB::raw('json_extract(event_data, \'$.landing_source\') as landing_source'),
                 'session_id',
             ])
-            ->whereIn('event_type', AnalyticsMetricsService::FUNNEL_ACTION_EVENTS)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereRaw('json_extract(event_data, \'$.landing_source\') IS NOT NULL')
             ->when($sourceFilter && $sourceFilter !== 'all', fn ($query) => $query->where('referral_source', $sourceFilter))
-            ->distinct()
-            ->get();
+            ->distinct();
+
+        $this->metrics->applyFunnelActionEventConditions($rows);
+
+        $rows = $rows->get();
 
         $result = [];
         foreach ($rows as $row) {
@@ -675,17 +689,21 @@ class AbTestingService
             ->get();
     }
 
-    private function calcQualityMetrics(Collection $sessionIds, array $scrollDepths, array $dwellTimes): array
-    {
+    private function calcQualityMetrics(
+        Collection $sessionIds,
+        array $scrollDepths,
+        array $dwellTimes,
+        ?int $count = null,
+    ): array {
         if ($sessionIds->isEmpty()) {
-            return ['count' => 0, 'avg_scroll_depth' => 0, 'avg_dwell_time' => 0];
+            return ['count' => $count ?? 0, 'avg_scroll_depth' => 0, 'avg_dwell_time' => 0];
         }
 
         $depths = $sessionIds->map(fn ($id) => (float) ($scrollDepths[$id] ?? 0));
         $dwells = $sessionIds->map(fn ($id) => (float) ($dwellTimes[$id] ?? 0));
 
         return [
-            'count' => $sessionIds->count(),
+            'count' => $count ?? $sessionIds->count(),
             'avg_scroll_depth' => round($depths->avg() ?? 0, 1),
             'avg_dwell_time' => round($dwells->avg() ?? 0, 1),
         ];

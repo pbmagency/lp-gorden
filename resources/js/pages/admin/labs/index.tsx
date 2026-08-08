@@ -16,7 +16,6 @@ import {
     MousePointerClick,
     RefreshCw,
     ShoppingCart,
-    Target,
     TrendingUp,
     Trophy,
     Users,
@@ -59,7 +58,6 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/admin-layout';
 import {
-    formatCurrency,
     formatDuration,
     formatNumber,
     formatPercent,
@@ -87,9 +85,9 @@ const transformFunnelData = (
         'Visits',
         'Engaged',
         'Intent',
-        'Initiate Checkout',
+        'Direct Checkout',
         'WhatsApp Leads',
-        'Payments',
+        'Total Leads',
     ];
 
     return stages.map((stage) => {
@@ -129,7 +127,6 @@ export default function LabsIndex({
     heatmap: rawHeatmap,
     section_heatmap: rawSectionHeatmap,
     availableSources: rawAvailableSources,
-    capabilities,
     minimumWinnerVisits,
     filters,
 }: LabsPageProps) {
@@ -153,7 +150,8 @@ export default function LabsIndex({
     });
     // State
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [sortColumn, setSortColumn] = useState<keyof MatrixItem>('lead_cr');
+    const [sortColumn, setSortColumn] =
+        useState<keyof MatrixItem>('total_lead_rate');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const [currentPage, setCurrentPage] = useState(1);
     const [showToast, setShowToast] = useState(false);
@@ -292,17 +290,18 @@ export default function LabsIndex({
     const [selectedFunnelSources, setSelectedFunnelSources] = useState<
         string[]
     >(() => {
-        // Default: Top 2 by the primary metric (Lead CR)
+        // Default: Top 2 by the primary metric (Total Lead Rate)
         return matrix.slice(0, 2).map((m) => m.landing_source);
     });
 
     const itemsPerPage = 10;
 
-    // TOEFL's primary measurable outcome is a WhatsApp lead.
+    // The primary outcome combines direct checkout and WhatsApp leads.
     const winner = useMemo(() => {
         const eligibleVariants = filteredMatrix.filter(
             (variant) =>
-                variant.visits >= minimumWinnerVisits && variant.leads > 0,
+                variant.visits >= minimumWinnerVisits &&
+                variant.total_leads > 0,
         );
 
         if (eligibleVariants.length === 0) {
@@ -310,7 +309,7 @@ export default function LabsIndex({
         }
 
         return eligibleVariants.reduce((prev, curr) =>
-            curr.lead_cr > prev.lead_cr ? curr : prev,
+            curr.total_lead_rate > prev.total_lead_rate ? curr : prev,
         );
     }, [filteredMatrix, minimumWinnerVisits]);
 
@@ -720,14 +719,14 @@ export default function LabsIndex({
                                         </CardTitle>
                                         <CardDescription>
                                             Landing page comparison sorted by
-                                            WhatsApp Lead CR
+                                            Total Lead Rate
                                         </CardDescription>
                                         {!winner && (
                                             <p className="mt-1 text-xs text-amber-500">
                                                 Insufficient data: winner
                                                 requires at least{' '}
                                                 {minimumWinnerVisits} visits and
-                                                one WhatsApp lead.
+                                                one total lead.
                                             </p>
                                         )}
                                     </div>
@@ -785,13 +784,13 @@ export default function LabsIndex({
                                                     <button
                                                         onClick={() =>
                                                             handleSort(
-                                                                'initiate_checkout_rate',
+                                                                'direct_checkout_rate',
                                                             )
                                                         }
                                                         className="flex items-center gap-1 hover:text-foreground"
                                                     >
                                                         <ShoppingCart className="h-4 w-4" />{' '}
-                                                        Initiate Checkout
+                                                        Direct Checkout
                                                         <ArrowUpDown className="h-3 w-3" />
                                                     </button>
                                                 </th>
@@ -799,12 +798,12 @@ export default function LabsIndex({
                                                     <button
                                                         onClick={() =>
                                                             handleSort(
-                                                                'lead_cr',
+                                                                'whatsapp_lead_rate',
                                                             )
                                                         }
                                                         className="flex items-center gap-1 hover:text-foreground"
                                                     >
-                                                        Lead CR
+                                                        WhatsApp Lead Rate
                                                         <ArrowUpDown className="h-3 w-3" />
                                                     </button>
                                                 </th>
@@ -812,30 +811,14 @@ export default function LabsIndex({
                                                     <button
                                                         onClick={() =>
                                                             handleSort(
-                                                                'strict_cr',
+                                                                'total_lead_rate',
                                                             )
                                                         }
                                                         className="flex items-center gap-1 hover:text-foreground"
                                                     >
-                                                        <Target className="h-4 w-4" />{' '}
-                                                        Sales CR
+                                                        Total Leads CR
                                                         <ArrowUpDown className="h-3 w-3" />
                                                     </button>
-                                                </th>
-                                                <th className="p-4 text-left text-sm font-medium text-muted-foreground">
-                                                    <button
-                                                        onClick={() =>
-                                                            handleSort('rpv')
-                                                        }
-                                                        className="flex items-center gap-1 hover:text-foreground"
-                                                    >
-                                                        <TrendingUp className="h-4 w-4" />{' '}
-                                                        RPV
-                                                        <ArrowUpDown className="h-3 w-3" />
-                                                    </button>
-                                                </th>
-                                                <th className="p-4 text-left text-sm font-medium text-muted-foreground">
-                                                    Revenue
                                                 </th>
                                             </tr>
                                         </thead>
@@ -902,7 +885,7 @@ export default function LabsIndex({
                                                         </td>
                                                         <td className="p-4 text-foreground">
                                                             {formatPercent(
-                                                                item.initiate_checkout_rate,
+                                                                item.direct_checkout_rate,
                                                                 2,
                                                             )}
                                                             %
@@ -910,39 +893,31 @@ export default function LabsIndex({
                                                         <td className="p-4">
                                                             <Badge variant="secondary">
                                                                 {formatPercent(
-                                                                    item.lead_cr,
+                                                                    item.whatsapp_lead_rate,
                                                                     2,
                                                                 )}
                                                                 %
                                                             </Badge>
                                                         </td>
                                                         <td className="p-4">
-                                                            <Badge variant="outline">
-                                                                {capabilities.payment
-                                                                    ? `${formatPercent(
-                                                                          item.strict_cr,
-                                                                          2,
-                                                                      )}%`
-                                                                    : '—'}
-                                                            </Badge>
-                                                        </td>
-                                                        <td className="p-4">
-                                                            <span
-                                                                className={`font-bold ${isWinner ? 'text-chart-4' : 'text-foreground'}`}
+                                                            <Badge
+                                                                variant={
+                                                                    isWinner
+                                                                        ? 'default'
+                                                                        : 'secondary'
+                                                                }
+                                                                className={
+                                                                    isWinner
+                                                                        ? 'bg-chart-4 text-foreground'
+                                                                        : undefined
+                                                                }
                                                             >
-                                                                {capabilities.revenue
-                                                                    ? formatCurrency(
-                                                                          item.rpv,
-                                                                      )
-                                                                    : '—'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="p-4 text-foreground">
-                                                            {capabilities.revenue
-                                                                ? formatCurrency(
-                                                                      item.revenue,
-                                                                  )
-                                                                : '—'}
+                                                                {formatPercent(
+                                                                    item.total_lead_rate,
+                                                                    2,
+                                                                )}
+                                                                %
+                                                            </Badge>
                                                         </td>
                                                     </tr>
                                                 );
@@ -1014,11 +989,11 @@ export default function LabsIndex({
                                                         </div>
                                                         <div>
                                                             <span className="text-muted-foreground">
-                                                                Checkout:
+                                                                Direct Checkout:
                                                             </span>{' '}
                                                             <span className="text-foreground">
                                                                 {formatPercent(
-                                                                    item.initiate_checkout_rate,
+                                                                    item.direct_checkout_rate,
                                                                     2,
                                                                 )}
                                                                 %
@@ -1026,11 +1001,12 @@ export default function LabsIndex({
                                                         </div>
                                                         <div>
                                                             <span className="text-muted-foreground">
-                                                                Lead CR:
+                                                                WhatsApp Lead
+                                                                Rate:
                                                             </span>{' '}
                                                             <Badge variant="secondary">
                                                                 {formatPercent(
-                                                                    item.lead_cr,
+                                                                    item.whatsapp_lead_rate,
                                                                     2,
                                                                 )}
                                                                 %
@@ -1038,42 +1014,26 @@ export default function LabsIndex({
                                                         </div>
                                                         <div>
                                                             <span className="text-muted-foreground">
-                                                                Sales CR:
+                                                                Total Leads CR:
                                                             </span>{' '}
-                                                            <Badge variant="outline">
-                                                                {capabilities.payment
-                                                                    ? `${formatPercent(
-                                                                          item.strict_cr,
-                                                                          2,
-                                                                      )}%`
-                                                                    : '—'}
-                                                            </Badge>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-muted-foreground">
-                                                                RPV:
-                                                            </span>{' '}
-                                                            <span
-                                                                className={`font-bold ${isWinner ? 'text-chart-4' : 'text-foreground'}`}
+                                                            <Badge
+                                                                variant={
+                                                                    isWinner
+                                                                        ? 'default'
+                                                                        : 'secondary'
+                                                                }
+                                                                className={
+                                                                    isWinner
+                                                                        ? 'bg-chart-4 text-foreground'
+                                                                        : undefined
+                                                                }
                                                             >
-                                                                {capabilities.revenue
-                                                                    ? formatCurrency(
-                                                                          item.rpv,
-                                                                      )
-                                                                    : '—'}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-muted-foreground">
-                                                                Revenue:
-                                                            </span>{' '}
-                                                            <span className="text-foreground">
-                                                                {capabilities.revenue
-                                                                    ? formatCurrency(
-                                                                          item.revenue,
-                                                                      )
-                                                                    : '—'}
-                                                            </span>
+                                                                {formatPercent(
+                                                                    item.total_lead_rate,
+                                                                    2,
+                                                                )}
+                                                                %
+                                                            </Badge>
                                                         </div>
                                                     </div>
                                                 </CardContent>
@@ -1281,9 +1241,9 @@ export default function LabsIndex({
                                                     'Visits',
                                                     'Engaged',
                                                     'Intent',
-                                                    'Initiate Checkout',
+                                                    'Direct Checkout',
                                                     'WhatsApp Leads',
-                                                    'Payments',
+                                                    'Total Leads',
                                                 ].map((stage) => (
                                                     <tr
                                                         key={stage}
@@ -1378,7 +1338,8 @@ export default function LabsIndex({
                                         Behavior Analysis
                                     </h2>
                                     <p className="text-sm text-muted-foreground">
-                                        Leads vs Non-Leads engagement comparison
+                                        Total Leads vs Others engagement
+                                        comparison
                                     </p>
                                 </div>
                             </div>
@@ -1390,9 +1351,10 @@ export default function LabsIndex({
                                         avg_scroll_depth: 0,
                                         avg_dwell_time: 0,
                                     };
-                                    const leads = item.leads ?? defaultMetrics;
+                                    const leads =
+                                        item.total_leads ?? defaultMetrics;
                                     const nonLeads =
-                                        item.non_leads ?? defaultMetrics;
+                                        item.others ?? defaultMetrics;
 
                                     const scrollGap = Math.abs(
                                         leads.avg_scroll_depth -
@@ -1441,7 +1403,7 @@ export default function LabsIndex({
                                                     <div className="space-y-1">
                                                         <div className="flex items-center justify-between text-xs">
                                                             <span className="text-primary">
-                                                                Leads (
+                                                                Total Leads (
                                                                 {leads.count})
                                                             </span>
                                                             <span className="font-medium text-foreground">
@@ -1501,7 +1463,7 @@ export default function LabsIndex({
                                                                 )}
                                                             </div>
                                                             <div className="text-xs text-muted-foreground">
-                                                                Leads
+                                                                Total Leads
                                                             </div>
                                                         </div>
                                                         <div className="text-xl text-muted-foreground">
