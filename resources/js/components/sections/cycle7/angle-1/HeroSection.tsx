@@ -64,7 +64,10 @@ export default memo(function HeroSection() {
                         </div>
 
                         {/* b. Headline */}
-                        <h1 className="font-['var(--font-heading)'] text-[clamp(32px,4vw,44px)] font-black leading-[1.15] text-[#151515] max-[499px]:text-[32px]">
+                        <h1 
+                            className="font-black leading-[1.15] text-[#151515] text-[clamp(24px,7vw,30px)] min-[501px]:text-[clamp(30px,4vw,44px)]"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             Serius Soal Beasiswa?
                             <br />
                             Capai{' '}
@@ -72,7 +75,6 @@ export default memo(function HeroSection() {
                                 TOEFL 500+ dalam <br className="hidden sm:block" /> 15 Hari Buat Submission
                             </span>
                         </h1>
-
                         {/* c. Sub-copy */}
                         <p className="text-base leading-[1.6] text-[#3d3d3d]">
                             <b>Persiapkan dari</b>{' '}
