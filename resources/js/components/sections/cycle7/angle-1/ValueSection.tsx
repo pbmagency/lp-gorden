@@ -82,7 +82,7 @@ export default function ValueSection() {
                     <div
                         className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:text-xs sm:font-bold"
                         style={{
-                            fontFamily: "'Nunito', sans-serif",
+                            fontFamily: 'var(--font-heading)',
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
@@ -94,7 +94,7 @@ export default function ValueSection() {
                     <h2
                         className="mb-4 text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
-                            fontFamily: "'Nunito', sans-serif",
+                            fontFamily: 'var(--font-heading)',
                             color: '#151515',
                         }}
                     >
@@ -102,7 +102,7 @@ export default function ValueSection() {
                     </h2>
                     <p
                         className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
-                        style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
+                        style={{ fontFamily: 'var(--font-heading)', color: '#666666' }}
                     >
                         <strong>Ini cara Full Bright membantu 45.000+ orang mengubah submission yang tadinya ditolak jadi diterima di kampus impian mereka.</strong>
                     </p>
@@ -117,7 +117,7 @@ export default function ValueSection() {
                             </div>
                             <p
                                 className="text-[18px] font-[800] text-gray-500 sm:text-base sm:font-bold"
-                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 Cara Lama ✗
                             </p>
@@ -132,7 +132,7 @@ export default function ValueSection() {
                                 <div
                                     key={t}
                                     className="flex items-start gap-3 text-[15px] leading-[1.5] text-gray-500 sm:text-base sm:leading-normal"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300" />
                                     {t}
@@ -160,7 +160,7 @@ export default function ValueSection() {
                                 className="text-[18px] font-[800] sm:text-base sm:font-bold"
                                 style={{
                                     color: '#D70808',
-                                    fontFamily: "'Nunito', sans-serif",
+                                    fontFamily: 'var(--font-heading)',
                                 }}
                             >
                                 Metode Full Bright ✓
@@ -176,7 +176,7 @@ export default function ValueSection() {
                                 <div
                                     key={t}
                                     className="flex items-start gap-3 text-[15px] leading-[1.5] sm:text-base sm:leading-normal"
-                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
+                                    style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                                 >
                                     <div
                                         className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
@@ -205,11 +205,11 @@ export default function ValueSection() {
                                 </div>
                                 <h3
                                     className="text-[18px] font-[800] leading-snug sm:text-lg sm:font-bold"
-                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
+                                    style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                                 >
                                     {title}
                                 </h3>
-                                <p className="text-[15px] leading-[1.6] text-gray-500 sm:text-sm sm:leading-relaxed" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                                <p className="text-[15px] leading-[1.6] text-gray-500 sm:text-sm sm:leading-relaxed" style={{ fontFamily: 'var(--font-heading)'  }}>
                                     {desc}
                                 </p>
                             </div>
@@ -248,7 +248,7 @@ export default function ValueSection() {
                     <div
                         className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:font-bold"
                         style={{
-                            fontFamily: "'Nunito', sans-serif",
+                            fontFamily: 'var(--font-heading)',
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
@@ -260,7 +260,7 @@ export default function ValueSection() {
                     <h2
                         className="text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
-                            fontFamily: "'Nunito', sans-serif",
+                            fontFamily: 'var(--font-heading)',
                             color: '#151515',
                         }}
                     >
@@ -286,13 +286,13 @@ export default function ValueSection() {
                             <div className="flex flex-col gap-1.5">
                                 <p
                                     className="text-[18px] font-[800] leading-snug sm:text-base sm:font-bold"
-                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
+                                    style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                                 >
                                     {title}
                                 </p>
                                 <p
                                     className="text-[15px] leading-[1.6] sm:text-sm sm:leading-relaxed"
-                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#8a8a8a' }}
+                                    style={{ fontFamily: 'var(--font-heading)', color: '#8a8a8a' }}
                                 >
                                     {why}
                                 </p>

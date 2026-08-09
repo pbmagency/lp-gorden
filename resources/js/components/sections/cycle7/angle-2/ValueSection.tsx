@@ -65,13 +65,13 @@ export default function ValueSection() {
                 <div className="mb-14 text-center">
                     <div
                         className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-1.5 text-[12px] font-[700] uppercase tracking-[0.08em] text-[#D70808]"
-                        style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         <span>🎯</span> MINDSETMU BIKIN GAGAL DAPAT BEASISWA
                     </div>
                     <h2
                         className="mb-5 text-[clamp(24px,3vw,36px)] font-[900] text-[#151515] sm:text-3xl sm:font-black md:text-[2.5rem]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Mindsetmu Sekarang Menentukan{' '}
                         <span className="text-[#D70808]">
@@ -95,7 +95,7 @@ export default function ValueSection() {
                             </div>
                             <p
                                 className="text-[14px] font-[900] text-gray-600 sm:text-[15px] sm:font-black"
-                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 Mindset Orang yang Gagal Beasiswa ✗
                             </p>
@@ -122,7 +122,7 @@ export default function ValueSection() {
                             </div>
                             <p
                                 className="text-[14px] font-[900] text-[#D70808] sm:text-[15px] sm:font-black"
-                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 Mindset Orang yang Lolos Beasiswa ✓
                             </p>
@@ -146,7 +146,7 @@ export default function ValueSection() {
                 <div className="mx-auto mb-8 max-w-[640px] text-center">
                     <p
                         className="text-[22px] font-[800] leading-[1.5] text-[#151515] sm:text-[24px] sm:font-extrabold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Full Bright menggunakan 3 metode yang terbukti <br className="hidden sm:block" />
                         <span className="text-[#D70808]">menaikkan skor TOEFL hanya dalam 10-25 hari</span>:
@@ -170,7 +170,7 @@ export default function ValueSection() {
                                 </div>
                                 <h3
                                     className="text-[16px] font-[900] leading-[1.3] text-[#151515] sm:text-[17px] sm:font-black"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     {title}
                                 </h3>
@@ -190,7 +190,7 @@ export default function ValueSection() {
                     </p>
                     <p
                         className="text-[20px] font-[800] leading-[1.5] text-[#151515] sm:text-[22px] sm:font-extrabold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Justru persiapan TOEFL memang <span className="text-[#D70808]">seharusnya dimulai 5-6 bulan sebelum submission</span> agar:
                     </p>
@@ -212,7 +212,7 @@ export default function ValueSection() {
                                 </div>
                                 <h3
                                     className="text-[16px] font-[900] leading-[1.3] text-[#151515] sm:text-[18px] sm:font-black"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     {card.title}
                                 </h3>
@@ -221,14 +221,14 @@ export default function ValueSection() {
                             <div className="inline-flex w-max items-center gap-2.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm">
                                 <span
                                     className="text-[14px] font-[900] sm:text-[15px]"
-                                    style={{ fontFamily: "'Nunito', sans-serif", color: card.pillLeftColor }}
+                                    style={{ fontFamily: 'var(--font-heading)', color: card.pillLeftColor }}
                                 >
                                     {card.pillLeft}
                                 </span>
                                 <div className="h-3.5 w-px bg-gray-300" />
                                 <span
                                     className="text-[13px] font-[600] text-gray-500 sm:text-[14px]"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     {card.pillRight}
                                 </span>

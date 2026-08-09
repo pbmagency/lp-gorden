@@ -19,7 +19,7 @@ export default function AgitationSection() {
                 <div className="mb-8 text-center md:mb-10">
                     <div
                         className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-1.5 text-[12px] font-[700] uppercase tracking-[0.08em] text-[#D70808]"
-                        style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         KENAPA BANYAK PEJUANG BEASISWA GAGAL DI TOEFL?
                     </div>
@@ -27,7 +27,7 @@ export default function AgitationSection() {
                     {/* Headline */}
                     <h2
                         className="mb-5 text-[clamp(24px,3vw,36px)] font-[900] leading-[1.3] text-[#151515] sm:text-3xl sm:font-black md:text-[2.5rem] md:leading-tight"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Bukan Karena Kurang Mampu, <br className="hidden sm:block" />
                         <span className="text-[#D70808]">
@@ -37,10 +37,10 @@ export default function AgitationSection() {
 
                     {/* Subheadline */}
                     <div className="mx-auto max-w-[576px] text-[16px] leading-[1.6] text-[#3d3d3d] sm:text-base sm:text-[#666666] md:text-[17px]">
-                        <p className="mb-6" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                        <p className="mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
                             Target beasiswa sudah ada, tapi kebanyakan orang menunda TOEFL, setelah itu baru belajar dengan metode yang salah.
                         </p>
-                        <p style={{ fontFamily: "'Nunito', sans-serif" }}>
+                        <p style={{ fontFamily: 'var(--font-heading)' }}>
                             Coba jujur, kamu pernah kepikiran seperti ini?
                         </p>
                     </div>
@@ -59,7 +59,7 @@ export default function AgitationSection() {
                                 </div>
                                 <p
                                     className="text-[14px] font-[700] text-gray-700 sm:text-[15px]"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     {item}
                                 </p>
@@ -72,7 +72,7 @@ export default function AgitationSection() {
                 <div className="mb-10 text-center">
                     <p
                         className="text-[18px] font-[800] text-[#151515] sm:text-[19px]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         ⚠️ Kalau iya, hati-hati.
                     </p>
@@ -85,14 +85,14 @@ export default function AgitationSection() {
                     </p>
                     <h3
                         className="mb-3 text-center text-[clamp(22px,3vw,36px)] font-[900] text-[#151515] sm:text-3xl sm:font-black"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         <span className="text-[38px] text-[#D70808] sm:text-[44px]">82%</span>{' '}
                         Pejuang Beasiswa Gagal
                     </h3>
                     <p
                         className="mx-auto max-w-xl text-center text-[16px] leading-[1.6] text-[#3d3d3d] sm:text-[15px]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         karena menunda TOEFL, lalu buru-buru belajar sendiri dengan metode yang salah.
                     </p>
@@ -102,7 +102,7 @@ export default function AgitationSection() {
                 <div className="space-y-4 text-center">
                     <p
                         className="text-[18px] font-[800] leading-[1.6] text-[#151515] sm:text-[18px] md:text-[19px]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Mindsetmu harus segera diubah, sebelum submissionmu gagal.
                     </p>

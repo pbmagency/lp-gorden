@@ -234,13 +234,13 @@ export default function SocialProofSection() {
                         <div key={s.label}>
                             <p
                                 className="text-[40px] font-[900] tracking-[-0.02em] md:text-5xl"
-                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 {s.value}
                             </p>
                             <p
                                 className="mt-1.5 text-[13px] font-[600] tracking-wide opacity-75 sm:text-[14px]"
-                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 {s.label}
                             </p>
@@ -259,7 +259,7 @@ export default function SocialProofSection() {
                     </div>
                     <h2
                         className="mb-4 text-[clamp(24px,3vw,36px)] font-[900] leading-[1.3] text-[#151515] sm:text-3xl sm:font-black md:text-[2.5rem]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Lihat Bagaimana Mindset yang Benar<br className="hidden sm:block" />
                         <span className="text-[#D70808]">
@@ -268,7 +268,7 @@ export default function SocialProofSection() {
                     </h2>
                     <p
                         className="text-[14px] font-[600] text-[#9ca3af] sm:text-[15px]"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         Klik foto untuk memperbesar
                     </p>
