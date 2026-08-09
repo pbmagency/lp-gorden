@@ -71,7 +71,7 @@ export default function AgitationSection() {
                 {/* Warning */}
                 <div className="mb-10 text-center">
                     <p
-                        className="text-[16px] font-[800] text-[#151515] sm:text-[17px]"
+                        className="text-[18px] font-[800] text-[#151515] sm:text-[19px]"
                         style={{ fontFamily: "'Nunito', sans-serif" }}
                     >
                         ⚠️ Kalau iya, hati-hati.
