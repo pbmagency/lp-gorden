@@ -38,17 +38,17 @@ const prepCards = [
         iconBg: '#FFEDD5',
         title: 'Mengurangi Risiko Gugur di Tahap Seleksi',
         pillLeft: '5-6 Bulan',
-        pillLeftColor: '#EA580C',
+        pillLeftColor: '#D70808', // Red
         pillRight: 'lebih awal, bisa dapat LoA duluan',
         desc: 'Sertifikat yang siap lebih dulu bisa dipakai daftar kampus tujuan. Kamu bisa dapat LoA Unconditional dan skip ujian seleksi bakat LPDP.',
     },
     {
         Icon: RefreshCcw,
-        iconColor: '#151515',
-        iconBg: '#F3F4F6',
+        iconColor: '#EA580C', // Orange to match image 2
+        iconBg: '#FFEDD5', // Orange bg to match image 2
         title: 'Tidak Perlu Panik Kalau Harus Tes Ulang',
         pillLeft: '2-3x',
-        pillLeftColor: '#151515',
+        pillLeftColor: '#151515', // Black
         pillRight: 'kesempatan retake',
         desc: 'Lolos target dari dalam sekali tes itu cukup susah. Hasil resmi baru keluar 7-14 hari kerja, dan tes ulang harus tunggu beberapa minggu.',
     }
@@ -58,7 +58,7 @@ export default function ValueSection() {
     const { trackCTA } = useAnalytics();
     
     return (
-        <SectionWrapper id="value" bg="white" className="py-[80px] px-6">
+        <SectionWrapper id="value" bg="white" className="py-[80px] px-6 md:py-28">
             <div className="mx-auto max-w-6xl">
                 
                 {/* 1. Headline & Subheadline */}
@@ -197,38 +197,39 @@ export default function ValueSection() {
                 </div>
 
                 {/* 6. Preparation Cards */}
-                <div className="mb-10 grid gap-4 sm:grid-cols-2">
+                <div className="mx-auto mb-10 grid max-w-5xl gap-4 sm:grid-cols-2">
                     {prepCards.map((card) => (
                         <div
                             key={card.title}
-                            className="flex flex-col gap-4 rounded-[16px] border border-gray-100 bg-[#F9F9F9] p-[28px]"
+                            className="flex flex-col gap-5 rounded-[24px] border border-gray-100 bg-white p-6 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-8"
                         >
-                            <div className="flex items-center gap-[14px]">
+                            <div className="flex items-start gap-4 sm:items-center">
                                 <div
-                                    className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full border-2"
-                                    style={{ backgroundColor: card.iconBg, borderColor: card.pillLeftColor }}
+                                    className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[14px]"
+                                    style={{ backgroundColor: card.iconBg }}
                                 >
-                                    <card.Icon size={22} color={card.iconColor} strokeWidth={2.5} />
+                                    <card.Icon size={24} color={card.iconColor} strokeWidth={2.5} />
                                 </div>
                                 <h3
-                                    className="text-[17px] font-[900] leading-[1.3] text-[#151515] sm:text-[18px] sm:font-black"
+                                    className="text-[16px] font-[900] leading-[1.3] text-[#151515] sm:text-[18px] sm:font-black"
                                     style={{ fontFamily: "'Nunito', sans-serif" }}
                                 >
                                     {card.title}
                                 </h3>
                             </div>
 
-                            <div 
-                                className="inline-flex items-baseline gap-2 self-start rounded-full border-[1.5px] bg-white px-4 py-1.5"
-                                style={{ borderColor: card.pillLeftColor }}
-                            >
+                            <div className="inline-flex w-max items-center gap-2.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm">
                                 <span
-                                    className="text-[16px] font-[900] sm:text-[17px]"
+                                    className="text-[14px] font-[900] sm:text-[15px]"
                                     style={{ fontFamily: "'Nunito', sans-serif", color: card.pillLeftColor }}
                                 >
                                     {card.pillLeft}
                                 </span>
-                                <span className="text-[13px] font-[600] text-gray-500 sm:text-[14px]">
+                                <div className="h-3.5 w-px bg-gray-300" />
+                                <span
+                                    className="text-[13px] font-[600] text-gray-500 sm:text-[14px]"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     {card.pillRight}
                                 </span>
                             </div>
@@ -257,15 +258,7 @@ export default function ValueSection() {
                             Lihat Bukti Alumni →
                         </LpButton>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-                        <span className="flex items-center gap-1 text-[12px] font-[600] text-gray-500 sm:text-[13px]">
-                            ★★★★★<span className="ml-1">4.9/5 Google Review</span>
-                        </span>
-                        <span className="text-[12px] text-gray-500">•</span>
-                        <span className="text-[12px] font-[600] text-gray-500 sm:text-[13px]">45.000+ Alumni Sukses</span>
-                        <span className="text-[12px] text-gray-500">•</span>
-                        <span className="text-[12px] font-[600] text-gray-500 sm:text-[13px]">🛡 Garansi 100%</span>
-                    </div>
+                    <SocialProofMicro />
                 </div>
 
             </div>
