@@ -66,7 +66,8 @@ export default memo(function HeroSection() {
                         {/* b. Headline */}
                         <h1 
                             className="font-black leading-[1.15] text-[#151515] text-[clamp(24px,7vw,30px)] min-[501px]:text-[clamp(30px,4vw,44px)]"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                            style={{ fontFamily: 'var(--font-heading)',
+                                color: '#151515',}}
                         >
                             Serius Soal Beasiswa?
                             <br />
