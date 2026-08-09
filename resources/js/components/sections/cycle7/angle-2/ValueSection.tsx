@@ -242,7 +242,7 @@ export default function ValueSection() {
                 </div>
 
                 <div className="text-center">
-                    <div className="flex flex-wrap justify-center gap-3 sm:flex-row">
+                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
                         <LpButton
                             href="#pricing"
                             size="md"
@@ -261,7 +261,10 @@ export default function ValueSection() {
                             Lihat Bukti Alumni →
                         </LpButton>
                     </div>
-                    <SocialProofMicro />
+                    <div className="mt-4">
+                        <SocialProofMicro />
+                    </div>
+                    
                 </div>
 
             </div>
