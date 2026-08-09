@@ -261,8 +261,8 @@ export default function SocialProofSection() {
                         className="mb-4 text-[clamp(24px,3vw,36px)] font-[900] leading-[1.3] text-[#151515] sm:text-3xl sm:font-black md:text-[2.5rem]"
                         style={{ fontFamily: 'var(--font-heading)' }}
                     >
-                        Lihat Bagaimana Mindset yang Benar{' '}
-                        <br className="hidden sm:block" />
+                        Lihat Bagaimana Mindset yang Benar
+                        <br/>
                         <span className="text-[#D70808]">
                             Berhasil Membuat Alumni Meraih Target Skor
                         </span>
