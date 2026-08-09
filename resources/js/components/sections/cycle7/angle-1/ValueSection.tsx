@@ -80,8 +80,9 @@ export default function ValueSection() {
             <SectionWrapper id="value" bg="white" className="py-20 md:py-28">
                 <div className="mb-14 text-center">
                     <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase"
+                        className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:text-xs sm:font-bold"
                         style={{
+                            fontFamily: "'Nunito', sans-serif",
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
@@ -89,19 +90,19 @@ export default function ValueSection() {
                     >
                         <span>💡</span> METODE EKSKLUSIF FULL BRIGHT
                     </div>
-                    {/* 👇 Added leading-[1.3] for tighter wrap on mobile 👇 */}
+                    {/* 👇 Updated font and sizes to match model on mobile 👇 */}
                     <h2
-                        className="mb-4 text-2xl font-black leading-[1.3] sm:text-3xl md:text-4xl md:leading-tight"
+                        className="mb-4 text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
-                            fontFamily: 'var(--font-heading)',
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#151515',
                         }}
                     >
                         Ini <span style={{ color: '#D70808' }}>Strategi Belajar TOEFL</span> Yang Tepat Untuk Kamu
                     </h2>
                     <p
-                        className="mx-auto max-w-2xl text-sm leading-relaxed sm:text-base md:text-lg"
-                        style={{ color: '#666666' }}
+                        className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
                     >
                         Ini cara Full Bright membantu <strong>45.000+ orang</strong> mengubah submission yang tadinya ditolak jadi diterima di kampus impian mereka.
                     </p>
@@ -115,22 +116,23 @@ export default function ValueSection() {
                                 <BookOpen size={20} />
                             </div>
                             <p
-                                className="text-base font-bold text-gray-500"
-                                style={{ fontFamily: 'var(--font-heading)' }}
+                                className="text-[18px] font-[800] text-gray-500 sm:text-base sm:font-bold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
                             >
                                 Cara Lama ✗
                             </p>
                         </div>
                         <div className="flex flex-col gap-3">
                             {[
-                                'Belajar grammar random tanpa strategi submission',
-                                'Submit apply apa adanya, berharap TOEFL kepake',
-                                'Tidak ada yang mengevaluasi progress tiap minggu',
-                                'Skor stuck, deadline submission makin dekat',
+                                'Hafal ratusan rumus grammar dari buku tebal', 
+                                'Belajar berbulan-bulan tanpa arah yang jelas', 
+                                'Skor stuck di tempat meski sudah kerja keras', 
+                                'Tidak tahu bagian mana yang paling penting di tes'  
                             ].map((t) => (
                                 <div
                                     key={t}
-                                    className="flex items-start gap-3 text-sm text-gray-500 sm:text-base"
+                                    className="flex items-start gap-3 text-[15px] leading-[1.5] text-gray-500 sm:text-base sm:leading-normal"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
                                 >
                                     <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300" />
                                     {t}
@@ -155,10 +157,10 @@ export default function ValueSection() {
                                 <Target size={20} color="white" />
                             </div>
                             <p
-                                className="text-base font-bold"
+                                className="text-[18px] font-[800] sm:text-base sm:font-bold"
                                 style={{
                                     color: '#D70808',
-                                    fontFamily: 'var(--font-heading)',
+                                    fontFamily: "'Nunito', sans-serif",
                                 }}
                             >
                                 Metode Full Bright ✓
@@ -166,15 +168,15 @@ export default function ValueSection() {
                         </div>
                         <div className="flex flex-col gap-3">
                             {[
-                                'Strategi submit disesuaikan jurusan & rencana kontribusi',
-                                'Evaluasi progress mingguan, bukan asal jalan sendiri',
-                                'Dibimbing sampai skor target tercapai',
-                                'Sudah membantu 45.000+ alumni lolos beasiswa',
+                                'Belajar pola soal yang paling sering keluar', 
+                                '1 jam per hari sudah cukup, tidak ganggu aktivitas', 
+                                'Skor naik signifikan dalam 15 hari', 
+                                'Dianalisa dan diuji pada 45.000+ alumni',
                             ].map((t) => (
                                 <div
                                     key={t}
-                                    className="flex items-start gap-3 text-sm sm:text-base"
-                                    style={{ color: '#151515' }}
+                                    className="flex items-start gap-3 text-[15px] leading-[1.5] sm:text-base sm:leading-normal"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                                 >
                                     <div
                                         className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
@@ -202,12 +204,12 @@ export default function ValueSection() {
                                     <Icon size={24} color={iconColor} strokeWidth={2.5} />
                                 </div>
                                 <h3
-                                    className="text-base font-bold leading-snug sm:text-lg"
-                                    style={{ color: '#151515' }}
+                                    className="text-[18px] font-[800] leading-snug sm:text-lg sm:font-bold"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                                 >
                                     {title}
                                 </h3>
-                                <p className="text-sm leading-relaxed text-gray-500">
+                                <p className="text-[15px] leading-[1.6] text-gray-500 sm:text-sm sm:leading-relaxed" style={{ fontFamily: "'Nunito', sans-serif" }}>
                                     {desc}
                                 </p>
                             </div>
@@ -244,8 +246,9 @@ export default function ValueSection() {
             <SectionWrapper bg="cultured" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
                     <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+                        className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:font-bold"
                         style={{
+                            fontFamily: "'Nunito', sans-serif",
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
@@ -253,11 +256,11 @@ export default function ValueSection() {
                     >
                         <span>🏅</span> Mengapa Full Bright?
                     </div>
-                    {/* 👇 Added leading-[1.3] here as well for consistency 👇 */}
+                    {/* 👇 Updated font and sizes to match model on mobile 👇 */}
                     <h2
-                        className="text-2xl font-black leading-[1.3] sm:text-3xl md:text-4xl md:leading-tight"
+                        className="text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl md:leading-tight"
                         style={{
-                            fontFamily: 'var(--font-heading)',
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#151515',
                         }}
                     >
@@ -282,14 +285,14 @@ export default function ValueSection() {
                             </div>
                             <div className="flex flex-col gap-1.5">
                                 <p
-                                    className="text-base font-bold leading-snug"
-                                    style={{ color: '#151515' }}
+                                    className="text-[18px] font-[800] leading-snug sm:text-base sm:font-bold"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                                 >
                                     {title}
                                 </p>
                                 <p
-                                    className="text-sm leading-relaxed"
-                                    style={{ color: '#8a8a8a' }}
+                                    className="text-[15px] leading-[1.6] sm:text-sm sm:leading-relaxed"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#8a8a8a' }}
                                 >
                                     {why}
                                 </p>
