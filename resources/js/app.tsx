@@ -4,6 +4,8 @@ import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+// PostHog is optional: no-ops with a console warning if VITE_POSTHOG_KEY/HOST are unset.
+import '@/lib/posthog-tracking';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

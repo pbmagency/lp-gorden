@@ -12,6 +12,13 @@ interface LpButtonProps {
     fullWidth?: boolean;
     target?: string;
     rel?: string;
+    /**
+     * Optional PostHog "intent" zone label (e.g. "hero_primary", "pricing").
+     * When set, adds a `data-cta-zone` attribute that the optional
+     * posthog-tracking.ts click listener picks up automatically — pass the
+     * same string you already use for `trackCTA(location, ...)`.
+     */
+    ctaZone?: string;
 }
 
 export default function LpButton({
@@ -24,6 +31,7 @@ export default function LpButton({
     fullWidth = false,
     target,
     rel,
+    ctaZone,
 }: LpButtonProps) {
     const base = 'inline-flex items-center justify-center gap-2 font-bold rounded-2xl transition-all duration-200 cursor-pointer';
 
@@ -60,7 +68,7 @@ export default function LpButton({
     const cls = `${base} ${sizes[size]} ${variantClass[variant]} ${hoverClass[variant]} ${fullWidth ? 'w-full' : ''} ${className}`;
 
     if (href) {
-        return <a href={href} onClick={onClick} className={cls} style={styles[variant]} target={target} rel={rel}>{children}</a>;
+        return <a href={href} onClick={onClick} className={cls} style={styles[variant]} target={target} rel={rel} data-cta-zone={ctaZone}>{children}</a>;
     }
-    return <button type="button" onClick={onClick} className={cls} style={styles[variant]}>{children}</button>;
+    return <button type="button" onClick={onClick} className={cls} style={styles[variant]} data-cta-zone={ctaZone}>{children}</button>;
 }

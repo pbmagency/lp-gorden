@@ -4,6 +4,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CacheLandingPage;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Services\PostHogService;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -30,5 +31,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // PostHog is optional here — PostHogService no-ops when unconfigured,
+        // so this is safe to leave in place even if POSTHOG_PROJECT_TOKEN is empty.
+        $exceptions->report(function (Throwable $exception): void {
+            $userId = auth()->id();
+
+            app(PostHogService::class)->captureException(
+                $exception,
+                $userId !== null ? (string) $userId : null,
+            );
+        });
     })->create();
