@@ -242,9 +242,10 @@ export default function ValueSection() {
                 </div>
 
                 <div className="text-center">
-                    <div className="flex flex-wrap justify-center gap-3">
+                    <div className="flex flex-wrap justify-center gap-3 sm:flex-row">
                         <LpButton
                             href="#pricing"
+                            size="md"
                             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D70808] px-7 py-3.5 text-[16px] font-[700] text-white shadow-[0_4px_20px_rgba(215,8,8,0.35)] transition-all hover:bg-[#b30606] sm:text-[17px] sm:font-bold"
                             onClick={() => trackCTA('value_primary', 'Gabung Sekarang →', '#pricing')}
                         >
@@ -252,6 +253,7 @@ export default function ValueSection() {
                         </LpButton>
                         <LpButton
                             href="#testimonials"
+                            size="md"
                             variant="outline"
                             className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-[700] !text-[#151515] transition-all hover:bg-red-50 sm:text-[17px] sm:font-bold"
                             onClick={() => trackCTA('value_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
