@@ -252,7 +252,8 @@ export default function ValueSection() {
                         </LpButton>
                         <LpButton
                             href="#testimonials"
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-[700] text-[#151515] transition-all hover:bg-red-50 sm:text-[17px] sm:font-bold"
+                            variant="outline"
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-[700] !text-[#151515] transition-all hover:bg-red-50 sm:text-[17px] sm:font-bold"
                             onClick={() => trackCTA('value_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
                         >
                             Lihat Bukti Alumni →

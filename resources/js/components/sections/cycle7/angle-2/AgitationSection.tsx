@@ -84,10 +84,10 @@ export default function AgitationSection() {
                         Fakta yang harus kamu tahu
                     </p>
                     <h3
-                        className="mb-3 text-center text-[clamp(24px,3vw,36px)] font-[900] text-[#151515] sm:text-3xl sm:font-black"
+                        className="mb-3 text-center text-[clamp(22px,3vw,36px)] font-[900] text-[#151515] sm:text-3xl sm:font-black"
                         style={{ fontFamily: "'Nunito', sans-serif" }}
                     >
-                        <span className="text-[40px] text-[#D70808] sm:text-[44px]">82%</span>{' '}
+                        <span className="text-[38px] text-[#D70808] sm:text-[44px]">82%</span>{' '}
                         Pejuang Beasiswa Gagal
                     </h3>
                     <p
@@ -101,7 +101,7 @@ export default function AgitationSection() {
                 {/* Closing Bridge */}
                 <div className="space-y-4 text-center">
                     <p
-                        className="text-[16px] font-[800] leading-[1.6] text-[#151515] sm:text-base md:text-[17px]"
+                        className="text-[18px] font-[800] leading-[1.6] text-[#151515] sm:text-[18px] md:text-[19px]"
                         style={{ fontFamily: "'Nunito', sans-serif" }}
                     >
                         Mindsetmu harus segera diubah, sebelum submissionmu gagal.

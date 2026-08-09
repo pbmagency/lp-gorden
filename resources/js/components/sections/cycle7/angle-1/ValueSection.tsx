@@ -104,7 +104,7 @@ export default function ValueSection() {
                         className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
                         style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
                     >
-                        Ini cara Full Bright membantu <strong>45.000+ orang</strong> mengubah submission yang tadinya ditolak jadi diterima di kampus impian mereka.
+                        <strong>Ini cara Full Bright membantu 45.000+ orang mengubah submission yang tadinya ditolak jadi diterima di kampus impian mereka.</strong>
                     </p>
                 </div>
 

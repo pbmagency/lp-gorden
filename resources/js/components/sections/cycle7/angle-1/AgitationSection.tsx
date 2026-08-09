@@ -59,7 +59,7 @@ export default function AgitationSection() {
                         className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
                         style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
                     >
-                        Kebanyakan pejuang beasiswa <strong style={{ color: '#151515' }}>belajar TOEFL</strong> dengan cara yang salah, bukan untuk kejar skor demi submission.
+                        <strong style={{ color: '#151515' }}>Kebanyakan pejuang beasiswa belajar TOEFL dengan cara yang salah, bukan untuk kejar skor demi submission.</strong>
                     </p>
                 </div>
 
