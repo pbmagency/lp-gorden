@@ -151,11 +151,12 @@ function PayButton({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onClick}
-                className={`inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 sm:text-base active:translate-y-0 active:shadow-none ${bgClass} ${shadowClass} ${hoverClass}`}
+                className={`inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-4 text-[16px] font-[900] text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 sm:text-base sm:font-black active:translate-y-0 active:shadow-none ${bgClass} ${shadowClass} ${hoverClass}`}
+                style={{ fontFamily: "'Nunito', sans-serif" }}
             >
                 {label}
             </a>
-            <p className="flex items-center justify-center gap-1 text-center text-[11px] text-[#9ca3af]">
+            <p className="flex items-center justify-center gap-1 text-center text-[11px] text-[#9ca3af]" style={{ fontFamily: "'Nunito', sans-serif" }}>
                 <Lock size={10} strokeWidth={2.5} /> Pembayaran aman &
                 terenkripsi
             </p>
@@ -177,7 +178,8 @@ function WaButton({ onClick, label }: { onClick: () => void; label: string }) {
     return (
         <button
             onClick={onClick}
-            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-[1.5px] border-[#25D366] bg-transparent px-5 py-3 text-sm font-bold text-[#16a34a] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-[1.5px] border-[#25D366] bg-transparent px-5 py-3 text-[14px] font-[700] text-[#16a34a] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:text-sm sm:font-bold"
+            style={{ fontFamily: "'Nunito', sans-serif" }}
         >
             <WhatsAppIcon size={15} color="#25D366" /> {label}
         </button>
@@ -200,7 +202,8 @@ function FeatureList({
                         return (
                             <li
                                 key={i}
-                                className={`mt-2 block text-[10px] font-black tracking-widest uppercase ${isBundling ? 'text-[#16a34a]' : 'text-[#D70808]'}`}
+                                className={`mt-2 block text-[10px] font-[900] tracking-widest uppercase sm:font-black ${isBundling ? 'text-[#16a34a]' : 'text-[#D70808]'}`}
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
                             >
                                 {f.text}
                             </li>
@@ -211,7 +214,8 @@ function FeatureList({
                         return (
                             <li
                                 key={i}
-                                className={`flex items-start gap-2 text-xs md:text-sm ${f.bold ? 'font-bold text-[#151515]' : 'text-[#3d3d3d]'}`}
+                                className={`flex items-start gap-2 text-[14px] md:text-sm ${f.bold ? 'font-[700] text-[#151515] sm:font-bold' : 'text-[#3d3d3d]'}`}
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
                             >
                                 <Globe size={14} className="mt-0.5 shrink-0" color="#3b82f6" />
                                 <span>{f.text}</span>
@@ -223,7 +227,8 @@ function FeatureList({
                         return (
                             <li
                                 key={i}
-                                className={`mt-2 flex items-start gap-2 border-t border-gray-100 pt-3 text-xs md:text-sm text-[#9ca3af] ${f.bold ? 'font-bold' : ''}`}
+                                className={`mt-2 flex items-start gap-2 border-t border-gray-100 pt-3 text-[14px] md:text-sm text-[#9ca3af] ${f.bold ? 'font-[700] sm:font-bold' : ''}`}
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
                             >
                                 <XCircle size={14} className="mt-0.5 shrink-0" color="#d1d5db" />
                                 <span>{f.text}</span>
@@ -234,7 +239,8 @@ function FeatureList({
                     return (
                         <li
                             key={i}
-                            className={`flex items-start gap-2 text-xs md:text-sm ${f.bold ? 'font-bold text-[#151515]' : 'text-[#3d3d3d]'}`}
+                            className={`flex items-start gap-2 text-[14px] md:text-sm ${f.bold ? 'font-[700] text-[#151515] sm:font-bold' : 'text-[#3d3d3d]'}`}
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
                         >
                             <CheckCircle2 size={14} className="mt-0.5 shrink-0" color="#16a34a" />
                             <span>{f.text}</span>
@@ -343,14 +349,23 @@ export default function PricingSection() {
             >
                 {/* ── Updated Header ── */}
                 <div className="mb-14 text-center">
-                    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-1.5 text-xs font-bold tracking-widest uppercase text-[#D70808]">
+                    <div
+                        className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-[6px] text-[12px] font-[800] tracking-widest uppercase text-[#D70808] sm:py-1.5 sm:text-xs sm:font-bold"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
                         <span>⏳</span> Mulai dari Sekarang, Bukan Nanti
                     </div>
-                    <h2 className="font-['var(--font-heading)'] mb-4 text-3xl font-black text-[#151515] md:text-4xl lg:text-5xl">
+                    <h2
+                        className="mb-4 text-[clamp(30px,4vw,48px)] font-black leading-[1.2] text-[#151515] md:text-4xl lg:text-5xl"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
                         Persiapkan Sekarang,{' '}
                         <span className="text-[#D70808]">Jangan Ditunda</span>
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base leading-relaxed text-[#3d3d3d]">
+                    <p
+                        className="mx-auto max-w-2xl text-[16px] leading-[1.6] text-[#3d3d3d]"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
                         Semakin cepat kamu mulai, semakin besar peluang kamu diterima
                         beasiswa karena skor 500+ tercapai sebelum deadline submission.
                     </p>
@@ -361,10 +376,16 @@ export default function PricingSection() {
                     <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
                         <div className="mb-1 flex items-start justify-between">
                             <div>
-                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#9ca3af]">
+                                <p
+                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Paket
                                 </p>
-                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
+                                <h3
+                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Starter
                                 </h3>
                             </div>
@@ -372,7 +393,10 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
+                        <p
+                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             Target Skor:{' '}
                             <span className="font-black text-[#16a34a]">
                                 450+
@@ -384,14 +408,20 @@ export default function PricingSection() {
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
+                                <span
+                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Rp 1.000.000
                                 </span>
                                 <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     HEMAT 75%
                                 </span>
                             </div>
-                            <p className="font-['var(--font-heading)'] text-3xl font-black text-[#D70808]">
+                            <p
+                                className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
                                 Rp 250.000
                             </p>
                         </div>
@@ -422,13 +452,22 @@ export default function PricingSection() {
                         </div>
                         <div className="mt-4 mb-1 flex items-start justify-between">
                             <div>
-                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#D70808]">
+                                <p
+                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#D70808] sm:font-bold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Paket
                                 </p>
-                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
+                                <h3
+                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Bundling
                                 </h3>
-                                <p className="mt-0.5 text-[11px] font-semibold text-[#D70808]">
+                                <p
+                                    className="mt-0.5 text-[11px] font-[600] text-[#D70808] sm:font-semibold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Starter + Intermediate
                                 </p>
                             </div>
@@ -436,7 +475,10 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
+                        <p
+                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             Target Skor:{' '}
                             <span className="font-black text-[#D70808]">
                                 500+
@@ -448,17 +490,26 @@ export default function PricingSection() {
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
+                                <span
+                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Rp 1.875.000
                                 </span>
                                 <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     DISKON 80%
                                 </span>
                             </div>
-                            <p className="font-['var(--font-heading)'] mb-1 text-3xl font-black text-[#D70808]">
+                            <p
+                                className="mb-1 text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
                                 Rp 375.000
                             </p>
-                            <p className="text-[11px] font-semibold text-[#D70808]">
+                            <p
+                                className="text-[11px] font-[600] text-[#D70808] sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
                                 Hemat Rp 1.500.000 dari harga normal!
                             </p>
                         </div>
@@ -476,10 +527,16 @@ export default function PricingSection() {
                                         <Icon size={18} color="#D97706" fill="#D97706" />
                                     </div>
                                     <div>
-                                        <p className="font-['var(--font-heading)'] mb-1 text-[13px] font-black leading-tight text-[#151515]">
+                                        <p
+                                            className="mb-1 text-[13px] font-[900] leading-[1.2] text-[#151515] sm:font-black sm:leading-tight"
+                                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                                        >
                                             {title}
                                         </p>
-                                        <p className="text-[11px] leading-relaxed text-[#6B7280]">
+                                        <p
+                                            className="text-[11px] leading-[1.6] text-[#6B7280] sm:leading-relaxed"
+                                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                                        >
                                             {desc}
                                         </p>
                                     </div>
@@ -495,7 +552,10 @@ export default function PricingSection() {
                             }
                             green
                         />
-                        <p className="mt-2 text-center text-[10px] font-[600] text-[#D70808]">
+                        <p
+                            className="mt-2 text-center text-[10px] font-[600] text-[#D70808]"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             * Centang opsi Bundle saat checkout
                         </p>
                         <OrDivider />
@@ -514,10 +574,16 @@ export default function PricingSection() {
                     <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
                         <div className="mb-1 flex items-start justify-between">
                             <div>
-                                <p className="mb-1 text-[10px] font-bold tracking-widest uppercase text-[#9ca3af]">
+                                <p
+                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Paket
                                 </p>
-                                <h3 className="font-['var(--font-heading)'] text-2xl font-black text-[#151515]">
+                                <h3
+                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Intermediate
                                 </h3>
                             </div>
@@ -525,7 +591,10 @@ export default function PricingSection() {
                                 <StarRow /> <span className="ml-1">5.0</span>
                             </span>
                         </div>
-                        <p className="mb-4 text-sm font-semibold text-[#9ca3af]">
+                        <p
+                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             Target Skor:{' '}
                             <span className="font-black text-[#16a34a]">
                                 500+
@@ -538,14 +607,20 @@ export default function PricingSection() {
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
-                                <span className="text-sm font-semibold line-through text-[#9ca3af]">
+                                <span
+                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
                                     Rp 1.400.000
                                 </span>
                                 <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
                                     DISKON 75%
                                 </span>
                             </div>
-                            <p className="font-['var(--font-heading)'] text-3xl font-black text-[#D70808]">
+                            <p
+                                className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
                                 Rp 350.000
                             </p>
                         </div>
@@ -574,22 +649,37 @@ export default function PricingSection() {
 
                 {/* Legalitas */}
                 <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
-                    <p className="mb-3 text-xs font-black tracking-widest uppercase text-[#9ca3af]">
+                    <p
+                        className="mb-3 text-[12px] font-[900] tracking-widest uppercase text-[#9ca3af] sm:text-xs sm:font-black"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
                         Legalitas Resmi
                     </p>
                     <div className="flex flex-col gap-1.5">
-                        <span className="text-xs font-semibold text-[#151515]">
+                        <span
+                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun
                             2020
                         </span>
-                        <span className="text-xs font-semibold text-[#151515]">
+                        <span
+                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             ✓ SK Izin Operasional LKP
                             503/20177/LKP/DPM-PTSP/8/2024
                         </span>
-                        <span className="text-xs font-semibold text-[#151515]">
+                        <span
+                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             ✓ NPSN Nomor K9998700
                         </span>
-                        <span className="text-xs font-semibold text-[#151515]">
+                        <span
+                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
                             ✓ Bekerja sama dengan IIEF Jakarta
                         </span>
                     </div>
@@ -597,7 +687,8 @@ export default function PricingSection() {
                         href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-block text-xs font-semibold text-[#D70808] hover:underline"
+                        className="mt-3 inline-block text-[12px] font-[600] text-[#D70808] hover:underline sm:text-xs sm:font-semibold"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
                     >
                         Info Detail Legalitas →
                     </a>

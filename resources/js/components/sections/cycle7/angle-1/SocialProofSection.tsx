@@ -232,9 +232,9 @@ export default function SocialProofSection() {
                     {statsBar.map((s) => (
                         <div key={s.label}>
                             <p
-                                className="text-4xl font-black tracking-tight md:text-5xl"
+                                className="text-[36px] font-[900] tracking-tight md:text-5xl"
                                 style={{
-                                    fontFamily: 'var(--font-heading)',
+                                    fontFamily: "'Nunito', sans-serif",
                                     letterSpacing: '-0.02em',
                                 }}
                             >
@@ -251,8 +251,9 @@ export default function SocialProofSection() {
             <SectionWrapper bg="white" className="py-20 md:py-24">
                 <div className="mb-12 text-center">
                     <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+                        className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:text-xs sm:font-bold"
                         style={{
+                            fontFamily: "'Nunito', sans-serif",
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
@@ -261,9 +262,9 @@ export default function SocialProofSection() {
                         💬 Testimoni Alumni Kami
                     </div>
                     <h2
-                        className="mb-4 text-2xl font-black sm:text-3xl md:text-4xl"
+                        className="mb-4 text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl"
                         style={{
-                            fontFamily: 'var(--font-heading)',
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#151515',
                         }}
                     >
@@ -272,7 +273,7 @@ export default function SocialProofSection() {
                             Meraih Target Skor Untuk Beasiswa
                         </span>
                     </h2>
-                    <p className="text-sm" style={{ color: '#9ca3af' }}>
+                    <p className="text-[14px]" style={{ fontFamily: "'Nunito', sans-serif", color: '#9ca3af' }}>
                         Klik foto untuk memperbesar
                     </p>
                 </div>
@@ -286,8 +287,8 @@ export default function SocialProofSection() {
                             onClick={() => openLightbox(i)}
                         >
                             <p
-                                className="m-0 text-lg font-extrabold"
-                                style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
+                                className="m-0 text-[18px] font-[800]"
+                                style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                             >
                                 Skor <span style={{ color: '#D70808' }}>{img.score}</span>
                             </p>
@@ -328,8 +329,8 @@ export default function SocialProofSection() {
                                     onClick={() => openLightbox(i % waScreenshots.length)}
                                 >
                                     <p
-                                        className="m-0 text-base font-extrabold"
-                                        style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
+                                        className="m-0 text-[16px] font-[800]"
+                                        style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                                     >
                                         Skor <span style={{ color: '#D70808' }}>{img.score}</span>
                                     </p>
@@ -351,8 +352,8 @@ export default function SocialProofSection() {
                 {/* International testimonials */}
                 <div className="mx-auto mb-14 w-full max-w-4xl">
                     <p
-                        className="mb-6 text-center text-xs font-bold tracking-widest uppercase"
-                        style={{ color: '#9ca3af' }}
+                        className="mb-6 text-center text-[12px] font-[700] tracking-widest uppercase"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: '#9ca3af' }}
                     >
                         Testimoni Alumni yang Sukses Masuk Universitas Luar Negeri
                     </p>
@@ -367,8 +368,9 @@ export default function SocialProofSection() {
                                 }}
                             >
                                 <span
-                                    className="self-start rounded-full px-2.5 py-1 text-xs font-semibold"
+                                    className="self-start rounded-full px-[10px] py-[4px] text-[12px] font-[600]"
                                     style={{
+                                        fontFamily: "'Nunito', sans-serif",
                                         backgroundColor: '#FFF0F0',
                                         color: '#D70808',
                                     }}
@@ -376,14 +378,14 @@ export default function SocialProofSection() {
                                     {t.university}
                                 </span>
                                 <p
-                                    className="text-xs font-black tracking-widest uppercase"
-                                    style={{ color: '#D70808' }}
+                                    className="text-[12px] font-black tracking-widest uppercase"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#D70808' }}
                                 >
                                     {t.title}
                                 </p>
                                 <p
-                                    className="flex-1 text-sm leading-relaxed"
-                                    style={{ color: '#3d3d3d' }}
+                                    className="flex-1 text-[14px] leading-[1.6]"
+                                    style={{ fontFamily: "'Nunito', sans-serif", color: '#3d3d3d' }}
                                 >
                                     "{t.text}"
                                 </p>
@@ -400,17 +402,17 @@ export default function SocialProofSection() {
                                     />
                                     <div className="min-w-0 flex-1">
                                         <p
-                                            className="truncate text-sm font-black"
+                                            className="truncate text-[14px] font-black"
                                             style={{
-                                                fontFamily: 'var(--font-heading)',
+                                                fontFamily: "'Nunito', sans-serif",
                                                 color: '#151515',
                                             }}
                                         >
                                             {t.name}
                                         </p>
                                         <p
-                                            className="truncate text-xs"
-                                            style={{ color: '#6b7280' }}
+                                            className="truncate text-[12px]"
+                                            style={{ fontFamily: "'Nunito', sans-serif", color: '#6b7280' }}
                                         >
                                             {t.role}
                                         </p>
@@ -463,7 +465,7 @@ export default function SocialProofSection() {
                                     <p
                                         className="shrink-0 text-xl font-black"
                                         style={{
-                                            fontFamily: 'var(--font-heading)',
+                                            fontFamily: "'Nunito', sans-serif",
                                             color: '#16a34a',
                                         }}
                                     >
@@ -561,9 +563,9 @@ export default function SocialProofSection() {
 
                 <div className="mt-10 mb-6 text-center">
                     <p
-                        className="mx-auto mb-5 max-w-[520px] text-lg font-bold leading-relaxed"
+                        className="mx-auto mb-5 max-w-[520px] text-[18px] font-[700] leading-[1.6]"
                         style={{
-                            fontFamily: 'var(--font-heading)',
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#151515',
                         }}
                     >
