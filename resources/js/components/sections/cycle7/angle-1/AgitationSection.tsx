@@ -30,8 +30,9 @@ export default function AgitationSection() {
                 {/* Tag */}
                 <div className="mb-8 text-center md:mb-10">
                     <div
-                        className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-1.5 text-[10px] font-bold uppercase tracking-widest sm:text-xs"
+                        className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-[13px] font-[800] uppercase tracking-widest sm:py-1.5 sm:text-xs sm:font-bold"
                         style={{
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#D70808',
                             border: '1px solid #ffb3b3',
                         }}
@@ -40,11 +41,10 @@ export default function AgitationSection() {
                     </div>
 
                     {/* Headline */}
-                    {/* 👇 Reduced text-3xl to text-2xl and adjusted line height for mobile 👇 */}
                     <h2
-                        className="mb-4 text-2xl font-black leading-[1.3] sm:text-3xl md:mb-5 md:text-[2.5rem] md:leading-[1.25]"
+                        className="mb-4 text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:mb-5 md:text-[2.5rem] md:leading-[1.25]"
                         style={{
-                            fontFamily: 'var(--font-heading)',
+                            fontFamily: "'Nunito', sans-serif",
                             color: '#151515',
                         }}
                     >
@@ -56,8 +56,8 @@ export default function AgitationSection() {
 
                     {/* Subheadline */}
                     <p
-                        className="mx-auto max-w-2xl text-[14px] leading-relaxed sm:text-base md:text-lg"
-                        style={{ color: '#666666' }}
+                        className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
                     >
                         Kebanyakan pejuang beasiswa <strong style={{ color: '#151515' }}>belajar TOEFL</strong> dengan cara yang salah, bukan untuk kejar skor demi submission.
                     </p>
@@ -66,12 +66,11 @@ export default function AgitationSection() {
                 {/* Table Block */}
                 <div className="mx-auto mb-10 max-w-3xl overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-sm md:mb-12">
                     {/* Header */}
-                    {/* 👇 Changed to grid-cols-2 by default so it's side-by-side on mobile 👇 */}
                     <div className="grid grid-cols-2 gap-4 border-b border-gray-200 bg-white p-5 sm:gap-6 md:px-8 md:py-6">
-                        <div className="text-[13px] font-bold leading-snug sm:text-sm md:text-base" style={{ color: '#151515' }}>
+                        <div className="text-[17px] font-[800] leading-[1.3] sm:text-sm sm:font-bold sm:leading-snug md:text-base" style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}>
                             Yang Selama Ini Kamu Lakukan
                         </div>
-                        <div className="text-[13px] font-bold leading-snug sm:text-sm md:text-base" style={{ color: '#151515' }}>
+                        <div className="text-[17px] font-[800] leading-[1.3] sm:text-sm sm:font-bold sm:leading-snug md:text-base" style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}>
                             Kenapa Cara Ini Bikin Submission Gagal
                         </div>
                     </div>
@@ -81,13 +80,12 @@ export default function AgitationSection() {
                         {tableData.map((item, i) => (
                             <div 
                                 key={i} 
-                                /* 👇 Changed to grid-cols-2 by default so it's side-by-side on mobile 👇 */
                                 className="grid grid-cols-2 gap-4 border-b border-gray-100 p-5 last:border-b-0 sm:gap-6 md:px-8 md:py-5"
                             >
-                                <div className="flex text-[13px] leading-relaxed text-gray-500 sm:items-center sm:text-sm">
+                                <div className="flex text-[15px] leading-[1.4] text-gray-500 sm:items-center sm:text-sm sm:leading-relaxed" style={{ fontFamily: "'Nunito', sans-serif" }}>
                                     {item.do}
                                 </div>
-                                <div className="flex text-[13px] leading-relaxed text-gray-500 sm:items-center sm:text-sm">
+                                <div className="flex text-[15px] leading-[1.4] text-gray-500 sm:items-center sm:text-sm sm:leading-relaxed" style={{ fontFamily: "'Nunito', sans-serif" }}>
                                     {item.whyFails}
                                 </div>
                             </div>
@@ -98,14 +96,14 @@ export default function AgitationSection() {
                 {/* Closing Bridge */}
                 <div className="space-y-3 text-center px-2">
                     <p
-                        className="text-[16px] leading-relaxed md:text-lg"
-                        style={{ color: '#666666' }}
+                        className="text-[16px] font-semibold leading-[1.5] sm:font-normal sm:leading-relaxed md:text-lg"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: '#666666' }}
                     >
                         Padahal dengan strategi yang tepat, skor bisa naik signifikan tanpa perlu waktu lama.
                     </p>
                     <p
-                        className="text-[17px] font-bold leading-relaxed md:text-[20px]"
-                        style={{ color: '#151515' }}
+                        className="text-[20px] font-bold leading-[1.5] sm:text-[17px] sm:leading-relaxed md:text-[20px]"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: '#151515' }}
                     >
                         Kalau kamu mau lolos beasiswa, cara belajar kamu harus segera diubah
                     </p>
