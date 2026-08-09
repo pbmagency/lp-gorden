@@ -23,8 +23,9 @@ export default function AgitationSection() {
             <div className="mx-auto max-w-2xl">
                 {/* Tag */}
                 <div className="mb-8 text-center md:mb-10">
+                    {/* 👇 text-[14px] on mobile, back to text-xs on md: (desktop) 👇 */}
                     <div
-                        className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+                        className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[14px] font-bold tracking-widest uppercase md:text-xs"
                         style={{
                             backgroundColor: '#FFF0F0',
                             color: '#D70808',
@@ -152,14 +153,16 @@ export default function AgitationSection() {
 
                 {/* Closing Bridge */}
                 <div className="space-y-3 text-center">
+                    {/* 👇 text-[22px] on mobile, back to md:text-[22px] on desktop 👇 */}
                     <p
-                        className="text-xl leading-relaxed md:text-[22px]"
+                        className="text-[22px] leading-relaxed md:text-[22px]"
                         style={{ color: '#3d3d3d' }}
                     >
                         Kabar baiknya, hampir semua yang berhasil dapat beasiswa punya satu kesamaan.
                     </p>
+                    {/* 👇 text-[22px] on mobile, back to md:text-[22px] on desktop 👇 */}
                     <p
-                        className="text-xl leading-relaxed font-semibold md:text-[22px]"
+                        className="text-[22px] leading-relaxed font-semibold md:text-[22px]"
                         style={{ color: '#151515' }}
                     >
                         Mereka mempersiapkan TOEFL dari jauh-jauh hari, bukan mepet.
