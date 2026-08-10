@@ -270,7 +270,7 @@ export default function SocialProofSection() {
                     >
                         Lihat Bagaimana Strategi Kami Membantu Alumni<br />
                         <span style={{ color: '#D70808' }}>
-                            Meraih Target Skor Untuk Beasiswa
+                            Meraih Target Skor Untuk Beasiswa & CPNS
                         </span>
                     </h2>
                     <p className="text-[14px]" style={{ fontFamily: 'var(--font-heading)', color: '#9ca3af' }}>

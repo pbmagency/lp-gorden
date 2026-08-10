@@ -59,7 +59,7 @@ export default function AgitationSection() {
                         className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
                         style={{ fontFamily: 'var(--font-heading)', color: '#666666' }}
                     >
-                        <strong style={{ color: '#151515' }}>Kebanyakan pejuang beasiswa belajar TOEFL dengan cara yang salah, bukan untuk kejar skor demi submission.</strong>
+                        <strong style={{ color: '#151515' }}>Kebanyakan pejuang beasiswa & CPNS belajar TOEFL dengan cara yang salah, bukan untuk kejar skor demi submission.</strong>
                     </p>
                 </div>
 
@@ -105,7 +105,7 @@ export default function AgitationSection() {
                         className="text-[20px] font-bold leading-[1.5] sm:text-[17px] sm:leading-relaxed md:text-[20px]"
                         style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                     >
-                        Kalau kamu mau lolos beasiswa, cara belajar kamu harus segera diubah
+                        Kalau kamu mau lolos beasiswa & CPNS, cara belajar kamu harus segera diubah
                     </p>
 
                     <div className="flex justify-center pt-2">

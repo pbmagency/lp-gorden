@@ -104,7 +104,7 @@ export default function ValueSection() {
                         className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
                         style={{ fontFamily: 'var(--font-heading)', color: '#666666' }}
                     >
-                        <strong>Ini cara Full Bright membantu 45.000+ orang mengubah submission yang tadinya ditolak jadi diterima di kampus impian mereka.</strong>
+                        <strong>Ini cara Full Bright membantu 45.000+ orang mengubah submission yang tadinya ditolak jadi diterima di kampus & perusahaan impian mereka.</strong>
                     </p>
                 </div>
 
