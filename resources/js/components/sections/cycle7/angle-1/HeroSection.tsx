@@ -106,8 +106,7 @@ export default memo(function HeroSection() {
                         </div>
 
                         {/* e. CTA buttons */}
-                        <div className="flex flex-col gap-3">
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-col gap-3 sm:flex-row">
                                 <LpButton
                                     href="#pricing"
                                     size="md"
@@ -140,9 +139,7 @@ export default memo(function HeroSection() {
                                     Lihat Bukti Alumni →
                                 </LpButton>
                             </div>
-
                             <SocialProofMicro />
-                        </div>
                     </div>
 
                     {/* Right column — score card */}
