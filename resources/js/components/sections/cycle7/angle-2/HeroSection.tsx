@@ -68,12 +68,12 @@ export default memo(function HeroSection() {
                             className="font-black leading-[1.15] text-[#151515] text-[clamp(24px,7vw,30px)] min-[501px]:text-[clamp(30px,4vw,44px)]"
                             style={{ fontFamily: 'var(--font-heading)',
                                 color: '#151515',}}
-                        > 
-                            Serius Soal Beasiswa & CPNS?
+                        >
+                            Serius Soal Beasiswa?
                             <br />
                             Capai{' '}
                             <span className="box-decoration-clone bg-[linear-gradient(#F5B700,#F5B700)] bg-[length:100%_12px] bg-[position:0_100%] bg-no-repeat px-[2px] [-webkit-box-decoration-break:clone]">
-                                TOEFL 500+ dalam <br className="hidden sm:block" /> 15 Hari
+                                TOEFL 500+ dalam <br className="hidden sm:block" /> 15 Hari Buat Submission
                             </span>
                         </h1>
                         {/* c. Sub-copy */}

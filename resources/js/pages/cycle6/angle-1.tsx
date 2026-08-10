@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately (critical rendering path)
-import HeroSection from '@/components/sections/test-variations/cycle6-angle/HeroSection';
+import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
 import Navbar from '@/components/sections/test-variations/cycle6-angle/Navbar';
 import UrgencyBanner from '@/components/sections/test-variations/cycle6-angle/UrgencyBanner';
 
@@ -26,6 +26,10 @@ const PricingSection = lazy(
 const FAQSection = lazy(
     () =>
         import('@/components/sections/test-variations/cycle6-angle/FAQSection'),
+);
+const LogoBar = lazy(
+    () =>
+        import('@/components/sections/test-variations/cycle6-angle-2/LogoBar'),
 );
 const FreeTrialSection = lazy(
     () =>
@@ -88,6 +92,9 @@ export default function Cycle6Angle() {
                 <UrgencyBanner />
                 <Navbar />
                 <HeroSection />
+                <Suspense fallback={<SectionSkeleton />}>
+                    <LogoBar />
+                </Suspense>
                 {/* Below-the-fold: lazy loaded after hydration */}
                 <Suspense fallback={<SectionSkeleton />}>
                     <AgitationSection />
