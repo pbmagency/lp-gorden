@@ -4,7 +4,7 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately (critical rendering path)
 import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
 import Navbar from '@/components/sections/cycle7/angle-1/Navbar';
-
+import UrgencyBanner from '@/components/sections/cycle7/angle-1/UrgencyBanner';
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
     () =>
@@ -89,6 +89,7 @@ export default function Cycle6Angle() {
 
             <div className="min-h-screen bg-white">
                 {/* Above-the-fold: rendered immediately */}
+                <UrgencyBanner />
                 <Navbar />
                 <HeroSection />
                 {/* Below-the-fold: lazy loaded after hydration */}

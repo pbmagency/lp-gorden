@@ -4,7 +4,7 @@ import { lazy, Suspense, useEffect } from 'react';
 // Above-the-fold — load immediately (critical rendering path)
 import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
 import Navbar from '@/components/sections/cycle7/angle-1/Navbar';
-import UrgencyBanner from '@/components/sections/test-variations/cycle6-angle/UrgencyBanner';
+import UrgencyBanner from '@/components/sections/cycle7/angle-1/UrgencyBanner';
 
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
