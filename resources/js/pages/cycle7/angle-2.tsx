@@ -20,7 +20,7 @@ const SocialProofSection = lazy(
 );
 const PricingSection = lazy(
     () =>
-        import('@/components/sections/cycle7/angle-1/PricingSection'),
+        import('@/components/sections/cycle7/angle-2/PricingSection'),
 );
 
 const FAQSection = lazy(
