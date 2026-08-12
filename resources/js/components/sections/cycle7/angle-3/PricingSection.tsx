@@ -368,7 +368,7 @@ export default function PricingSection() {
                     className="mb-3 text-[14px] font-[700] text-[#151515] sm:text-[15px]"
                     style={{ fontFamily: 'var(--font-heading)' }}
                 >
-                    Cara belajar yang cocok buatmu:
+                    👇 Pilih Cara Belajarmu
                 </p>
                 <div className="inline-flex items-center gap-1 rounded-full border border-[#ffb3b3] bg-white p-[5px] shadow-[0_2px_12px_rgba(215,8,8,0.08)]">
                     <button
