@@ -144,6 +144,7 @@ export default function LmsSection() {
                     <div className="mb-6 flex flex-wrap justify-center gap-3">
                         <LpButton
                             href="#pricing"
+                            size="md"
                             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D70808] px-7 py-3.5 text-[16px] font-[700] text-white shadow-[0_4px_20px_rgba(215,8,8,0.35)] transition-all hover:bg-[#b30606] sm:text-[17px] sm:font-bold"
                             onClick={() => trackCTA('lms_primary', 'Gabung Sekarang →', '#pricing')}
                         >
@@ -151,7 +152,9 @@ export default function LmsSection() {
                         </LpButton>
                         <LpButton
                             href="#testimonials"
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-[700] text-[#151515] transition-all hover:bg-red-50 sm:text-[17px] sm:font-bold"
+                            size="md"
+                            variant="outline"
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-[#D70808] bg-transparent px-7 py-3.5 text-[16px] font-[700] !text-[#151515] transition-all hover:bg-red-50 sm:text-[17px] sm:font-bold"
                             onClick={() => trackCTA('lms_testimonials', 'Lihat Bukti Alumni →', '#testimonials')}
                         >
                             Lihat Bukti Alumni →

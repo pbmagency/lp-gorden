@@ -652,77 +652,116 @@ export default function PricingSection() {
                 </div>
             )}
 
-            {/* === SELF STUDY MODE (1 CARD) === */}
+            {/* === SELF STUDY MODE (1 CARD + TESTIMONIAL) === */}
             {mode === 'self' && (
-                <div className="mx-auto mb-14 flex w-full max-w-[500px] flex-col overflow-hidden rounded-3xl border-2 border-[#F5B700] bg-[linear-gradient(165deg,#ffffff_0%,#fffbf0_100%)] p-6 shadow-[0_16px_56px_rgba(245,183,0,0.15),0_0_0_1px_rgba(245,183,0,0.08)] md:p-7 relative">
-                    <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#F5B700] px-4 py-2 text-[10px] font-black text-white">
-                        🔥 POPULAR
-                    </div>
-                    
-                    <div className="mb-1 mt-4 flex items-start justify-between">
-                        <div>
-                            <p
-                                className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                E-Course
-                            </p>
-                            <h3
-                                className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                Self-Study LMS
-                            </h3>
+                <div className="mx-auto mb-14 w-full max-w-[500px]">
+                    <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#F5B700] bg-[linear-gradient(165deg,#ffffff_0%,#fffbf0_100%)] p-6 shadow-[0_16px_56px_rgba(245,183,0,0.15),0_0_0_1px_rgba(245,183,0,0.08)] md:p-7">
+                        <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#F5B700] px-4 py-2 text-[10px] font-black text-white">
+                            🔥 POPULAR
                         </div>
-                        <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-3 py-1 text-[10px] font-semibold text-[#D70808]">
-                            📚 Mandiri
-                        </span>
-                    </div>
-                    
-                    <p
-                        className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
-                        style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                        Target Skor:{' '}
-                        <span className="font-black text-[#16a34a]">500+</span>
-                        {' - '}
-                        <span className="font-black text-[#151515]">Belajar Kapan Saja</span>
-                    </p>
-
-                    <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
-                        <div className="mb-1 flex items-center gap-2">
-                            <span
-                                className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                Rp 250.000
-                            </span>
-                            <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
-                                HEMAT 68%
+                        
+                        <div className="mb-1 mt-4 flex items-start justify-between">
+                            <div>
+                                <p
+                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    E-Course
+                                </p>
+                                <h3
+                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Self-Study LMS
+                                </h3>
+                            </div>
+                            <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-3 py-1 text-[10px] font-semibold text-[#D70808]">
+                                📚 Mandiri
                             </span>
                         </div>
+                        
                         <p
-                            className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
                             style={{ fontFamily: 'var(--font-heading)' }}
                         >
-                            Rp 81.000
+                            Target Skor:{' '}
+                            <span className="font-black text-[#16a34a]">500+</span>
+                            {' - '}
+                            <span className="font-black text-[#151515]">Belajar Kapan Saja</span>
                         </p>
+
+                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
+                            <div className="mb-1 flex items-center gap-2">
+                                <span
+                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Rp 250.000
+                                </span>
+                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
+                                    HEMAT 68%
+                                </span>
+                            </div>
+                            <p
+                                className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                Rp 81.000
+                            </p>
+                        </div>
+
+                        <FeatureList features={selfFeatures} />
+
+                        <PayButton
+                            href={PG_SELF}
+                            label="Mulai Belajar Mandiri →"
+                            onClick={() => handlePayClick('Self', PG_SELF)}
+                        />
+                        <OrDivider />
+                        <WaButton
+                            onClick={() => handleWaClick('Self', WA_SELF)}
+                            label="Tanya via WhatsApp"
+                        />
+                        <div className="mt-4 flex justify-center">
+                            <SocialProofMicro variant="badges" />
+                        </div>
                     </div>
 
-                    <FeatureList features={selfFeatures} />
-
-                    <PayButton
-                        href={PG_SELF}
-                        label="Mulai Belajar Mandiri →"
-                        onClick={() => handlePayClick('Self', PG_SELF)}
-                    />
-                    <OrDivider />
-                    <WaButton
-                        onClick={() => handleWaClick('Self', WA_SELF)}
-                        label="Tanya via WhatsApp"
-                    />
-                    <div className="mt-4 flex justify-center">
-                        <SocialProofMicro variant="badges" />
+                    {/* Testimonial Section added right below the card */}
+                    <div className="mt-8">
+                        <p
+                            className="mb-4 text-center text-[10px] font-[900] tracking-widest uppercase text-[#9ca3af]"
+                            style={{ fontFamily: 'var(--font-heading)' }}
+                        >
+                            Kata Mereka yang Belajar Mandiri
+                        </p>
+                        <div className="rounded-2xl border border-[#ececec] bg-[#F9F9F9] p-5">
+                            <p className="mb-2 text-[12px] text-[#F59E0B]">⭐⭐⭐⭐⭐</p>
+                            <p
+                                className="mb-4 text-[13px] font-[600] leading-[1.5] text-[#3d3d3d] sm:text-[14px]"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                "Trm kasih Full Bright Indonesia yg sudah memberikan kesempatan belajar Bhs
+                                Inggris, belajar disini bisa menjadi alternatif bagi individu yg ingin belajar sambil
+                                bekerja, LMS bisa diakses kapan pun!"
+                            </p>
+                            <div className="flex items-center gap-3">
+                                <img
+                                    src="/image/avatar1.webp"
+                                    alt="Nina Hernawati"
+                                    className="h-8 w-8 rounded-full object-cover bg-gray-200"
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=Nina+Hernawati&background=random';
+                                    }}
+                                />
+                                <p
+                                    className="text-[12px] font-[800] text-[#151515] sm:text-[13px]"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Nina Hernawati
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
