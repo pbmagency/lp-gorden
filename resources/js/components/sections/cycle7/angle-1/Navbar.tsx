@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState, memo, useRef } from 'react';
 import { useAnalytics } from '@/hooks/use-analytics';
 
@@ -33,8 +35,11 @@ const Navbar = memo(() => {
     useEffect(() => {
         // Automatically measure the height of the UrgencyBanner right above it
         const updateHeight = () => {
-            if (headerRef.current?.previousElementSibling?.tagName === 'A') {
-                setBannerHeight(headerRef.current.previousElementSibling.getBoundingClientRect().height);
+            const prev = headerRef.current?.previousElementSibling;
+            
+            // We now check for 'BUTTON' as well since we changed the banner's HTML tag!
+            if (prev && (prev.tagName === 'A' || prev.tagName === 'BUTTON')) {
+                setBannerHeight(prev.getBoundingClientRect().height);
             } else {
                 setBannerHeight(0); // If the banner disappears (expires)
             }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { waUrl } from '@/lib/wa-number';
-import { useAnalytics } from '@/hooks/use-analytics'; // Added analytics import
+import { useAnalytics, generateEventId } from '@/hooks/use-analytics'; // Added generateEventId
 
 const options = [
     'Harganya masih terlalu mahal buatku',
@@ -64,6 +64,40 @@ export default function ReturnModal() {
         };
     }, []);
 
+    // Identical tracking logic to your PricingSection's handleWaClick
+    const handleWaClick = (idx: number) => {
+        const url = waUrl(waMsgs[idx]);
+        const eventId = generateEventId();
+
+        // 1. Send Meta Pixel Event
+        try {
+            (
+                window as {
+                    fbq?: (e: string, n: string, p?: object, o?: object) => void;
+                }
+            ).fbq?.(
+                'track',
+                'Search',
+                { search_string: `Return Modal - ${options[idx]}` },
+                { eventID: eventId },
+            );
+        } catch {
+            /* fbq not loaded */
+        }
+
+        // 2. Track Custom CTA Analytics
+        trackCTA('return_popup', 'Konsultasi WhatsApp', url);
+        
+        // 3. THIS IS THE FIX: Track as 'wa_registration' so your admin dashboard records it correctly!
+        trackConversion('wa_registration', {
+            location: 'return_popup',
+            reason: options[idx],
+        });
+
+        // 4. Open WhatsApp
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -93,23 +127,14 @@ export default function ReturnModal() {
 
                 {selectedIdx !== null ? (
                     <div className="animate-in fade-in zoom-in-95 duration-200">
-                        <a
-                            href={waUrl(waMsgs[selectedIdx])}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => {
-                                // Added analytics tracking here!
-                                trackCTA('return_popup', 'Konsultasi WhatsApp', waUrl(waMsgs[selectedIdx]));
-                                trackConversion('whatsapp_leads', {
-                                    location: 'return_popup',
-                                    reason_selected: options[selectedIdx]
-                                });
-                            }}
-                            className="mb-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#16a34a] px-4 py-3.5 text-[14px] font-[700] text-white transition-all hover:brightness-110 active:scale-[0.98]"
+                        <button
+                            type="button"
+                            onClick={() => handleWaClick(selectedIdx)}
+                            className="mb-3.5 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#16a34a] px-4 py-3.5 text-[14px] font-[700] text-white transition-all hover:brightness-110 active:scale-[0.98]"
                             style={{ fontFamily: 'var(--font-heading)' }}
                         >
                             💬 Konsultasi via WhatsApp →
-                        </a>
+                        </button>
                         <p
                             className="mb-0.5 text-[13px] font-[700] text-[#151515]"
                             style={{ fontFamily: 'var(--font-heading)' }}
@@ -139,6 +164,7 @@ export default function ReturnModal() {
                     <div className="flex flex-col gap-2">
                         {options.map((opt, idx) => (
                             <button
+                                type="button"
                                 key={idx}
                                 onClick={() => setSelectedIdx(idx)}
                                 className="flex min-h-[54px] w-full items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3.5 py-3 text-left transition-all hover:border-gray-300 hover:bg-gray-50"
