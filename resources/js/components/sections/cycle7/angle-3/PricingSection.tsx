@@ -370,13 +370,12 @@ export default function PricingSection() {
                 >
                     Cara belajar yang cocok buatmu:
                 </p>
-                <div className="inline-flex gap-1 rounded-full border-[1.5px] border-gray-200 bg-gray-100 p-1">
-                    {/* 2. Swapped button position so 'self' is first (on the left) */}
+                <div className="inline-flex items-center gap-1 rounded-full border border-[#ffb3b3] bg-white p-[5px] shadow-[0_2px_12px_rgba(215,8,8,0.08)]">
                     <button
                         onClick={() => setMode('self')}
-                        className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
+                        className={`rounded-full px-5 py-2.5 text-[15px] font-[800] transition-all ${
                             mode === 'self'
-                                ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                                ? 'bg-[#D70808] text-white shadow-md hover:brightness-110 active:scale-[0.98]'
                                 : 'text-gray-500 hover:text-gray-700 underline decoration-dotted decoration-gray-400 decoration-[1.5px] underline-offset-[5px]'
                         }`}
                         style={{ fontFamily: 'var(--font-heading)' }}
@@ -385,9 +384,9 @@ export default function PricingSection() {
                     </button>
                     <button
                         onClick={() => setMode('tutor')}
-                        className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
+                        className={`rounded-full px-5 py-2.5 text-[15px] font-[800] transition-all ${
                             mode === 'tutor'
-                                ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                                ? 'bg-[#D70808] text-white shadow-md hover:brightness-110 active:scale-[0.98]'
                                 : 'text-gray-500 hover:text-gray-700 underline decoration-dotted decoration-gray-400 decoration-[1.5px] underline-offset-[5px]'
                         }`}
                         style={{ fontFamily: 'var(--font-heading)' }}
