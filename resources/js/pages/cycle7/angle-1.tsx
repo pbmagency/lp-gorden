@@ -10,6 +10,10 @@ const AgitationSection = lazy(
     () =>
         import('@/components/sections/cycle7/angle-1/AgitationSection'),
 );
+const LmsSection = lazy(
+    () =>
+        import('@/components/sections/cycle7/angle-1/LmsSection'),
+);
 const ValueSection = lazy(
     () =>
         import('@/components/sections/cycle7/angle-1/ValueSection'),
@@ -101,6 +105,9 @@ export default function Cycle6Angle() {
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <ValueSection />
+                </Suspense>
+                <Suspense fallback={<SectionSkeleton />}>
+                    <LmsSection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <SocialProofSection />

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { CheckCircle2, Globe, Lock, Shield, Star, XCircle } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
@@ -13,6 +16,9 @@ const WA_INTER = waUrl(
 const WA_BUNDLING = waUrl(
     'Halo Admin Full Bright Indonesia. Saya minat mau daftar paket HEMAT TOEFL Level Starter + Intermediate.',
 );
+const WA_SELF = waUrl(
+    'Halo Admin Full Bright Indonesia. Saya minat mau daftar E-Course TOEFL (Belajar Mandiri).',
+);
 
 const PG_STARTER =
     'https://member.fullbrightindonesia.com/paket-premium-toefl-level-starter-live-zoom-intensif-flash-sale';
@@ -20,6 +26,8 @@ const PG_INTER =
     'https://member.fullbrightindonesia.com/paket-premium-toefl-level-intermediate-live-zoom-intensif-flash-sale';
 const PG_BUNDLING =
     'https://member.fullbrightindonesia.com/paket-premium-toefl-level-starter-live-zoom-intensif-flash-sale';
+const PG_SELF =
+    'https://member.fullbrightindonesia.com/paket-gold-e-course-toefl';
 
 type FeatureItem =
     | { type: 'check'; text: string; bold?: boolean }
@@ -87,6 +95,18 @@ const bundlingFeatures: FeatureItem[] = [
     { type: 'check', text: 'Sertifikat TOEFL Prediction' },
 ];
 
+const selfFeatures: FeatureItem[] = [
+    { type: 'check', text: 'Akses LMS Eksklusif Full Bright', bold: true },
+    { type: 'check', text: '60+ Video Materi Pembelajaran', bold: true },
+    { type: 'check', text: '84 Paket Drill Soal (Listening, Structure, Reading)', bold: true },
+    { type: 'check', text: 'Rangkuman & AI Assistant' },
+    { type: 'check', text: '3x Simulasi Ujian Full' },
+    { type: 'check', text: 'Grup Diskusi Interaktif' },
+    { type: 'label', text: 'Belum Termasuk' },
+    { type: 'cross', text: 'Sesi Live Zoom Bersama Tutor' },
+    { type: 'cross', text: 'Evaluasi Progress Personal' },
+];
+
 const guarantees = [
     {
         Icon: Shield,
@@ -110,13 +130,7 @@ function StarRow() {
     );
 }
 
-function WhatsAppIcon({
-    size = 18,
-    color = '#25D366',
-}: {
-    size?: number;
-    color?: string;
-}) {
+function WhatsAppIcon({ size = 18, color = '#25D366' }: { size?: number; color?: string }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -125,17 +139,7 @@ function WhatsAppIcon({
     );
 }
 
-function PayButton({
-    href,
-    label,
-    onClick,
-    green,
-}: {
-    href: string;
-    label: string;
-    onClick?: () => void;
-    green?: boolean;
-}) {
+function PayButton({ href, label, onClick, green }: { href: string; label: string; onClick?: () => void; green?: boolean }) {
     const bgClass = green ? 'bg-[#16a34a]' : 'bg-[#D70808]';
     const shadowClass = green
         ? 'shadow-[0_6px_24px_rgba(22,163,74,0.4)]'
@@ -157,8 +161,7 @@ function PayButton({
                 {label}
             </a>
             <p className="flex items-center justify-center gap-1 text-center text-[11px] text-[#9ca3af]" style={{ fontFamily: 'var(--font-heading)' }}>
-                <Lock size={10} strokeWidth={2.5} /> Pembayaran aman &
-                terenkripsi
+                <Lock size={10} strokeWidth={2.5} /> Pembayaran aman & terenkripsi
             </p>
         </div>
     );
@@ -186,14 +189,7 @@ function WaButton({ onClick, label }: { onClick: () => void; label: string }) {
     );
 }
 
-// Collapsible logic removed - showing all features unconditionally
-function FeatureList({
-    features,
-    isBundling,
-}: {
-    features: FeatureItem[];
-    isBundling?: boolean;
-}) {
+function FeatureList({ features, isBundling }: { features: FeatureItem[]; isBundling?: boolean }) {
     return (
         <div className="mb-3 flex flex-col">
             <ul className="flex flex-col gap-2">
@@ -253,10 +249,11 @@ function FeatureList({
 }
 
 export default function PricingSection() {
+    const [mode, setMode] = useState<'tutor' | 'self'>('tutor');
     const { trackCTA, trackInitiateCheckout, trackConversion } = useAnalytics();
 
     const handlePayClick = (
-        level: 'Starter' | 'Intermediate' | 'Bundling',
+        level: 'Starter' | 'Intermediate' | 'Bundling' | 'Self',
         pgUrl: string,
     ) => {
         const eventId = generateEventId();
@@ -265,17 +262,14 @@ export default function PricingSection() {
                 ? 250000
                 : level === 'Intermediate'
                   ? 350000
-                  : 375000;
+                  : level === 'Bundling'
+                  ? 375000
+                  : 81000;
 
         try {
             (
                 window as {
-                    fbq?: (
-                        e: string,
-                        n: string,
-                        p?: object,
-                        o?: object,
-                    ) => void;
+                    fbq?: (e: string, n: string, p?: object, o?: object) => void;
                 }
             ).fbq?.(
                 'track',
@@ -300,7 +294,7 @@ export default function PricingSection() {
     };
 
     const handleWaClick = (
-        level: 'Starter' | 'Intermediate' | 'Bundling',
+        level: 'Starter' | 'Intermediate' | 'Bundling' | 'Self',
         waUrl: string,
     ) => {
         const eventId = generateEventId();
@@ -309,17 +303,14 @@ export default function PricingSection() {
                 ? 250000
                 : level === 'Intermediate'
                   ? 350000
-                  : 375000;
+                  : level === 'Bundling'
+                  ? 375000
+                  : 81000;
 
         try {
             (
                 window as {
-                    fbq?: (
-                        e: string,
-                        n: string,
-                        p?: object,
-                        o?: object,
-                    ) => void;
+                    fbq?: (e: string, n: string, p?: object, o?: object) => void;
                 }
             ).fbq?.(
                 'track',
@@ -341,36 +332,71 @@ export default function PricingSection() {
     };
 
     return (
-        <>
-            <SectionWrapper
-                id="pricing"
-                bg="white"
-                className="pt-20 pb-12 md:pt-28 md:pb-16"
-            >
-                {/* ── Updated Header ── */}
-                <div className="mb-14 text-center">
-                    <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-[6px] text-[12px] font-[800] tracking-widest uppercase text-[#D70808] sm:py-1.5 sm:text-xs sm:font-bold"
-                        style={{ fontFamily: 'var(--font-heading)'  }}
-                    >
-                        <span>⏳</span> Mulai dari Sekarang, Bukan Nanti
-                    </div>
-                    <h2
-                        className="mb-4 text-[clamp(30px,4vw,48px)] font-black leading-[1.2] text-[#151515] md:text-4xl lg:text-5xl"
-                        style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                        Persiapkan Sekarang,{' '}
-                        <span className="text-[#D70808]">Jangan Ditunda</span>
-                    </h2>
-                    <p
-                        className="mx-auto max-w-2xl text-[16px] leading-[1.6] text-[#3d3d3d]"
-                        style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                        Semakin cepat kamu mulai, semakin besar peluang kamu diterima
-                        beasiswa karena skor 500+ tercapai sebelum deadline submission.
-                    </p>
+        <SectionWrapper
+            id="pricing"
+            bg="white"
+            className="pt-20 pb-12 md:pt-28 md:pb-16"
+        >
+            {/* ── Updated Header ── */}
+            <div className="mb-14 text-center">
+                <div
+                    className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ffb3b3] bg-[#FFF0F0] px-4 py-[6px] text-[12px] font-[800] tracking-widest uppercase text-[#D70808] sm:py-1.5 sm:text-xs sm:font-bold"
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                    <span>⏳</span> Mulai dari Sekarang, Bukan Nanti
                 </div>
+                <h2
+                    className="mb-4 text-[clamp(30px,4vw,48px)] font-black leading-[1.2] text-[#151515] md:text-4xl lg:text-5xl"
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                    Persiapkan Sekarang,{' '}
+                    <span className="text-[#D70808]">Jangan Ditunda</span>
+                </h2>
+                <p
+                    className="mx-auto max-w-2xl text-[16px] leading-[1.6] text-[#3d3d3d]"
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                    Semakin cepat kamu mulai, semakin besar peluang kamu diterima
+                    beasiswa karena skor 500+ tercapai sebelum deadline submission.
+                </p>
+            </div>
 
+            {/* ── Toggle Buttons ── */}
+            <div className="mb-12 text-center">
+                <p
+                    className="mb-3 text-[14px] font-[700] text-[#151515] sm:text-[15px]"
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                    Cara belajar yang cocok buatmu:
+                </p>
+                <div className="inline-flex gap-1 rounded-full border-[1.5px] border-gray-200 bg-gray-100 p-1">
+                    <button
+                        onClick={() => setMode('tutor')}
+                        className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
+                            mode === 'tutor'
+                                ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                                : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                        style={{ fontFamily: 'var(--font-heading)' }}
+                    >
+                        Dibimbing Tutor
+                    </button>
+                    <button
+                        onClick={() => setMode('self')}
+                        className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
+                            mode === 'self'
+                                ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                                : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                        style={{ fontFamily: 'var(--font-heading)' }}
+                    >
+                        Belajar Sendiri
+                    </button>
+                </div>
+            </div>
+
+            {/* === TUTOR MODE (3 CARDS) === */}
+            {mode === 'tutor' && (
                 <div className="mx-auto mb-14 grid max-w-6xl gap-6 md:grid-cols-3">
                     {/* ── Starter ── */}
                     <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
@@ -378,7 +404,7 @@ export default function PricingSection() {
                             <div>
                                 <p
                                     className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
-                                    style={{ fontFamily: 'var(--font-heading)'  }}
+                                    style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     Paket
                                 </p>
@@ -398,13 +424,9 @@ export default function PricingSection() {
                             style={{ fontFamily: 'var(--font-heading)' }}
                         >
                             Target Skor:{' '}
-                            <span className="font-black text-[#16a34a]">
-                                450+
-                            </span>
+                            <span className="font-black text-[#16a34a]">450+</span>
                             {' - '}
-                            <span className="font-black text-[#151515]">
-                                10 Hari (2 Minggu)
-                            </span>
+                            <span className="font-black text-[#151515]">10 Hari (2 Minggu)</span>
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
@@ -431,9 +453,7 @@ export default function PricingSection() {
                         <PayButton
                             href={PG_STARTER}
                             label="Apply Sekarang →"
-                            onClick={() =>
-                                handlePayClick('Starter', PG_STARTER)
-                            }
+                            onClick={() => handlePayClick('Starter', PG_STARTER)}
                         />
                         <OrDivider />
                         <WaButton
@@ -480,13 +500,9 @@ export default function PricingSection() {
                             style={{ fontFamily: 'var(--font-heading)' }}
                         >
                             Target Skor:{' '}
-                            <span className="font-black text-[#D70808]">
-                                500+
-                            </span>
+                            <span className="font-black text-[#D70808]">500+</span>
                             {' - '}
-                            <span className="font-black text-[#151515]">
-                                25 Hari Total
-                            </span>
+                            <span className="font-black text-[#151515]">25 Hari Total</span>
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
                             <div className="mb-1 flex items-center gap-2">
@@ -547,9 +563,7 @@ export default function PricingSection() {
                         <PayButton
                             href={PG_BUNDLING}
                             label="Apply Sekarang →"
-                            onClick={() =>
-                                handlePayClick('Bundling', PG_BUNDLING)
-                            }
+                            onClick={() => handlePayClick('Bundling', PG_BUNDLING)}
                             green
                         />
                         <p
@@ -560,9 +574,7 @@ export default function PricingSection() {
                         </p>
                         <OrDivider />
                         <WaButton
-                            onClick={() =>
-                                handleWaClick('Bundling', WA_BUNDLING)
-                            }
+                            onClick={() => handleWaClick('Bundling', WA_BUNDLING)}
                             label="Tanya via WhatsApp"
                         />
                         <div className="mt-4 flex justify-center">
@@ -596,13 +608,9 @@ export default function PricingSection() {
                             style={{ fontFamily: "'Nunito', sans-serif" }}
                         >
                             Target Skor:{' '}
-                            <span className="font-black text-[#16a34a]">
-                                500+
-                            </span>
+                            <span className="font-black text-[#16a34a]">500+</span>
                             {' - '}
-                            <span className="font-black text-[#151515]">
-                                15 Hari
-                            </span>
+                            <span className="font-black text-[#151515]">15 Hari</span>
                             {' - Min. 430'}
                         </p>
                         <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
@@ -630,15 +638,11 @@ export default function PricingSection() {
                         <PayButton
                             href={PG_INTER}
                             label="Apply Sekarang →"
-                            onClick={() =>
-                                handlePayClick('Intermediate', PG_INTER)
-                            }
+                            onClick={() => handlePayClick('Intermediate', PG_INTER)}
                         />
                         <OrDivider />
                         <WaButton
-                            onClick={() =>
-                                handleWaClick('Intermediate', WA_INTER)
-                            }
+                            onClick={() => handleWaClick('Intermediate', WA_INTER)}
                             label="Tanya via WhatsApp"
                         />
                         <div className="mt-4 flex justify-center">
@@ -646,54 +650,127 @@ export default function PricingSection() {
                         </div>
                     </div>
                 </div>
+            )}
 
-                {/* Legalitas */}
-                <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
-                    <p
-                        className="mb-3 text-[12px] font-[900] tracking-widest uppercase text-[#9ca3af] sm:text-xs sm:font-black"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
-                    >
-                        Legalitas Resmi
-                    </p>
-                    <div className="flex flex-col gap-1.5">
-                        <span
-                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun
-                            2020
-                        </span>
-                        <span
-                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            ✓ SK Izin Operasional LKP
-                            503/20177/LKP/DPM-PTSP/8/2024
-                        </span>
-                        <span
-                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            ✓ NPSN Nomor K9998700
-                        </span>
-                        <span
-                            className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            ✓ Bekerja sama dengan IIEF Jakarta
+            {/* === SELF STUDY MODE (1 CARD) === */}
+            {mode === 'self' && (
+                <div className="mx-auto mb-14 flex w-full max-w-[500px] flex-col overflow-hidden rounded-3xl border-2 border-[#F5B700] bg-[linear-gradient(165deg,#ffffff_0%,#fffbf0_100%)] p-6 shadow-[0_16px_56px_rgba(245,183,0,0.15),0_0_0_1px_rgba(245,183,0,0.08)] md:p-7 relative">
+                    <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#F5B700] px-4 py-2 text-[10px] font-black text-white">
+                        🔥 POPULAR
+                    </div>
+                    
+                    <div className="mb-1 mt-4 flex items-start justify-between">
+                        <div>
+                            <p
+                                className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                E-Course
+                            </p>
+                            <h3
+                                className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                Self-Study LMS
+                            </h3>
+                        </div>
+                        <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-3 py-1 text-[10px] font-semibold text-[#D70808]">
+                            📚 Mandiri
                         </span>
                     </div>
-                    <a
-                        href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-3 inline-block text-[12px] font-[600] text-[#D70808] hover:underline sm:text-xs sm:font-semibold"
+                    
+                    <p
+                        className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                        style={{ fontFamily: 'var(--font-heading)' }}
+                    >
+                        Target Skor:{' '}
+                        <span className="font-black text-[#16a34a]">500+</span>
+                        {' - '}
+                        <span className="font-black text-[#151515]">Belajar Kapan Saja</span>
+                    </p>
+
+                    <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
+                        <div className="mb-1 flex items-center gap-2">
+                            <span
+                                className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                Rp 250.000
+                            </span>
+                            <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
+                                HEMAT 68%
+                            </span>
+                        </div>
+                        <p
+                            className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                            style={{ fontFamily: 'var(--font-heading)' }}
+                        >
+                            Rp 81.000
+                        </p>
+                    </div>
+
+                    <FeatureList features={selfFeatures} />
+
+                    <PayButton
+                        href={PG_SELF}
+                        label="Mulai Belajar Mandiri →"
+                        onClick={() => handlePayClick('Self', PG_SELF)}
+                    />
+                    <OrDivider />
+                    <WaButton
+                        onClick={() => handleWaClick('Self', WA_SELF)}
+                        label="Tanya via WhatsApp"
+                    />
+                    <div className="mt-4 flex justify-center">
+                        <SocialProofMicro variant="badges" />
+                    </div>
+                </div>
+            )}
+
+            {/* Legalitas */}
+            <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
+                <p
+                    className="mb-3 text-[12px] font-[900] tracking-widest uppercase text-[#9ca3af] sm:text-xs sm:font-black"
+                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                >
+                    Legalitas Resmi
+                </p>
+                <div className="flex flex-col gap-1.5">
+                    <span
+                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
                         style={{ fontFamily: "'Nunito', sans-serif" }}
                     >
-                        Info Detail Legalitas →
-                    </a>
+                        ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun 2020
+                    </span>
+                    <span
+                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
+                        ✓ SK Izin Operasional LKP 503/20177/LKP/DPM-PTSP/8/2024
+                    </span>
+                    <span
+                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
+                        ✓ NPSN Nomor K9998700
+                    </span>
+                    <span
+                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                    >
+                        ✓ Bekerja sama dengan IIEF Jakarta
+                    </span>
                 </div>
-            </SectionWrapper>
-        </>
+                <a
+                    href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-[12px] font-[600] text-[#D70808] hover:underline sm:text-xs sm:font-semibold"
+                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                >
+                    Info Detail Legalitas →
+                </a>
+            </div>
+        </SectionWrapper>
     );
 }
