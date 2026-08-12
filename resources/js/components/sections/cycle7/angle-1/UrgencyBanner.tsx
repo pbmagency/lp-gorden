@@ -58,7 +58,8 @@ export default function UrgencyBanner() {
                 e.preventDefault();
                 document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="flex w-full cursor-pointer items-center justify-center bg-[#D70808] px-4 py-2 transition-colors hover:bg-[#b30606]"
+            // Added: sticky top-0 z-[100]
+            className="sticky top-0 z-[100] flex w-full cursor-pointer items-center justify-center bg-[#D70808] px-4 py-2 transition-colors hover:bg-[#b30606]"
             style={{ fontFamily: 'var(--font-heading)' }}
         >
             <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-[12px] font-[800] tracking-wide text-white sm:gap-x-4 sm:text-[13px]">
