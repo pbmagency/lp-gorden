@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { waUrl } from '@/lib/wa-number';
-import { useAnalytics, generateEventId } from '@/hooks/use-analytics'; // Added generateEventId
+import { useAnalytics, generateEventId } from '@/hooks/use-analytics';
 
 const options = [
     'Harganya masih terlalu mahal buatku',
@@ -63,6 +63,23 @@ export default function ReturnModal() {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, []);
+
+    // NEW FUNCTION: Track when they select an option (intent & micro-conversion)
+    const handleSelectOption = (idx: number) => {
+        setSelectedIdx(idx);
+        
+        const selectedText = options[idx];
+
+        // 1. Tracks in Micro-Conversion (Button Location column)
+        trackCTA(`Return Modal: ${selectedText}`, selectedText, '');
+        
+        // 2. Explicitly counts this as an "intent" event
+        trackConversion('intent', { 
+            location: `Return Modal: ${selectedText}`, 
+            action: 'return_modal_answered',
+            value: selectedText 
+        });
+    };
 
     // Identical tracking logic to your PricingSection's handleWaClick
     const handleWaClick = (idx: number) => {
@@ -166,7 +183,7 @@ export default function ReturnModal() {
                             <button
                                 type="button"
                                 key={idx}
-                                onClick={() => setSelectedIdx(idx)}
+                                onClick={() => handleSelectOption(idx)}
                                 className="flex min-h-[54px] w-full items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3.5 py-3 text-left transition-all hover:border-gray-300 hover:bg-gray-50"
                             >
                                 <span
