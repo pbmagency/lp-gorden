@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 const options = [
     'Bingung mulai belajar dari mana',
@@ -13,6 +14,25 @@ const options = [
 
 export default function SurveySection() {
     const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+    // Added trackConversion here:
+    const { trackCTA, trackConversion } = useAnalytics();
+
+    const handleSelect = (idx: number, opt: string) => {
+        // Prevent changing the answer if they already selected one
+        if (selectedIdx !== null) return; 
+        
+        setSelectedIdx(idx);
+        
+        // 1. Tracks in Micro-Conversion (Button Location column)
+        trackCTA(`Survey: ${opt}`, opt, '');
+        
+        // 2. Explicitly counts this as an "intent" event in your analytics!
+        trackConversion('intent', { 
+            location: `Survey: ${opt}`, 
+            action: 'survey_answered',
+            value: opt 
+        });
+    };
 
     return (
         <SectionWrapper id="survey" bg="white" className="py-12 md:py-16">
@@ -36,14 +56,21 @@ export default function SurveySection() {
                 <div className="flex flex-col gap-2">
                     {options.map((opt, idx) => {
                         const isSelected = selectedIdx === idx;
+                        
+                        // IF a selection has been made, HIDE all other options
+                        if (selectedIdx !== null && !isSelected) {
+                            return null;
+                        }
+
                         return (
                             <button
                                 key={idx}
-                                onClick={() => setSelectedIdx(idx)}
+                                onClick={() => handleSelect(idx, opt)}
+                                disabled={selectedIdx !== null}
                                 className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-all duration-200 ${
                                     isSelected
-                                        ? 'border-[#ffb3b3] bg-[#FFF0F0]'
-                                        : 'border-[#e5e7eb] bg-white hover:border-gray-300'
+                                        ? 'border-[#ffb3b3] bg-[#FFF0F0] cursor-default'
+                                        : 'border-[#e5e7eb] bg-white hover:border-gray-300 cursor-pointer'
                                 }`}
                             >
                                 <span
