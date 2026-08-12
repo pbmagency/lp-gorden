@@ -96,15 +96,15 @@ const bundlingFeatures: FeatureItem[] = [
 ];
 
 const selfFeatures: FeatureItem[] = [
-    { type: 'check', text: 'Akses LMS Eksklusif Full Bright', bold: true },
     { type: 'check', text: '60+ Video Materi Pembelajaran', bold: true },
-    { type: 'check', text: '84 Paket Drill Soal (Listening, Structure, Reading)', bold: true },
-    { type: 'check', text: 'Rangkuman & AI Assistant' },
-    { type: 'check', text: '3x Simulasi Ujian Full' },
-    { type: 'check', text: 'Grup Diskusi Interaktif' },
+    { type: 'check', text: 'Materi Hari ke-1 s/d ke-15 (Roadmap Lengkap)', bold: true },
+    { type: 'check', text: 'Lebih dari 1.000+ Nomor Latihan Soal', bold: true },
+    { type: 'check', text: 'Grup WA Diskusi' },
+    { type: 'check', text: 'Diagnostic Test' },
+    { type: 'check', text: 'Simulasi dan Post Test (Full Skills)' },
     { type: 'label', text: 'Belum Termasuk' },
-    { type: 'cross', text: 'Sesi Live Zoom Bersama Tutor' },
-    { type: 'cross', text: 'Evaluasi Progress Personal' },
+    { type: 'cross', text: 'LIVE ZOOM 15 Hari' },
+    { type: 'cross', text: 'Sertifikat TOEFL' },
 ];
 
 const guarantees = [
@@ -375,7 +375,7 @@ export default function PricingSection() {
                         className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
                             mode === 'tutor'
                                 ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
-                                : 'text-gray-500 hover:text-gray-700'
+                                : 'text-gray-500 hover:text-gray-700 underline decoration-dotted decoration-gray-400 decoration-[1.5px] underline-offset-[5px]'
                         }`}
                         style={{ fontFamily: 'var(--font-heading)' }}
                     >
@@ -386,7 +386,7 @@ export default function PricingSection() {
                         className={`rounded-full px-5 py-2.5 text-[13px] font-[800] transition-all sm:px-6 sm:text-[14px] ${
                             mode === 'self'
                                 ? 'bg-white text-[#D70808] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
-                                : 'text-gray-500 hover:text-gray-700'
+                                : 'text-gray-500 hover:text-gray-700 underline decoration-dotted decoration-gray-400 decoration-[1.5px] underline-offset-[5px]'
                         }`}
                         style={{ fontFamily: 'var(--font-heading)' }}
                     >
@@ -395,264 +395,310 @@ export default function PricingSection() {
                 </div>
             </div>
 
-            {/* === TUTOR MODE (3 CARDS) === */}
+            {/* === TUTOR MODE (3 CARDS + LEGALITAS) === */}
             {mode === 'tutor' && (
-                <div className="mx-auto mb-14 grid max-w-6xl gap-6 md:grid-cols-3">
-                    {/* ── Starter ── */}
-                    <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
-                        <div className="mb-1 flex items-start justify-between">
-                            <div>
-                                <p
-                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Paket
-                                </p>
-                                <h3
-                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Starter
-                                </h3>
-                            </div>
-                            <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
-                                <StarRow /> <span className="ml-1">5.0</span>
-                            </span>
-                        </div>
-                        <p
-                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
-                            style={{ fontFamily: 'var(--font-heading)' }}
-                        >
-                            Target Skor:{' '}
-                            <span className="font-black text-[#16a34a]">450+</span>
-                            {' - '}
-                            <span className="font-black text-[#151515]">10 Hari (2 Minggu)</span>
-                        </p>
-                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
-                            <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Rp 1.000.000
-                                </span>
-                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
-                                    HEMAT 81%
-                                </span>
-                            </div>
-                            <p
-                                className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                Rp 190.000
-                            </p>
-                        </div>
-
-                        <FeatureList features={starterFeatures} />
-
-                        <PayButton
-                            href={PG_STARTER}
-                            label="Apply Sekarang →"
-                            onClick={() => handlePayClick('Starter', PG_STARTER)}
-                        />
-                        <OrDivider />
-                        <WaButton
-                            onClick={() => handleWaClick('Starter', WA_STARTER)}
-                            label="Tanya via WhatsApp"
-                        />
-                        <div className="mt-4 flex justify-center">
-                            <SocialProofMicro variant="badges" />
-                        </div>
-                    </div>
-
-                    {/* ── Bundling ── HIGHLIGHTED */}
-                    <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#16a34a] bg-[linear-gradient(165deg,#ffffff_0%,#f0fdf4_100%)] p-6 shadow-[0_16px_56px_rgba(22,163,74,0.2),0_0_0_1px_rgba(22,163,74,0.08)] md:p-7">
-                        <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#16a34a] px-4 py-2 text-[10px] font-black text-white">
-                            ⭐ PALING HEMAT
-                        </div>
-                        <div className="mt-4 mb-1 flex items-start justify-between">
-                            <div>
-                                <p
-                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#D70808] sm:font-bold"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Paket
-                                </p>
-                                <h3
-                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Bundling
-                                </h3>
-                                <p
-                                    className="mt-0.5 text-[11px] font-[600] text-[#D70808] sm:font-semibold"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Starter + Intermediate
-                                </p>
-                            </div>
-                            <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-2.5 py-1 text-[10px] font-semibold text-[#D70808]">
-                                <StarRow /> <span className="ml-1">5.0</span>
-                            </span>
-                        </div>
-                        <p
-                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
-                            style={{ fontFamily: 'var(--font-heading)' }}
-                        >
-                            Target Skor:{' '}
-                            <span className="font-black text-[#D70808]">500+</span>
-                            {' - '}
-                            <span className="font-black text-[#151515]">25 Hari Total</span>
-                        </p>
-                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
-                            <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
-                                    style={{ fontFamily: 'var(--font-heading)' }}
-                                >
-                                    Rp 1.875.000
-                                </span>
-                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
-                                    DISKON 84%
-                                </span>
-                            </div>
-                            <p
-                                className="mb-1 text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                Rp 300.000
-                            </p>
-                            <p
-                                className="text-[11px] font-[600] text-[#D70808] sm:font-semibold"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                Hemat Rp 1.500.000 dari harga normal!
-                            </p>
-                        </div>
-
-                        <FeatureList features={bundlingFeatures} isBundling={true} />
-
-                        {/* Guarantees inside Bundling */}
-                        <div className="mb-5 flex flex-col gap-3">
-                            {guarantees.map(({ Icon, title, desc }) => (
-                                <div
-                                    key={title}
-                                    className="flex items-start gap-3 rounded-2xl border border-[#f3f4f6] bg-[#F9FAFB] p-4"
-                                >
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FEF3C7]">
-                                        <Icon size={18} color="#D97706" fill="#D97706" />
-                                    </div>
-                                    <div>
-                                        <p
-                                            className="mb-1 text-[13px] font-[900] leading-[1.2] text-[#151515] sm:font-black sm:leading-tight"
-                                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                                        >
-                                            {title}
-                                        </p>
-                                        <p
-                                            className="text-[11px] leading-[1.6] text-[#6B7280] sm:leading-relaxed"
-                                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                                        >
-                                            {desc}
-                                        </p>
-                                    </div>
+                <>
+                    <div className="mx-auto mb-14 grid max-w-6xl gap-6 md:grid-cols-3">
+                        {/* ── Starter ── */}
+                        <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
+                            <div className="mb-1 flex items-start justify-between">
+                                <div>
+                                    <p
+                                        className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Paket
+                                    </p>
+                                    <h3
+                                        className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Starter
+                                    </h3>
                                 </div>
-                            ))}
-                        </div>
-
-                        <PayButton
-                            href={PG_BUNDLING}
-                            label="Apply Sekarang →"
-                            onClick={() => handlePayClick('Bundling', PG_BUNDLING)}
-                            green
-                        />
-                        <p
-                            className="mt-2 text-center text-[10px] font-[600] text-[#D70808]"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            * Centang opsi Bundle saat checkout
-                        </p>
-                        <OrDivider />
-                        <WaButton
-                            onClick={() => handleWaClick('Bundling', WA_BUNDLING)}
-                            label="Tanya via WhatsApp"
-                        />
-                        <div className="mt-4 flex justify-center">
-                            <SocialProofMicro variant="badges" />
-                        </div>
-                    </div>
-
-                    {/* ── Intermediate ── */}
-                    <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
-                        <div className="mb-1 flex items-start justify-between">
-                            <div>
-                                <p
-                                    className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                                >
-                                    Paket
-                                </p>
-                                <h3
-                                    className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                                >
-                                    Intermediate
-                                </h3>
-                            </div>
-                            <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
-                                <StarRow /> <span className="ml-1">5.0</span>
-                            </span>
-                        </div>
-                        <p
-                            className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
-                            style={{ fontFamily: "'Nunito', sans-serif" }}
-                        >
-                            Target Skor:{' '}
-                            <span className="font-black text-[#16a34a]">500+</span>
-                            {' - '}
-                            <span className="font-black text-[#151515]">15 Hari</span>
-                            {' - Min. 430'}
-                        </p>
-                        <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
-                            <div className="mb-1 flex items-center gap-2">
-                                <span
-                                    className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
-                                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                                >
-                                    Rp 1.400.000
-                                </span>
-                                <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
-                                    DISKON 81%
+                                <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
+                                    <StarRow /> <span className="ml-1">5.0</span>
                                 </span>
                             </div>
                             <p
-                                className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                Target Skor:{' '}
+                                <span className="font-black text-[#16a34a]">450+</span>
+                                {' - '}
+                                <span className="font-black text-[#151515]">10 Hari (2 Minggu)</span>
+                            </p>
+                            <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
+                                <div className="mb-1 flex items-center gap-2">
+                                    <span
+                                        className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Rp 1.000.000
+                                    </span>
+                                    <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
+                                        HEMAT 81%
+                                    </span>
+                                </div>
+                                <p
+                                    className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Rp 190.000
+                                </p>
+                            </div>
+
+                            <FeatureList features={starterFeatures} />
+
+                            <PayButton
+                                href={PG_STARTER}
+                                label="Apply Sekarang →"
+                                onClick={() => handlePayClick('Starter', PG_STARTER)}
+                            />
+                            <OrDivider />
+                            <WaButton
+                                onClick={() => handleWaClick('Starter', WA_STARTER)}
+                                label="Tanya via WhatsApp"
+                            />
+                            <div className="mt-4 flex justify-center">
+                                <SocialProofMicro variant="badges" />
+                            </div>
+                        </div>
+
+                        {/* ── Bundling ── HIGHLIGHTED */}
+                        <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#16a34a] bg-[linear-gradient(165deg,#ffffff_0%,#f0fdf4_100%)] p-6 shadow-[0_16px_56px_rgba(22,163,74,0.2),0_0_0_1px_rgba(22,163,74,0.08)] md:p-7">
+                            <div className="font-['var(--font-heading)'] absolute top-0 right-0 rounded-bl-2xl bg-[#16a34a] px-4 py-2 text-[10px] font-black text-white">
+                                ⭐ PALING HEMAT
+                            </div>
+                            <div className="mt-4 mb-1 flex items-start justify-between">
+                                <div>
+                                    <p
+                                        className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#D70808] sm:font-bold"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Paket
+                                    </p>
+                                    <h3
+                                        className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Bundling
+                                    </h3>
+                                    <p
+                                        className="mt-0.5 text-[11px] font-[600] text-[#D70808] sm:font-semibold"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Starter + Intermediate
+                                    </p>
+                                </div>
+                                <span className="flex items-center gap-1 rounded-full bg-[#FFF0F0] px-2.5 py-1 text-[10px] font-semibold text-[#D70808]">
+                                    <StarRow /> <span className="ml-1">5.0</span>
+                                </span>
+                            </div>
+                            <p
+                                className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                style={{ fontFamily: 'var(--font-heading)' }}
+                            >
+                                Target Skor:{' '}
+                                <span className="font-black text-[#D70808]">500+</span>
+                                {' - '}
+                                <span className="font-black text-[#151515]">25 Hari Total</span>
+                            </p>
+                            <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
+                                <div className="mb-1 flex items-center gap-2">
+                                    <span
+                                        className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        Rp 1.875.000
+                                    </span>
+                                    <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
+                                        DISKON 84%
+                                    </span>
+                                </div>
+                                <p
+                                    className="mb-1 text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Rp 300.000
+                                </p>
+                                <p
+                                    className="text-[11px] font-[600] text-[#D70808] sm:font-semibold"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    Hemat Rp 1.500.000 dari harga normal!
+                                </p>
+                            </div>
+
+                            <FeatureList features={bundlingFeatures} isBundling={true} />
+
+                            {/* Guarantees inside Bundling */}
+                            <div className="mb-5 flex flex-col gap-3">
+                                {guarantees.map(({ Icon, title, desc }) => (
+                                    <div
+                                        key={title}
+                                        className="flex items-start gap-3 rounded-2xl border border-[#f3f4f6] bg-[#F9FAFB] p-4"
+                                    >
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FEF3C7]">
+                                            <Icon size={18} color="#D97706" fill="#D97706" />
+                                        </div>
+                                        <div>
+                                            <p
+                                                className="mb-1 text-[13px] font-[900] leading-[1.2] text-[#151515] sm:font-black sm:leading-tight"
+                                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                            >
+                                                {title}
+                                            </p>
+                                            <p
+                                                className="text-[11px] leading-[1.6] text-[#6B7280] sm:leading-relaxed"
+                                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                                            >
+                                                {desc}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <PayButton
+                                href={PG_BUNDLING}
+                                label="Apply Sekarang →"
+                                onClick={() => handlePayClick('Bundling', PG_BUNDLING)}
+                                green
+                            />
+                            <p
+                                className="mt-2 text-center text-[10px] font-[600] text-[#D70808]"
                                 style={{ fontFamily: "'Nunito', sans-serif" }}
                             >
-                                Rp 266.000
+                                * Centang opsi Bundle saat checkout
                             </p>
+                            <OrDivider />
+                            <WaButton
+                                onClick={() => handleWaClick('Bundling', WA_BUNDLING)}
+                                label="Tanya via WhatsApp"
+                            />
+                            <div className="mt-4 flex justify-center">
+                                <SocialProofMicro variant="badges" />
+                            </div>
                         </div>
 
-                        <FeatureList features={intermediateFeatures} />
+                        {/* ── Intermediate ── */}
+                        <div className="flex flex-col rounded-3xl border-2 border-gray-200 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:border-gray-300 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] md:p-7">
+                            <div className="mb-1 flex items-start justify-between">
+                                <div>
+                                    <p
+                                        className="mb-1 text-[10px] font-[700] tracking-widest uppercase text-[#9ca3af] sm:font-bold"
+                                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    >
+                                        Paket
+                                    </p>
+                                    <h3
+                                        className="text-[24px] font-[900] text-[#151515] sm:text-2xl sm:font-black"
+                                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    >
+                                        Intermediate
+                                    </h3>
+                                </div>
+                                <span className="flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2.5 py-1 text-[10px] font-semibold text-[#16a34a]">
+                                    <StarRow /> <span className="ml-1">5.0</span>
+                                </span>
+                            </div>
+                            <p
+                                className="mb-4 text-[14px] font-[600] text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
+                                Target Skor:{' '}
+                                <span className="font-black text-[#16a34a]">500+</span>
+                                {' - '}
+                                <span className="font-black text-[#151515]">15 Hari</span>
+                                {' - Min. 430'}
+                            </p>
+                            <div className="mb-5 rounded-2xl border-[1.5px] border-[#ffb3b3] bg-[#FFF0F0] p-4">
+                                <div className="mb-1 flex items-center gap-2">
+                                    <span
+                                        className="text-[14px] font-[600] line-through text-[#9ca3af] sm:text-sm sm:font-semibold"
+                                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                                    >
+                                        Rp 1.400.000
+                                    </span>
+                                    <span className="rounded-full bg-[#D70808] px-2 py-0.5 text-[10px] font-black text-white">
+                                        DISKON 81%
+                                    </span>
+                                </div>
+                                <p
+                                    className="text-[30px] font-[900] text-[#D70808] sm:text-3xl sm:font-black"
+                                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                                >
+                                    Rp 266.000
+                                </p>
+                            </div>
 
-                        <PayButton
-                            href={PG_INTER}
-                            label="Apply Sekarang →"
-                            onClick={() => handlePayClick('Intermediate', PG_INTER)}
-                        />
-                        <OrDivider />
-                        <WaButton
-                            onClick={() => handleWaClick('Intermediate', WA_INTER)}
-                            label="Tanya via WhatsApp"
-                        />
-                        <div className="mt-4 flex justify-center">
-                            <SocialProofMicro variant="badges" />
+                            <FeatureList features={intermediateFeatures} />
+
+                            <PayButton
+                                href={PG_INTER}
+                                label="Apply Sekarang →"
+                                onClick={() => handlePayClick('Intermediate', PG_INTER)}
+                            />
+                            <OrDivider />
+                            <WaButton
+                                onClick={() => handleWaClick('Intermediate', WA_INTER)}
+                                label="Tanya via WhatsApp"
+                            />
+                            <div className="mt-4 flex justify-center">
+                                <SocialProofMicro variant="badges" />
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    {/* Legalitas (Hanya terlihat di Tutor Mode) */}
+                    <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
+                        <p
+                            className="mb-3 text-[12px] font-[900] tracking-widest uppercase text-[#9ca3af] sm:text-xs sm:font-black"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
+                            Legalitas Resmi
+                        </p>
+                        <div className="flex flex-col gap-1.5">
+                            <span
+                                className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
+                                ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun 2020
+                            </span>
+                            <span
+                                className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
+                                ✓ SK Izin Operasional LKP 503/20177/LKP/DPM-PTSP/8/2024
+                            </span>
+                            <span
+                                className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
+                                ✓ NPSN Nomor K9998700
+                            </span>
+                            <span
+                                className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
+                                style={{ fontFamily: "'Nunito', sans-serif" }}
+                            >
+                                ✓ Bekerja sama dengan IIEF Jakarta
+                            </span>
+                        </div>
+                        <a
+                            href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 inline-block text-[12px] font-[600] text-[#D70808] hover:underline sm:text-xs sm:font-semibold"
+                            style={{ fontFamily: "'Nunito', sans-serif" }}
+                        >
+                        </a>
+                    </div>
+                </>
             )}
 
-            {/* === SELF STUDY MODE (1 CARD + TESTIMONIAL) === */}
+            {/* === SELF STUDY MODE (1 CARD + TESTIMONIAL ONLY) === */}
             {mode === 'self' && (
                 <div className="mx-auto mb-14 w-full max-w-[500px]">
                     <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#F5B700] bg-[linear-gradient(165deg,#ffffff_0%,#fffbf0_100%)] p-6 shadow-[0_16px_56px_rgba(245,183,0,0.15),0_0_0_1px_rgba(245,183,0,0.08)] md:p-7">
@@ -747,7 +793,7 @@ export default function PricingSection() {
                             </p>
                             <div className="flex items-center gap-3">
                                 <img
-                                    src="/public/people/nina.webp"
+                                    src="/people/nina.webp"
                                     alt="Nina Hernawati"
                                     className="h-8 w-8 rounded-full object-cover bg-gray-200"
                                     onError={(e) => {
@@ -765,51 +811,6 @@ export default function PricingSection() {
                     </div>
                 </div>
             )}
-
-            {/* Legalitas */}
-            <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#e5e7eb] bg-[#F3F3F3] px-6 py-4">
-                <p
-                    className="mb-3 text-[12px] font-[900] tracking-widest uppercase text-[#9ca3af] sm:text-xs sm:font-black"
-                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                >
-                    Legalitas Resmi
-                </p>
-                <div className="flex flex-col gap-1.5">
-                    <span
-                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
-                    >
-                        ✓ SK Kemenkumham RI Nomor AHU-0055720-AH.0114 Tahun 2020
-                    </span>
-                    <span
-                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
-                    >
-                        ✓ SK Izin Operasional LKP 503/20177/LKP/DPM-PTSP/8/2024
-                    </span>
-                    <span
-                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
-                    >
-                        ✓ NPSN Nomor K9998700
-                    </span>
-                    <span
-                        className="text-[12px] font-[600] text-[#151515] sm:text-xs sm:font-semibold"
-                        style={{ fontFamily: "'Nunito', sans-serif" }}
-                    >
-                        ✓ Bekerja sama dengan IIEF Jakarta
-                    </span>
-                </div>
-                <a
-                    href="https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/K9998700"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-block text-[12px] font-[600] text-[#D70808] hover:underline sm:text-xs sm:font-semibold"
-                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                >
-                    Info Detail Legalitas →
-                </a>
-            </div>
         </SectionWrapper>
     );
 }

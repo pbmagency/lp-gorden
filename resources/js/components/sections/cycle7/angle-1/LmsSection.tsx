@@ -141,7 +141,7 @@ export default function LmsSection() {
                     <p className="mb-6 text-[16px] font-[800] text-[#151515] sm:text-[18px]" style={{ fontFamily: "'Nunito', sans-serif" }}>
                         Semua fitur ini bisa kamu akses <span className="text-[#D70808]">begitu kamu bergabung.</span>
                     </p>
-                    <div className="mb-6 flex flex-wrap justify-center gap-3">
+                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
                         <LpButton
                             href="#pricing"
                             size="md"
