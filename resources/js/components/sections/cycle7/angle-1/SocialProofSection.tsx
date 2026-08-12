@@ -38,10 +38,10 @@ const waScreenshots: WaScreenshot[] = [
 const carouselItems = [
     { name: 'Kak Rani', score: 547, photo: '/people/People 1.webp' },
     { name: 'Kak Ayu', score: 543, photo: '/people/People 2.webp' },
-    { name: 'Mbak Widya', score: 563, photo: '/people/People 3.webp' },
-    { name: 'Pak Yohanes', score: 560, photo: '/people/People 1.webp' },
-    { name: 'Kak Uly Sinaga', score: 507, photo: '/people/People 2.webp' },
-    { name: 'Kak Nadia Ayu', score: 513, photo: '/people/People 3.webp' },
+    { name: 'Mbak Widya', score: 563, photo: '/people/People8.webp' },
+    { name: 'Pak Yohanes', score: 560, photo: '/people/People6.webp' },
+    { name: 'Kak Uly Sinaga', score: 507, photo: '/people/People5.webp' },
+    { name: 'Kak Nadia Ayu', score: 513, photo: '/people/People7.webp' },
 ];
 const internationalTestimonials = [
     {
