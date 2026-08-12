@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useRef } from 'react';
 import { useAnalytics } from '@/hooks/use-analytics';
 
 const FullBrightLogo = memo(() => {
@@ -26,24 +26,43 @@ const FullBrightLogo = memo(() => {
 
 const Navbar = memo(() => {
     const [scrolled, setScrolled] = useState(false);
+    const [bannerHeight, setBannerHeight] = useState(0);
+    const headerRef = useRef<HTMLElement>(null);
     const { trackCTA } = useAnalytics();
 
     useEffect(() => {
+        // Automatically measure the height of the UrgencyBanner right above it
+        const updateHeight = () => {
+            if (headerRef.current?.previousElementSibling?.tagName === 'A') {
+                setBannerHeight(headerRef.current.previousElementSibling.getBoundingClientRect().height);
+            } else {
+                setBannerHeight(0); // If the banner disappears (expires)
+            }
+        };
+
+        updateHeight();
+        window.addEventListener('resize', updateHeight);
+
         const onScroll = () => setScrolled(window.scrollY > 12);
         window.addEventListener('scroll', onScroll, { passive: true });
 
-        return () => window.removeEventListener('scroll', onScroll);
+        return () => {
+            window.removeEventListener('resize', updateHeight);
+            window.removeEventListener('scroll', onScroll);
+        };
     }, []);
 
     return (
         <header
-            className={`sticky top-0 z-50 transition-all duration-300 ${
+            ref={headerRef}
+            style={{ top: `${bannerHeight}px` }}
+            className={`sticky z-50 transition-all duration-300 ${
                 scrolled
                     ? 'border-b border-gray-100 bg-white/95 shadow-md backdrop-blur-md'
                     : 'border-b border-gray-100 bg-white shadow-sm'
             }`}
         >
-            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
                 <a href="#" className="flex shrink-0 items-center select-none">
                     <FullBrightLogo />
