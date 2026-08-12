@@ -5,6 +5,8 @@ import { lazy, Suspense, useEffect } from 'react';
 import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
 import Navbar from '@/components/sections/cycle7/angle-1/Navbar';
 import UrgencyBanner from '@/components/sections/cycle7/angle-1/UrgencyBanner';
+import ReturnModal from '@/components/sections/cycle7/angle-1/ReturnSection'; // <--- Added this import!
+
 // Below-the-fold — lazy load to reduce initial bundle size
 const AgitationSection = lazy(
     () =>
@@ -139,6 +141,9 @@ export default function Cycle6Angle() {
                 <Suspense fallback={<SectionSkeleton />}>
                     <Footer />
                 </Suspense>
+
+                {/* Return Modal (Exit Intent) added here! */}
+                <ReturnModal />
 
                 {/* Floating WhatsApp Button */}
                 <a

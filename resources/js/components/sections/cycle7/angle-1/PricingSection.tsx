@@ -747,7 +747,7 @@ export default function PricingSection() {
                             </p>
                             <div className="flex items-center gap-3">
                                 <img
-                                    src="/image/avatar1.webp"
+                                    src="/public/people/nina.webp"
                                     alt="Nina Hernawati"
                                     className="h-8 w-8 rounded-full object-cover bg-gray-200"
                                     onError={(e) => {
