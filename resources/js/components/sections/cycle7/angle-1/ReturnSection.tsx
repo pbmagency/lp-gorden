@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { waUrl } from '@/lib/wa-number';
+import { useAnalytics } from '@/hooks/use-analytics'; // Added analytics import
 
 const options = [
     'Harganya masih terlalu mahal buatku',
@@ -28,6 +29,9 @@ const waMsgs = [
 export default function ReturnModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+    
+    // Initialize analytics
+    const { trackCTA, trackConversion } = useAnalytics();
 
     useEffect(() => {
         // Automatically track clicks on checkout links
@@ -93,6 +97,14 @@ export default function ReturnModal() {
                             href={waUrl(waMsgs[selectedIdx])}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => {
+                                // Added analytics tracking here!
+                                trackCTA('return_popup', 'Konsultasi WhatsApp', waUrl(waMsgs[selectedIdx]));
+                                trackConversion('whatsapp_leads', {
+                                    location: 'return_popup',
+                                    reason_selected: options[selectedIdx]
+                                });
+                            }}
                             className="mb-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#16a34a] px-4 py-3.5 text-[14px] font-[700] text-white transition-all hover:brightness-110 active:scale-[0.98]"
                             style={{ fontFamily: 'var(--font-heading)' }}
                         >

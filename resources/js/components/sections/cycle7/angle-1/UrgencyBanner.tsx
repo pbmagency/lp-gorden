@@ -1,24 +1,25 @@
-'use client'; // Remove this line if you are NOT using Next.js App Router
+'use client'; 
 
 import { useEffect, useState } from 'react';
+import { useAnalytics } from '@/hooks/use-analytics'; // Added analytics import
 
 export default function UrgencyBanner() {
     const [timeLeft, setTimeLeft] = useState({ hours: 11, minutes: 59, seconds: 59 });
     const [mounted, setMounted] = useState(false);
-    
-    // NEW: State to track if the timer has completely run out
     const [isExpired, setIsExpired] = useState(false);
+    
+    // Initialize analytics
+    const { trackCTA } = useAnalytics();
 
     useEffect(() => {
         setMounted(true);
-        const DURATION = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+        const DURATION = 12 * 60 * 60 * 1000; 
         const STORAGE_KEY = 'urgency_banner_expiry';
 
         function updateTimer() {
             let expiry = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
             const now = Date.now();
 
-            // 1. If this is their first visit ever, set the unique expiry time
             if (!expiry) {
                 expiry = now + DURATION;
                 localStorage.setItem(STORAGE_KEY, expiry.toString());
@@ -26,13 +27,11 @@ export default function UrgencyBanner() {
 
             const diff = expiry - now;
 
-            // 2. NEW LOGIC: If the timer reaches 00:00:00, hide the banner completely
             if (diff <= 0) {
                 setIsExpired(true);
-                return; // Stop updating the timer
+                return; 
             }
 
-            // 3. Otherwise, just keep counting down from their unique expiry time
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / 1000 / 60) % 60);
             const s = Math.floor((diff / 1000) % 60);
@@ -45,21 +44,22 @@ export default function UrgencyBanner() {
         return () => clearInterval(interval);
     }, []);
 
-    // Helper to format numbers (e.g. turns '9' into '09')
     const formatTime = (num: number) => num.toString().padStart(2, '0');
 
-    // If the countdown is finished, return null so the banner completely disappears!
     if (isExpired) return null;
 
     return (
-        <a
-            href="#pricing"
+        // Changed from <a> to <button> to prevent it from triggering global link trackers (like exit-intent)
+        <button
+            type="button"
             onClick={(e) => {
                 e.preventDefault();
+                // Added tracking event for your admin dashboard!
+                trackCTA('urgency_banner', 'Click Promo Banner', '#pricing');
+                
                 document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            // Added: sticky top-0 z-[100]
-            className="sticky top-0 z-[100] flex w-full cursor-pointer items-center justify-center bg-[#D70808] px-4 py-2 transition-colors hover:bg-[#b30606]"
+            className="sticky top-0 z-[100] flex w-full cursor-pointer items-center justify-center bg-[#D70808] border-none px-4 py-2 transition-colors hover:bg-[#b30606]"
             style={{ fontFamily: 'var(--font-heading)' }}
         >
             <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-[12px] font-[800] tracking-wide text-white sm:gap-x-4 sm:text-[13px]">
@@ -78,6 +78,6 @@ export default function UrgencyBanner() {
                     </span>
                 </span>
             </div>
-        </a>
+        </button>
     );
 }
