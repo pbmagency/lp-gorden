@@ -63,9 +63,9 @@ export default function ReturnModal() {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#151515]/45">
+        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#151515]/45 sm:items-center sm:p-4">
             <div 
-                className="relative w-full max-w-[480px] max-h-[85vh] overflow-y-auto rounded-t-[24px] bg-white p-6 pb-8 shadow-[0_-12px_40px_rgba(0,0,0,0.18)] animate-in slide-in-from-bottom-full duration-200"
+                className="relative w-full max-w-[480px] max-h-[85vh] overflow-y-auto rounded-t-[24px] bg-white p-6 pb-8 shadow-[0_-12px_40px_rgba(0,0,0,0.18)] sm:rounded-3xl sm:shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
             >
                 <button 
                     onClick={() => setIsOpen(false)}
