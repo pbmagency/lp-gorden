@@ -33,15 +33,13 @@ const Navbar = memo(() => {
     const { trackCTA } = useAnalytics();
 
     useEffect(() => {
-        // Automatically measure the height of the UrgencyBanner right above it
         const updateHeight = () => {
             const prev = headerRef.current?.previousElementSibling;
             
-            // We now check for 'BUTTON' as well since we changed the banner's HTML tag!
             if (prev && (prev.tagName === 'A' || prev.tagName === 'BUTTON')) {
                 setBannerHeight(prev.getBoundingClientRect().height);
             } else {
-                setBannerHeight(0); // If the banner disappears (expires)
+                setBannerHeight(0); // If the banner disappears, snap to 0
             }
         };
 
@@ -51,9 +49,18 @@ const Navbar = memo(() => {
         const onScroll = () => setScrolled(window.scrollY > 12);
         window.addEventListener('scroll', onScroll, { passive: true });
 
+        // Watch for the UrgencyBanner being removed from the DOM
+        const observer = new MutationObserver(() => {
+            updateHeight();
+        });
+        if (headerRef.current?.parentElement) {
+            observer.observe(headerRef.current.parentElement, { childList: true });
+        }
+
         return () => {
             window.removeEventListener('resize', updateHeight);
             window.removeEventListener('scroll', onScroll);
+            observer.disconnect();
         };
     }, []);
 
@@ -63,7 +70,7 @@ const Navbar = memo(() => {
             style={{ top: `${bannerHeight}px` }}
             className={`sticky z-50 transition-all duration-300 ${
                 scrolled
-                    ? 'border-b border-gray-100 bg-white/95 shadow-md backdrop-blur-md'
+                    ? 'border-b border-gray-100 bg-white shadow-md' // FIX: Changed to solid bg-white to prevent transparency overlap
                     : 'border-b border-gray-100 bg-white shadow-sm'
             }`}
         >

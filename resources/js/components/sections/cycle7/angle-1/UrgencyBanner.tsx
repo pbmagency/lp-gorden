@@ -1,10 +1,10 @@
 'use client'; 
 
 import { useEffect, useState } from 'react';
-import { useAnalytics } from '@/hooks/use-analytics'; // Added analytics import
+import { useAnalytics } from '@/hooks/use-analytics';
 
 export default function UrgencyBanner() {
-    const [timeLeft, setTimeLeft] = useState({ hours: 11, minutes: 59, seconds: 59 });
+    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 10 });
     const [mounted, setMounted] = useState(false);
     const [isExpired, setIsExpired] = useState(false);
     
@@ -13,7 +13,8 @@ export default function UrgencyBanner() {
 
     useEffect(() => {
         setMounted(true);
-        const DURATION = 12 * 60 * 60 * 1000; 
+        // CHANGED TO 10 SECONDS FOR TESTING
+        const DURATION = 10 * 1000; 
         const STORAGE_KEY = 'urgency_banner_expiry';
 
         function updateTimer() {
@@ -49,14 +50,11 @@ export default function UrgencyBanner() {
     if (isExpired) return null;
 
     return (
-        // Changed from <a> to <button> to prevent it from triggering global link trackers (like exit-intent)
         <button
             type="button"
             onClick={(e) => {
                 e.preventDefault();
-                // Added tracking event for your admin dashboard!
                 trackCTA('urgency_banner', 'Click Promo Banner', '#pricing');
-                
                 document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
             }}
             className="sticky top-0 z-[100] flex w-full cursor-pointer items-center justify-center bg-[#D70808] border-none px-4 py-2 transition-colors hover:bg-[#b30606]"
