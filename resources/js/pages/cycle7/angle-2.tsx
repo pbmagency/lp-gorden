@@ -120,7 +120,7 @@ export default function Cycle6Angle() {
                 {/* Floating WhatsApp Button */}
                 <a
                     href={waUrl(
-                        'Halo Admin Full Bright Indonesia. Saya lihat iklan. Submission beasiswa luar negeri saya butuh skor TOEFL, saya minat daftar kelas.',
+                        'Halo Admin Full Bright Indonesia. Saya tertarik daftar kelas TOEFL Online.',
                     )}
                     target="_blank"
                     rel="noopener noreferrer"

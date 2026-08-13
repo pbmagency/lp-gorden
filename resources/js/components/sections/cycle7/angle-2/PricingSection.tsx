@@ -49,14 +49,14 @@ const starterFeatures: FeatureItem[] = [
 
 const intermediateFeatures: FeatureItem[] = [
     { type: 'check', text: 'LIVE ZOOM 15 Hari', bold: true },
-    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 210 Soal)', bold: true },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 1000+ Soal)', bold: true },
     { type: 'check', text: 'Progress Test & Post Test (Full Test) 2x', bold: true },
     { type: 'check', text: 'Evaluasi Progress Mingguan' },
     { type: 'check', text: 'Strategi Submit Sesuai Jurusan & Rencana Kontribusi' },
     { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
     { type: 'check', text: '60+ Video Materi Pembelajaran' },
-    { type: 'check', text: 'E-Book Structure (300+ Soal)' },
-    { type: 'check', text: 'E-Book Listening dan Reading (300+ Soal)' },
+    { type: 'check', text: 'E-Book Structure' },
+    { type: 'check', text: 'E-Book Listening dan Reading' },
     { type: 'check', text: 'Grup WA Diskusi' },
     { type: 'check', text: 'Placement Test / Pre-Test' },
     { type: 'check', text: '15 Link Soal Tambahan saat LIVE ZOOM' },

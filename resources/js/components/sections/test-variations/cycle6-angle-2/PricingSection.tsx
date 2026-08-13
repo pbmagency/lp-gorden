@@ -30,14 +30,14 @@ type FeatureItem =
 
 const starterFeatures: FeatureItem[] = [
     { type: 'check', text: 'LIVE ZOOM 10 Hari' },
-    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 170 Soal)' },
+    { type: 'check', text: 'Akses Latihan Soal di LMS (Total 1000+ Soal)' },
     { type: 'check', text: 'Post Test (Full Test) 1x' },
     { type: 'check', text: 'Evaluasi Progress Mingguan' },
     { type: 'check', text: 'Strategi Submit Sesuai Jurusan & Rencana Kontribusi' },
     { type: 'check', text: 'Rekaman ZOOM jika tidak hadir' },
     { type: 'check', text: '30+ Video Materi Pembelajaran' },
-    { type: 'check', text: 'E-Book Structure (100+ Soal)' },
-    { type: 'check', text: 'E-Book Listening dan Reading (190+ Soal)' },
+    { type: 'check', text: 'E-Book Structure' },
+    { type: 'check', text: 'E-Book Listening dan Reading' },
     { type: 'check', text: 'Grup WA Diskusi' },
     { type: 'check', text: 'Placement Test / Pre-Test' },
     { type: 'check', text: '10+ Link Soal Tambahan saat LIVE ZOOM' },

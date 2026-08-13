@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAnalytics } from '@/hooks/use-analytics';
 
 export default function UrgencyBanner() {
-    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 10 });
+    const [timeLeft, setTimeLeft] = useState({ hours: 11, minutes: 59, seconds: 59 });
     const [mounted, setMounted] = useState(false);
     const [isExpired, setIsExpired] = useState(false);
     
@@ -13,8 +13,8 @@ export default function UrgencyBanner() {
 
     useEffect(() => {
         setMounted(true);
-        // CHANGED TO 10 SECONDS FOR TESTING
-        const DURATION = 10 * 1000; 
+        // REVERTED BACK TO 12 HOURS
+        const DURATION = 12 * 60 * 60 * 1000; 
         const STORAGE_KEY = 'urgency_banner_expiry';
 
         function updateTimer() {
