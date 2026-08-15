@@ -5,6 +5,7 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import LpButton from '@/components/ui/lp-button';
 import { useAnalytics } from '@/hooks/use-analytics';
+import SocialProofMicro from '@/components/ui/social-proof-micro';
 
 interface WaScreenshot {
     src: string;
@@ -200,6 +201,7 @@ export default function BuktiNyataSection() {
                         </LpButton>
                     </div>
                 </div>
+                <SocialProofMicro/>
             </div>
 
             {/* Lightbox */}
