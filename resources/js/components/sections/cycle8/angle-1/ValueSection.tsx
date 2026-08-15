@@ -1,6 +1,5 @@
 'use client';
 
-import { Target, TrendingUp, Zap, Check, X } from 'lucide-react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
@@ -8,26 +7,23 @@ import { useAnalytics } from '@/hooks/use-analytics';
 
 const pillars = [
     {
-        Icon: Target,
-        iconColor: '#D70808', // Red
-        iconBg: '#FFF0F0',
+        icon: '🎯',
         borderColor: '#D70808', // Red left border
+        iconBg: '#FFF0F0',
         title: 'TOEFL Pattern Recognition Method™',
         desc: 'Belajar pola soal yang paling sering muncul agar target skor untuk submission lebih cepat tercapai, tanpa menghabiskan waktu mempelajari semua materi.',
     },
     {
-        Icon: Zap,
-        iconColor: '#F59E0B', // Yellow
-        iconBg: '#FEF3C7',
+        icon: '⚡',
         borderColor: '#151515', // Black left border
+        iconBg: '#F3F3F3',
         title: 'Shortcut Structure Framework™',
         desc: 'Roadmap belajar disesuaikan dengan target beasiswa dan waktu submission, sehingga kamu fokus pada materi yang paling berdampak untuk mencapai skor.',
     },
     {
-        Icon: TrendingUp,
-        iconColor: '#D70808', // Red
-        iconBg: '#FFF0F0',
+        icon: '📈',
         borderColor: '#D70808', // Red left border
+        iconBg: '#FFF0F0',
         title: 'Score-Focused Learning System™',
         desc: 'Setiap sesi belajar difokuskan pada target skor yang dibutuhkan untuk submission, sehingga progresmu selalu mengarah ke tujuan yang jelas.',
     },
@@ -35,63 +31,69 @@ const pillars = [
 
 const tableRows = [
     {
-        criteria: 'Biaya tetap terjangkau',
-        otodidak: true,
-        kursus: false,
-        fullbright: true,
+        label: 'Biaya tetap terjangkau',
+        self: 'yes',
+        course: 'no',
+        fb: 'yes',
     },
     {
-        criteria: 'Jadwal bisa kamu atur sendiri',
-        otodidak: true,
-        kursus: false,
-        fullbright: true,
+        label: 'Jadwal bisa kamu atur sendiri',
+        self: 'yes',
+        course: 'no',
+        fb: 'yes',
     },
     {
-        criteria: 'Materi tersusun urut, tidak bingung',
-        otodidak: false,
-        kursus: true,
-        fullbright: true,
+        label: 'Materi tersusun urut, tidak bingung',
+        self: 'no',
+        course: 'yes',
+        fb: 'yes',
     },
     {
-        criteria: 'Materi khusus pola soal TOEFL',
-        otodidak: false,
-        kursus: false,
-        fullbright: true,
+        label: 'Materi khusus pola soal TOEFL',
+        self: 'no',
+        course: 'no',
+        fb: 'yes',
     },
     {
-        criteria: 'Ada yang bisa ditanya kalau bingung',
-        otodidak: false,
-        kursus: true,
-        fullbright: true,
+        label: 'Ada yang bisa ditanya kalau bingung',
+        self: 'no',
+        course: 'yes',
+        fb: 'yes',
     },
     {
-        criteria: 'Materi bisa diulang kapan pun',
-        otodidak: true,
-        kursus: false,
-        fullbright: true,
+        label: 'Materi bisa diulang kapan pun',
+        self: 'yes',
+        course: 'no',
+        fb: 'yes',
     },
     {
-        criteria: 'Skor naik signifikan dalam 15 hari',
-        otodidak: false,
-        kursus: false,
-        fullbright: true,
+        label: 'Skor naik signifikan dalam 15 hari',
+        self: 'no',
+        course: 'no',
+        fb: 'yes',
     },
 ];
 
-const CheckIcon = ({ state }: { state: 'gray' | 'red' }) => (
-    <div className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full ${state === 'red' ? 'bg-[#D70808]' : 'bg-[#9CA3AF]'}`}>
-        <Check size={13} color="white" strokeWidth={4} />
-    </div>
-);
+const CmpIcon = ({ state, isFb = false }: { state: string, isFb?: boolean }) => {
+    // Replicating the exact logic from your source code
+    const isYes = state === 'yes';
+    const text = isYes ? '✓' : '✕';
+    
+    let bgClass = 'bg-[#efefef] text-[#b4b4b4]'; // Default No
+    if (isYes) {
+        bgClass = isFb ? 'bg-[#D70808] text-white' : 'bg-[#9ca3af] text-white';
+    }
 
-const CrossIcon = () => (
-    <div className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#E5E7EB]">
-        <X size={13} color="white" strokeWidth={4} />
-    </div>
-);
+    return (
+        <div className={`flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full text-[13px] font-[900] ${bgClass}`}>
+            {text}
+        </div>
+    );
+};
 
 export default function ValueSection() {
     const { trackCTA } = useAnalytics();
+    
     return (
         <>
             <div
@@ -116,7 +118,7 @@ export default function ValueSection() {
             <SectionWrapper id="value" bg="white" className="py-20 md:py-28">
                 <div className="mb-14 text-center">
                     <div
-                        className="mb-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[12px] font-[800] uppercase tracking-widest sm:px-4 sm:py-1.5 sm:text-xs sm:font-bold"
+                        className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[12px] font-[700] uppercase tracking-[0.08em]"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             backgroundColor: '#FFF0F0',
@@ -126,9 +128,8 @@ export default function ValueSection() {
                     >
                         <span>💡</span> METODE EKSKLUSIF FULL BRIGHT
                     </div>
-                    {/* 👇 Updated font and sizes to match model on mobile 👇 */}
                     <h2
-                        className="mb-4 text-[clamp(28px,3.6vw,42px)] font-black leading-[1.2] sm:text-3xl md:text-4xl md:leading-tight"
+                        className="mb-5 text-[clamp(24px,3vw,36px)] font-[900] leading-[1.2]"
                         style={{
                             fontFamily: 'var(--font-heading)',
                             color: '#151515',
@@ -137,80 +138,82 @@ export default function ValueSection() {
                         Ini <span style={{ color: '#D70808' }}>Strategi Belajar TOEFL</span> Yang Tepat Untuk Kamu
                     </h2>
                     <p
-                        className="mx-auto max-w-2xl text-[16px] leading-[1.6] sm:text-base sm:leading-relaxed md:text-lg"
-                        style={{ fontFamily: 'var(--font-heading)', color: '#666666' }}
+                        className="mx-auto max-w-[576px] text-[16px] leading-[1.6]"
+                        style={{ color: '#3d3d3d' }}
                     >
-                        <strong>Ini cara Full Bright membantu 45.000+ orang mengubah submission yang tadinya ditolak jadi diterima di kampus & perusahaan impian mereka.</strong>
+                        Ini cara Full Bright membantu <strong style={{ color: '#151515' }}>45.000+ orang</strong> mengubah submission yang tadinya ditolak jadi diterima di kampus & perusahaan impian mereka.
                     </p>
                 </div>
 
                 {/* Comparison Table */}
-                <div className="mx-auto mb-16 max-w-[850px] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div className="w-full overflow-x-auto">
-                        <div className="min-w-[650px]">
-                            {/* Header */}
-                            <div className="grid grid-cols-[2.5fr_1fr_1fr_1.2fr] items-stretch border-b border-gray-100">
-                                <div className="flex items-center px-6 py-5 text-[12px] font-[800] uppercase tracking-widest text-[#666666]">
-                                    KRITERIA
-                                </div>
-                                <div className="flex items-center justify-center px-2 py-5 text-center text-[12px] font-[800] text-[#666666]">
-                                    Belajar Otodidak
-                                </div>
-                                <div className="flex items-center justify-center px-2 py-5 text-center text-[12px] font-[800] text-[#666666]">
-                                    Kursus Lain
-                                </div>
-                                <div className="flex items-center justify-center rounded-tl-[16px] bg-[#D70808] px-2 py-5 text-center text-[13px] font-[800] text-white">
-                                    Full Bright
-                                </div>
+                <div className="mx-auto mb-14 max-w-[760px] overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
+                    <div className="w-full">
+                        {/* Header */}
+                        <div 
+                            className="bg-[#F9F9F9] border-b border-[#ececec]"
+                            style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
+                        >
+                            <div className="p-[16px] text-[12px] font-[900] uppercase tracking-[0.08em] text-[#6b7280]">
+                                Kriteria
                             </div>
+                            <div className="p-[16px_8px] text-center text-[13px] font-[800] leading-[1.25] text-[#6b7280]" style={{ fontFamily: 'var(--font-heading)' }}>
+                                Belajar Otodidak
+                            </div>
+                            <div className="p-[16px_8px] text-center text-[13px] font-[800] leading-[1.25] text-[#6b7280]" style={{ fontFamily: 'var(--font-heading)' }}>
+                                Kursus Lain
+                            </div>
+                            <div className="bg-[#D70808] p-[16px_8px] text-center text-[13px] font-[900] leading-[1.25] text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+                                Full Bright
+                            </div>
+                        </div>
 
-                            {/* Rows */}
-                            <div className="flex flex-col">
-                                {tableRows.map((row, i) => (
-                                    <div
-                                        key={i}
-                                        className="grid grid-cols-[2.5fr_1fr_1fr_1.2fr] items-stretch border-b border-gray-100 last:border-0"
-                                    >
-                                        <div className="flex items-center px-6 py-4 text-[14px] font-[700] text-[#151515]">
-                                            {row.criteria}
-                                        </div>
-                                        <div className="flex items-center justify-center px-2 py-4">
-                                            {row.otodidak ? <CheckIcon state="gray" /> : <CrossIcon />}
-                                        </div>
-                                        <div className="flex items-center justify-center px-2 py-4">
-                                            {row.kursus ? <CheckIcon state="gray" /> : <CrossIcon />}
-                                        </div>
-                                        <div className="flex items-center justify-center bg-[#fff5f5] px-2 py-4">
-                                            <CheckIcon state="red" />
-                                        </div>
+                        {/* Rows */}
+                        <div className="flex flex-col">
+                            {tableRows.map((row, i) => (
+                                <div
+                                    key={i}
+                                    className="border-b border-[#f4f4f4] last:border-0"
+                                    style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'center' }}
+                                >
+                                    <div className="p-[16px] text-[14px] font-[700] leading-[1.4] text-[#151515]">
+                                        {row.label}
                                     </div>
-                                ))}
-                            </div>
+                                    <div className="flex items-center justify-center p-[16px_8px]">
+                                        <CmpIcon state={row.self} />
+                                    </div>
+                                    <div className="flex items-center justify-center p-[16px_8px]">
+                                        <CmpIcon state={row.course} />
+                                    </div>
+                                    <div className="flex self-stretch items-center justify-center bg-[#FFF7F7] p-[16px_8px]">
+                                        <CmpIcon state={row.fb} isFb={true} />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="mx-auto mb-10 grid max-w-5xl gap-6 md:grid-cols-3">
+                <div className="mx-auto mb-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 max-w-5xl">
                     {pillars.map(
-                        ({ Icon, iconColor, iconBg, borderColor, title, desc }) => (
+                        ({ icon, iconBg, borderColor, title, desc }) => (
                             <div
                                 key={title}
-                                className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                                className="flex flex-col gap-4 rounded-[16px] border border-[#f3f4f6] bg-white p-[28px] shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
                                 style={{ borderLeft: `4px solid ${borderColor}` }}
                             >
                                 <div
-                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
+                                    className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[16px] text-[22px]"
                                     style={{ backgroundColor: iconBg }}
                                 >
-                                    <Icon size={24} color={iconColor} strokeWidth={2.5} />
+                                    {icon}
                                 </div>
                                 <h3
-                                    className="text-[18px] font-[800] leading-snug sm:text-lg sm:font-bold"
+                                    className="m-0 text-[16px] font-[900] leading-[1.3]"
                                     style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
                                 >
                                     {title}
                                 </h3>
-                                <p className="text-[15px] leading-[1.6] text-gray-500 sm:text-sm sm:leading-relaxed" style={{ fontFamily: 'var(--font-heading)'  }}>
+                                <p className="m-0 text-[14px] leading-[1.7]" style={{ color: '#3d3d3d' }}>
                                     {desc}
                                 </p>
                             </div>
@@ -238,7 +241,7 @@ export default function ValueSection() {
                             Lihat Bukti Alumni →
                         </LpButton>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-5 flex justify-center">
                         <SocialProofMicro />
                     </div>
                 </div>
