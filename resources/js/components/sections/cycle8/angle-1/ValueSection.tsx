@@ -144,12 +144,12 @@ export default function ValueSection() {
                     </p>
                 </div>
 
-                {/* Comparison Table - Removed overflow-hidden! */}
+                {/* Comparison Table */}
                 <div className="mx-auto mb-10 max-w-[760px] rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
                     <div className="w-full">
-                        {/* Header - Sticky Header */}
+                        {/* Header - Sticky Header offset increased to clear Banner + Navbar */}
                         <div 
-                            className="sticky top-[64px] z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] md:top-[80px]"
+                            className="sticky top-[115px] z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] md:top-[125px]"
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
                         >
                             <div className="p-[16px] text-[12px] font-[900] uppercase tracking-[0.08em] text-[#6b7280]">
@@ -183,7 +183,6 @@ export default function ValueSection() {
                                     <div className="flex items-center justify-center p-[16px_8px]">
                                         <CmpIcon state={row.course} />
                                     </div>
-                                    {/* Added rounded-br-[20px] on the very last row's right column to prevent corners from bleeding */}
                                     <div className={`flex self-stretch items-center justify-center bg-[#FFF7F7] p-[16px_8px] ${i === tableRows.length - 1 ? 'rounded-br-[20px]' : ''}`}>
                                         <CmpIcon state={row.fb} isFb={true} />
                                     </div>
