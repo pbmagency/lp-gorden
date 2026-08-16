@@ -75,11 +75,10 @@ const tableRows = [
 ];
 
 const CmpIcon = ({ state, isFb = false }: { state: string, isFb?: boolean }) => {
-    // Replicating the exact logic from your source code
     const isYes = state === 'yes';
     const text = isYes ? '✓' : '✕';
     
-    let bgClass = 'bg-[#efefef] text-[#b4b4b4]'; // Default No
+    let bgClass = 'bg-[#efefef] text-[#b4b4b4]';
     if (isYes) {
         bgClass = isFb ? 'bg-[#D70808] text-white' : 'bg-[#9ca3af] text-white';
     }
@@ -145,10 +144,10 @@ export default function ValueSection() {
                     </p>
                 </div>
 
-                {/* Comparison Table */}
-                <div className="mx-auto mb-10 max-w-[760px] overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
+                {/* Comparison Table - Removed overflow-hidden! */}
+                <div className="mx-auto mb-10 max-w-[760px] rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
                     <div className="w-full">
-                        {/* Header - Made Sticky! */}
+                        {/* Header - Sticky Header */}
                         <div 
                             className="sticky top-[64px] z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] md:top-[80px]"
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
@@ -172,10 +171,10 @@ export default function ValueSection() {
                             {tableRows.map((row, i) => (
                                 <div
                                     key={i}
-                                    className="border-b border-[#f4f4f4] last:border-0"
+                                    className={`border-[#f4f4f4] ${i < tableRows.length - 1 ? 'border-b' : ''}`}
                                     style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'center' }}
                                 >
-                                    <div className="p-[16px] text-[14px] font-[700] leading-[1.4] text-[#151515]">
+                                    <div className={`p-[16px] text-[14px] font-[700] leading-[1.4] text-[#151515] ${i === tableRows.length - 1 ? 'rounded-bl-[20px]' : ''}`}>
                                         {row.label}
                                     </div>
                                     <div className="flex items-center justify-center p-[16px_8px]">
@@ -184,7 +183,8 @@ export default function ValueSection() {
                                     <div className="flex items-center justify-center p-[16px_8px]">
                                         <CmpIcon state={row.course} />
                                     </div>
-                                    <div className="flex self-stretch items-center justify-center bg-[#FFF7F7] p-[16px_8px]">
+                                    {/* Added rounded-br-[20px] on the very last row's right column to prevent corners from bleeding */}
+                                    <div className={`flex self-stretch items-center justify-center bg-[#FFF7F7] p-[16px_8px] ${i === tableRows.length - 1 ? 'rounded-br-[20px]' : ''}`}>
                                         <CmpIcon state={row.fb} isFb={true} />
                                     </div>
                                 </div>
@@ -193,7 +193,7 @@ export default function ValueSection() {
                     </div>
                 </div>
 
-                {/* Added Title for Pillars */}
+                {/* Title for Pillars */}
                 <div className="mb-6 text-center px-4">
                     <h3
                         className="mx-auto max-w-2xl text-[16px] font-[800] leading-[1.5] sm:text-[18px] md:text-[20px]"
