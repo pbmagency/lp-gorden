@@ -98,7 +98,7 @@ export default function Cycle6Angle() {
         <>
             <Head>
                 <title>
-                    Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja
+                    Raih TOEFL Skor 500+ Cukup 15 Hari (LMS + Tutor AI)
                 </title>
                 <meta
                     name="description"
