@@ -3,8 +3,8 @@ import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately (critical rendering path)
 import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
-import Navbar from '@/components/sections/cycle7/angle-1/Navbar';
-import UrgencyBanner from '@/components/sections/cycle7/angle-1/UrgencyBanner';
+import Navbar from '@/components/sections/cycle7/angle-3/Navbar';
+import UrgencyBanner from '@/components/sections/cycle7/angle-3/UrgencyBanner';
 import ReturnModal from '@/components/sections/cycle7/angle-1/ReturnSection'; // <--- Added this import!
 
 // Below-the-fold — lazy load to reduce initial bundle size
@@ -89,7 +89,7 @@ export default function Cycle6Angle() {
         <>
             <Head>
                 <title>
-                    Raih TOEFL Skor 500+ Cukup 15 Hari (LMS + Tutor AI)
+                    Kelas TOEFL Skor 500+ untuk Submission Beasiswa dan Kerja
                 </title>
                 <meta
                     name="description"
