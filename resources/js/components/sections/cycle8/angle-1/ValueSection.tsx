@@ -171,7 +171,7 @@ export default function ValueSection() {
                         {/* Header - Sticky on mobile, relative on desktop! */}
                         <div 
                             className={`z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] transition-all duration-300 sticky md:relative md:top-auto ${
-                                isBannerVisible ? 'top-[115px]' : 'top-[64px]'
+                                isBannerVisible ? 'top-[112px]' : 'top-[64px]'
                             }`}
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
                         >
