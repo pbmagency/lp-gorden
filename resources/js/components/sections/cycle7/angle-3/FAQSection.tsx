@@ -21,7 +21,7 @@ const faqs: { category: string; q: string; a: string; node?: ReactNode }[] = [
     { 
         category: 'Belajar Mandiri (LMS)', 
         q: 'Kalau ambil paket Self-Study LMS, apa saja yang saya dapat?', 
-        a: 'Kamu dapat akses penuh ke LMS Full Bright: 60+ video materi Full Skills (Listening, Structure, Reading), materi terstruktur hari ke-1 sampai ke-15, 1.000+ nomor latihan soal beserta pembahasan, diagnostic test, simulasi dan post test full skills, serta grup WA diskusi. Semua bisa diakses kapan saja tanpa terikat jadwal kelas.' 
+        a: 'Kamu dapat akses penuh ke LMS Full Bright: 60+ video materi Full Skills (Listening, Structure, Reading), materi terstruktur hari ke-1 sampai ke-15, 1.000+ nomor latihan soal beserta pembahasan, diagnostic test, serta grup WA diskusi. Semua bisa diakses kapan saja tanpa terikat jadwal kelas.' 
     },
     { 
         category: 'Belajar Mandiri (LMS)', 
