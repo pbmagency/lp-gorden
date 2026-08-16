@@ -101,7 +101,6 @@ export default function ValueSection() {
         
         const checkBannerStatus = () => {
             const expiry = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-            // If the expiry exists and current time is past expiry, the banner is gone
             if (expiry > 0 && Date.now() >= expiry) {
                 setIsBannerVisible(false);
             } else {
@@ -111,7 +110,6 @@ export default function ValueSection() {
 
         checkBannerStatus();
         
-        // Check periodically in case it expires while the user is looking at this section
         const interval = setInterval(checkBannerStatus, 1000);
         return () => clearInterval(interval);
     }, []);
@@ -168,12 +166,12 @@ export default function ValueSection() {
                 </div>
 
                 {/* Comparison Table */}
-                <div className="mx-auto mb-10 max-w-[760px] rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
-                    <div className="w-full">
-                        {/* Header - Dynamic Sticky Header based on banner visibility */}
+                <div className="mx-auto mb-10 max-w-[760px] h-fit rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
+                    <div className="w-full relative h-full">
+                        {/* Header - Sticky on mobile, relative on desktop! */}
                         <div 
-                            className={`sticky z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] transition-all duration-300 ${
-                                isBannerVisible ? 'top-[115px] md:top-[125px]' : 'top-[64px] md:top-[80px]'
+                            className={`z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] transition-all duration-300 sticky md:relative md:top-auto ${
+                                isBannerVisible ? 'top-[115px]' : 'top-[64px]'
                             }`}
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
                         >
