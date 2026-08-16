@@ -142,7 +142,7 @@ export default function AgitationSection() {
                 {/* Closing Bridge */}
                 <div className="px-2 space-y-4 text-center">
                     <p
-                        className="mx-auto max-w-2xl text-[15px] leading-[1.6]"
+                        className="mx-auto max-w-2xl text-[18px] leading-[1.6]"
                         style={{ color: '#6b6b6b' }}
                     >
                         Materi yang sama bisa terasa jauh lebih mudah kalau urutannya benar dan ada penjelasan lengkapnya.

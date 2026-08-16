@@ -146,11 +146,11 @@ export default function ValueSection() {
                 </div>
 
                 {/* Comparison Table */}
-                <div className="mx-auto mb-14 max-w-[760px] overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
+                <div className="mx-auto mb-10 max-w-[760px] overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
                     <div className="w-full">
-                        {/* Header */}
+                        {/* Header - Made Sticky! */}
                         <div 
-                            className="bg-[#F9F9F9] border-b border-[#ececec]"
+                            className="sticky top-[64px] z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] md:top-[80px]"
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
                         >
                             <div className="p-[16px] text-[12px] font-[900] uppercase tracking-[0.08em] text-[#6b7280]">
@@ -162,7 +162,7 @@ export default function ValueSection() {
                             <div className="p-[16px_8px] text-center text-[13px] font-[800] leading-[1.25] text-[#6b7280]" style={{ fontFamily: 'var(--font-heading)' }}>
                                 Kursus Lain
                             </div>
-                            <div className="bg-[#D70808] p-[16px_8px] text-center text-[13px] font-[900] leading-[1.25] text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+                            <div className="bg-[#D70808] p-[16px_8px] text-center text-[13px] font-[900] leading-[1.25] text-white rounded-tr-[20px]" style={{ fontFamily: 'var(--font-heading)' }}>
                                 Full Bright
                             </div>
                         </div>
@@ -191,6 +191,16 @@ export default function ValueSection() {
                             ))}
                         </div>
                     </div>
+                </div>
+
+                {/* Added Title for Pillars */}
+                <div className="mb-6 text-center px-4">
+                    <h3
+                        className="mx-auto max-w-2xl text-[16px] font-[800] leading-[1.5] sm:text-[18px] md:text-[20px]"
+                        style={{ fontFamily: 'var(--font-heading)', color: '#151515' }}
+                    >
+                        3 Metode Belajar yang Membuat Alumni Full Bright Naik Skor dalam 15 Hari:
+                    </h3>
                 </div>
 
                 <div className="mx-auto mb-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 max-w-5xl">

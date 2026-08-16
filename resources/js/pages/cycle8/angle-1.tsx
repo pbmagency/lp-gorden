@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react';
 import { lazy, Suspense, useEffect } from 'react';
 
 // Above-the-fold — load immediately (critical rendering path)
-import HeroSection from '@/components/sections/cycle7/angle-1/HeroSection';
+import HeroSection from '@/components/sections/cycle8/angle-1/HeroSection';
 import Navbar from '@/components/sections/cycle8/angle-1/Navbar';
 import UrgencyBanner from '@/components/sections/cycle8/angle-1/UrgencyBanner';
 import ReturnModal from '@/components/sections/cycle7/angle-1/ReturnSection'; // <--- Added this import!
