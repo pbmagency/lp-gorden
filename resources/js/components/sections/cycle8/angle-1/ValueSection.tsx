@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import LpButton from '@/components/ui/lp-button';
 import SectionWrapper from '@/components/ui/section-wrapper';
 import SocialProofMicro from '@/components/ui/social-proof-micro';
@@ -92,6 +93,28 @@ const CmpIcon = ({ state, isFb = false }: { state: string, isFb?: boolean }) => 
 
 export default function ValueSection() {
     const { trackCTA } = useAnalytics();
+    const [isBannerVisible, setIsBannerVisible] = useState(true);
+
+    // Sync with the UrgencyBanner's expiry state
+    useEffect(() => {
+        const STORAGE_KEY = 'urgency_banner_expiry';
+        
+        const checkBannerStatus = () => {
+            const expiry = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            // If the expiry exists and current time is past expiry, the banner is gone
+            if (expiry > 0 && Date.now() >= expiry) {
+                setIsBannerVisible(false);
+            } else {
+                setIsBannerVisible(true);
+            }
+        };
+
+        checkBannerStatus();
+        
+        // Check periodically in case it expires while the user is looking at this section
+        const interval = setInterval(checkBannerStatus, 1000);
+        return () => clearInterval(interval);
+    }, []);
     
     return (
         <>
@@ -147,9 +170,11 @@ export default function ValueSection() {
                 {/* Comparison Table */}
                 <div className="mx-auto mb-10 max-w-[760px] rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
                     <div className="w-full">
-                        {/* Header - Sticky Header offset increased to clear Banner + Navbar */}
+                        {/* Header - Dynamic Sticky Header based on banner visibility */}
                         <div 
-                            className="sticky top-[115px] z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] md:top-[125px]"
+                            className={`sticky z-20 rounded-t-[20px] bg-[#F9F9F9] border-b border-[#ececec] transition-all duration-300 ${
+                                isBannerVisible ? 'top-[115px] md:top-[125px]' : 'top-[64px] md:top-[80px]'
+                            }`}
                             style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.85fr 0.85fr 0.9fr', alignItems: 'stretch' }}
                         >
                             <div className="p-[16px] text-[12px] font-[900] uppercase tracking-[0.08em] text-[#6b7280]">
