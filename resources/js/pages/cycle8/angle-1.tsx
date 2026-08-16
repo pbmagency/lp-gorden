@@ -47,7 +47,7 @@ const DeliverablesSection = lazy(
 
 const FAQSection = lazy(
     () =>
-        import('@/components/sections/test-variations/cycle6-angle-2/FAQSection'),
+        import('@/components/sections/cycle7/angle-3/FAQSection'),
 );
 const FreeTrialSection = lazy(
     () =>
