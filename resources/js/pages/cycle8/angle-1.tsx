@@ -129,13 +129,7 @@ export default function Cycle6Angle() {
                     <BuktiNyataSection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
-                    <DeliverablesSection />
-                </Suspense>
-                <Suspense fallback={<SectionSkeleton />}>
                     <LmsSection />
-                </Suspense>
-                <Suspense fallback={<SectionSkeleton />}>
-                    <WhySection />
                 </Suspense>
                 <Suspense fallback={<SectionSkeleton />}>
                     <SocialProofSection />
