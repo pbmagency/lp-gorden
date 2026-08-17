@@ -119,10 +119,12 @@ jobs:
           EOF
           "
 
-      - name: Adjust Permissions, Migrate Database & Clear Cache
+      - name: Adjust Permissions, Generate Key, Migrate & Clear Cache
         run: |
           ssh ${{ env.SERVER_USER }}@${{ env.SERVER_IP }} "
             cd ${{ env.TARGET_DIR_LARAVEL }}
+            chmod -R 775 storage bootstrap/cache
+            php artisan key:generate --force
             php artisan migrate --force
             php artisan optimize:clear
           "
