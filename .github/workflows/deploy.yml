@@ -8,7 +8,6 @@ on:
 env:
   SERVER_IP: '72.61.142.238'
   SERVER_USER: 'root'
-  DOMAIN_USERNAME: 'pbmagency'
   TARGET_DIR_LARAVEL: '/home/pbmagency.id/sub2_laravel'
   TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub2'
 
@@ -54,12 +53,9 @@ jobs:
           rsync -avz --no-perms --no-owner --no-group --delete \
           ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}/
 
-      - name: Adjust Permissions & Clear Cache
+      - name: Clear Laravel Cache
         run: |
           ssh ${{ env.SERVER_USER }}@${{ env.SERVER_IP }} "
-            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}
-            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_PUBLIC }}
-            
             cd ${{ env.TARGET_DIR_LARAVEL }}
             php artisan optimize:clear
           "
