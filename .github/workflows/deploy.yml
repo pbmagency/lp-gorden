@@ -113,6 +113,8 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY_VPS1 }}
           script: |
             mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/public/build
+            mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
+
             cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
 
             cd ${{ env.TARGET_DIR_PUBLIC }}
