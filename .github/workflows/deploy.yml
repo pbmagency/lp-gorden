@@ -60,7 +60,7 @@ jobs:
           APP_NAME=Laravel
           APP_ENV=production
           APP_KEY=base64:rP6NsHlCN2LWiyanp69WXcdb8Xq7TwxIRG2ROPGx3jc=
-          APP_DEBUG=false
+          APP_DEBUG=true
           APP_URL=https://sub2.pbmagency.id
           APP_LOCALE=en
           APP_FALLBACK_LOCALE=en
