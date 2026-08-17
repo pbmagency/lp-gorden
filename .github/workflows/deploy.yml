@@ -1,41 +1,34 @@
-name: Deploy Split Structure (Laravel & Public)
+name: Deploy to VPS 2 (Staging)
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main # Ubah ke nama branch-mu jika kamu pakai branch lain
+
+env:
+  SERVER_IP: '72.61.142.238'
+  SERVER_USER: 'root'
+  DOMAIN_USERNAME: 'pbmagency'
+  TARGET_DIR_LARAVEL: '/home/pbmagency.id/sub2_laravel'
+  TARGET_DIR_PUBLIC: '/home/pbmagency.id/sub2'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      SERVER_IP: '72.61.210.213'
-      SERVER_USER: 'root'
-      DOMAIN_USERNAME: 'subgu1960'
-      TARGET_DIR_LARAVEL: '/home/sub2.gumpreneur.id/laravel'
-      TARGET_DIR_PUBLIC: '/home/sub2.gumpreneur.id/public_html'
-
+    
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.2' # Sesuaikan dengan versi PHP project-mu
 
-      # We keep this step here just in case your Vite/NPM build requires Laravel's packages to exist
-      - name: Install Composer Dependencies (Runner)
-        run: |
-          composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+      - name: Install Dependencies (Composer)
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install NPM & Build Inertia React
+      - name: Setup Node.js & Build Assets
         run: |
           npm install
           npm run build
@@ -43,92 +36,30 @@ jobs:
       - name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY_VPS1 }}
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Add Server to Known Hosts
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          for attempt in 1 2 3; do
-            keyscan_error_file="$(mktemp)"
-            if ssh-keyscan -T 30 -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts 2>"$keyscan_error_file"; then
-              rm -f "$keyscan_error_file"
-              break
-            fi
-            echo "ssh-keyscan attempt $attempt failed:"
-            cat "$keyscan_error_file"
-            rm -f "$keyscan_error_file"
-            if [ "$attempt" -eq 3 ]; then
-              echo "Failed to fetch SSH host key for ${{ env.SERVER_IP }} after 3 attempts."
-              exit 1
-            else
-              sleep 5
-            fi
-          done
-          chmod 600 ~/.ssh/known_hosts
+        run: ssh-keyscan -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      # ---------------------------------------------------------
-      # SYNC 1: Pindahkan Core Laravel
-      # ---------------------------------------------------------
-      - name: Sync Core Laravel to Server
+      - name: Deploy Core Laravel Files
         run: |
-          rsync -avz --delete \
+          rsync -avz --no-perms --no-owner --no-group --delete \
+          --exclude='.git' \
+          --exclude='/public' \
           --exclude='.env' \
-          --exclude='/storage/' \
-          --exclude='/bootstrap/cache/' \
-          --exclude='/.git/' \
-          --exclude='/node_modules/' \
-          --exclude='/public/' \
-          --exclude='/vendor/' \
-          ./ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}
+          ./ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}/
 
-      # ---------------------------------------------------------
-      # SYNC 2: Pindahkan Aset Public
-      # ---------------------------------------------------------
-      - name: Sync Public Assets to public_html
+      - name: Deploy Public Files
         run: |
-          rsync -avz --delete \
-          --exclude='index.php' \
-          --exclude='.htaccess' \
-          ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}
+          rsync -avz --no-perms --no-owner --no-group --delete \
+          ./public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_PUBLIC }}/
 
-      # ---------------------------------------------------------
-      # SYNC 3: Upload storage/app/public (images, misc assets)
-      # ---------------------------------------------------------
-      - name: Sync Storage Public Assets
+      - name: Adjust Permissions & Clear Cache
         run: |
-          mkdir -p ./storage/app/public
-          ssh ${{ env.SERVER_USER }}@${{ env.SERVER_IP }} "mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public"
-          rsync -avz \
-          ./storage/app/public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}/storage/app/public
-
-      # ---------------------------------------------------------
-      # POST-DEPLOYMENT
-      # ---------------------------------------------------------
-      - name: Run Artisan & Move Manifest
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.SERVER_IP }}
-          username: ${{ env.SERVER_USER }}
-          key: ${{ secrets.DEPLOY_KEY_VPS1 }}
-          script: |
-            mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/public/build
-            mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
-
-            cp ${{ env.TARGET_DIR_PUBLIC }}/build/manifest.json ${{ env.TARGET_DIR_LARAVEL }}/public/build/manifest.json
-
-            cd ${{ env.TARGET_DIR_PUBLIC }}
-            ln -sfn ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public storage
-
-            cd ${{ env.TARGET_DIR_LARAVEL }}
-
-            # --- CHANGED: Run composer install directly on the server ---
-            composer install --no-dev --optimize-autoloader --no-interaction
-
-            php artisan optimize:clear
-            php artisan migrate --force
-
+          ssh ${{ env.SERVER_USER }}@${{ env.SERVER_IP }} "
             chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}
             chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_PUBLIC }}
-            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}/storage
-            chown -R ${{ env.DOMAIN_USERNAME }}:${{ env.DOMAIN_USERNAME }} ${{ env.TARGET_DIR_LARAVEL }}/bootstrap/cache
+            
+            cd ${{ env.TARGET_DIR_LARAVEL }}
+            php artisan optimize:clear
+          "
