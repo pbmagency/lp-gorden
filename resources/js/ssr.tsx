@@ -18,6 +18,7 @@ createServer((page) =>
             switch (true) {
                 case name === 'welcome':
                 case name === 'landing':
+                case name === 'GordenLanding':
                 case name === 'checkout':
                 case name.startsWith('payment/'):
                 case name.startsWith('admin/'):
