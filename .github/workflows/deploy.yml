@@ -97,6 +97,8 @@ jobs:
       # ---------------------------------------------------------
       - name: Sync Storage Public Assets
         run: |
+          mkdir -p ./storage/app/public
+          ssh ${{ env.SERVER_USER }}@${{ env.SERVER_IP }} "mkdir -p ${{ env.TARGET_DIR_LARAVEL }}/storage/app/public"
           rsync -avz \
           ./storage/app/public/ ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:${{ env.TARGET_DIR_LARAVEL }}/storage/app/public
 
