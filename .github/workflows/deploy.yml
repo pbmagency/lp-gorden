@@ -26,8 +26,10 @@ jobs:
 
       - name: Install Dependencies (Composer)
         run: |
-          composer clear-cache
+          composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
           composer install --no-interaction --prefer-dist --no-progress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js & Build Assets
         run: |
