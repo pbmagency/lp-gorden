@@ -25,7 +25,9 @@ jobs:
           php-version: '8.3'
 
       - name: Install Dependencies (Composer)
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: |
+          composer clear-cache
+          composer install --no-interaction --prefer-dist --no-progress
 
       - name: Setup Node.js & Build Assets
         run: |
