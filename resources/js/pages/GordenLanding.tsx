@@ -20,7 +20,7 @@ export default function GordenLanding() {
     const [katCat, setKatCat] = useState('semua');
     const [expKain, setExpKain] = useState(false);
     const [expBlinds, setExpBlinds] = useState(false);
-    const [renderDeferredContent, setRenderDeferredContent] = useState(false);
+    const [renderDeferredContent, setRenderDeferredContent] = useState(true);
 
     const lightboxImgRef = useRef<HTMLImageElement>(null);
     const reviewsSectionRef = useRef<HTMLParagraphElement>(null);
@@ -33,30 +33,6 @@ export default function GordenLanding() {
         mql.addEventListener('change', onChange);
         return () => mql.removeEventListener('change', onChange);
     }, []);
-
-    useEffect(() => {
-        const backgrounds = document.querySelectorAll<HTMLElement>('[style*="--landing-bg"]');
-        if (!('IntersectionObserver' in window)) {
-            backgrounds.forEach((element) => element.classList.add('lazy-bg-ready'));
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    (entry.target as HTMLElement).classList.add('lazy-bg-ready');
-                    observer.unobserve(entry.target);
-                });
-            },
-            { rootMargin: '700px 0px' },
-        );
-
-        backgrounds.forEach((element) => {
-            if (!element.classList.contains('lazy-bg-ready')) observer.observe(element);
-        });
-        return () => observer.disconnect();
-    }, [showAllProjects, expKain, expBlinds, narrow]);
 
     useEffect(() => {
         const section = reviewsSectionRef.current;
@@ -267,7 +243,7 @@ export default function GordenLanding() {
             <Head>
                 <style>{`
   * { box-sizing: border-box; }
-  body { margin: 0; background: oklch(0.97 0.015 85); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: oklch(0.97 0.015 85); font-family: "Poppins", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: #6a6151; }
   a:hover { color: #4f4a3d; }
   .landing-content > section:not(:first-child),
@@ -275,8 +251,7 @@ export default function GordenLanding() {
     content-visibility: auto;
     contain-intrinsic-size: auto 720px;
   }
-  [style*="--landing-bg"] { background-image: none; }
-  [style*="--landing-bg"].lazy-bg-ready { background-image: var(--landing-bg); }
+  [style*="--landing-bg"] { background-image: var(--landing-bg); }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
   }
@@ -289,7 +264,7 @@ export default function GordenLanding() {
                 style={{
                     background: 'oklch(0.97 0.015 85)',
                     color: 'oklch(0.24 0.02 60)',
-                    fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+                    fontFamily: 'Poppins, Helvetica, sans-serif',
                     fontSize: '17px',
                     lineHeight: '1.62',
                     overflowX: 'clip',
