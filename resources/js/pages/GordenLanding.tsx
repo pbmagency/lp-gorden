@@ -330,7 +330,7 @@ export default function GordenLanding() {
                             }}
                         />
                         <a
-                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                             target="_blank"
                             rel="noopener"
                             style={{
@@ -561,7 +561,7 @@ export default function GordenLanding() {
                                     }}
                                 >
                                     <a
-                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                         target="_blank"
                                         rel="noopener"
                                         style={{
@@ -979,7 +979,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2075,7 +2075,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2313,7 +2313,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2674,7 +2674,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -3643,7 +3643,7 @@ export default function GordenLanding() {
                         <div style={{ margin: '22px 0 0' }}>
                             <div style={{ display: 'flex' }}>
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20habis%20lihat%20portofolionya.%20Saya%20mau%20konsultasi%20lebih%20lanjut."
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -4412,7 +4412,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -4835,7 +4835,7 @@ export default function GordenLanding() {
                                                         Bersih dan tidak ramai, pas untuk rumah minimalis.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Minimalis."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -4962,7 +4962,7 @@ export default function GordenLanding() {
                                                         Model, bahan, dan ukuran menyesuaikan ruangan Anda.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Custom."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5089,7 +5089,7 @@ export default function GordenLanding() {
                                                         Tirai tembus pandang, hampir wajib untuk kamar tidur.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Siang%20%26%20Vitrase."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5225,7 +5225,7 @@ export default function GordenLanding() {
                                                             Gorden pita nempel jendela, simpel untuk rumah minimalis.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Kupu-Kupu."
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5352,7 +5352,7 @@ export default function GordenLanding() {
                                                             Bahan dan model kelas hotel untuk unit sewa.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Hotel%20%26%20Apartemen."
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5479,7 +5479,7 @@ export default function GordenLanding() {
                                                             Untuk rumah sakit, sekolah, dan ruang publik.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Tirai%20Area%20Publik."
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5672,7 +5672,7 @@ export default function GordenLanding() {
                                                         Ditarik naik-turun, hemat tempat, rapi untuk kantor.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Roller%20Blinds."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5817,7 +5817,7 @@ export default function GordenLanding() {
                                                         Gorden dan vitrase jadi satu, terang-gelap tinggal digeser.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Zebra%20Blinds."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5944,7 +5944,7 @@ export default function GordenLanding() {
                                                         Kesan formal, arah cahaya bisa diatur supaya layar tidak silau.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Vertikal%20Blinds."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -6080,7 +6080,7 @@ export default function GordenLanding() {
                                                             Slat aluminium, ringan dan mudah dibersihkan.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Slimline%20Blinds."
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -6207,7 +6207,7 @@ export default function GordenLanding() {
                                                             Menahan panas dan silau dari luar, tahan angin.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Outdoor%20Blinds."
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -6382,7 +6382,7 @@ export default function GordenLanding() {
                                                         Satu dinding saja bisa mengubah karakter ruangan.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Wallpaper%20Custom."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -6509,7 +6509,7 @@ export default function GordenLanding() {
                                                         Kasa nyamuk, rail rolet, dan perlengkapan gorden lain.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Perlengkapan%20Lainnya."
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -6572,7 +6572,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20model%20gorden%20yang%20cocok%20untuk%20ruangan%20saya."
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -7318,7 +7318,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -7575,7 +7575,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -8074,7 +8074,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -8304,7 +8304,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20di%20Solo%20Raya.%20Apakah%20bisa%20survey%20ke%20lokasi%20saya%3F"
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -8412,7 +8412,7 @@ export default function GordenLanding() {
                                 <p style={{ margin: '0' }}>Jl. Songgolangit 22, Gentan, Solo</p>
                                 <p style={{ margin: '0' }}>
                                     WhatsApp:{' '}
-                                    <a href="https://wa.me/6285860525758" target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
+                                    <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
                                         085.860.52.57.58
                                     </a>
                                 </p>
@@ -8583,7 +8583,7 @@ export default function GordenLanding() {
                 )}
 
                 <a
-                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F"
                     target="_blank"
                     rel="noopener"
                     aria-label="Konsultasi gratis via WhatsApp"
