@@ -28,7 +28,7 @@ jobs:
 
       - name: Install NPM & Build Assets
         run: |
-          npm ci
+          npm install --include=optional
           npm run build:ssr
 
       - name: Setup SSH Key (Jalur Elit VPS1)
