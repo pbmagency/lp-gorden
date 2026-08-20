@@ -2,36 +2,36 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\CacheLandingPage;
 use Illuminate\Support\Facades\Cache;
-use ReflectionMethod;
 use Tests\TestCase;
 
 class LandingPageCacheTest extends TestCase
 {
-    public function test_cached_landing_page_uses_the_current_session_csrf_token(): void
+    protected function setUp(): void
     {
-        Cache::flush();
+        parent::setUp();
 
-        $firstToken = 'first-session-token';
-        $this->withSession(['_token' => $firstToken])
-            ->get('/')
+        Cache::store('file')->flush();
+    }
+
+    public function test_anonymous_landing_page_is_served_from_the_fast_file_cache(): void
+    {
+        $this->get('/')
             ->assertOk()
-            ->assertSee('content="'.$firstToken.'"', false);
+            ->assertHeader('X-Landing-Cache', 'MISS')
+            ->assertDontSee('name="csrf-token"', false);
 
-        $manifestVersion = (new ReflectionMethod(CacheLandingPage::class, 'manifestVersion'))
-            ->invoke(null);
-        $cachedHtml = Cache::get('landing_page_html_v2:'.$manifestVersion);
-
-        $this->assertIsString($cachedHtml);
-        $this->assertStringContainsString('__LANDING_CSRF_TOKEN__', $cachedHtml);
-        $this->assertStringNotContainsString($firstToken, $cachedHtml);
-
-        $secondToken = 'second-session-token';
-        $this->withSession(['_token' => $secondToken])
-            ->get('/')
+        $this->get('/')
             ->assertOk()
-            ->assertSee('content="'.$secondToken.'"', false)
-            ->assertDontSee('content="'.$firstToken.'"', false);
+            ->assertHeader('X-Landing-Cache', 'HIT')
+            ->assertHeader('Cache-Control', 'max-age=300, public, stale-while-revalidate=86400')
+            ->assertSee('Gorden Custom Solo Raya');
+    }
+
+    public function test_query_strings_are_not_mixed_into_the_shared_html_cache(): void
+    {
+        $this->get('/?utm_source=campaign')
+            ->assertOk()
+            ->assertHeaderMissing('X-Landing-Cache');
     }
 }

@@ -13,6 +13,22 @@ const landingPath = path.join(
 const assetsPath = path.join(root, 'public', 'assets');
 
 async function optimizeImages() {
+    await sharp(path.join(assetsPath, 'logo.webp'))
+        .resize(64, 64, { fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 82, effort: 6 })
+        .toFile(path.join(assetsPath, 'logo-64.webp'));
+
+    await sharp(path.join(assetsPath, 'proses-pasang.webp'))
+        .rotate()
+        .resize({
+            width: 1280,
+            height: 1280,
+            fit: 'inside',
+            withoutEnlargement: true,
+        })
+        .webp({ quality: 76, effort: 6 })
+        .toFile(path.join(assetsPath, 'proses-pasang-1280.webp'));
+
     const files = fs
         .readdirSync(assetsPath)
         .filter((file) => file.endsWith('.webp'));
@@ -40,11 +56,17 @@ async function optimizeImages() {
 
         const optimizedSize = fs.statSync(temporary).size;
         if (optimizedSize < sourceSize) {
-            fs.unlinkSync(source);
-            fs.renameSync(temporary, source);
-            console.log(
-                `${file}: ${Math.round(sourceSize / 1024)}KB -> ${Math.round(optimizedSize / 1024)}KB`,
-            );
+            try {
+                fs.copyFileSync(temporary, source);
+                fs.unlinkSync(temporary);
+                console.log(
+                    `${file}: ${Math.round(sourceSize / 1024)}KB -> ${Math.round(optimizedSize / 1024)}KB`,
+                );
+            } catch (error) {
+                fs.unlinkSync(temporary);
+                if (error.code !== 'EBUSY' && error.code !== 'EPERM') throw error;
+                console.warn(`${file}: skipped because the source file is in use`);
+            }
         } else {
             fs.unlinkSync(temporary);
         }

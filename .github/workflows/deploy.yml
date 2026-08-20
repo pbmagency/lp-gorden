@@ -28,8 +28,8 @@ jobs:
 
       - name: Install NPM & Build Assets
         run: |
-          npm install
-          npm run build
+          npm ci
+          npm run build:ssr
 
       - name: Setup SSH Key (Jalur Elit VPS1)
         uses: webfactory/ssh-agent@v0.9.0
@@ -52,6 +52,7 @@ jobs:
             
             # 2. Pindahkan isi folder public ke etalase utama (public_html)
             cp -r /home/toko.gordenwallpapersolo.com/toko_laravel/public/* /home/toko.gordenwallpapersolo.com/public_html/
+            cp /home/toko.gordenwallpapersolo.com/toko_laravel/public/.htaccess /home/toko.gordenwallpapersolo.com/public_html/.htaccess
             
             # 3. Auto-edit file index.php agar mengarah ke gudang toko_laravel
             sed -i "s|__DIR__.'/../storage|__DIR__.'/../toko_laravel/storage|g" /home/toko.gordenwallpapersolo.com/public_html/index.php
@@ -69,4 +70,41 @@ jobs:
             # 6. Beri izin jalan untuk folder cache & storage Laravel
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/storage
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/cache
+
+            # 7. Cache konfigurasi/rute/view Laravel untuk menekan TTFB.
+            cd /home/toko.gordenwallpapersolo.com/toko_laravel
+            php artisan optimize
+
+            # 8. Jalankan Inertia SSR sebagai service yang otomatis hidup lagi
+            # setelah deploy maupun reboot. Bila Node belum tersedia, situs
+            # tetap aman memakai client rendering dan deploy tidak dibuat gagal.
+            NODE_BIN=$(command -v node || true)
+            if [ -n "$NODE_BIN" ]; then
+              printf '%s\n' \
+                '[Unit]' \
+                'Description=Toko Gorden Inertia SSR' \
+                'After=network.target' \
+                '' \
+                '[Service]' \
+                'Type=simple' \
+                "User=$CYBER_USER" \
+                "Group=$CYBER_GROUP" \
+                'WorkingDirectory=/home/toko.gordenwallpapersolo.com/toko_laravel' \
+                "ExecStart=$NODE_BIN /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/ssr/ssr.js" \
+                'Restart=always' \
+                'RestartSec=3' \
+                '' \
+                '[Install]' \
+                'WantedBy=multi-user.target' \
+                > /etc/systemd/system/toko-gorden-inertia-ssr.service
+              systemctl daemon-reload
+              systemctl enable toko-gorden-inertia-ssr.service
+              systemctl restart toko-gorden-inertia-ssr.service
+            else
+              echo "Node.js tidak tersedia di VPS; Inertia SSR dilewati."
+            fi
+
+            # 9. Isi cache HTML landing setelah bundle/service terbaru aktif.
+            curl -kfsS --resolve toko.gordenwallpapersolo.com:443:127.0.0.1 https://toko.gordenwallpapersolo.com/ > /dev/null || true
+            curl -kfsS --resolve toko.gordenwallpapersolo.com:443:127.0.0.1 https://toko.gordenwallpapersolo.com/ > /dev/null || true
           EOF

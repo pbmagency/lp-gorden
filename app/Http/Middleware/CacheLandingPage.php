@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CacheLandingPage
 {
-    private const CSRF_PLACEHOLDER = '__LANDING_CSRF_TOKEN__';
-
     // INCREASED: Changed from 300 seconds (5 mins) to 7 days (604800 seconds).
     // This virtually guarantees a cache hit for TTFB in the green line.
     // It is safe because the cache key updates automatically on deployment.
@@ -24,20 +22,28 @@ class CacheLandingPage
 
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->isMethod('GET') || $request->user() || ! $request->is('/')) {
+        if (
+            ! $request->isMethod('GET')
+            || ! $request->is('/')
+            || $request->query->count() > 0
+            || $request->header('X-Inertia')
+        ) {
             return $next($request);
         }
 
-        $cacheKey = 'landing_page_html_v2:'.self::manifestVersion();
+        $cacheKey = 'landing_page_html_v3:'.self::contentVersion();
+        $cache = Cache::store('file');
+        $html = $cache->get($cacheKey);
 
-        if (Cache::has($cacheKey)) {
-            /** @var string $html */
-            $html = Cache::get($cacheKey);
-
+        if (is_string($html)) {
             return response(
-                str_replace(self::CSRF_PLACEHOLDER, csrf_token(), $html),
+                $html,
                 200,
-                ['Content-Type' => 'text/html; charset=UTF-8'],
+                [
+                    'Content-Type' => 'text/html; charset=UTF-8',
+                    'Cache-Control' => 'public, max-age=300, stale-while-revalidate=86400',
+                    'X-Landing-Cache' => 'HIT',
+                ],
             );
         }
 
@@ -45,26 +51,23 @@ class CacheLandingPage
         $response = $next($request);
 
         if ($response->getStatusCode() === 200) {
-            $cacheableHtml = str_replace(
-                csrf_token(),
-                self::CSRF_PLACEHOLDER,
-                $response->getContent(),
-            );
-
-            Cache::put($cacheKey, $cacheableHtml, self::TTL_SECONDS);
+            $cache->put($cacheKey, $response->getContent(), self::TTL_SECONDS);
+            $response->headers->set('X-Landing-Cache', 'MISS');
         }
 
         return $response;
     }
 
-    private static function manifestVersion(): string
+    private static function contentVersion(): string
     {
         $manifest = public_path('build/manifest.json');
+        $template = resource_path('views/app.blade.php');
 
-        if (file_exists($manifest)) {
-            return (string) filemtime($manifest);
-        }
+        $versions = [
+            file_exists($manifest) ? filemtime($manifest) : 'dev',
+            file_exists($template) ? filemtime($template) : 'no-template',
+        ];
 
-        return 'dev';
+        return sha1(implode('|', $versions));
     }
 }

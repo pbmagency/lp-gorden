@@ -5,7 +5,9 @@ const lazyBackground = (value: string): React.CSSProperties => ({ '--landing-bg'
 
 export default function GordenLanding() {
     const [showAllProjects, setShowAllProjects] = useState(false);
-    const [narrow, setNarrow] = useState(false);
+    // SSR uses the mobile layout as its stable baseline because mobile is the
+    // dominant landing-page/Lighthouse viewport. Desktop corrects after mount.
+    const [narrow, setNarrow] = useState(true);
     const showTrustBar = true;
 
     const [reviewIdx, setReviewIdx] = useState(0);
@@ -315,10 +317,10 @@ export default function GordenLanding() {
                         }}
                     >
                         <img
-                            src="/assets/logo.webp"
+                            src="/assets/logo-64.webp"
                             alt="Gorden Wallpaper Solo"
-                            width="292"
-                            height="292"
+                            width="64"
+                            height="64"
                             decoding="async"
                             style={{
                                 height: '52px',
@@ -6994,7 +6996,7 @@ export default function GordenLanding() {
                                                     padding: '14px 16px',
                                                     borderRadius: '14px',
                                                     overflow: 'hidden',
-                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang-1280.webp')"),
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'center',
                                                 }}
@@ -7273,7 +7275,7 @@ export default function GordenLanding() {
                                                     padding: '14px 16px',
                                                     borderRadius: '14px',
                                                     overflow: 'hidden',
-                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang-1280.webp')"),
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'center',
                                                 }}
