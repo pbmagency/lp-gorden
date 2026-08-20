@@ -39,6 +39,9 @@ export default defineConfig({
         compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] }),
     ],
     build: {
+        // A versioned directory guarantees that CDN PoPs cannot reuse module
+        // responses cached before the server's JavaScript MIME fix.
+        assetsDir: 'assets-v2',
         rollupOptions: {
             output: {
                 manualChunks(id) {

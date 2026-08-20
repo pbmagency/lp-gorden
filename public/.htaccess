@@ -24,6 +24,13 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# OpenLiteSpeed can otherwise fall back to application/octet-stream for Vite
+# modules on some vhosts. Declare module MIME types explicitly.
+<IfModule mod_mime.c>
+    AddType application/javascript .js .mjs
+    AddType text/css .css
+</IfModule>
+
 # ─── Long-term caching for static assets ──────────────────────────────────────
 # Vite uses content hashes in filenames → safe to cache "forever"
 <IfModule mod_expires.c>
