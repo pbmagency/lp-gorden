@@ -1,5 +1,9 @@
 let hydrationStarted = false;
 
+// Runtime marker also guarantees a fresh content hash after server MIME fixes,
+// bypassing any incorrectly cached module response at the CDN/browser layer.
+document.documentElement.dataset.landingLoader = 'mime-fix-1';
+
 function hydrateLanding(): void {
     if (hydrationStarted) return;
     hydrationStarted = true;
