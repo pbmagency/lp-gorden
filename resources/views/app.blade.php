@@ -2,68 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    @if(request()->path() !== '/')
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7DZSEDBHZY"></script>
     <script>
-        (function() {
-            const appearance = '{{ $appearance ?? 'system' }}';
-            if (appearance === 'system') {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (prefersDark) {
-                    document.documentElement.classList.add('dark');
-                }
-            }
-        })();
-    </script>
-
-    <style>
-        html { background-color: oklch(1 0 0); }
-        html.dark { background-color: oklch(0.145 0 0); }
-    </style>
-    @else
-    <style>
-        html, body { background-color: oklch(0.97 0.015 85) !important; }
-    </style>
-    @endif
-
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    @if(request()->is('/'))
-        <link rel="preload" href="/assets/hero-gorden.webp" as="image" type="image/webp" fetchpriority="high">
-    @endif
-
-    @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
-    <x-inertia::head>
-        <title>{{ config('app.name') }}</title>
-    </x-inertia::head>
-</head>
-
-<body @class(['antialiased', 'font-sans' => request()->path() !== '/']) @if(request()->path() === '/') style="background-color: oklch(0.97 0.015 85) !important;" @endif>
-    <x-inertia::app />
-
-    {{-- Third-party trackers are loaded after interaction/idle so they cannot
-         compete with LCP or block the main thread during startup. --}}
-    <script>
-        (function () {
-            let loaded = false;
-            function loadMarketingScripts() {
-                if (loaded) return;
-                loaded = true;
-
-                window.dataLayer = window.dataLayer || [];
-                window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
-                window.gtag('js', new Date());
-                window.gtag('config', 'G-DJG744VCZF');
-                const ga = document.createElement('script');
-                ga.async = true;
-                ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-DJG744VCZF';
-                document.head.appendChild(ga);
+      
 
             (function(c, l, a, r, i, t, y) {
                 c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };

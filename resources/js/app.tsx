@@ -10,10 +10,10 @@ const AuthLayout = lazy(() => import('@/layouts/auth-layout'));
 const SettingsLayout = lazy(() => import('@/layouts/settings/layout'));
 const AppProviders = lazy(() => import('@/components/app-providers'));
 
-const inertiaRoot = document.getElementById('app');
+const inertiaPage = document.querySelector<HTMLScriptElement>('script[data-page="app"]');
 let initialComponent = '';
 try {
-    initialComponent = JSON.parse(inertiaRoot?.dataset.page ?? '{}').component ?? '';
+    initialComponent = JSON.parse(inertiaPage?.textContent ?? '{}').component ?? '';
 } catch {
     // Inertia will report malformed page data with its own actionable error.
 }

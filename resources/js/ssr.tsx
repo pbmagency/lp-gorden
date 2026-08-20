@@ -37,6 +37,10 @@ createServer((page) =>
             return pages[`./pages/${name}.tsx`] as { default: ComponentType };
         },
         setup({ App, props }) {
+            if (page.component === 'GordenLanding') {
+                return <App {...props} />;
+            }
+
             return (
                 <AppProviders>
                     <App {...props} />
