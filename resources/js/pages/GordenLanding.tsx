@@ -18,8 +18,11 @@ export default function GordenLanding() {
     const [katCat, setKatCat] = useState('semua');
     const [expKain, setExpKain] = useState(false);
     const [expBlinds, setExpBlinds] = useState(false);
+    const [renderDeferredContent, setRenderDeferredContent] = useState(false);
 
     const lightboxImgRef = useRef<HTMLImageElement>(null);
+    const reviewsSectionRef = useRef<HTMLParagraphElement>(null);
+    const deferredContentSentinelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const mql = window.matchMedia('(max-width: 760px)');
@@ -51,14 +54,53 @@ export default function GordenLanding() {
             if (!element.classList.contains('lazy-bg-ready')) observer.observe(element);
         });
         return () => observer.disconnect();
-    }, [showAllProjects, expKain, expBlinds, reviewIdx, narrow]);
+    }, [showAllProjects, expKain, expBlinds, narrow]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setReviewIdx((i) => (i + 1) % reviewShots.length);
-        }, 3500);
-        return () => clearInterval(timer);
-    }, [reviewShots.length]);
+        const section = reviewsSectionRef.current;
+        if (!section || !('IntersectionObserver' in window)) return;
+
+        let timer: ReturnType<typeof setInterval> | undefined;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !timer) {
+                    timer = setInterval(() => {
+                        setReviewIdx((i) => (i + 1) % reviewShots.length);
+                    }, 5000);
+                } else if (!entry.isIntersecting && timer) {
+                    clearInterval(timer);
+                    timer = undefined;
+                }
+            },
+            { rootMargin: '200px 0px' },
+        );
+        observer.observe(section);
+
+        return () => {
+            observer.disconnect();
+            if (timer) clearInterval(timer);
+        };
+    }, [reviewShots.length, renderDeferredContent]);
+
+    useEffect(() => {
+        const sentinel = deferredContentSentinelRef.current;
+        if (!sentinel || renderDeferredContent) return;
+        if (!('IntersectionObserver' in window)) {
+            setRenderDeferredContent(true);
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                setRenderDeferredContent(true);
+                observer.disconnect();
+            },
+            { rootMargin: '1200px 0px' },
+        );
+        observer.observe(sentinel);
+        return () => observer.disconnect();
+    }, [renderDeferredContent]);
 
     useEffect(() => {
         const csrfToken = document.querySelector("meta[name='csrf-token']")?.getAttribute('content') || '';
@@ -75,7 +117,7 @@ export default function GordenLanding() {
         };
 
         // Do not let first-party analytics compete with the hero/LCP request.
-        const visitTimer = window.setTimeout(() => track({ event_type: 'visit', url: window.location.href }), 6000);
+        const visitTimer = window.setTimeout(() => track({ event_type: 'visit', url: window.location.href }), 12000);
 
         const timers = [setTimeout(() => track({ event_type: 'engagement', duration: 15 }), 15000), setTimeout(() => track({ event_type: 'engagement', duration: 45 }), 45000), setTimeout(() => track({ event_type: 'engagement', duration: 75 }), 75000)];
 
@@ -179,6 +221,16 @@ export default function GordenLanding() {
             const y = el.getBoundingClientRect().top + window.scrollY - 132;
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
+    };
+
+    const revealDeferredAnchor = (event: React.MouseEvent<HTMLElement>) => {
+        const anchor = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+        const hash = anchor?.getAttribute('href');
+        if (!hash || hash === '#' || document.getElementById(hash.slice(1))) return;
+
+        event.preventDefault();
+        setRenderDeferredContent(true);
+        window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }), 0);
     };
 
     const reviewPrev = reviewShots[(reviewIdx + reviewShots.length - 1) % reviewShots.length];
@@ -312,6 +364,7 @@ export default function GordenLanding() {
 
                 <main
                     className="landing-content"
+                    onClickCapture={revealDeferredAnchor}
                     style={{
                         maxWidth: '1000px',
                         margin: '0 auto',
@@ -3657,6 +3710,7 @@ export default function GordenLanding() {
                         }}
                     >
                         <p
+                            ref={reviewsSectionRef}
                             style={{
                                 margin: '0 0 10px',
                                 fontSize: '12px',
@@ -4440,2181 +4494,17 @@ export default function GordenLanding() {
                         </div>
                     </section>
 
-                    <section
-                        id="katalog"
-                        style={{
-                            padding: '44px 0',
-                            borderTop: '1px solid oklch(0.9 0.02 80)',
-                            scrollMarginTop: '76px',
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: '0 0 10px',
-                                fontSize: '12px',
-                                fontWeight: '700',
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                color: '#817661',
-                            }}
-                        >
-                            Katalog model
-                        </p>
-                        <h2
-                            style={{
-                                margin: '0 0 8px',
-                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                fontSize: 'clamp(23px, 5.2vw, 30px)',
-                                lineHeight: '1.2',
-                                fontWeight: '700',
-                                letterSpacing: '-0.02em',
-                            }}
-                        >
-                            Model gorden yang kami kerjakan
-                        </h2>
-                        <p
-                            style={{
-                                margin: '0 0 24px',
-                                color: 'oklch(0.42 0.02 60)',
-                                maxWidth: '62ch',
-                            }}
-                        >
-                            Semua dibuat custom sesuai ukuran jendela Anda. Belum tahu yang cocok? Kami bantu saat survey.
-                        </p>
-                        <div
-                            id="katalog-filter"
-                            style={{
-                                position: 'sticky',
-                                top: '68px',
-                                zIndex: '20',
-                                margin: '0 0 18px',
-                                padding: '10px 0',
-                                background: '#fdfcfa',
-                                borderBottom: '1px solid oklch(0.92 0.015 82)',
-                            }}
-                        >
-                            {narrow && (
-                                <select
-                                    onChange={(e) => {
-                                        setKatCat(e.target.value);
-                                        setTimeout(() => {
-                                            const el = document.getElementById('katalog-filter')?.nextElementSibling;
-                                            if (el)
-                                                window.scrollTo({
-                                                    top: el.getBoundingClientRect().top + window.scrollY - 132,
-                                                    behavior: 'smooth',
-                                                });
-                                        }, 100);
-                                    }}
-                                    value="{{ katCat }}"
-                                    aria-label="Pilih kategori model"
-                                    style={{
-                                        width: '100%',
-                                        minHeight: '48px',
-                                        padding: '12px 14px',
-                                        borderRadius: '12px',
-                                        border: '1.5px solid #d8cfbd',
-                                        background: '#fdfcfa',
-                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                        fontSize: '15px',
-                                        fontWeight: '600',
-                                        color: '#3a352c',
-                                    }}
-                                >
-                                    <option value="semua">Semua model (13)</option>
-                                    <option value="kain">Gorden kain (6)</option>
-                                    <option value="blinds">Blinds (5)</option>
-                                    <option value="lain">Wallpaper &amp; pelengkap (2)</option>
-                                </select>
-                            )}
-                            {!narrow && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexWrap: 'nowrap',
-                                        gap: '8px',
-                                        overflowX: 'auto',
-                                        padding: '2px',
-                                        scrollbarWidth: 'none',
-                                    }}
-                                >
-                                    <button
-                                        type="button"
-                                        onClick={() => pickCat('semua')}
-                                        style={{
-                                            minHeight: '40px',
-                                            padding: '9px 16px',
-                                            borderRadius: '999px',
-                                            border: '1.5px solid #d8cfbd',
-                                            ...tab('semua'),
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap',
-                                            flex: 'none',
-                                        }}
-                                    >
-                                        Semua model{' '}
-                                        <span
-                                            style={{
-                                                opacity: '0.6',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            13
-                                        </span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => pickCat('kain')}
-                                        style={{
-                                            minHeight: '40px',
-                                            padding: '9px 16px',
-                                            borderRadius: '999px',
-                                            border: '1.5px solid #d8cfbd',
-                                            ...tab('kain'),
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap',
-                                            flex: 'none',
-                                        }}
-                                    >
-                                        Gorden kain{' '}
-                                        <span
-                                            style={{
-                                                opacity: '0.6',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            6
-                                        </span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => pickCat('blinds')}
-                                        style={{
-                                            minHeight: '40px',
-                                            padding: '9px 16px',
-                                            borderRadius: '999px',
-                                            border: '1.5px solid #d8cfbd',
-                                            ...tab('blinds'),
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap',
-                                            flex: 'none',
-                                        }}
-                                    >
-                                        Blinds{' '}
-                                        <span
-                                            style={{
-                                                opacity: '0.6',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            5
-                                        </span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => pickCat('lain')}
-                                        style={{
-                                            minHeight: '40px',
-                                            padding: '9px 16px',
-                                            borderRadius: '999px',
-                                            border: '1.5px solid #d8cfbd',
-                                            ...tab('lain'),
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap',
-                                            flex: 'none',
-                                        }}
-                                    >
-                                        Wallpaper &amp; pelengkap{' '}
-                                        <span
-                                            style={{
-                                                opacity: '0.6',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            2
-                                        </span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                        {showKain && (
-                            <div style={{ margin: '0 0 0' }}>
-                                <h3
-                                    style={{
-                                        margin: '0 0 14px',
-                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                        fontSize: '13px',
-                                        fontWeight: '700',
-                                        letterSpacing: '0.1em',
-                                        textTransform: 'uppercase',
-                                        color: '#8f8674',
-                                    }}
-                                >
-                                    Gorden kain
-                                </h3>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
-                                        gap: '16px',
-                                    }}
-                                >
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-gorden-sala3-1152x1536.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '12px',
-                                                    left: '12px',
-                                                    padding: '5px 11px',
-                                                    background: '#817661',
-                                                    color: '#fdfcfa',
-                                                    fontSize: '10px',
-                                                    fontWeight: '700',
-                                                    letterSpacing: '0.1em',
-                                                    textTransform: 'uppercase',
-                                                    borderRadius: '6px',
-                                                }}
-                                            >
-                                                Best Seller
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Gorden Minimalis
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,9
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    312 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Bersih dan tidak ramai, pas untuk rumah minimalis.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Minimalis."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-gorden-custom.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        ></div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Gorden Custom
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,9
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    158 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Model, bahan, dan ukuran menyesuaikan ruangan Anda.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Custom."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-gorden-siang-dan-vitrase.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        ></div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Gorden Siang &amp; Vitrase
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,8
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    132 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Tirai tembus pandang, hampir wajib untuk kamar tidur.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Siang%20%26%20Vitrase."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                </div>
-                                {showKainRest && (
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
-                                            gap: '16px',
-                                        }}
-                                    >
-                                        <article
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                background: '#fdfcfa',
-                                                border: '1px solid oklch(0.91 0.015 82)',
-                                                borderRadius: '16px',
-                                                overflow: 'hidden',
-                                                boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'relative',
-                                                    aspectRatio: '4 / 3',
-                                                    ...lazyBackground("url('/assets/img-gorden-kupu-1.webp')"),
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                }}
-                                            ></div>
-                                            <div
-                                                style={{
-                                                    flex: '1',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    padding: '15px 16px 16px',
-                                                }}
-                                            >
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 6px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: '17px',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                        lineHeight: '1.25',
-                                                    }}
-                                                >
-                                                    Gorden Kupu-Kupu
-                                                </h3>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '7px',
-                                                        margin: '0 0 8px',
-                                                    }}
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: '#E0A93B',
-                                                            fontSize: '12px',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        ★★★★★
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: '700',
-                                                            color: 'oklch(0.32 0.02 60)',
-                                                        }}
-                                                    >
-                                                        4,7
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            color: 'oklch(0.55 0.03 70)',
-                                                        }}
-                                                    >
-                                                        74 pembeli
-                                                    </span>
-                                                </div>
-                                                <p
-                                                    style={{
-                                                        margin: '0 0 14px',
-                                                        fontSize: '14px',
-                                                        lineHeight: '1.45',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Gorden pita nempel jendela, simpel untuk rumah minimalis.
-                                                </p>
-                                                <a
-                                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Kupu-Kupu."
-                                                    target="_blank"
-                                                    rel="noopener"
-                                                    style={{
-                                                        marginTop: 'auto',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '7px',
-                                                        minHeight: '40px',
-                                                        padding: '8px 12px',
-                                                        background: '#FF6B35',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: '700',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '9px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/assets/whatsapp.svg"
-                                                        alt=""
-                                                        style={{
-                                                            flex: 'none',
-                                                            width: '17px',
-                                                            height: '17px',
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            whiteSpace: 'nowrap',
-                                                        }}
-                                                    >
-                                                        Tanya harga &amp; spesifikasi
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </article>
-                                        <article
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                background: '#fdfcfa',
-                                                border: '1px solid oklch(0.91 0.015 82)',
-                                                borderRadius: '16px',
-                                                overflow: 'hidden',
-                                                boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'relative',
-                                                    aspectRatio: '4 / 3',
-                                                    ...lazyBackground("url('/assets/img-gorden-hotel-apartemen.webp')"),
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                }}
-                                            ></div>
-                                            <div
-                                                style={{
-                                                    flex: '1',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    padding: '15px 16px 16px',
-                                                }}
-                                            >
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 6px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: '17px',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                        lineHeight: '1.25',
-                                                    }}
-                                                >
-                                                    Gorden Hotel &amp; Apartemen
-                                                </h3>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '7px',
-                                                        margin: '0 0 8px',
-                                                    }}
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: '#E0A93B',
-                                                            fontSize: '12px',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        ★★★★★
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: '700',
-                                                            color: 'oklch(0.32 0.02 60)',
-                                                        }}
-                                                    >
-                                                        4,9
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            color: 'oklch(0.55 0.03 70)',
-                                                        }}
-                                                    >
-                                                        96 pembeli
-                                                    </span>
-                                                </div>
-                                                <p
-                                                    style={{
-                                                        margin: '0 0 14px',
-                                                        fontSize: '14px',
-                                                        lineHeight: '1.45',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Bahan dan model kelas hotel untuk unit sewa.
-                                                </p>
-                                                <a
-                                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Hotel%20%26%20Apartemen."
-                                                    target="_blank"
-                                                    rel="noopener"
-                                                    style={{
-                                                        marginTop: 'auto',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '7px',
-                                                        minHeight: '40px',
-                                                        padding: '8px 12px',
-                                                        background: '#FF6B35',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: '700',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '9px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/assets/whatsapp.svg"
-                                                        alt=""
-                                                        style={{
-                                                            flex: 'none',
-                                                            width: '17px',
-                                                            height: '17px',
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            whiteSpace: 'nowrap',
-                                                        }}
-                                                    >
-                                                        Tanya harga &amp; spesifikasi
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </article>
-                                        <article
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                background: '#fdfcfa',
-                                                border: '1px solid oklch(0.91 0.015 82)',
-                                                borderRadius: '16px',
-                                                overflow: 'hidden',
-                                                boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'relative',
-                                                    aspectRatio: '4 / 3',
-                                                    ...lazyBackground("url('/assets/img-gorden-rumah-sakit-rso-orthopedi-surakar.webp')"),
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                }}
-                                            ></div>
-                                            <div
-                                                style={{
-                                                    flex: '1',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    padding: '15px 16px 16px',
-                                                }}
-                                            >
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 6px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: '17px',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                        lineHeight: '1.25',
-                                                    }}
-                                                >
-                                                    Tirai Area Publik
-                                                </h3>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '7px',
-                                                        margin: '0 0 8px',
-                                                    }}
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: '#E0A93B',
-                                                            fontSize: '12px',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        ★★★★★
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: '700',
-                                                            color: 'oklch(0.32 0.02 60)',
-                                                        }}
-                                                    >
-                                                        4,9
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            color: 'oklch(0.55 0.03 70)',
-                                                        }}
-                                                    >
-                                                        54 pembeli
-                                                    </span>
-                                                </div>
-                                                <p
-                                                    style={{
-                                                        margin: '0 0 14px',
-                                                        fontSize: '14px',
-                                                        lineHeight: '1.45',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Untuk rumah sakit, sekolah, dan ruang publik.
-                                                </p>
-                                                <a
-                                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Tirai%20Area%20Publik."
-                                                    target="_blank"
-                                                    rel="noopener"
-                                                    style={{
-                                                        marginTop: 'auto',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '7px',
-                                                        minHeight: '40px',
-                                                        padding: '8px 12px',
-                                                        background: '#FF6B35',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: '700',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '9px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/assets/whatsapp.svg"
-                                                        alt=""
-                                                        style={{
-                                                            flex: 'none',
-                                                            width: '17px',
-                                                            height: '17px',
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            whiteSpace: 'nowrap',
-                                                        }}
-                                                    >
-                                                        Tanya harga &amp; spesifikasi
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </article>
-                                    </div>
-                                )}
-                                {katCat === 'semua' && !expKain && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setExpKain(true)}
-                                        style={{
-                                            width: '100%',
-                                            margin: '12px 0 0',
-                                            minHeight: '46px',
-                                            padding: '12px 16px',
-                                            background: '#fdfcfa',
-                                            border: '1.5px solid #d8cfbd',
-                                            borderRadius: '12px',
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            color: '#6f6656',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Lihat semua Gorden kain (6) →
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                        {showBlinds && (
-                            <div style={{ margin: '30px 0 0' }}>
-                                <h3
-                                    style={{
-                                        margin: '0 0 14px',
-                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                        fontSize: '13px',
-                                        fontWeight: '700',
-                                        letterSpacing: '0.1em',
-                                        textTransform: 'uppercase',
-                                        color: '#8f8674',
-                                    }}
-                                >
-                                    Blinds
-                                </h3>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
-                                        gap: '16px',
-                                    }}
-                                >
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-roller-blinds-untuk-kantor-1152x1536.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '12px',
-                                                    left: '12px',
-                                                    padding: '5px 11px',
-                                                    background: '#817661',
-                                                    color: '#fdfcfa',
-                                                    fontSize: '10px',
-                                                    fontWeight: '700',
-                                                    letterSpacing: '0.1em',
-                                                    textTransform: 'uppercase',
-                                                    borderRadius: '6px',
-                                                }}
-                                            >
-                                                Favorit Kantor
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Roller Blinds
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,8
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    247 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Ditarik naik-turun, hemat tempat, rapi untuk kantor.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Roller%20Blinds."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-zebra-blinds.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '12px',
-                                                    left: '12px',
-                                                    padding: '5px 11px',
-                                                    background: '#817661',
-                                                    color: '#fdfcfa',
-                                                    fontSize: '10px',
-                                                    fontWeight: '700',
-                                                    letterSpacing: '0.1em',
-                                                    textTransform: 'uppercase',
-                                                    borderRadius: '6px',
-                                                }}
-                                            >
-                                                Sedang Naik
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Zebra Blinds
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,9
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    186 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Gorden dan vitrase jadi satu, terang-gelap tinggal digeser.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Zebra%20Blinds."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-vertikal-blinds.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        ></div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Vertikal Blinds
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,7
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    143 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Kesan formal, arah cahaya bisa diatur supaya layar tidak silau.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Vertikal%20Blinds."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                </div>
-                                {showBlindsRest && (
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
-                                            gap: '16px',
-                                        }}
-                                    >
-                                        <article
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                background: '#fdfcfa',
-                                                border: '1px solid oklch(0.91 0.015 82)',
-                                                borderRadius: '16px',
-                                                overflow: 'hidden',
-                                                boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'relative',
-                                                    aspectRatio: '4 / 3',
-                                                    ...lazyBackground("url('/assets/img-slimline-blinds-gorden-kantor-scaled-e16.webp')"),
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                }}
-                                            ></div>
-                                            <div
-                                                style={{
-                                                    flex: '1',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    padding: '15px 16px 16px',
-                                                }}
-                                            >
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 6px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: '17px',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                        lineHeight: '1.25',
-                                                    }}
-                                                >
-                                                    Slimline Blinds
-                                                </h3>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '7px',
-                                                        margin: '0 0 8px',
-                                                    }}
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: '#E0A93B',
-                                                            fontSize: '12px',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        ★★★★★
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: '700',
-                                                            color: 'oklch(0.32 0.02 60)',
-                                                        }}
-                                                    >
-                                                        4,6
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            color: 'oklch(0.55 0.03 70)',
-                                                        }}
-                                                    >
-                                                        88 pembeli
-                                                    </span>
-                                                </div>
-                                                <p
-                                                    style={{
-                                                        margin: '0 0 14px',
-                                                        fontSize: '14px',
-                                                        lineHeight: '1.45',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Slat aluminium, ringan dan mudah dibersihkan.
-                                                </p>
-                                                <a
-                                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Slimline%20Blinds."
-                                                    target="_blank"
-                                                    rel="noopener"
-                                                    style={{
-                                                        marginTop: 'auto',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '7px',
-                                                        minHeight: '40px',
-                                                        padding: '8px 12px',
-                                                        background: '#FF6B35',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: '700',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '9px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/assets/whatsapp.svg"
-                                                        alt=""
-                                                        style={{
-                                                            flex: 'none',
-                                                            width: '17px',
-                                                            height: '17px',
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            whiteSpace: 'nowrap',
-                                                        }}
-                                                    >
-                                                        Tanya harga &amp; spesifikasi
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </article>
-                                        <article
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                background: '#fdfcfa',
-                                                border: '1px solid oklch(0.91 0.015 82)',
-                                                borderRadius: '16px',
-                                                overflow: 'hidden',
-                                                boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    position: 'relative',
-                                                    aspectRatio: '4 / 3',
-                                                    ...lazyBackground("url('/assets/img-outdoor-blinds.webp')"),
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                }}
-                                            ></div>
-                                            <div
-                                                style={{
-                                                    flex: '1',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    padding: '15px 16px 16px',
-                                                }}
-                                            >
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 6px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: '17px',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                        lineHeight: '1.25',
-                                                    }}
-                                                >
-                                                    Outdoor Blinds
-                                                </h3>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '7px',
-                                                        margin: '0 0 8px',
-                                                    }}
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: '#E0A93B',
-                                                            fontSize: '12px',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        ★★★★★
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: '700',
-                                                            color: 'oklch(0.32 0.02 60)',
-                                                        }}
-                                                    >
-                                                        4,8
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            color: 'oklch(0.55 0.03 70)',
-                                                        }}
-                                                    >
-                                                        61 pembeli
-                                                    </span>
-                                                </div>
-                                                <p
-                                                    style={{
-                                                        margin: '0 0 14px',
-                                                        fontSize: '14px',
-                                                        lineHeight: '1.45',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Menahan panas dan silau dari luar, tahan angin.
-                                                </p>
-                                                <a
-                                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Outdoor%20Blinds."
-                                                    target="_blank"
-                                                    rel="noopener"
-                                                    style={{
-                                                        marginTop: 'auto',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '7px',
-                                                        minHeight: '40px',
-                                                        padding: '8px 12px',
-                                                        background: '#FF6B35',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: '700',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '9px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/assets/whatsapp.svg"
-                                                        alt=""
-                                                        style={{
-                                                            flex: 'none',
-                                                            width: '17px',
-                                                            height: '17px',
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            whiteSpace: 'nowrap',
-                                                        }}
-                                                    >
-                                                        Tanya harga &amp; spesifikasi
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </article>
-                                    </div>
-                                )}
-                                {katCat === 'semua' && !expBlinds && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setExpBlinds(true)}
-                                        style={{
-                                            width: '100%',
-                                            margin: '12px 0 0',
-                                            minHeight: '46px',
-                                            padding: '12px 16px',
-                                            background: '#fdfcfa',
-                                            border: '1.5px solid #d8cfbd',
-                                            borderRadius: '12px',
-                                            fontFamily: 'Poppins, Helvetica, sans-serif',
-                                            fontSize: '14px',
-                                            fontWeight: '600',
-                                            color: '#6f6656',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Lihat semua Blinds (5) →
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                        {showPelengkap && (
-                            <div style={{ margin: '30px 0 0' }}>
-                                <h3
-                                    style={{
-                                        margin: '0 0 14px',
-                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                        fontSize: '13px',
-                                        fontWeight: '700',
-                                        letterSpacing: '0.1em',
-                                        textTransform: 'uppercase',
-                                        color: '#8f8674',
-                                    }}
-                                >
-                                    Wallpaper &amp; pelengkap
-                                </h3>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
-                                        gap: '16px',
-                                    }}
-                                >
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-wallpaper-custom-motif-peta-dunia.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        ></div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Wallpaper Custom
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,8
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    118 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Satu dinding saja bisa mengubah karakter ruangan.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Wallpaper%20Custom."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            background: '#fdfcfa',
-                                            border: '1px solid oklch(0.91 0.015 82)',
-                                            borderRadius: '16px',
-                                            overflow: 'hidden',
-                                            boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
-                                            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                aspectRatio: '4 / 3',
-                                                ...lazyBackground("url('/assets/img-kasa-nyamuk-magnetik-1536x1012.webp')"),
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                            }}
-                                        ></div>
-                                        <div
-                                            style={{
-                                                flex: '1',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '15px 16px 16px',
-                                            }}
-                                        >
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 6px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '17px',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                    lineHeight: '1.25',
-                                                }}
-                                            >
-                                                Perlengkapan Lainnya
-                                            </h3>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '7px',
-                                                    margin: '0 0 8px',
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        color: '#E0A93B',
-                                                        fontSize: '12px',
-                                                        letterSpacing: '0.5px',
-                                                    }}
-                                                >
-                                                    ★★★★★
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        fontWeight: '700',
-                                                        color: 'oklch(0.32 0.02 60)',
-                                                    }}
-                                                >
-                                                    4,7
-                                                </span>
-                                                <span
-                                                    style={{
-                                                        fontSize: '12px',
-                                                        color: 'oklch(0.55 0.03 70)',
-                                                    }}
-                                                >
-                                                    69 pembeli
-                                                </span>
-                                            </div>
-                                            <p
-                                                style={{
-                                                    margin: '0 0 14px',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.45',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Kasa nyamuk, rail rolet, dan perlengkapan gorden lain.
-                                            </p>
-                                            <a
-                                                href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Perlengkapan%20Lainnya."
-                                                target="_blank"
-                                                rel="noopener"
-                                                style={{
-                                                    marginTop: 'auto',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '7px',
-                                                    minHeight: '40px',
-                                                    padding: '8px 12px',
-                                                    background: '#FF6B35',
-                                                    color: '#fff',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '9px',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <img
-                                                    src="/assets/whatsapp.svg"
-                                                    alt=""
-                                                    style={{
-                                                        flex: 'none',
-                                                        width: '17px',
-                                                        height: '17px',
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                                <span
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    Tanya harga &amp; spesifikasi
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </article>
-                                </div>
-                            </div>
-                        )}
-                        <p
-                            style={{
-                                margin: '26px 0 0',
-                                fontSize: '16px',
-                                color: 'oklch(0.48 0.02 60)',
-                                textAlign: 'center',
-                                fontWeight: '700',
-                            }}
-                        >
-                            Belum yakin yang mana? Kirim foto jendela Anda lewat WA, kami bantu pilihkan modelnya.
-                        </p>
-                        <div style={{ margin: '12px 0 0' }}>
-                            <div
+                    <div ref={deferredContentSentinelRef} aria-hidden="true" style={{ height: '1px' }} />
+                    {renderDeferredContent && (
+                        <>
+                            <section
+                                id="katalog"
                                 style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '12px',
+                                    padding: '44px 0',
+                                    borderTop: '1px solid oklch(0.9 0.02 80)',
+                                    scrollMarginTop: '76px',
                                 }}
                             >
-                                <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20model%20gorden%20yang%20cocok%20untuk%20ruangan%20saya."
-                                    target="_blank"
-                                    rel="noopener"
-                                    style={{
-                                        flex: '1 1 260px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#FF6B35',
-                                        color: '#fff',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/whatsapp.svg"
-                                        alt=""
-                                        style={{
-                                            flex: 'none',
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '9px',
-                                            display: 'block',
-                                        }}
-                                    />
-                                    Konsultasi Gratis →
-                                </a>
-                                <a
-                                    href="#portofolio"
-                                    style={{
-                                        flex: '1 1 220px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: 'rgba(253,252,250,0.12)',
-                                        border: '2px solid #FF6B35',
-                                        color: '#241D17',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                        backdropFilter: 'blur(4px)',
-                                    }}
-                                >
-                                    Lihat Portofolio →
-                                </a>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    gap: '5px 10px',
-                                    margin: '12px 0 0',
-                                    fontSize: '12.5px',
-                                    color: 'oklch(0.4 0.02 60)',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        color: '#E0A93B',
-                                        fontSize: '12.5px',
-                                        letterSpacing: '1px',
-                                    }}
-                                >
-                                    ★★★★★
-                                </span>
-                                <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
-                                <span>Google Review</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>1.000+ pembeli</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>Ada garansi kalau kurang pas</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section
-                        id="proses"
-                        style={{
-                            padding: '44px 0',
-                            borderTop: '1px solid oklch(0.9 0.02 80)',
-                            scrollMarginTop: '76px',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                alignItems: 'flex-end',
-                                justifyContent: 'space-between',
-                                gap: '10px 24px',
-                                margin: '0 0 24px',
-                            }}
-                        >
-                            <div>
                                 <p
                                     style={{
                                         margin: '0 0 10px',
@@ -6625,752 +4515,7 @@ export default function GordenLanding() {
                                         color: '#817661',
                                     }}
                                 >
-                                    Proses kerja
-                                </p>
-                                <h2
-                                    style={{
-                                        margin: '0',
-                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                        fontSize: 'clamp(23px, 5.2vw, 30px)',
-                                        lineHeight: '1.2',
-                                        fontWeight: '700',
-                                        letterSpacing: '-0.02em',
-                                    }}
-                                >
-                                    Empat langkah, Anda tinggal duduk
-                                </h2>
-                            </div>
-                            <p
-                                style={{
-                                    margin: '0',
-                                    maxWidth: '38ch',
-                                    fontSize: '15px',
-                                    color: 'oklch(0.45 0.02 60)',
-                                }}
-                            >
-                                Dikerjakan tim kami sendiri, dari chat pertama sampai gorden terpasang rapi.
-                            </p>
-                        </div>
-                        {!narrow && (
-                            <div
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-                                    gap: '16px',
-                                    alignItems: 'stretch',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        padding: '24px 22px',
-                                        background: '#fdfcfa',
-                                        border: '1px solid oklch(0.91 0.015 82)',
-                                        borderRadius: '18px',
-                                    }}
-                                >
-                                    <div style={{ padding: '0' }}>
-                                        <div
-                                            style={{
-                                                display: 'grid',
-                                                gridTemplateColumns: '42px 1fr',
-                                                gap: '14px',
-                                                alignItems: 'start',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '21px',
-                                                    fontWeight: '700',
-                                                    lineHeight: '1.15',
-                                                    letterSpacing: '-0.02em',
-                                                    color: '#b3a892',
-                                                }}
-                                            >
-                                                01
-                                            </span>
-                                            <div>
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 5px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                    }}
-                                                >
-                                                    Bisa tanya sampai cocok
-                                                </h3>
-                                                <p
-                                                    style={{
-                                                        margin: '0',
-                                                        fontSize: '15px',
-                                                        lineHeight: '1.5',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Ceritakan ruangan dan kebutuhan Anda lewat WhatsApp, lalu tentukan jadwal survey yang paling cocok.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            padding: '20px 0 0',
-                                            borderTop: '1px solid oklch(0.92 0.015 82)',
-                                            marginTop: '20px',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                display: 'grid',
-                                                gridTemplateColumns: '42px 1fr',
-                                                gap: '14px',
-                                                alignItems: 'start',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '21px',
-                                                    fontWeight: '700',
-                                                    lineHeight: '1.15',
-                                                    letterSpacing: '-0.02em',
-                                                    color: '#b3a892',
-                                                }}
-                                            >
-                                                02
-                                            </span>
-                                            <div>
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 5px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                    }}
-                                                >
-                                                    Aman dari salah ukur
-                                                </h3>
-                                                <p
-                                                    style={{
-                                                        margin: '0',
-                                                        fontSize: '15px',
-                                                        lineHeight: '1.5',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Tim datang bawa katalog kain, ukur presisi, dan bantu cocokkan warnanya.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            padding: '20px 0 0',
-                                            borderTop: '1px solid oklch(0.92 0.015 82)',
-                                            marginTop: '20px',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                display: 'grid',
-                                                gridTemplateColumns: '42px 1fr',
-                                                gap: '14px',
-                                                alignItems: 'start',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '21px',
-                                                    fontWeight: '700',
-                                                    lineHeight: '1.15',
-                                                    letterSpacing: '-0.02em',
-                                                    color: '#b3a892',
-                                                }}
-                                            >
-                                                03
-                                            </span>
-                                            <div>
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 5px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                    }}
-                                                >
-                                                    Produksi sesuai ukuran
-                                                </h3>
-                                                <p
-                                                    style={{
-                                                        margin: '0',
-                                                        fontSize: '15px',
-                                                        lineHeight: '1.5',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Dijahit khusus untuk jendela Anda dengan kain blackout impor, lalu difinishing sistem steam uap.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            padding: '20px 0 0',
-                                            borderTop: '1px solid oklch(0.92 0.015 82)',
-                                            marginTop: '20px',
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                display: 'grid',
-                                                gridTemplateColumns: '42px 1fr',
-                                                gap: '14px',
-                                                alignItems: 'start',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: '21px',
-                                                    fontWeight: '700',
-                                                    lineHeight: '1.15',
-                                                    letterSpacing: '-0.02em',
-                                                    color: '#b3a892',
-                                                }}
-                                            >
-                                                04
-                                            </span>
-                                            <div>
-                                                <h3
-                                                    style={{
-                                                        margin: '0 0 5px',
-                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                        fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                        fontWeight: '600',
-                                                        letterSpacing: '-0.01em',
-                                                    }}
-                                                >
-                                                    Pasang &amp; cek akhir
-                                                </h3>
-                                                <p
-                                                    style={{
-                                                        margin: '0',
-                                                        fontSize: '15px',
-                                                        lineHeight: '1.5',
-                                                        color: 'oklch(0.45 0.02 60)',
-                                                    }}
-                                                >
-                                                    Dipasang sampai rapi, lalu dicek bersama Anda. Kalau ada yang kurang pas, kami rapikan saat itu juga.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p
-                                        style={{
-                                            margin: '22px 0 0',
-                                            padding: '14px 16px',
-                                            background: '#f6f3ec',
-                                            borderRadius: '10px',
-                                            fontSize: '14px',
-                                            lineHeight: '1.45',
-                                            color: 'oklch(0.38 0.02 60)',
-                                        }}
-                                    >
-                                        <strong
-                                            style={{
-                                                color: 'oklch(0.26 0.02 60)',
-                                            }}
-                                        >
-                                            Jadwal fleksibel.
-                                        </strong>{' '}
-                                        Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.
-                                    </p>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '16px',
-                                        minHeight: '420px',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            flex: '1',
-                                            minHeight: '200px',
-                                            position: 'relative',
-                                            display: 'flex',
-                                            alignItems: 'flex-end',
-                                            padding: '14px 16px',
-                                            borderRadius: '14px',
-                                            overflow: 'hidden',
-                                            ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-ukur.webp')"),
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
-                                    >
-                                        <p
-                                            style={{
-                                                margin: '0',
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '13px',
-                                                fontWeight: '600',
-                                                lineHeight: '1.35',
-                                                color: '#fdfcfa',
-                                            }}
-                                        >
-                                            Survey &amp; ukur di rumah pelanggan
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{
-                                            flex: '1',
-                                            minHeight: '200px',
-                                            position: 'relative',
-                                            display: 'flex',
-                                            alignItems: 'flex-end',
-                                            padding: '14px 16px',
-                                            borderRadius: '14px',
-                                            overflow: 'hidden',
-                                            ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
-                                    >
-                                        <p
-                                            style={{
-                                                margin: '0',
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '13px',
-                                                fontWeight: '600',
-                                                lineHeight: '1.35',
-                                                color: '#fdfcfa',
-                                            }}
-                                        >
-                                            Dicek bersama sebelum dinyatakan selesai
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        {narrow && (
-                            <div
-                                style={{
-                                    padding: '22px 18px',
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.91 0.015 82)',
-                                    borderRadius: '18px',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gap: '14px',
-                                        padding: '0',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '42px 1fr',
-                                            gap: '14px',
-                                            alignItems: 'start',
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '21px',
-                                                fontWeight: '700',
-                                                lineHeight: '1.15',
-                                                letterSpacing: '-0.02em',
-                                                color: '#b3a892',
-                                            }}
-                                        >
-                                            01
-                                        </span>
-                                        <div>
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 5px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                }}
-                                            >
-                                                Bisa tanya sampai cocok
-                                            </h3>
-                                            <p
-                                                style={{
-                                                    margin: '0',
-                                                    fontSize: '15px',
-                                                    lineHeight: '1.5',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Ceritakan ruangan dan kebutuhan Anda lewat WhatsApp, lalu tentukan jadwal survey yang paling cocok.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gap: '14px',
-                                        padding: '20px 0 0',
-                                        borderTop: '1px solid oklch(0.92 0.015 82)',
-                                        marginTop: '20px',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '42px 1fr',
-                                            gap: '14px',
-                                            alignItems: 'start',
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '21px',
-                                                fontWeight: '700',
-                                                lineHeight: '1.15',
-                                                letterSpacing: '-0.02em',
-                                                color: '#b3a892',
-                                            }}
-                                        >
-                                            02
-                                        </span>
-                                        <div>
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 5px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                }}
-                                            >
-                                                Aman dari salah ukur
-                                            </h3>
-                                            <p
-                                                style={{
-                                                    margin: '0',
-                                                    fontSize: '15px',
-                                                    lineHeight: '1.5',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Tim datang bawa katalog kain, ukur presisi, dan bantu cocokkan warnanya.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            aspectRatio: '16 / 10',
-                                            position: 'relative',
-                                            display: 'flex',
-                                            alignItems: 'flex-end',
-                                            padding: '14px 16px',
-                                            borderRadius: '14px',
-                                            overflow: 'hidden',
-                                            ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-ukur.webp')"),
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
-                                    >
-                                        <p
-                                            style={{
-                                                margin: '0',
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '13px',
-                                                fontWeight: '600',
-                                                lineHeight: '1.35',
-                                                color: '#fdfcfa',
-                                            }}
-                                        >
-                                            Survey &amp; ukur di rumah pelanggan
-                                        </p>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gap: '14px',
-                                        padding: '20px 0 0',
-                                        borderTop: '1px solid oklch(0.92 0.015 82)',
-                                        marginTop: '20px',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '42px 1fr',
-                                            gap: '14px',
-                                            alignItems: 'start',
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '21px',
-                                                fontWeight: '700',
-                                                lineHeight: '1.15',
-                                                letterSpacing: '-0.02em',
-                                                color: '#b3a892',
-                                            }}
-                                        >
-                                            03
-                                        </span>
-                                        <div>
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 5px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                }}
-                                            >
-                                                Produksi sesuai ukuran
-                                            </h3>
-                                            <p
-                                                style={{
-                                                    margin: '0',
-                                                    fontSize: '15px',
-                                                    lineHeight: '1.5',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Dijahit khusus untuk jendela Anda dengan kain blackout impor, lalu difinishing sistem steam uap.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gap: '14px',
-                                        padding: '20px 0 0',
-                                        borderTop: '1px solid oklch(0.92 0.015 82)',
-                                        marginTop: '20px',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '42px 1fr',
-                                            gap: '14px',
-                                            alignItems: 'start',
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '21px',
-                                                fontWeight: '700',
-                                                lineHeight: '1.15',
-                                                letterSpacing: '-0.02em',
-                                                color: '#b3a892',
-                                            }}
-                                        >
-                                            04
-                                        </span>
-                                        <div>
-                                            <h3
-                                                style={{
-                                                    margin: '0 0 5px',
-                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                    fontSize: 'clamp(17px, 4.2vw, 19px)',
-                                                    fontWeight: '600',
-                                                    letterSpacing: '-0.01em',
-                                                }}
-                                            >
-                                                Pasang &amp; cek akhir
-                                            </h3>
-                                            <p
-                                                style={{
-                                                    margin: '0',
-                                                    fontSize: '15px',
-                                                    lineHeight: '1.5',
-                                                    color: 'oklch(0.45 0.02 60)',
-                                                }}
-                                            >
-                                                Dipasang sampai rapi, lalu dicek bersama Anda. Kalau ada yang kurang pas, kami rapikan saat itu juga.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            aspectRatio: '16 / 10',
-                                            position: 'relative',
-                                            display: 'flex',
-                                            alignItems: 'flex-end',
-                                            padding: '14px 16px',
-                                            borderRadius: '14px',
-                                            overflow: 'hidden',
-                                            ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
-                                    >
-                                        <p
-                                            style={{
-                                                margin: '0',
-                                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                                fontSize: '13px',
-                                                fontWeight: '600',
-                                                lineHeight: '1.35',
-                                                color: '#fdfcfa',
-                                            }}
-                                        >
-                                            Dicek bersama sebelum dinyatakan selesai
-                                        </p>
-                                    </div>
-                                </div>
-                                <p
-                                    style={{
-                                        margin: '22px 0 0',
-                                        padding: '14px 16px',
-                                        background: '#f6f3ec',
-                                        borderRadius: '10px',
-                                        fontSize: '14px',
-                                        lineHeight: '1.45',
-                                        color: 'oklch(0.38 0.02 60)',
-                                    }}
-                                >
-                                    <strong style={{ color: 'oklch(0.26 0.02 60)' }}>Jadwal fleksibel.</strong> Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.
-                                </p>
-                            </div>
-                        )}
-                        <div style={{ margin: '26px 0 0' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '12px',
-                                }}
-                            >
-                                <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
-                                    target="_blank"
-                                    rel="noopener"
-                                    style={{
-                                        flex: '1 1 260px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#FF6B35',
-                                        color: '#fff',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/whatsapp.svg"
-                                        alt=""
-                                        style={{
-                                            flex: 'none',
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '9px',
-                                            display: 'block',
-                                        }}
-                                    />
-                                    Konsultasi Gratis →
-                                </a>
-                                <a
-                                    href="#portofolio"
-                                    style={{
-                                        flex: '1 1 220px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#fdfcfa',
-                                        border: '2px solid #FF6B35',
-                                        color: '#C24E1E',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    Lihat Portofolio →
-                                </a>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    gap: '5px 10px',
-                                    margin: '12px 0 0',
-                                    fontSize: '12.5px',
-                                    color: 'oklch(0.4 0.02 60)',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        color: '#E0A93B',
-                                        fontSize: '12.5px',
-                                        letterSpacing: '1px',
-                                    }}
-                                >
-                                    ★★★★★
-                                </span>
-                                <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
-                                <span>Google Review</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>1.000+ pembeli</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>Ada garansi kalau kurang pas</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section
-                        style={{
-                            margin: '44px 0',
-                            padding: 'clamp(22px, 5vw, 30px) clamp(16px, 4.5vw, 24px)',
-                            background: '#fdfcfa',
-                            border: '1px solid oklch(0.88 0.02 80)',
-                            borderLeft: '6px solid #817661',
-                            borderRadius: '18px',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
-                                gap: '24px',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <div>
-                                <p
-                                    style={{
-                                        margin: '0 0 10px',
-                                        fontSize: '12px',
-                                        fontWeight: '700',
-                                        letterSpacing: '0.14em',
-                                        textTransform: 'uppercase',
-                                        color: '#817661',
-                                    }}
-                                >
-                                    Jaminan
+                                    Katalog model
                                 </p>
                                 <h2
                                     style={{
@@ -7380,1004 +4525,3918 @@ export default function GordenLanding() {
                                         lineHeight: '1.2',
                                         fontWeight: '700',
                                         letterSpacing: '-0.02em',
-                                        textWrap: 'pretty',
                                     }}
                                 >
-                                    Ada garansi kalau kurang pas
+                                    Model gorden yang kami kerjakan
                                 </h2>
                                 <p
                                     style={{
-                                        margin: '0',
-                                        fontSize: '17px',
-                                        color: '#4d4636',
+                                        margin: '0 0 24px',
+                                        color: 'oklch(0.42 0.02 60)',
+                                        maxWidth: '62ch',
                                     }}
                                 >
-                                    Ada yang kurang pas dalam 14 hari? Kami perbaiki tanpa biaya tambahan.
+                                    Semua dibuat custom sesuai ukuran jendela Anda. Belum tahu yang cocok? Kami bantu saat survey.
                                 </p>
-                            </div>
-                            <div style={{ display: 'grid', gap: '10px' }}>
-                                <span
+                                <div
+                                    id="katalog-filter"
+                                    style={{
+                                        position: 'sticky',
+                                        top: '68px',
+                                        zIndex: '20',
+                                        margin: '0 0 18px',
+                                        padding: '10px 0',
+                                        background: '#fdfcfa',
+                                        borderBottom: '1px solid oklch(0.92 0.015 82)',
+                                    }}
+                                >
+                                    {narrow && (
+                                        <select
+                                            onChange={(e) => {
+                                                setKatCat(e.target.value);
+                                                setTimeout(() => {
+                                                    const el = document.getElementById('katalog-filter')?.nextElementSibling;
+                                                    if (el)
+                                                        window.scrollTo({
+                                                            top: el.getBoundingClientRect().top + window.scrollY - 132,
+                                                            behavior: 'smooth',
+                                                        });
+                                                }, 100);
+                                            }}
+                                            value="{{ katCat }}"
+                                            aria-label="Pilih kategori model"
+                                            style={{
+                                                width: '100%',
+                                                minHeight: '48px',
+                                                padding: '12px 14px',
+                                                borderRadius: '12px',
+                                                border: '1.5px solid #d8cfbd',
+                                                background: '#fdfcfa',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: '15px',
+                                                fontWeight: '600',
+                                                color: '#3a352c',
+                                            }}
+                                        >
+                                            <option value="semua">Semua model (13)</option>
+                                            <option value="kain">Gorden kain (6)</option>
+                                            <option value="blinds">Blinds (5)</option>
+                                            <option value="lain">Wallpaper &amp; pelengkap (2)</option>
+                                        </select>
+                                    )}
+                                    {!narrow && (
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexWrap: 'nowrap',
+                                                gap: '8px',
+                                                overflowX: 'auto',
+                                                padding: '2px',
+                                                scrollbarWidth: 'none',
+                                            }}
+                                        >
+                                            <button
+                                                type="button"
+                                                onClick={() => pickCat('semua')}
+                                                style={{
+                                                    minHeight: '40px',
+                                                    padding: '9px 16px',
+                                                    borderRadius: '999px',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    ...tab('semua'),
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    flex: 'none',
+                                                }}
+                                            >
+                                                Semua model{' '}
+                                                <span
+                                                    style={{
+                                                        opacity: '0.6',
+                                                        fontWeight: '500',
+                                                    }}
+                                                >
+                                                    13
+                                                </span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => pickCat('kain')}
+                                                style={{
+                                                    minHeight: '40px',
+                                                    padding: '9px 16px',
+                                                    borderRadius: '999px',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    ...tab('kain'),
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    flex: 'none',
+                                                }}
+                                            >
+                                                Gorden kain{' '}
+                                                <span
+                                                    style={{
+                                                        opacity: '0.6',
+                                                        fontWeight: '500',
+                                                    }}
+                                                >
+                                                    6
+                                                </span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => pickCat('blinds')}
+                                                style={{
+                                                    minHeight: '40px',
+                                                    padding: '9px 16px',
+                                                    borderRadius: '999px',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    ...tab('blinds'),
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    flex: 'none',
+                                                }}
+                                            >
+                                                Blinds{' '}
+                                                <span
+                                                    style={{
+                                                        opacity: '0.6',
+                                                        fontWeight: '500',
+                                                    }}
+                                                >
+                                                    5
+                                                </span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => pickCat('lain')}
+                                                style={{
+                                                    minHeight: '40px',
+                                                    padding: '9px 16px',
+                                                    borderRadius: '999px',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    ...tab('lain'),
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    flex: 'none',
+                                                }}
+                                            >
+                                                Wallpaper &amp; pelengkap{' '}
+                                                <span
+                                                    style={{
+                                                        opacity: '0.6',
+                                                        fontWeight: '500',
+                                                    }}
+                                                >
+                                                    2
+                                                </span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                {showKain && (
+                                    <div style={{ margin: '0 0 0' }}>
+                                        <h3
+                                            style={{
+                                                margin: '0 0 14px',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: '13px',
+                                                fontWeight: '700',
+                                                letterSpacing: '0.1em',
+                                                textTransform: 'uppercase',
+                                                color: '#8f8674',
+                                            }}
+                                        >
+                                            Gorden kain
+                                        </h3>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
+                                                gap: '16px',
+                                            }}
+                                        >
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-gorden-sala3-1152x1536.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '12px',
+                                                            left: '12px',
+                                                            padding: '5px 11px',
+                                                            background: '#817661',
+                                                            color: '#fdfcfa',
+                                                            fontSize: '10px',
+                                                            fontWeight: '700',
+                                                            letterSpacing: '0.1em',
+                                                            textTransform: 'uppercase',
+                                                            borderRadius: '6px',
+                                                        }}
+                                                    >
+                                                        Best Seller
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Gorden Minimalis
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,9
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            312 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Bersih dan tidak ramai, pas untuk rumah minimalis.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Minimalis."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-gorden-custom.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Gorden Custom
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,9
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            158 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Model, bahan, dan ukuran menyesuaikan ruangan Anda.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Custom."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-gorden-siang-dan-vitrase.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Gorden Siang &amp; Vitrase
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,8
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            132 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Tirai tembus pandang, hampir wajib untuk kamar tidur.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Siang%20%26%20Vitrase."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                        </div>
+                                        {showKainRest && (
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
+                                                    gap: '16px',
+                                                }}
+                                            >
+                                                <article
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        background: '#fdfcfa',
+                                                        border: '1px solid oklch(0.91 0.015 82)',
+                                                        borderRadius: '16px',
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            position: 'relative',
+                                                            aspectRatio: '4 / 3',
+                                                            ...lazyBackground("url('/assets/img-gorden-kupu-1.webp')"),
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        style={{
+                                                            flex: '1',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            padding: '15px 16px 16px',
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 6px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: '17px',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                                lineHeight: '1.25',
+                                                            }}
+                                                        >
+                                                            Gorden Kupu-Kupu
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '7px',
+                                                                margin: '0 0 8px',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: '#E0A93B',
+                                                                    fontSize: '12px',
+                                                                    letterSpacing: '0.5px',
+                                                                }}
+                                                            >
+                                                                ★★★★★
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '700',
+                                                                    color: 'oklch(0.32 0.02 60)',
+                                                                }}
+                                                            >
+                                                                4,7
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    color: 'oklch(0.55 0.03 70)',
+                                                                }}
+                                                            >
+                                                                74 pembeli
+                                                            </span>
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                margin: '0 0 14px',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.45',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Gorden pita nempel jendela, simpel untuk rumah minimalis.
+                                                        </p>
+                                                        <a
+                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Kupu-Kupu."
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            style={{
+                                                                marginTop: 'auto',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '7px',
+                                                                minHeight: '40px',
+                                                                padding: '8px 12px',
+                                                                background: '#FF6B35',
+                                                                color: '#fff',
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                textDecoration: 'none',
+                                                                borderRadius: '9px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="/assets/whatsapp.svg"
+                                                                alt=""
+                                                                style={{
+                                                                    flex: 'none',
+                                                                    width: '17px',
+                                                                    height: '17px',
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'nowrap',
+                                                                }}
+                                                            >
+                                                                Tanya harga &amp; spesifikasi
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                                <article
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        background: '#fdfcfa',
+                                                        border: '1px solid oklch(0.91 0.015 82)',
+                                                        borderRadius: '16px',
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            position: 'relative',
+                                                            aspectRatio: '4 / 3',
+                                                            ...lazyBackground("url('/assets/img-gorden-hotel-apartemen.webp')"),
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        style={{
+                                                            flex: '1',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            padding: '15px 16px 16px',
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 6px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: '17px',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                                lineHeight: '1.25',
+                                                            }}
+                                                        >
+                                                            Gorden Hotel &amp; Apartemen
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '7px',
+                                                                margin: '0 0 8px',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: '#E0A93B',
+                                                                    fontSize: '12px',
+                                                                    letterSpacing: '0.5px',
+                                                                }}
+                                                            >
+                                                                ★★★★★
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '700',
+                                                                    color: 'oklch(0.32 0.02 60)',
+                                                                }}
+                                                            >
+                                                                4,9
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    color: 'oklch(0.55 0.03 70)',
+                                                                }}
+                                                            >
+                                                                96 pembeli
+                                                            </span>
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                margin: '0 0 14px',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.45',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Bahan dan model kelas hotel untuk unit sewa.
+                                                        </p>
+                                                        <a
+                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Hotel%20%26%20Apartemen."
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            style={{
+                                                                marginTop: 'auto',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '7px',
+                                                                minHeight: '40px',
+                                                                padding: '8px 12px',
+                                                                background: '#FF6B35',
+                                                                color: '#fff',
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                textDecoration: 'none',
+                                                                borderRadius: '9px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="/assets/whatsapp.svg"
+                                                                alt=""
+                                                                style={{
+                                                                    flex: 'none',
+                                                                    width: '17px',
+                                                                    height: '17px',
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'nowrap',
+                                                                }}
+                                                            >
+                                                                Tanya harga &amp; spesifikasi
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                                <article
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        background: '#fdfcfa',
+                                                        border: '1px solid oklch(0.91 0.015 82)',
+                                                        borderRadius: '16px',
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            position: 'relative',
+                                                            aspectRatio: '4 / 3',
+                                                            ...lazyBackground("url('/assets/img-gorden-rumah-sakit-rso-orthopedi-surakar.webp')"),
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        style={{
+                                                            flex: '1',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            padding: '15px 16px 16px',
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 6px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: '17px',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                                lineHeight: '1.25',
+                                                            }}
+                                                        >
+                                                            Tirai Area Publik
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '7px',
+                                                                margin: '0 0 8px',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: '#E0A93B',
+                                                                    fontSize: '12px',
+                                                                    letterSpacing: '0.5px',
+                                                                }}
+                                                            >
+                                                                ★★★★★
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '700',
+                                                                    color: 'oklch(0.32 0.02 60)',
+                                                                }}
+                                                            >
+                                                                4,9
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    color: 'oklch(0.55 0.03 70)',
+                                                                }}
+                                                            >
+                                                                54 pembeli
+                                                            </span>
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                margin: '0 0 14px',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.45',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Untuk rumah sakit, sekolah, dan ruang publik.
+                                                        </p>
+                                                        <a
+                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Tirai%20Area%20Publik."
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            style={{
+                                                                marginTop: 'auto',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '7px',
+                                                                minHeight: '40px',
+                                                                padding: '8px 12px',
+                                                                background: '#FF6B35',
+                                                                color: '#fff',
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                textDecoration: 'none',
+                                                                borderRadius: '9px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="/assets/whatsapp.svg"
+                                                                alt=""
+                                                                style={{
+                                                                    flex: 'none',
+                                                                    width: '17px',
+                                                                    height: '17px',
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'nowrap',
+                                                                }}
+                                                            >
+                                                                Tanya harga &amp; spesifikasi
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        )}
+                                        {katCat === 'semua' && !expKain && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setExpKain(true)}
+                                                style={{
+                                                    width: '100%',
+                                                    margin: '12px 0 0',
+                                                    minHeight: '46px',
+                                                    padding: '12px 16px',
+                                                    background: '#fdfcfa',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    borderRadius: '12px',
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    color: '#6f6656',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                Lihat semua Gorden kain (6) →
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                                {showBlinds && (
+                                    <div style={{ margin: '30px 0 0' }}>
+                                        <h3
+                                            style={{
+                                                margin: '0 0 14px',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: '13px',
+                                                fontWeight: '700',
+                                                letterSpacing: '0.1em',
+                                                textTransform: 'uppercase',
+                                                color: '#8f8674',
+                                            }}
+                                        >
+                                            Blinds
+                                        </h3>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
+                                                gap: '16px',
+                                            }}
+                                        >
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-roller-blinds-untuk-kantor-1152x1536.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '12px',
+                                                            left: '12px',
+                                                            padding: '5px 11px',
+                                                            background: '#817661',
+                                                            color: '#fdfcfa',
+                                                            fontSize: '10px',
+                                                            fontWeight: '700',
+                                                            letterSpacing: '0.1em',
+                                                            textTransform: 'uppercase',
+                                                            borderRadius: '6px',
+                                                        }}
+                                                    >
+                                                        Favorit Kantor
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Roller Blinds
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,8
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            247 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Ditarik naik-turun, hemat tempat, rapi untuk kantor.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Roller%20Blinds."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-zebra-blinds.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '12px',
+                                                            left: '12px',
+                                                            padding: '5px 11px',
+                                                            background: '#817661',
+                                                            color: '#fdfcfa',
+                                                            fontSize: '10px',
+                                                            fontWeight: '700',
+                                                            letterSpacing: '0.1em',
+                                                            textTransform: 'uppercase',
+                                                            borderRadius: '6px',
+                                                        }}
+                                                    >
+                                                        Sedang Naik
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Zebra Blinds
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,9
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            186 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Gorden dan vitrase jadi satu, terang-gelap tinggal digeser.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Zebra%20Blinds."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-vertikal-blinds.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Vertikal Blinds
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,7
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            143 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Kesan formal, arah cahaya bisa diatur supaya layar tidak silau.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Vertikal%20Blinds."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                        </div>
+                                        {showBlindsRest && (
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
+                                                    gap: '16px',
+                                                }}
+                                            >
+                                                <article
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        background: '#fdfcfa',
+                                                        border: '1px solid oklch(0.91 0.015 82)',
+                                                        borderRadius: '16px',
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            position: 'relative',
+                                                            aspectRatio: '4 / 3',
+                                                            ...lazyBackground("url('/assets/img-slimline-blinds-gorden-kantor-scaled-e16.webp')"),
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        style={{
+                                                            flex: '1',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            padding: '15px 16px 16px',
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 6px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: '17px',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                                lineHeight: '1.25',
+                                                            }}
+                                                        >
+                                                            Slimline Blinds
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '7px',
+                                                                margin: '0 0 8px',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: '#E0A93B',
+                                                                    fontSize: '12px',
+                                                                    letterSpacing: '0.5px',
+                                                                }}
+                                                            >
+                                                                ★★★★★
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '700',
+                                                                    color: 'oklch(0.32 0.02 60)',
+                                                                }}
+                                                            >
+                                                                4,6
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    color: 'oklch(0.55 0.03 70)',
+                                                                }}
+                                                            >
+                                                                88 pembeli
+                                                            </span>
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                margin: '0 0 14px',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.45',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Slat aluminium, ringan dan mudah dibersihkan.
+                                                        </p>
+                                                        <a
+                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Slimline%20Blinds."
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            style={{
+                                                                marginTop: 'auto',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '7px',
+                                                                minHeight: '40px',
+                                                                padding: '8px 12px',
+                                                                background: '#FF6B35',
+                                                                color: '#fff',
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                textDecoration: 'none',
+                                                                borderRadius: '9px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="/assets/whatsapp.svg"
+                                                                alt=""
+                                                                style={{
+                                                                    flex: 'none',
+                                                                    width: '17px',
+                                                                    height: '17px',
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'nowrap',
+                                                                }}
+                                                            >
+                                                                Tanya harga &amp; spesifikasi
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                                <article
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        background: '#fdfcfa',
+                                                        border: '1px solid oklch(0.91 0.015 82)',
+                                                        borderRadius: '16px',
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            position: 'relative',
+                                                            aspectRatio: '4 / 3',
+                                                            ...lazyBackground("url('/assets/img-outdoor-blinds.webp')"),
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        style={{
+                                                            flex: '1',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            padding: '15px 16px 16px',
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 6px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: '17px',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                                lineHeight: '1.25',
+                                                            }}
+                                                        >
+                                                            Outdoor Blinds
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '7px',
+                                                                margin: '0 0 8px',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: '#E0A93B',
+                                                                    fontSize: '12px',
+                                                                    letterSpacing: '0.5px',
+                                                                }}
+                                                            >
+                                                                ★★★★★
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '700',
+                                                                    color: 'oklch(0.32 0.02 60)',
+                                                                }}
+                                                            >
+                                                                4,8
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '12px',
+                                                                    color: 'oklch(0.55 0.03 70)',
+                                                                }}
+                                                            >
+                                                                61 pembeli
+                                                            </span>
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                margin: '0 0 14px',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.45',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Menahan panas dan silau dari luar, tahan angin.
+                                                        </p>
+                                                        <a
+                                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Outdoor%20Blinds."
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            style={{
+                                                                marginTop: 'auto',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '7px',
+                                                                minHeight: '40px',
+                                                                padding: '8px 12px',
+                                                                background: '#FF6B35',
+                                                                color: '#fff',
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                textDecoration: 'none',
+                                                                borderRadius: '9px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="/assets/whatsapp.svg"
+                                                                alt=""
+                                                                style={{
+                                                                    flex: 'none',
+                                                                    width: '17px',
+                                                                    height: '17px',
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'nowrap',
+                                                                }}
+                                                            >
+                                                                Tanya harga &amp; spesifikasi
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        )}
+                                        {katCat === 'semua' && !expBlinds && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setExpBlinds(true)}
+                                                style={{
+                                                    width: '100%',
+                                                    margin: '12px 0 0',
+                                                    minHeight: '46px',
+                                                    padding: '12px 16px',
+                                                    background: '#fdfcfa',
+                                                    border: '1.5px solid #d8cfbd',
+                                                    borderRadius: '12px',
+                                                    fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    color: '#6f6656',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                Lihat semua Blinds (5) →
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                                {showPelengkap && (
+                                    <div style={{ margin: '30px 0 0' }}>
+                                        <h3
+                                            style={{
+                                                margin: '0 0 14px',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: '13px',
+                                                fontWeight: '700',
+                                                letterSpacing: '0.1em',
+                                                textTransform: 'uppercase',
+                                                color: '#8f8674',
+                                            }}
+                                        >
+                                            Wallpaper &amp; pelengkap
+                                        </h3>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 255px), 1fr))',
+                                                gap: '16px',
+                                            }}
+                                        >
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-wallpaper-custom-motif-peta-dunia.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Wallpaper Custom
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,8
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            118 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Satu dinding saja bisa mengubah karakter ruangan.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Wallpaper%20Custom."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    background: '#fdfcfa',
+                                                    border: '1px solid oklch(0.91 0.015 82)',
+                                                    borderRadius: '16px',
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 10px 24px -22px rgba(58,53,44,0.9)',
+                                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        aspectRatio: '4 / 3',
+                                                        ...lazyBackground("url('/assets/img-kasa-nyamuk-magnetik-1536x1012.webp')"),
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center',
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        flex: '1',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        padding: '15px 16px 16px',
+                                                    }}
+                                                >
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 6px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '17px',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                            lineHeight: '1.25',
+                                                        }}
+                                                    >
+                                                        Perlengkapan Lainnya
+                                                    </h3>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '7px',
+                                                            margin: '0 0 8px',
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                color: '#E0A93B',
+                                                                fontSize: '12px',
+                                                                letterSpacing: '0.5px',
+                                                            }}
+                                                        >
+                                                            ★★★★★
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                fontWeight: '700',
+                                                                color: 'oklch(0.32 0.02 60)',
+                                                            }}
+                                                        >
+                                                            4,7
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '12px',
+                                                                color: 'oklch(0.55 0.03 70)',
+                                                            }}
+                                                        >
+                                                            69 pembeli
+                                                        </span>
+                                                    </div>
+                                                    <p
+                                                        style={{
+                                                            margin: '0 0 14px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.45',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Kasa nyamuk, rail rolet, dan perlengkapan gorden lain.
+                                                    </p>
+                                                    <a
+                                                        href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Perlengkapan%20Lainnya."
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        style={{
+                                                            marginTop: 'auto',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '7px',
+                                                            minHeight: '40px',
+                                                            padding: '8px 12px',
+                                                            background: '#FF6B35',
+                                                            color: '#fff',
+                                                            fontSize: '14px',
+                                                            fontWeight: '700',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '9px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/assets/whatsapp.svg"
+                                                            alt=""
+                                                            style={{
+                                                                flex: 'none',
+                                                                width: '17px',
+                                                                height: '17px',
+                                                                display: 'block',
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            Tanya harga &amp; spesifikasi
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                )}
+                                <p
+                                    style={{
+                                        margin: '26px 0 0',
+                                        fontSize: '16px',
+                                        color: 'oklch(0.48 0.02 60)',
+                                        textAlign: 'center',
+                                        fontWeight: '700',
+                                    }}
+                                >
+                                    Belum yakin yang mana? Kirim foto jendela Anda lewat WA, kami bantu pilihkan modelnya.
+                                </p>
+                                <div style={{ margin: '12px 0 0' }}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '12px',
+                                        }}
+                                    >
+                                        <a
+                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20model%20gorden%20yang%20cocok%20untuk%20ruangan%20saya."
+                                            target="_blank"
+                                            rel="noopener"
+                                            style={{
+                                                flex: '1 1 260px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#FF6B35',
+                                                color: '#fff',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/whatsapp.svg"
+                                                alt=""
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    marginRight: '9px',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            Konsultasi Gratis →
+                                        </a>
+                                        <a
+                                            href="#portofolio"
+                                            style={{
+                                                flex: '1 1 220px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: 'rgba(253,252,250,0.12)',
+                                                border: '2px solid #FF6B35',
+                                                color: '#241D17',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                                backdropFilter: 'blur(4px)',
+                                            }}
+                                        >
+                                            Lihat Portofolio →
+                                        </a>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            gap: '5px 10px',
+                                            margin: '12px 0 0',
+                                            fontSize: '12.5px',
+                                            color: 'oklch(0.4 0.02 60)',
+                                        }}
+                                    >
+                                        <span
+                                            style={{
+                                                color: '#E0A93B',
+                                                fontSize: '12.5px',
+                                                letterSpacing: '1px',
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </span>
+                                        <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
+                                        <span>Google Review</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>1.000+ pembeli</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>Ada garansi kalau kurang pas</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section
+                                id="proses"
+                                style={{
+                                    padding: '44px 0',
+                                    borderTop: '1px solid oklch(0.9 0.02 80)',
+                                    scrollMarginTop: '76px',
+                                }}
+                            >
+                                <div
                                     style={{
                                         display: 'flex',
+                                        flexWrap: 'wrap',
+                                        alignItems: 'flex-end',
+                                        justifyContent: 'space-between',
+                                        gap: '10px 24px',
+                                        margin: '0 0 24px',
+                                    }}
+                                >
+                                    <div>
+                                        <p
+                                            style={{
+                                                margin: '0 0 10px',
+                                                fontSize: '12px',
+                                                fontWeight: '700',
+                                                letterSpacing: '0.14em',
+                                                textTransform: 'uppercase',
+                                                color: '#817661',
+                                            }}
+                                        >
+                                            Proses kerja
+                                        </p>
+                                        <h2
+                                            style={{
+                                                margin: '0',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: 'clamp(23px, 5.2vw, 30px)',
+                                                lineHeight: '1.2',
+                                                fontWeight: '700',
+                                                letterSpacing: '-0.02em',
+                                            }}
+                                        >
+                                            Empat langkah, Anda tinggal duduk
+                                        </h2>
+                                    </div>
+                                    <p
+                                        style={{
+                                            margin: '0',
+                                            maxWidth: '38ch',
+                                            fontSize: '15px',
+                                            color: 'oklch(0.45 0.02 60)',
+                                        }}
+                                    >
+                                        Dikerjakan tim kami sendiri, dari chat pertama sampai gorden terpasang rapi.
+                                    </p>
+                                </div>
+                                {!narrow && (
+                                    <div
+                                        style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+                                            gap: '16px',
+                                            alignItems: 'stretch',
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                padding: '24px 22px',
+                                                background: '#fdfcfa',
+                                                border: '1px solid oklch(0.91 0.015 82)',
+                                                borderRadius: '18px',
+                                            }}
+                                        >
+                                            <div style={{ padding: '0' }}>
+                                                <div
+                                                    style={{
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '42px 1fr',
+                                                        gap: '14px',
+                                                        alignItems: 'start',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '21px',
+                                                            fontWeight: '700',
+                                                            lineHeight: '1.15',
+                                                            letterSpacing: '-0.02em',
+                                                            color: '#b3a892',
+                                                        }}
+                                                    >
+                                                        01
+                                                    </span>
+                                                    <div>
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 5px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                            }}
+                                                        >
+                                                            Bisa tanya sampai cocok
+                                                        </h3>
+                                                        <p
+                                                            style={{
+                                                                margin: '0',
+                                                                fontSize: '15px',
+                                                                lineHeight: '1.5',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Ceritakan ruangan dan kebutuhan Anda lewat WhatsApp, lalu tentukan jadwal survey yang paling cocok.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    padding: '20px 0 0',
+                                                    borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                    marginTop: '20px',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '42px 1fr',
+                                                        gap: '14px',
+                                                        alignItems: 'start',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '21px',
+                                                            fontWeight: '700',
+                                                            lineHeight: '1.15',
+                                                            letterSpacing: '-0.02em',
+                                                            color: '#b3a892',
+                                                        }}
+                                                    >
+                                                        02
+                                                    </span>
+                                                    <div>
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 5px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                            }}
+                                                        >
+                                                            Aman dari salah ukur
+                                                        </h3>
+                                                        <p
+                                                            style={{
+                                                                margin: '0',
+                                                                fontSize: '15px',
+                                                                lineHeight: '1.5',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Tim datang bawa katalog kain, ukur presisi, dan bantu cocokkan warnanya.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    padding: '20px 0 0',
+                                                    borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                    marginTop: '20px',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '42px 1fr',
+                                                        gap: '14px',
+                                                        alignItems: 'start',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '21px',
+                                                            fontWeight: '700',
+                                                            lineHeight: '1.15',
+                                                            letterSpacing: '-0.02em',
+                                                            color: '#b3a892',
+                                                        }}
+                                                    >
+                                                        03
+                                                    </span>
+                                                    <div>
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 5px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                            }}
+                                                        >
+                                                            Produksi sesuai ukuran
+                                                        </h3>
+                                                        <p
+                                                            style={{
+                                                                margin: '0',
+                                                                fontSize: '15px',
+                                                                lineHeight: '1.5',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Dijahit khusus untuk jendela Anda dengan kain blackout impor, lalu difinishing sistem steam uap.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    padding: '20px 0 0',
+                                                    borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                    marginTop: '20px',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '42px 1fr',
+                                                        gap: '14px',
+                                                        alignItems: 'start',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: '21px',
+                                                            fontWeight: '700',
+                                                            lineHeight: '1.15',
+                                                            letterSpacing: '-0.02em',
+                                                            color: '#b3a892',
+                                                        }}
+                                                    >
+                                                        04
+                                                    </span>
+                                                    <div>
+                                                        <h3
+                                                            style={{
+                                                                margin: '0 0 5px',
+                                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                                fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                                fontWeight: '600',
+                                                                letterSpacing: '-0.01em',
+                                                            }}
+                                                        >
+                                                            Pasang &amp; cek akhir
+                                                        </h3>
+                                                        <p
+                                                            style={{
+                                                                margin: '0',
+                                                                fontSize: '15px',
+                                                                lineHeight: '1.5',
+                                                                color: 'oklch(0.45 0.02 60)',
+                                                            }}
+                                                        >
+                                                            Dipasang sampai rapi, lalu dicek bersama Anda. Kalau ada yang kurang pas, kami rapikan saat itu juga.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p
+                                                style={{
+                                                    margin: '22px 0 0',
+                                                    padding: '14px 16px',
+                                                    background: '#f6f3ec',
+                                                    borderRadius: '10px',
+                                                    fontSize: '14px',
+                                                    lineHeight: '1.45',
+                                                    color: 'oklch(0.38 0.02 60)',
+                                                }}
+                                            >
+                                                <strong
+                                                    style={{
+                                                        color: 'oklch(0.26 0.02 60)',
+                                                    }}
+                                                >
+                                                    Jadwal fleksibel.
+                                                </strong>{' '}
+                                                Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '16px',
+                                                minHeight: '420px',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    flex: '1',
+                                                    minHeight: '200px',
+                                                    position: 'relative',
+                                                    display: 'flex',
+                                                    alignItems: 'flex-end',
+                                                    padding: '14px 16px',
+                                                    borderRadius: '14px',
+                                                    overflow: 'hidden',
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-ukur.webp')"),
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                }}
+                                            >
+                                                <p
+                                                    style={{
+                                                        margin: '0',
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        lineHeight: '1.35',
+                                                        color: '#fdfcfa',
+                                                    }}
+                                                >
+                                                    Survey &amp; ukur di rumah pelanggan
+                                                </p>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    flex: '1',
+                                                    minHeight: '200px',
+                                                    position: 'relative',
+                                                    display: 'flex',
+                                                    alignItems: 'flex-end',
+                                                    padding: '14px 16px',
+                                                    borderRadius: '14px',
+                                                    overflow: 'hidden',
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                }}
+                                            >
+                                                <p
+                                                    style={{
+                                                        margin: '0',
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        lineHeight: '1.35',
+                                                        color: '#fdfcfa',
+                                                    }}
+                                                >
+                                                    Dicek bersama sebelum dinyatakan selesai
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {narrow && (
+                                    <div
+                                        style={{
+                                            padding: '22px 18px',
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.91 0.015 82)',
+                                            borderRadius: '18px',
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gap: '14px',
+                                                padding: '0',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: '42px 1fr',
+                                                    gap: '14px',
+                                                    alignItems: 'start',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '21px',
+                                                        fontWeight: '700',
+                                                        lineHeight: '1.15',
+                                                        letterSpacing: '-0.02em',
+                                                        color: '#b3a892',
+                                                    }}
+                                                >
+                                                    01
+                                                </span>
+                                                <div>
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 5px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                        }}
+                                                    >
+                                                        Bisa tanya sampai cocok
+                                                    </h3>
+                                                    <p
+                                                        style={{
+                                                            margin: '0',
+                                                            fontSize: '15px',
+                                                            lineHeight: '1.5',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Ceritakan ruangan dan kebutuhan Anda lewat WhatsApp, lalu tentukan jadwal survey yang paling cocok.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gap: '14px',
+                                                padding: '20px 0 0',
+                                                borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                marginTop: '20px',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: '42px 1fr',
+                                                    gap: '14px',
+                                                    alignItems: 'start',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '21px',
+                                                        fontWeight: '700',
+                                                        lineHeight: '1.15',
+                                                        letterSpacing: '-0.02em',
+                                                        color: '#b3a892',
+                                                    }}
+                                                >
+                                                    02
+                                                </span>
+                                                <div>
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 5px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                        }}
+                                                    >
+                                                        Aman dari salah ukur
+                                                    </h3>
+                                                    <p
+                                                        style={{
+                                                            margin: '0',
+                                                            fontSize: '15px',
+                                                            lineHeight: '1.5',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Tim datang bawa katalog kain, ukur presisi, dan bantu cocokkan warnanya.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    aspectRatio: '16 / 10',
+                                                    position: 'relative',
+                                                    display: 'flex',
+                                                    alignItems: 'flex-end',
+                                                    padding: '14px 16px',
+                                                    borderRadius: '14px',
+                                                    overflow: 'hidden',
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-ukur.webp')"),
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                }}
+                                            >
+                                                <p
+                                                    style={{
+                                                        margin: '0',
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        lineHeight: '1.35',
+                                                        color: '#fdfcfa',
+                                                    }}
+                                                >
+                                                    Survey &amp; ukur di rumah pelanggan
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gap: '14px',
+                                                padding: '20px 0 0',
+                                                borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                marginTop: '20px',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: '42px 1fr',
+                                                    gap: '14px',
+                                                    alignItems: 'start',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '21px',
+                                                        fontWeight: '700',
+                                                        lineHeight: '1.15',
+                                                        letterSpacing: '-0.02em',
+                                                        color: '#b3a892',
+                                                    }}
+                                                >
+                                                    03
+                                                </span>
+                                                <div>
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 5px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                        }}
+                                                    >
+                                                        Produksi sesuai ukuran
+                                                    </h3>
+                                                    <p
+                                                        style={{
+                                                            margin: '0',
+                                                            fontSize: '15px',
+                                                            lineHeight: '1.5',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Dijahit khusus untuk jendela Anda dengan kain blackout impor, lalu difinishing sistem steam uap.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gap: '14px',
+                                                padding: '20px 0 0',
+                                                borderTop: '1px solid oklch(0.92 0.015 82)',
+                                                marginTop: '20px',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: '42px 1fr',
+                                                    gap: '14px',
+                                                    alignItems: 'start',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '21px',
+                                                        fontWeight: '700',
+                                                        lineHeight: '1.15',
+                                                        letterSpacing: '-0.02em',
+                                                        color: '#b3a892',
+                                                    }}
+                                                >
+                                                    04
+                                                </span>
+                                                <div>
+                                                    <h3
+                                                        style={{
+                                                            margin: '0 0 5px',
+                                                            fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                            fontSize: 'clamp(17px, 4.2vw, 19px)',
+                                                            fontWeight: '600',
+                                                            letterSpacing: '-0.01em',
+                                                        }}
+                                                    >
+                                                        Pasang &amp; cek akhir
+                                                    </h3>
+                                                    <p
+                                                        style={{
+                                                            margin: '0',
+                                                            fontSize: '15px',
+                                                            lineHeight: '1.5',
+                                                            color: 'oklch(0.45 0.02 60)',
+                                                        }}
+                                                    >
+                                                        Dipasang sampai rapi, lalu dicek bersama Anda. Kalau ada yang kurang pas, kami rapikan saat itu juga.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    aspectRatio: '16 / 10',
+                                                    position: 'relative',
+                                                    display: 'flex',
+                                                    alignItems: 'flex-end',
+                                                    padding: '14px 16px',
+                                                    borderRadius: '14px',
+                                                    overflow: 'hidden',
+                                                    ...lazyBackground("linear-gradient(to top, rgba(30,25,19,0.8) 0%, rgba(30,25,19,0.26) 42%, rgba(30,25,19,0) 78%), url('/assets/proses-pasang.webp')"),
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                }}
+                                            >
+                                                <p
+                                                    style={{
+                                                        margin: '0',
+                                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        lineHeight: '1.35',
+                                                        color: '#fdfcfa',
+                                                    }}
+                                                >
+                                                    Dicek bersama sebelum dinyatakan selesai
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p
+                                            style={{
+                                                margin: '22px 0 0',
+                                                padding: '14px 16px',
+                                                background: '#f6f3ec',
+                                                borderRadius: '10px',
+                                                fontSize: '14px',
+                                                lineHeight: '1.45',
+                                                color: 'oklch(0.38 0.02 60)',
+                                            }}
+                                        >
+                                            <strong style={{ color: 'oklch(0.26 0.02 60)' }}>Jadwal fleksibel.</strong> Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.
+                                        </p>
+                                    </div>
+                                )}
+                                <div style={{ margin: '26px 0 0' }}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '12px',
+                                        }}
+                                    >
+                                        <a
+                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            target="_blank"
+                                            rel="noopener"
+                                            style={{
+                                                flex: '1 1 260px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#FF6B35',
+                                                color: '#fff',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/whatsapp.svg"
+                                                alt=""
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    marginRight: '9px',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            Konsultasi Gratis →
+                                        </a>
+                                        <a
+                                            href="#portofolio"
+                                            style={{
+                                                flex: '1 1 220px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#fdfcfa',
+                                                border: '2px solid #FF6B35',
+                                                color: '#C24E1E',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            Lihat Portofolio →
+                                        </a>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            gap: '5px 10px',
+                                            margin: '12px 0 0',
+                                            fontSize: '12.5px',
+                                            color: 'oklch(0.4 0.02 60)',
+                                        }}
+                                    >
+                                        <span
+                                            style={{
+                                                color: '#E0A93B',
+                                                fontSize: '12.5px',
+                                                letterSpacing: '1px',
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </span>
+                                        <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
+                                        <span>Google Review</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>1.000+ pembeli</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>Ada garansi kalau kurang pas</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section
+                                style={{
+                                    margin: '44px 0',
+                                    padding: 'clamp(22px, 5vw, 30px) clamp(16px, 4.5vw, 24px)',
+                                    background: '#fdfcfa',
+                                    border: '1px solid oklch(0.88 0.02 80)',
+                                    borderLeft: '6px solid #817661',
+                                    borderRadius: '18px',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                                        gap: '24px',
                                         alignItems: 'center',
+                                    }}
+                                >
+                                    <div>
+                                        <p
+                                            style={{
+                                                margin: '0 0 10px',
+                                                fontSize: '12px',
+                                                fontWeight: '700',
+                                                letterSpacing: '0.14em',
+                                                textTransform: 'uppercase',
+                                                color: '#817661',
+                                            }}
+                                        >
+                                            Jaminan
+                                        </p>
+                                        <h2
+                                            style={{
+                                                margin: '0 0 8px',
+                                                fontFamily: 'Poppins, Helvetica, sans-serif',
+                                                fontSize: 'clamp(23px, 5.2vw, 30px)',
+                                                lineHeight: '1.2',
+                                                fontWeight: '700',
+                                                letterSpacing: '-0.02em',
+                                                textWrap: 'pretty',
+                                            }}
+                                        >
+                                            Ada garansi kalau kurang pas
+                                        </h2>
+                                        <p
+                                            style={{
+                                                margin: '0',
+                                                fontSize: '17px',
+                                                color: '#4d4636',
+                                            }}
+                                        >
+                                            Ada yang kurang pas dalam 14 hari? Kami perbaiki tanpa biaya tambahan.
+                                        </p>
+                                    </div>
+                                    <div style={{ display: 'grid', gap: '10px' }}>
+                                        <span
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                fontSize: '16px',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '12px',
+                                                }}
+                                            >
+                                                ✓
+                                            </span>{' '}
+                                            Perbaikan tanpa biaya tambahan
+                                        </span>
+                                        <span
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                fontSize: '16px',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '12px',
+                                                }}
+                                            >
+                                                ✓
+                                            </span>{' '}
+                                            Konsultasi &amp; survey gratis
+                                        </span>
+                                        <span
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                fontSize: '16px',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '12px',
+                                                }}
+                                            >
+                                                ✓
+                                            </span>{' '}
+                                            Harga jujur, tanpa biaya tersembunyi
+                                        </span>
+                                        <span
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                fontSize: '16px',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '12px',
+                                                }}
+                                            >
+                                                ✓
+                                            </span>{' '}
+                                            Dikerjakan tim sendiri, bukan dilempar vendor
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div style={{ margin: '26px 0 0' }}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '12px',
+                                        }}
+                                    >
+                                        <a
+                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            target="_blank"
+                                            rel="noopener"
+                                            style={{
+                                                flex: '1 1 260px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#FF6B35',
+                                                color: '#fff',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/whatsapp.svg"
+                                                alt=""
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    marginRight: '9px',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            Konsultasi Gratis →
+                                        </a>
+                                        <a
+                                            href="#portofolio"
+                                            style={{
+                                                flex: '1 1 220px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: 'rgba(253,252,250,0.12)',
+                                                border: '2px solid #FF6B35',
+                                                color: '#241D17',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                                backdropFilter: 'blur(4px)',
+                                            }}
+                                        >
+                                            Lihat Portofolio →
+                                        </a>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            gap: '5px 10px',
+                                            margin: '12px 0 0',
+                                            fontSize: '12.5px',
+                                            color: 'oklch(0.4 0.02 60)',
+                                        }}
+                                    >
+                                        <span
+                                            style={{
+                                                color: '#E0A93B',
+                                                fontSize: '12.5px',
+                                                letterSpacing: '1px',
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </span>
+                                        <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
+                                        <span>Google Review</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>1.000+ pembeli</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>Ada garansi kalau kurang pas</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section
+                                style={{
+                                    padding: '44px 0',
+                                    borderTop: '1px solid oklch(0.9 0.02 80)',
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        margin: '0 0 10px',
+                                        fontSize: '12px',
+                                        fontWeight: '700',
+                                        letterSpacing: '0.14em',
+                                        textTransform: 'uppercase',
+                                        color: '#817661',
+                                    }}
+                                >
+                                    Tanya jawab
+                                </p>
+                                <h2
+                                    style={{
+                                        margin: '0 0 8px',
+                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                        fontSize: 'clamp(23px, 5.2vw, 30px)',
+                                        lineHeight: '1.2',
+                                        fontWeight: '700',
+                                        letterSpacing: '-0.02em',
+                                    }}
+                                >
+                                    Pertanyaan yang paling sering masuk
+                                </h2>
+                                <p
+                                    style={{
+                                        margin: '0 0 22px',
+                                        color: 'oklch(0.42 0.02 60)',
+                                        maxWidth: '68ch',
+                                    }}
+                                >
+                                    Klik pertanyaannya untuk melihat jawaban.
+                                </p>
+                                <div style={{ display: 'grid', gap: '10px' }}>
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                1
+                                            </span>
+                                            <span style={{ flex: '1' }}>Berapa lama proses produksinya?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Umumnya <strong>7-10 hari kerja setelah survey</strong>, tergantung jumlah jendela dan ketersediaan kain yang Anda pilih. Kalau Anda sedang mengejar tanggal tertentu, sampaikan di awal, nanti kami cek dulu apakah bisa kami kejar.
+                                        </div>
+                                    </details>
+
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                2
+                                            </span>
+                                            <span style={{ flex: '1' }}>Apakah ada diskon?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Ada promo tertentu tergantung periode dan jumlah jendela yang dikerjakan. Paling enak tanya langsung ke owner via WhatsApp, biar kami info promo yang benar-benar aktif sekarang, bukan yang sudah lewat.
+                                        </div>
+                                    </details>
+
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                3
+                                            </span>
+                                            <span style={{ flex: '1' }}>Kapan waktu pemasangannya?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Dijadwalkan sesuai kesepakatan setelah produksi selesai, biasanya <strong>7-10 hari kerja</strong> setelahnya. Anda pilih hari dan jamnya; kami yang menyesuaikan.
+                                        </div>
+                                    </details>
+
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                4
+                                            </span>
+                                            <span style={{ flex: '1' }}>Kalau setelah dipasang ada yang kurang pas?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Masuk garansi pemasangan 14 hari. Kabari saja, kami datang memperbaiki tanpa biaya tambahan.
+                                        </div>
+                                    </details>
+
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                5
+                                            </span>
+                                            <span style={{ flex: '1' }}>Apakah survey dan konsultasi dikenakan biaya?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Tidak. Konsultasi dan survey ke lokasi gratis untuk area Solo Raya.
+                                        </div>
+                                    </details>
+
+                                    <details
+                                        style={{
+                                            background: '#fdfcfa',
+                                            border: '1px solid oklch(0.9 0.02 80)',
+                                            borderRadius: '14px',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <summary
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '14px',
+                                                padding: '16px 16px',
+                                                cursor: 'pointer',
+                                                listStyle: 'none',
+                                                fontSize: '17px',
+                                                fontWeight: '600',
+                                                color: 'oklch(0.26 0.02 60)',
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: '999px',
+                                                    background: '#817661',
+                                                    color: '#fdfcfa',
+                                                    fontSize: '14px',
+                                                    fontWeight: '700',
+                                                }}
+                                            >
+                                                6
+                                            </span>
+                                            <span style={{ flex: '1' }}>Bisa bantu pilih model kalau saya belum ada bayangan?</span>
+                                            <span
+                                                style={{
+                                                    flex: 'none',
+                                                    fontSize: '22px',
+                                                    lineHeight: '1',
+                                                    color: '#817661',
+                                                }}
+                                            >
+                                                +
+                                            </span>
+                                        </summary>
+                                        <div
+                                            style={{
+                                                padding: '0 18px 18px 18px',
+                                                fontSize: '16px',
+                                                color: 'oklch(0.4 0.02 60)',
+                                            }}
+                                        >
+                                            Justru itu tugas kami. Ceritakan fungsi ruangannya dan arah jendelanya, nanti owner yang bantu susun pilihannya, bukan Anda yang dibiarkan menebak sendiri.
+                                        </div>
+                                    </details>
+                                </div>
+
+                                <div style={{ margin: '26px 0 0' }}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '12px',
+                                        }}
+                                    >
+                                        <a
+                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
+                                            target="_blank"
+                                            rel="noopener"
+                                            style={{
+                                                flex: '1 1 260px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#FF6B35',
+                                                color: '#fff',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/whatsapp.svg"
+                                                alt=""
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    marginRight: '9px',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            Konsultasi Gratis →
+                                        </a>
+                                        <a
+                                            href="#portofolio"
+                                            style={{
+                                                flex: '1 1 220px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: 'rgba(253,252,250,0.12)',
+                                                border: '2px solid #FF6B35',
+                                                color: '#241D17',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                                backdropFilter: 'blur(4px)',
+                                            }}
+                                        >
+                                            Lihat Portofolio →
+                                        </a>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            gap: '5px 10px',
+                                            margin: '12px 0 0',
+                                            fontSize: '12.5px',
+                                            color: 'oklch(0.4 0.02 60)',
+                                        }}
+                                    >
+                                        <span
+                                            style={{
+                                                color: '#E0A93B',
+                                                fontSize: '12.5px',
+                                                letterSpacing: '1px',
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </span>
+                                        <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
+                                        <span>Google Review</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>1.000+ pembeli</span>
+                                        <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
+                                        <span>Ada garansi kalau kurang pas</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section
+                                style={{
+                                    margin: '44px 0 0',
+                                    padding: 'clamp(24px, 5.5vw, 32px) clamp(16px, 4.5vw, 24px)',
+                                    background: '#817661',
+                                    color: '#fdfcfa',
+                                    borderRadius: '18px',
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        margin: '0 0 10px',
+                                        fontSize: '12px',
+                                        fontWeight: '700',
+                                        letterSpacing: '0.14em',
+                                        textTransform: 'uppercase',
+                                        color: 'rgba(253,252,250,0.75)',
+                                    }}
+                                >
+                                    Area layanan
+                                </p>
+                                <h2
+                                    style={{
+                                        margin: '0 0 8px',
+                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                        fontSize: 'clamp(23px, 5.2vw, 30px)',
+                                        lineHeight: '1.2',
+                                        fontWeight: '700',
+                                        letterSpacing: '-0.02em',
+                                    }}
+                                >
+                                    Survey &amp; pasang di seluruh Solo Raya
+                                </h2>
+                                <p
+                                    style={{
+                                        margin: '0 0 20px',
+                                        color: 'rgba(253,252,250,0.85)',
+                                        maxWidth: '62ch',
+                                    }}
+                                >
+                                    Workshop kami di Jl. Songgolangit 22, Gentan, Solo, dan tim datang ke lokasi Anda tanpa biaya survey.
+                                </p>
+                                <div
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(46%, 130px), 1fr))',
                                         gap: '10px',
-                                        fontSize: '16px',
-                                        fontWeight: '600',
                                     }}
                                 >
                                     <span
                                         style={{
-                                            flex: 'none',
-                                            width: '24px',
-                                            height: '24px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '12px',
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
                                         }}
                                     >
-                                        ✓
-                                    </span>{' '}
-                                    Perbaikan tanpa biaya tambahan
-                                </span>
-                                <span
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        fontSize: '16px',
-                                        fontWeight: '600',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '24px',
-                                            height: '24px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '12px',
-                                        }}
-                                    >
-                                        ✓
-                                    </span>{' '}
-                                    Konsultasi &amp; survey gratis
-                                </span>
-                                <span
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        fontSize: '16px',
-                                        fontWeight: '600',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '24px',
-                                            height: '24px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '12px',
-                                        }}
-                                    >
-                                        ✓
-                                    </span>{' '}
-                                    Harga jujur, tanpa biaya tersembunyi
-                                </span>
-                                <span
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        fontSize: '16px',
-                                        fontWeight: '600',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '24px',
-                                            height: '24px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '12px',
-                                        }}
-                                    >
-                                        ✓
-                                    </span>{' '}
-                                    Dikerjakan tim sendiri, bukan dilempar vendor
-                                </span>
-                            </div>
-                        </div>
-
-                        <div style={{ margin: '26px 0 0' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '12px',
-                                }}
-                            >
-                                <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
-                                    target="_blank"
-                                    rel="noopener"
-                                    style={{
-                                        flex: '1 1 260px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#FF6B35',
-                                        color: '#fff',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/whatsapp.svg"
-                                        alt=""
-                                        style={{
-                                            flex: 'none',
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '9px',
-                                            display: 'block',
-                                        }}
-                                    />
-                                    Konsultasi Gratis →
-                                </a>
-                                <a
-                                    href="#portofolio"
-                                    style={{
-                                        flex: '1 1 220px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: 'rgba(253,252,250,0.12)',
-                                        border: '2px solid #FF6B35',
-                                        color: '#241D17',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                        backdropFilter: 'blur(4px)',
-                                    }}
-                                >
-                                    Lihat Portofolio →
-                                </a>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    gap: '5px 10px',
-                                    margin: '12px 0 0',
-                                    fontSize: '12.5px',
-                                    color: 'oklch(0.4 0.02 60)',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        color: '#E0A93B',
-                                        fontSize: '12.5px',
-                                        letterSpacing: '1px',
-                                    }}
-                                >
-                                    ★★★★★
-                                </span>
-                                <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
-                                <span>Google Review</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>1.000+ pembeli</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>Ada garansi kalau kurang pas</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section
-                        style={{
-                            padding: '44px 0',
-                            borderTop: '1px solid oklch(0.9 0.02 80)',
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: '0 0 10px',
-                                fontSize: '12px',
-                                fontWeight: '700',
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                color: '#817661',
-                            }}
-                        >
-                            Tanya jawab
-                        </p>
-                        <h2
-                            style={{
-                                margin: '0 0 8px',
-                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                fontSize: 'clamp(23px, 5.2vw, 30px)',
-                                lineHeight: '1.2',
-                                fontWeight: '700',
-                                letterSpacing: '-0.02em',
-                            }}
-                        >
-                            Pertanyaan yang paling sering masuk
-                        </h2>
-                        <p
-                            style={{
-                                margin: '0 0 22px',
-                                color: 'oklch(0.42 0.02 60)',
-                                maxWidth: '68ch',
-                            }}
-                        >
-                            Klik pertanyaannya untuk melihat jawaban.
-                        </p>
-                        <div style={{ display: 'grid', gap: '10px' }}>
-                            <details
-                                style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <summary
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
-                                        fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
-                                        }}
-                                    >
-                                        1
+                                        Solo
                                     </span>
-                                    <span style={{ flex: '1' }}>Berapa lama proses produksinya?</span>
                                     <span
                                         style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
                                         }}
                                     >
-                                        +
+                                        Sukoharjo
                                     </span>
-                                </summary>
-                                <div
-                                    style={{
-                                        padding: '0 18px 18px 18px',
-                                        fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
-                                    }}
-                                >
-                                    Umumnya <strong>7-10 hari kerja setelah survey</strong>, tergantung jumlah jendela dan ketersediaan kain yang Anda pilih. Kalau Anda sedang mengejar tanggal tertentu, sampaikan di awal, nanti kami cek dulu apakah bisa kami kejar.
+                                    <span
+                                        style={{
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Karanganyar
+                                    </span>
+                                    <span
+                                        style={{
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Boyolali
+                                    </span>
+                                    <span
+                                        style={{
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Klaten
+                                    </span>
+                                    <span
+                                        style={{
+                                            padding: '14px 16px',
+                                            background: 'rgba(253,252,250,0.12)',
+                                            border: '1px solid rgba(253,252,250,0.28)',
+                                            borderRadius: '12px',
+                                            fontSize: '17px',
+                                            fontWeight: '600',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Sragen
+                                    </span>
                                 </div>
-                            </details>
-
-                            <details
-                                style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <summary
+                                <p
                                     style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
-                                        fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
-                                        }}
-                                    >
-                                        2
-                                    </span>
-                                    <span style={{ flex: '1' }}>Apakah ada diskon?</span>
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
-                                        }}
-                                    >
-                                        +
-                                    </span>
-                                </summary>
-                                <div
-                                    style={{
-                                        padding: '0 18px 18px 18px',
+                                        margin: '18px 0 0',
                                         fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
+                                        color: 'rgba(253,252,250,0.85)',
                                     }}
                                 >
-                                    Ada promo tertentu tergantung periode dan jumlah jendela yang dikerjakan. Paling enak tanya langsung ke owner via WhatsApp, biar kami info promo yang benar-benar aktif sekarang, bukan yang sudah lewat.
-                                </div>
-                            </details>
+                                    Di luar area tersebut? Tanyakan dulu lewat WhatsApp, biasanya masih bisa kami bantu.
+                                </p>
 
-                            <details
-                                style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <summary
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
-                                        fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
-                                    }}
-                                >
-                                    <span
+                                <div style={{ margin: '26px 0 0' }}>
+                                    <div
                                         style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
                                             display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
+                                            flexWrap: 'wrap',
+                                            gap: '12px',
                                         }}
                                     >
-                                        3
-                                    </span>
-                                    <span style={{ flex: '1' }}>Kapan waktu pemasangannya?</span>
-                                    <span
+                                        <a
+                                            href="https://wa.me/6285860525758?text=Halo%2C%20saya%20di%20Solo%20Raya.%20Apakah%20bisa%20survey%20ke%20lokasi%20saya%3F"
+                                            target="_blank"
+                                            rel="noopener"
+                                            style={{
+                                                flex: '1 1 260px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: '#FF6B35',
+                                                color: '#fff',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/whatsapp.svg"
+                                                alt=""
+                                                style={{
+                                                    flex: 'none',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    marginRight: '9px',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            Konsultasi Gratis →
+                                        </a>
+                                        <a
+                                            href="#portofolio"
+                                            style={{
+                                                flex: '1 1 220px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                minHeight: '56px',
+                                                padding: '14px 18px',
+                                                background: 'transparent',
+                                                border: '2px solid rgba(253,252,250,0.55)',
+                                                color: '#fdfcfa',
+                                                fontSize: 'clamp(15px, 3.9vw, 17px)',
+                                                fontWeight: '700',
+                                                textDecoration: 'none',
+                                                borderRadius: '12px',
+                                                borderColor: '#FF6B35',
+                                            }}
+                                        >
+                                            Lihat Portofolio →
+                                        </a>
+                                    </div>
+                                    <div
                                         style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
-                                        }}
-                                    >
-                                        +
-                                    </span>
-                                </summary>
-                                <div
-                                    style={{
-                                        padding: '0 18px 18px 18px',
-                                        fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
-                                    }}
-                                >
-                                    Dijadwalkan sesuai kesepakatan setelah produksi selesai, biasanya <strong>7-10 hari kerja</strong> setelahnya. Anda pilih hari dan jamnya; kami yang menyesuaikan.
-                                </div>
-                            </details>
-
-                            <details
-                                style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <summary
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
-                                        fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
                                             display: 'flex',
+                                            flexWrap: 'wrap',
                                             alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
+                                            gap: '5px 10px',
+                                            margin: '12px 0 0',
+                                            fontSize: '12.5px',
+                                            color: 'rgba(253,252,250,0.85)',
                                         }}
                                     >
-                                        4
-                                    </span>
-                                    <span style={{ flex: '1' }}>Kalau setelah dipasang ada yang kurang pas?</span>
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
-                                        }}
-                                    >
-                                        +
-                                    </span>
-                                </summary>
-                                <div
-                                    style={{
-                                        padding: '0 18px 18px 18px',
-                                        fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
-                                    }}
-                                >
-                                    Masuk garansi pemasangan 14 hari. Kabari saja, kami datang memperbaiki tanpa biaya tambahan.
+                                        <span
+                                            style={{
+                                                color: '#E0A93B',
+                                                fontSize: '12.5px',
+                                                letterSpacing: '1px',
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </span>
+                                        <strong style={{ color: '#fdfcfa' }}>5,0</strong>
+                                        <span>Google Review</span>
+                                        <span style={{ color: 'rgba(253,252,250,0.4)' }}>•</span>
+                                        <span>1.000+ pembeli</span>
+                                        <span style={{ color: 'rgba(253,252,250,0.4)' }}>•</span>
+                                        <span>Ada garansi kalau kurang pas</span>
+                                    </div>
                                 </div>
-                            </details>
+                            </section>
 
-                            <details
+                            <footer
                                 style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
+                                    padding: '34px 0 0',
+                                    marginTop: '30px',
+                                    borderTop: '1px solid oklch(0.9 0.02 80)',
+                                    fontSize: '15px',
+                                    color: 'oklch(0.42 0.02 60)',
+                                    display: 'grid',
+                                    gap: '6px',
                                 }}
                             >
-                                <summary
+                                <p
                                     style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
+                                        margin: '0 0 6px',
+                                        fontFamily: 'Poppins, Helvetica, sans-serif',
+                                        fontSize: '19px',
                                         fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
+                                        color: 'oklch(0.24 0.02 60)',
                                     }}
                                 >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
-                                        }}
-                                    >
-                                        5
-                                    </span>
-                                    <span style={{ flex: '1' }}>Apakah survey dan konsultasi dikenakan biaya?</span>
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
-                                        }}
-                                    >
-                                        +
-                                    </span>
-                                </summary>
-                                <div
+                                    Gorden Wallpaper Solo
+                                </p>
+                                <p style={{ margin: '0' }}>Jl. Songgolangit 22, Gentan, Solo</p>
+                                <p style={{ margin: '0' }}>
+                                    WhatsApp:{' '}
+                                    <a href="https://wa.me/6285860525758" target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
+                                        085.860.52.57.58
+                                    </a>
+                                </p>
+                                <p style={{ margin: '0' }}>Jam operasional online: 24 jam, setiap hari</p>
+                                <p style={{ margin: '0' }}>Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
+                                <p style={{ margin: '0' }}>
+                                    <a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener">
+                                        Instagram @gorden.wallpapersolo
+                                    </a>{' '}
+                                    ·{' '}
+                                    <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener">
+                                        Facebook Gorden Wallpaper Solo
+                                    </a>
+                                </p>
+                                <p
                                     style={{
-                                        padding: '0 18px 18px 18px',
-                                        fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
+                                        margin: '8px 0 0',
+                                        fontSize: '13px',
+                                        color: 'oklch(0.58 0.03 70)',
                                     }}
                                 >
-                                    Tidak. Konsultasi dan survey ke lokasi gratis untuk area Solo Raya.
-                                </div>
-                            </details>
-
-                            <details
-                                style={{
-                                    background: '#fdfcfa',
-                                    border: '1px solid oklch(0.9 0.02 80)',
-                                    borderRadius: '14px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <summary
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '16px 16px',
-                                        cursor: 'pointer',
-                                        listStyle: 'none',
-                                        fontSize: '17px',
-                                        fontWeight: '600',
-                                        color: 'oklch(0.26 0.02 60)',
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            width: '30px',
-                                            height: '30px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: '999px',
-                                            background: '#817661',
-                                            color: '#fdfcfa',
-                                            fontSize: '14px',
-                                            fontWeight: '700',
-                                        }}
-                                    >
-                                        6
-                                    </span>
-                                    <span style={{ flex: '1' }}>Bisa bantu pilih model kalau saya belum ada bayangan?</span>
-                                    <span
-                                        style={{
-                                            flex: 'none',
-                                            fontSize: '22px',
-                                            lineHeight: '1',
-                                            color: '#817661',
-                                        }}
-                                    >
-                                        +
-                                    </span>
-                                </summary>
-                                <div
-                                    style={{
-                                        padding: '0 18px 18px 18px',
-                                        fontSize: '16px',
-                                        color: 'oklch(0.4 0.02 60)',
-                                    }}
-                                >
-                                    Justru itu tugas kami. Ceritakan fungsi ruangannya dan arah jendelanya, nanti owner yang bantu susun pilihannya, bukan Anda yang dibiarkan menebak sendiri.
-                                </div>
-                            </details>
-                        </div>
-
-                        <div style={{ margin: '26px 0 0' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '12px',
-                                }}
-                            >
-                                <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20konsultasi%20gorden.%20Boleh%20dibantu%3F"
-                                    target="_blank"
-                                    rel="noopener"
-                                    style={{
-                                        flex: '1 1 260px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#FF6B35',
-                                        color: '#fff',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/whatsapp.svg"
-                                        alt=""
-                                        style={{
-                                            flex: 'none',
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '9px',
-                                            display: 'block',
-                                        }}
-                                    />
-                                    Konsultasi Gratis →
-                                </a>
-                                <a
-                                    href="#portofolio"
-                                    style={{
-                                        flex: '1 1 220px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: 'rgba(253,252,250,0.12)',
-                                        border: '2px solid #FF6B35',
-                                        color: '#241D17',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                        backdropFilter: 'blur(4px)',
-                                    }}
-                                >
-                                    Lihat Portofolio →
-                                </a>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    gap: '5px 10px',
-                                    margin: '12px 0 0',
-                                    fontSize: '12.5px',
-                                    color: 'oklch(0.4 0.02 60)',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        color: '#E0A93B',
-                                        fontSize: '12.5px',
-                                        letterSpacing: '1px',
-                                    }}
-                                >
-                                    ★★★★★
-                                </span>
-                                <strong style={{ color: 'oklch(0.28 0.02 60)' }}>5,0</strong>
-                                <span>Google Review</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>1.000+ pembeli</span>
-                                <span style={{ color: 'oklch(0.78 0.02 80)' }}>•</span>
-                                <span>Ada garansi kalau kurang pas</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section
-                        style={{
-                            margin: '44px 0 0',
-                            padding: 'clamp(24px, 5.5vw, 32px) clamp(16px, 4.5vw, 24px)',
-                            background: '#817661',
-                            color: '#fdfcfa',
-                            borderRadius: '18px',
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: '0 0 10px',
-                                fontSize: '12px',
-                                fontWeight: '700',
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                color: 'rgba(253,252,250,0.75)',
-                            }}
-                        >
-                            Area layanan
-                        </p>
-                        <h2
-                            style={{
-                                margin: '0 0 8px',
-                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                fontSize: 'clamp(23px, 5.2vw, 30px)',
-                                lineHeight: '1.2',
-                                fontWeight: '700',
-                                letterSpacing: '-0.02em',
-                            }}
-                        >
-                            Survey &amp; pasang di seluruh Solo Raya
-                        </h2>
-                        <p
-                            style={{
-                                margin: '0 0 20px',
-                                color: 'rgba(253,252,250,0.85)',
-                                maxWidth: '62ch',
-                            }}
-                        >
-                            Workshop kami di Jl. Songgolangit 22, Gentan, Solo, dan tim datang ke lokasi Anda tanpa biaya survey.
-                        </p>
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(min(46%, 130px), 1fr))',
-                                gap: '10px',
-                            }}
-                        >
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Solo
-                            </span>
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Sukoharjo
-                            </span>
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Karanganyar
-                            </span>
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Boyolali
-                            </span>
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Klaten
-                            </span>
-                            <span
-                                style={{
-                                    padding: '14px 16px',
-                                    background: 'rgba(253,252,250,0.12)',
-                                    border: '1px solid rgba(253,252,250,0.28)',
-                                    borderRadius: '12px',
-                                    fontSize: '17px',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                Sragen
-                            </span>
-                        </div>
-                        <p
-                            style={{
-                                margin: '18px 0 0',
-                                fontSize: '16px',
-                                color: 'rgba(253,252,250,0.85)',
-                            }}
-                        >
-                            Di luar area tersebut? Tanyakan dulu lewat WhatsApp, biasanya masih bisa kami bantu.
-                        </p>
-
-                        <div style={{ margin: '26px 0 0' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '12px',
-                                }}
-                            >
-                                <a
-                                    href="https://wa.me/6285860525758?text=Halo%2C%20saya%20di%20Solo%20Raya.%20Apakah%20bisa%20survey%20ke%20lokasi%20saya%3F"
-                                    target="_blank"
-                                    rel="noopener"
-                                    style={{
-                                        flex: '1 1 260px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: '#FF6B35',
-                                        color: '#fff',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/whatsapp.svg"
-                                        alt=""
-                                        style={{
-                                            flex: 'none',
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '9px',
-                                            display: 'block',
-                                        }}
-                                    />
-                                    Konsultasi Gratis →
-                                </a>
-                                <a
-                                    href="#portofolio"
-                                    style={{
-                                        flex: '1 1 220px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        minHeight: '56px',
-                                        padding: '14px 18px',
-                                        background: 'transparent',
-                                        border: '2px solid rgba(253,252,250,0.55)',
-                                        color: '#fdfcfa',
-                                        fontSize: 'clamp(15px, 3.9vw, 17px)',
-                                        fontWeight: '700',
-                                        textDecoration: 'none',
-                                        borderRadius: '12px',
-                                        borderColor: '#FF6B35',
-                                    }}
-                                >
-                                    Lihat Portofolio →
-                                </a>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    gap: '5px 10px',
-                                    margin: '12px 0 0',
-                                    fontSize: '12.5px',
-                                    color: 'rgba(253,252,250,0.85)',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        color: '#E0A93B',
-                                        fontSize: '12.5px',
-                                        letterSpacing: '1px',
-                                    }}
-                                >
-                                    ★★★★★
-                                </span>
-                                <strong style={{ color: '#fdfcfa' }}>5,0</strong>
-                                <span>Google Review</span>
-                                <span style={{ color: 'rgba(253,252,250,0.4)' }}>•</span>
-                                <span>1.000+ pembeli</span>
-                                <span style={{ color: 'rgba(253,252,250,0.4)' }}>•</span>
-                                <span>Ada garansi kalau kurang pas</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <footer
-                        style={{
-                            padding: '34px 0 0',
-                            marginTop: '30px',
-                            borderTop: '1px solid oklch(0.9 0.02 80)',
-                            fontSize: '15px',
-                            color: 'oklch(0.42 0.02 60)',
-                            display: 'grid',
-                            gap: '6px',
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: '0 0 6px',
-                                fontFamily: 'Poppins, Helvetica, sans-serif',
-                                fontSize: '19px',
-                                fontWeight: '600',
-                                color: 'oklch(0.24 0.02 60)',
-                            }}
-                        >
-                            Gorden Wallpaper Solo
-                        </p>
-                        <p style={{ margin: '0' }}>Jl. Songgolangit 22, Gentan, Solo</p>
-                        <p style={{ margin: '0' }}>
-                            WhatsApp:{' '}
-                            <a href="https://wa.me/6285860525758" target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
-                                085.860.52.57.58
-                            </a>
-                        </p>
-                        <p style={{ margin: '0' }}>Jam operasional online: 24 jam, setiap hari</p>
-                        <p style={{ margin: '0' }}>Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
-                        <p style={{ margin: '0' }}>
-                            <a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener">
-                                Instagram @gorden.wallpapersolo
-                            </a>{' '}
-                            ·{' '}
-                            <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener">
-                                Facebook Gorden Wallpaper Solo
-                            </a>
-                        </p>
-                        <p
-                            style={{
-                                margin: '8px 0 0',
-                                fontSize: '13px',
-                                color: 'oklch(0.58 0.03 70)',
-                            }}
-                        >
-                            Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.
-                        </p>
-                    </footer>
+                                    Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.
+                                </p>
+                            </footer>
+                        </>
+                    )}
                 </main>
 
                 {!!lightbox && (

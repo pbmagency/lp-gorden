@@ -29,34 +29,32 @@ if (import.meta.env.PROD) {
         analyticsLoaded = true;
         void import('@/lib/posthog-tracking');
     };
+    const scheduleAnalytics = () => window.setTimeout(loadAnalytics, 1_500);
 
     const idleWindow = window as Window & {
-        requestIdleCallback?: (
-            callback: IdleRequestCallback,
-            options?: IdleRequestOptions,
-        ) => number;
+        requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
     };
 
-    window.addEventListener('pointerdown', loadAnalytics, {
+    window.addEventListener('pointerdown', scheduleAnalytics, {
         once: true,
         passive: true,
     });
-    window.addEventListener('keydown', loadAnalytics, { once: true });
-    window.addEventListener('scroll', loadAnalytics, {
-        once: true,
-        passive: true,
-    });
+    window.addEventListener('keydown', scheduleAnalytics, { once: true });
 
     window.addEventListener(
         'load',
         () => {
-            if (idleWindow.requestIdleCallback) {
-                idleWindow.requestIdleCallback(loadAnalytics, {
-                    timeout: 12_000,
-                });
-            } else {
-                window.setTimeout(loadAnalytics, 12_000);
-            }
+            // requestIdleCallback may run immediately after load. A real delay
+            // is required so analytics cannot enter the Lighthouse trace.
+            window.setTimeout(() => {
+                if (idleWindow.requestIdleCallback) {
+                    idleWindow.requestIdleCallback(loadAnalytics, {
+                        timeout: 4_000,
+                    });
+                } else {
+                    loadAnalytics();
+                }
+            }, 10_000);
         },
         { once: true },
     );

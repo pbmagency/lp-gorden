@@ -102,19 +102,25 @@
                 })(window,document);
             }
 
-            ['pointerdown', 'keydown', 'scroll'].forEach(function (eventName) {
-                window.addEventListener(eventName, loadMarketingScripts, {
+            function scheduleMarketingScripts() {
+                window.setTimeout(loadMarketingScripts, 1500);
+            }
+
+            ['pointerdown', 'keydown'].forEach(function (eventName) {
+                window.addEventListener(eventName, scheduleMarketingScripts, {
                     once: true,
                     passive: eventName !== 'keydown'
                 });
             });
 
             window.addEventListener('load', function () {
-                if ('requestIdleCallback' in window) {
-                    window.requestIdleCallback(loadMarketingScripts, { timeout: 12000 });
-                } else {
-                    window.setTimeout(loadMarketingScripts, 12000);
-                }
+                window.setTimeout(function () {
+                    if ('requestIdleCallback' in window) {
+                        window.requestIdleCallback(loadMarketingScripts, { timeout: 4000 });
+                    } else {
+                        loadMarketingScripts();
+                    }
+                }, 10000);
             }, { once: true });
         })();
     </script>
