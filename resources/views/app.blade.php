@@ -24,11 +24,20 @@
         </style>
     @endunless
 
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-192.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    @php
+        $faviconV = [
+            'ico' => file_exists(public_path('favicon.ico')) ? filemtime(public_path('favicon.ico')) : time(),
+            'svg' => file_exists(public_path('favicon.svg')) ? filemtime(public_path('favicon.svg')) : time(),
+            '192' => file_exists(public_path('favicon-192.png')) ? filemtime(public_path('favicon-192.png')) : time(),
+            'png' => file_exists(public_path('favicon.png')) ? filemtime(public_path('favicon.png')) : time(),
+            'apple' => file_exists(public_path('apple-touch-icon.png')) ? filemtime(public_path('apple-touch-icon.png')) : time(),
+        ];
+    @endphp
+    <link rel="icon" href="/favicon.ico?v={{ $faviconV['ico'] }}" sizes="any">
+    <link rel="icon" href="/favicon.svg?v={{ $faviconV['svg'] }}" type="image/svg+xml">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-192.png?v={{ $faviconV['192'] }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png?v={{ $faviconV['png'] }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v={{ $faviconV['apple'] }}">
     <link rel="manifest" href="/site.webmanifest">
     @unless(request()->is('/'))
         <meta name="csrf-token" content="{{ csrf_token() }}">

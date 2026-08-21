@@ -5,8 +5,8 @@ const fs = require('fs');
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
 
-// Source logo - use the icon/brand mark version
-const sourceLogo = path.join(publicDir, 'logo', 'Logo-Fullbright.webp');
+// Source logo - use the brand logo from assets
+const sourceLogo = path.join(publicDir, 'assets', 'logo-64.webp');
 
 async function generateFavicons() {
     // Check if source exists
