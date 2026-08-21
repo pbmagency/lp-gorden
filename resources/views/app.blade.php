@@ -70,14 +70,13 @@
                 ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-7DZSEDBHZY';
                 document.head.appendChild(ga);
 
-                (function (c, l, a, r, i, t, y) {
-                    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-                    t = l.createElement(r);
-                    t.async = true;
-                    t.src = 'https://www.clarity.ms/tag/' + i;
-                    y = l.getElementsByTagName(r)[0];
-                    y.parentNode.insertBefore(t, y);
-                })(window, document, 'clarity', 'script', 'wv3d64uo3o');
+                (function(c, l, a, r, i, t, y) {
+                c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+                t = l.createElement(r); t.async = 1;
+                t.src = "https://www.clarity.ms/tag/" + i;
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, "clarity", "script", "y5mfs5rh07");
 
                 (function (f, b, e, v, n, t, s) {
                     if (f.fbq) return;
