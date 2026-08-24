@@ -102,7 +102,7 @@ class PostHogService
     private function throwIfDebug(string $variable): void
     {
         if (app()->hasDebugModeEnabled()) {
-            throw new LogicException("{$variable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once {$variable} is configured");
+            \Illuminate\Support\Facades\Log::warning("{$variable} variable required by PostHog is missing or un-configured.");
         }
     }
 }
