@@ -68,12 +68,11 @@
     </x-inertia::head>
 </head>
 
-<body @class(['antialiased', 'font-sans' =>
+<body @class(['antialiased', 'font-sans' => ! request()->is('/')]) @if(request()->is('/')) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMM4GGBQ"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
- ! request()->is('/')]) @if(request()->is('/')) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
     <x-inertia::app />
 
     {{-- Marketing scripts stay outside the startup path. They load after the
