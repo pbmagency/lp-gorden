@@ -332,15 +332,15 @@ class AbTestingService
         // Human-readable labels for known sections (fallback to raw ID for unknowns)
         $labels = [
             'hero' => 'Hero',
-            'success-story' => 'Success Story',
-            'solusi' => 'Solution',
-            'problem' => 'Problem',
-            'benefits' => 'Benefits',
+            'agitation' => 'Agitation (Pain Points)',
+            'comparison' => 'Comparison Table',
+            'before-after' => 'Before/After',
+            'audience' => 'Target Audience',
+            'portofolio' => 'Portofolio',
             'testimoni' => 'Testimonials',
-            'pengajar' => 'Instructor',
-            'media-features' => 'Media Features',
-            'curriculum' => 'Curriculum',
-            'harga' => 'Pricing',
+            'katalog' => 'Katalog Produk',
+            'proses' => 'Proses Pemesanan',
+            'guarantee' => 'Guarantee',
             'faq' => 'FAQ',
         ];
 

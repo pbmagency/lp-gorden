@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $admin = User::firstOrNew(['email' => 'justin@gmail.com']);
 
-        User::factory()->create([
+        $admin->forceFill([
             'name' => 'justin',
-            'email' => 'justin@gmail.com',
             'role' => 'admin',
+            'email_verified_at' => now(),
             'password' => Hash::make('123justin'),
-        ]);
+        ])->save();
     }
 }

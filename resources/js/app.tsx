@@ -78,7 +78,7 @@ createInertiaApp({
     withApp(app) {
         if (isLeanLanding) return app;
         return (
-            <Suspense fallback={app}>
+            <Suspense fallback={null}>
                 <AppProviders>{app}</AppProviders>
             </Suspense>
         );
