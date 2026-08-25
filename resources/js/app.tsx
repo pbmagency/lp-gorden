@@ -60,7 +60,7 @@ if (import.meta.env.PROD) {
     );
 }
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Gorden';
 
 createInertiaApp({
     title: (title) => (title ? `${title}` : appName),
