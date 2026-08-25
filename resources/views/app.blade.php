@@ -103,30 +103,6 @@
                 y.parentNode.insertBefore(t, y);
             })(window, document, "clarity", "script", "y5mfs5rh07");
 
-                (function (f, b, e, v, n, t, s) {
-                    if (f.fbq) return;
-                    n = f.fbq = function () {
-                        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-                    };
-                    if (!f._fbq) f._fbq = n;
-                    n.push = n;
-                    n.loaded = true;
-                    n.version = '2.0';
-                    n.queue = [];
-                    t = b.createElement(e);
-                    t.async = true;
-                    t.src = v;
-                    s = b.getElementsByTagName(e)[0];
-                    s.parentNode.insertBefore(t, s);
-                })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-
-                fbq('init', '{{ config('services.meta.pixel_id', 'YOUR_PIXEL_ID') }}');
-                const eventId = crypto.randomUUID
-                    ? crypto.randomUUID()
-                    : Date.now() + '-' + Math.random().toString(36).substring(2, 11);
-                fbq('track', 'PageView', {}, { eventID: eventId });
-                fbq('track', 'ViewContent', {}, { eventID: eventId });
-
                 (function (w, d) {
                     if (w.__plerdyCode) return;
                     w.__plerdyCode = 1;
