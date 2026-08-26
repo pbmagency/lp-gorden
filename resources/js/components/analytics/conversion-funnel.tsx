@@ -67,13 +67,18 @@ function StageBar({ stage, maxCount, accent = 'default' }: StageBarProps) {
 }
 
 export function ConversionFunnel({ data, className }: ConversionFunnelProps) {
-    const maxCount = Math.max(1, ...data.map((item) => item.count));
-    const mainStages = data.filter(
+    const getArr = (d: any) => {
+    if (!d) return [];
+    return Array.isArray(d) ? d : Object.values(d);
+};
+    const safeData = getArr(data) as any[];
+    const maxCount = Math.max(1, ...safeData.map((item) => item.count));
+    const mainStages = safeData.filter(
         (stage) => !stage.branch || stage.branch === 'main',
     );
-    const checkoutStages = data.filter((stage) => stage.branch === 'checkout');
-    const leadStages = data.filter((stage) => stage.branch === 'lead');
-    const totalStages = data.filter((stage) => stage.branch === 'total');
+    const checkoutStages = safeData.filter((stage) => stage.branch === 'checkout');
+    const leadStages = safeData.filter((stage) => stage.branch === 'lead');
+    const totalStages = safeData.filter((stage) => stage.branch === 'total');
 
     return (
         <div

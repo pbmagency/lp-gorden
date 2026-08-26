@@ -189,7 +189,7 @@ export default function LabsIndex({
     const availablePages = useMemo(
         () =>
             [
-                ...new Set(matrix.map((m) => normalizePath(m.landing_source))),
+                ...new Set(safeMatrix.map((m) => normalizePath(m.landing_source))),
             ].sort(),
         [matrix, normalizePath],
     );
@@ -244,7 +244,7 @@ export default function LabsIndex({
     );
 
     const filteredMatrix = useMemo(
-        () => matrix.filter((m) => pageMatch(m.landing_source)),
+        () => safeMatrix.filter((m) => pageMatch(m.landing_source)),
         [matrix, pageMatch],
     );
     const filteredFunnel = useMemo(
@@ -291,7 +291,7 @@ export default function LabsIndex({
         string[]
     >(() => {
         // Default: Top 2 by the primary metric (Total Lead Rate)
-        return matrix.slice(0, 2).map((m) => m.landing_source);
+        return safeMatrix.slice(0, 2).map((m) => m.landing_source);
     });
 
     const itemsPerPage = 10;
@@ -470,7 +470,7 @@ export default function LabsIndex({
         );
     };
 
-    const hasData = matrix.length > 0;
+    const hasData = safeMatrix.length > 0;
 
     return (
         <AdminLayout>

@@ -27,7 +27,11 @@ const COLORS = [
 ];
 
 export function ReferralChart({ data, className }: ReferralChartProps) {
-    const chartData = data.map((item, index) => ({
+    const getArr = (d: any) => {
+    if (!d) return [];
+    return Array.isArray(d) ? d : Object.values(d);
+};
+    const chartData = getArr(data).map((item, index) => ({
         name:
             item.referral_source === 'direct' ? 'Direct' : item.referral_source,
         value: item.count,
