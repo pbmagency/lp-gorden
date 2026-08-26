@@ -204,6 +204,7 @@ export default function GordenLanding() {
     return (
         <>
             <Head>
+                <title>Gorden Custom Solo Raya, Terima Beres Ukur & Pasang</title>
                 <style>{`
   * { box-sizing: border-box; }
   body { margin: 0; background: oklch(0.97 0.015 85); font-family: "Poppins", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
