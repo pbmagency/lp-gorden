@@ -63,9 +63,15 @@
     @else
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
     @endif
-    <x-inertia::head>
-        <title>{{ config('app.name') }}</title>
-    </x-inertia::head>
+<x-inertia::head>
+    <title>
+        @if(request()->is('/'))
+            Gorden Custom Solo Raya, Terima Beres Ukur &amp; Pasang
+        @else
+            {{ config('app.name') }}
+        @endif
+    </title>
+</x-inertia::head>
 </head>
 
 <body @class(['antialiased', 'font-sans' => ! request()->is('/')]) @if(request()->is('/')) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
