@@ -19,9 +19,16 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
     const chartData = useMemo(() => {
         const dates = new Set<string>();
 
+        const getArr = (d: any) => {
+            if (!d) return [];
+            return Array.isArray(d) ? d : Object.values(d);
+        };
+
         // Collect all dates
         Object.values(data).forEach((eventData) => {
-            eventData.forEach((item) => dates.add(item.date));
+            getArr(eventData).forEach((item: any) => {
+                if (item?.date) dates.add(item.date);
+            });
         });
 
         // Sort dates
@@ -30,19 +37,19 @@ export function RevenueChart({ data, className }: RevenueChartProps) {
         // Create chart data
         return sortedDates.map((date) => {
             const visits =
-                data.visit?.find((item) => item.date === date)?.total || 0;
+                getArr(data.visit).find((item: any) => item.date === date)?.total || 0;
             const engagements =
-                data.engagement?.find((item) => item.date === date)?.total || 0;
+                getArr(data.engagement).find((item: any) => item.date === date)?.total || 0;
             const intent =
-                data.cta_click?.find((item) => item.date === date)?.total || 0;
+                getArr(data.cta_click).find((item: any) => item.date === date)?.total || 0;
             const directCheckouts =
-                data.direct_checkout?.find((item) => item.date === date)
-                    ?.total || 0;
+                getArr(data.direct_checkout).find((item: any) => item.date === date)?.total || 0;
             const whatsAppLeads =
-                data.whatsapp_lead?.find((item) => item.date === date)?.total ||
-                0;
+                getArr(data.whatsapp_lead).find((item: any) => item.date === date)?.total || 0;
+            const otherLeads =
+                getArr(data.other_lead).find((item: any) => item.date === date)?.total || 0;
             const totalLeads =
-                data.total_lead?.find((item) => item.date === date)?.total || 0;
+                getArr(data.total_lead).find((item: any) => item.date === date)?.total || 0;
 
             return {
                 date: new Date(date).toLocaleDateString('id-ID', {
