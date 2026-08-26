@@ -21,7 +21,10 @@ Route::inertia('/toefl-hack', 'cycle7/angle-1')->name('home3');
 Route::inertia('/e-course-toefl-hack', 'cycle7/angle-3')->name('home4');
 
 // ── Analytics tracking endpoint (public, uses session CSRF) ──────────────────
-Route::post('/analytics/track', [AnalyticsController::class, 'track'])->name('analytics.track');
+// Rate limit: 60 requests per minute per IP to prevent abuse
+Route::post('/analytics/track', [AnalyticsController::class, 'track'])
+    ->middleware('throttle:60,1')
+    ->name('analytics.track');
 
 // ── Authenticated routes ──────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified'])->group(function () {

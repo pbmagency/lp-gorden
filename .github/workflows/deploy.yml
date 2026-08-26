@@ -28,7 +28,7 @@ jobs:
 
       - name: Install NPM & Build Assets
         run: |
-          npm install --include=optional
+          npm ci --include=optional
           npm run build:ssr
 
       - name: Setup SSH Key (Jalur Elit VPS1)
@@ -71,8 +71,11 @@ jobs:
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/storage
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/cache
 
-            # 7. Cache konfigurasi/rute/view Laravel untuk menekan TTFB.
+            # 7. Jalankan migrasi database
             cd /home/toko.gordenwallpapersolo.com/toko_laravel
+            php artisan migrate --force
+
+            # 8. Cache konfigurasi/rute/view Laravel untuk menekan TTFB.
             php artisan optimize
 
             # 8. Jalankan Inertia SSR sebagai service yang otomatis hidup lagi

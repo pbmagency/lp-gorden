@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class MetaConversionService
 {
@@ -27,32 +27,51 @@ class MetaConversionService
         return $this->pixelId !== '' && $this->accessToken !== '';
     }
 
-    public function sendPageView(Request $request, string $eventId): void
-    {
+    /**
+     * Send PageView from a queued job (raw data, not Request).
+     */
+    public function sendPageViewFromJob(
+        string $ip,
+        string $userAgent,
+        string $eventId,
+        string $referer,
+        ?string $fbp,
+        ?string $fbc,
+    ): void {
         if (! $this->isConfigured() || ! $this->sdkAvailable) {
             return;
         }
 
-        $userData = $this->buildUserData($request);
+        $userData = $this->buildUserDataFromRaw($ip, $userAgent, $fbp, $fbc);
 
         $event = (new \FacebookAds\Object\ServerSide\Event)
             ->setEventName('PageView')
             ->setEventTime(time())
             ->setEventId($eventId)
-            ->setEventSourceUrl($request->header('Referer', $request->url()))
+            ->setEventSourceUrl($referer)
             ->setActionSource(\FacebookAds\Object\ServerSide\ActionSource::WEBSITE)
             ->setUserData($userData);
 
         $this->sendEvents([$event]);
     }
 
-    public function sendAddToCart(Request $request, string $eventId, array $eventData = []): void
-    {
+    /**
+     * Send AddToCart from a queued job (raw data, not Request).
+     */
+    public function sendAddToCartFromJob(
+        string $ip,
+        string $userAgent,
+        string $eventId,
+        string $referer,
+        ?string $fbp,
+        ?string $fbc,
+        array $eventData = [],
+    ): void {
         if (! $this->isConfigured() || ! $this->sdkAvailable) {
             return;
         }
 
-        $userData = $this->buildUserData($request);
+        $userData = $this->buildUserDataFromRaw($ip, $userAgent, $fbp, $fbc);
 
         $level       = $eventData['level'] ?? 'Starter';
         $price       = match ($level) {
@@ -78,7 +97,7 @@ class MetaConversionService
             ->setEventName('AddToCart')
             ->setEventTime(time())
             ->setEventId($eventId)
-            ->setEventSourceUrl($request->header('Referer', $request->url()))
+            ->setEventSourceUrl($referer)
             ->setActionSource(\FacebookAds\Object\ServerSide\ActionSource::WEBSITE)
             ->setUserData($userData)
             ->setCustomData($customData);
@@ -86,18 +105,45 @@ class MetaConversionService
         $this->sendEvents([$event]);
     }
 
-    private function buildUserData(Request $request): \FacebookAds\Object\ServerSide\UserData
+    public function sendPageView(Request $request, string $eventId): void
     {
-        $userData = (new \FacebookAds\Object\ServerSide\UserData)
-            ->setClientIpAddress($request->ip())
-            ->setClientUserAgent($request->userAgent());
+        $this->sendPageViewFromJob(
+            $request->ip(),
+            $request->userAgent(),
+            $eventId,
+            $request->header('Referer', $request->url()),
+            $request->input('event_data._fbp') ?? $request->cookie('_fbp'),
+            $request->input('event_data._fbc') ?? $request->cookie('_fbc'),
+        );
+    }
 
-        $fbp = $request->input('event_data._fbp') ?? $request->cookie('_fbp');
+    public function sendAddToCart(Request $request, string $eventId, array $eventData = []): void
+    {
+        $this->sendAddToCartFromJob(
+            $request->ip(),
+            $request->userAgent(),
+            $eventId,
+            $request->header('Referer', $request->url()),
+            $request->input('event_data._fbp') ?? $request->cookie('_fbp'),
+            $request->input('event_data._fbc') ?? $request->cookie('_fbc'),
+            $eventData,
+        );
+    }
+
+    private function buildUserDataFromRaw(
+        string $ip,
+        string $userAgent,
+        ?string $fbp,
+        ?string $fbc,
+    ): \FacebookAds\Object\ServerSide\UserData {
+        $userData = (new \FacebookAds\Object\ServerSide\UserData)
+            ->setClientIpAddress($ip)
+            ->setClientUserAgent($userAgent);
+
         if ($fbp) {
             $userData->setFbp($fbp);
         }
 
-        $fbc = $request->input('event_data._fbc') ?? $request->cookie('_fbc');
         if ($fbc) {
             $userData->setFbc($fbc);
         }
@@ -111,12 +157,7 @@ class MetaConversionService
             $eventRequest = (new \FacebookAds\Object\ServerSide\EventRequest($this->pixelId))
                 ->setEvents($events);
 
-            $response = $eventRequest->execute();
-
-            // Log::debug('Meta CAPI response', [
-            //     'events_received' => $response->getEventsReceived(),
-            //     'messages'        => $response->getMessages(),
-            // ]);
+            $eventRequest->execute();
         } catch (\Throwable $e) {
             Log::warning('Meta CAPI request failed', ['error' => $e->getMessage()]);
         }

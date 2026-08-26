@@ -31,3 +31,14 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# SSH keys — never commit credentials
+*.key
+*.pub
+*.pem
+*.p12
+*.pfx
+
+# Environment overrides
+.env.local
+.env.*.local
