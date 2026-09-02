@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendMetaAddToCart;
+use App\Jobs\SendMetaPageView;
 use App\Models\UserAnalytic;
 use App\Services\AnalyticsMetricsService;
-use App\Services\MetaConversionService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AnalyticsController extends Controller
 {
+    private const DASHBOARD_CACHE_VERSION_KEY = 'analytics_dashboard_version';
+
     public function __construct(private readonly AnalyticsMetricsService $metrics) {}
 
     public function index(Request $request): Response
@@ -30,7 +33,8 @@ class AnalyticsController extends Controller
         $endDate = Carbon::now()->endOfDay();
 
         // Cache dashboard data for 10 minutes to avoid re-running ~10 heavy queries
-        $cacheKey = "analytics_dashboard_v1_{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}";
+        $cacheVersion = Cache::get(self::DASHBOARD_CACHE_VERSION_KEY, 0);
+        $cacheKey = "analytics_dashboard_v1_{$cacheVersion}_{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}";
         $data = Cache::remember($cacheKey, 10 * 60, function () use ($startDate, $endDate) {
             return [
                 'stats' => $this->metrics->dashboardStats($startDate, $endDate),
@@ -47,7 +51,7 @@ class AnalyticsController extends Controller
         ]);
     }
 
-    public function track(Request $request, MetaConversionService $metaService): JsonResponse
+    public function track(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'event_type' => ['required', Rule::in([
@@ -117,17 +121,22 @@ class AnalyticsController extends Controller
             'created_at' => now(),
         ]);
 
+        // Make newly tracked visits and funnel events visible on the next
+        // admin dashboard request instead of serving stale data for 10 minutes.
+        Cache::add(self::DASHBOARD_CACHE_VERSION_KEY, 0);
+        Cache::increment(self::DASHBOARD_CACHE_VERSION_KEY);
+
         // Dispatch Meta CAPI calls to queue instead of blocking the response.
         // This reduces TTFB for the analytics track endpoint from ~200ms to <10ms.
         if ($eventId) {
             $eventType = $validated['event_type'];
 
             if ($eventType === 'visit') {
-                Bus::dispatch(new \App\Jobs\SendMetaPageView($request->ip(), $request->userAgent(), $eventId, $request->header('Referer', $request->url()), $request->cookie('_fbp'), $request->cookie('_fbc')));
+                Bus::dispatch(new SendMetaPageView($request->ip(), $request->userAgent(), $eventId, $request->header('Referer', $request->url()), $request->cookie('_fbp'), $request->cookie('_fbc')));
             }
 
             if ($eventType === 'initiate_checkout') {
-                Bus::dispatch(new \App\Jobs\SendMetaAddToCart($request->ip(), $request->userAgent(), $eventId, $request->header('Referer', $request->url()), $request->cookie('_fbp'), $request->cookie('_fbc'), $eventData));
+                Bus::dispatch(new SendMetaAddToCart($request->ip(), $request->userAgent(), $eventId, $request->header('Referer', $request->url()), $request->cookie('_fbp'), $request->cookie('_fbc'), $eventData));
             }
         }
 

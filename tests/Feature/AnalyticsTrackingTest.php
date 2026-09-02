@@ -4,11 +4,31 @@ namespace Tests\Feature;
 
 use App\Models\UserAnalytic;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class AnalyticsTrackingTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_landing_page_exposes_csrf_token_for_analytics(): void
+    {
+        $this->get('/c1-lp')
+            ->assertOk()
+            ->assertSee('meta name="csrf-token"', false);
+    }
+
+    public function test_tracking_an_event_invalidates_cached_dashboard_data(): void
+    {
+        Cache::put('analytics_dashboard_version', 7);
+
+        $this->postJson(route('analytics.track'), [
+            'event_type' => 'visit',
+            'event_data' => ['event_id' => 'cache-invalidation-visit'],
+        ])->assertOk();
+
+        $this->assertSame(8, Cache::get('analytics_dashboard_version'));
+    }
 
     public function test_unknown_event_type_is_rejected(): void
     {

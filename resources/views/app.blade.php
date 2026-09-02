@@ -43,9 +43,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png?v={{ $faviconV['png'] }}">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v={{ $faviconV['apple'] }}">
     <link rel="manifest" href="/site.webmanifest">
-    @unless($isLeanLanding)
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-    @endunless
+    {{-- Custom first-party analytics posts to a web route, so every page that
+         can emit analytics events must expose the session CSRF token. --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if(request()->is('/'))
         <link rel="preconnect" href="https://fonts.bunny.net">
