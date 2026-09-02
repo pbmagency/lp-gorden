@@ -2,12 +2,14 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 
 <head>
-    
+    @php
+        $isLeanLanding = request()->is('/') || request()->is('c1-lp');
+    @endphp
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    @unless(request()->is('/'))
+    @unless($isLeanLanding)
         <script>
             (function () {
                 const appearance = '{{ $appearance ?? 'system' }}';
@@ -41,7 +43,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png?v={{ $faviconV['png'] }}">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v={{ $faviconV['apple'] }}">
     <link rel="manifest" href="/site.webmanifest">
-    @unless(request()->is('/'))
+    @unless($isLeanLanding)
         <meta name="csrf-token" content="{{ csrf_token() }}">
     @endunless
 
@@ -49,17 +51,19 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden.webp" as="image" type="image/webp" fetchpriority="high">
+    @elseif(request()->is('c1-lp'))
+        <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @endif
 
     @viteReactRefresh
-    @if(request()->is('/'))
+    @if($isLeanLanding)
         @vite('resources/js/landing-loader.ts')
     @else
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
     @endif
 <x-inertia::head>
     <title>
-        @if(request()->is('/'))
+        @if($isLeanLanding)
             Gorden Custom Solo Raya, Terima Beres Ukur &amp; Pasang
         @else
             {{ config('app.name') }}
@@ -68,7 +72,7 @@
 </x-inertia::head>
 </head>
 
-<body @class(['antialiased', 'font-sans' => ! request()->is('/')]) @if(request()->is('/')) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
+<body @class(['antialiased', 'font-sans' => ! $isLeanLanding]) @if($isLeanLanding) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
     
     <x-inertia::app />
 

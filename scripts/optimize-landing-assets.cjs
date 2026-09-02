@@ -12,6 +12,27 @@ const landingPath = path.join(
 );
 const assetsPath = path.join(root, 'public', 'assets');
 
+async function optimizeCycleOneImages() {
+    const source = fs.readFileSync(
+        path.join(root, 'resources', 'js', 'pages', 'cycle1', 'c1-lp.tsx'),
+        'utf8',
+    );
+    const names = [...source.matchAll(/\/assets\/([A-Za-z0-9._-]+\.(?:png|jpe?g))/gi)]
+        .map((match) => match[1]);
+
+    for (const name of new Set(names)) {
+        const input = path.join(assetsPath, name);
+        const output = path.join(assetsPath, `${path.parse(name).name}.webp`);
+        if (!fs.existsSync(input) || fs.existsSync(output)) continue;
+        await sharp(input)
+            .rotate()
+            .resize({ width: 1280, height: 1280, fit: 'inside', withoutEnlargement: true })
+            .webp({ quality: 76, effort: 6 })
+            .toFile(output);
+        console.log(`${name} -> ${path.basename(output)}`);
+    }
+}
+
 async function optimizeImages() {
     await sharp(path.join(assetsPath, 'logo.webp'))
         .resize(64, 64, { fit: 'inside', withoutEnlargement: true })
@@ -64,7 +85,7 @@ async function optimizeImages() {
                 );
             } catch (error) {
                 fs.unlinkSync(temporary);
-                if (error.code !== 'EBUSY' && error.code !== 'EPERM') throw error;
+                if (!['EBUSY', 'EPERM', 'UNKNOWN'].includes(error.code)) throw error;
                 console.warn(`${file}: skipped because the source file is in use`);
             }
         } else {
@@ -84,7 +105,7 @@ function enableLazyBackgrounds() {
 }
 
 enableLazyBackgrounds();
-optimizeImages().catch((error) => {
+Promise.all([optimizeImages(), optimizeCycleOneImages()]).catch((error) => {
     console.error(error);
     process.exitCode = 1;
 });

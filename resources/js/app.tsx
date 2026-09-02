@@ -10,14 +10,18 @@ const AuthLayout = lazy(() => import('@/layouts/auth-layout'));
 const SettingsLayout = lazy(() => import('@/layouts/settings/layout'));
 const AppProviders = lazy(() => import('@/components/app-providers'));
 
-const inertiaPage = document.querySelector<HTMLScriptElement>('script[data-page="app"]');
+const inertiaPage = document.querySelector<HTMLScriptElement>(
+    'script[data-page="app"]',
+);
 let initialComponent = '';
 try {
-    initialComponent = JSON.parse(inertiaPage?.textContent ?? '{}').component ?? '';
+    initialComponent =
+        JSON.parse(inertiaPage?.textContent ?? '{}').component ?? '';
 } catch {
     // Inertia will report malformed page data with its own actionable error.
 }
-const isLeanLanding = initialComponent === 'GordenLanding';
+const isLeanLanding =
+    initialComponent === 'GordenLanding' || initialComponent === 'cycle1/c1-lp';
 
 // Analytics is deliberately kept out of the critical rendering path. Loading it
 // after the first interaction (or after a generous idle timeout) keeps PostHog
@@ -32,7 +36,10 @@ if (import.meta.env.PROD) {
     const scheduleAnalytics = () => window.setTimeout(loadAnalytics, 1_500);
 
     const idleWindow = window as Window & {
-        requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+        requestIdleCallback?: (
+            callback: IdleRequestCallback,
+            options?: IdleRequestOptions,
+        ) => number;
     };
 
     window.addEventListener('pointerdown', scheduleAnalytics, {
