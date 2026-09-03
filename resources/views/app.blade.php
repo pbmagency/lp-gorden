@@ -52,6 +52,9 @@
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden.webp" as="image" type="image/webp" fetchpriority="high">
     @elseif(request()->is('c1-lp'))
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+        <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
+        <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @endif
 

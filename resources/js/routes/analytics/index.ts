@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\AnalyticsController::track
- * @see app/Http/Controllers/AnalyticsController.php:50
+ * @see app/Http/Controllers/AnalyticsController.php:54
  * @route '/analytics/track'
  */
 export const track = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ track.definition = {
 
 /**
 * @see \App\Http\Controllers\AnalyticsController::track
- * @see app/Http/Controllers/AnalyticsController.php:50
+ * @see app/Http/Controllers/AnalyticsController.php:54
  * @route '/analytics/track'
  */
 track.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ track.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AnalyticsController::track
- * @see app/Http/Controllers/AnalyticsController.php:50
+ * @see app/Http/Controllers/AnalyticsController.php:54
  * @route '/analytics/track'
  */
 track.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ track.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
     /**
 * @see \App\Http\Controllers\AnalyticsController::track
- * @see app/Http/Controllers/AnalyticsController.php:50
+ * @see app/Http/Controllers/AnalyticsController.php:54
  * @route '/analytics/track'
  */
     const trackForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ track.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
             /**
 * @see \App\Http\Controllers\AnalyticsController::track
- * @see app/Http/Controllers/AnalyticsController.php:50
+ * @see app/Http/Controllers/AnalyticsController.php:54
  * @route '/analytics/track'
  */
         trackForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

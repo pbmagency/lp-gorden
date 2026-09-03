@@ -22,16 +22,18 @@ class CacheLandingPage
 
     public function handle(Request $request, Closure $next): Response
     {
+        $isLandingPage = $request->is('/') || $request->is('c1-lp');
         if (
             ! $request->isMethod('GET')
-            || ! $request->is('/')
+            || ! $isLandingPage
             || $request->query->count() > 0
             || $request->header('X-Inertia')
         ) {
             return $next($request);
         }
 
-        $cacheKey = 'landing_page_html_v3:'.self::contentVersion();
+        $routeSlug = $request->is('/') ? 'home' : 'c1-lp';
+        $cacheKey = 'landing_page_html_v3:'.$routeSlug.':'.self::contentVersion();
         $cache = Cache::store('file');
         $html = $cache->get($cacheKey);
 

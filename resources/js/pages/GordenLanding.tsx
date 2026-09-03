@@ -269,7 +269,7 @@ export default function GordenLanding() {
                             }}
                         />
                         <a
-                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                             target="_blank"
                             rel="noopener"
                             style={{
@@ -278,7 +278,7 @@ export default function GordenLanding() {
                                 justifyContent: 'center',
                                 minHeight: '46px',
                                 padding: '11px 18px',
-                                background: '#FF6B35',
+                                background: '#25D366',
                                 color: '#fff',
                                 fontSize: '15px',
                                 fontWeight: '600',
@@ -473,13 +473,14 @@ export default function GordenLanding() {
                                         textWrap: 'pretty',
                                     }}
                                 >
-                                    Gorden Custom Solo Raya,{' '}
+                                    Takut Salah Ukur atau{' '}
                                     <span
                                         style={{
                                             background: 'linear-gradient(to top, rgba(224, 169, 59, 0.85) 0.28em, transparent 0.28em)',
+                                            fontStyle: 'italic',
                                         }}
                                     >
-                                        Terima Beres Ukur &amp; Pasang
+                                        Salah Pilih Model Gorden?
                                     </span>
                                 </h1>
                                 <p
@@ -490,7 +491,8 @@ export default function GordenLanding() {
                                         textWrap: 'pretty',
                                     }}
                                 >
-                                    <b style={{ color: '#fdfcfa' }}>Takut salah ukur atau salah model?</b> Konsultasi langsung dengan owner, kami ukur dan pasang di tempat.
+                                    <em style={{ color: '#fdfcfa', fontWeight: '700' }}>Di Gorden Wallpaper Solo kamu terima beres.</em>{' '}
+                                    Konsultasi langsung dengan owner, kami yang ukur ke lokasi dan pasang sampai rapi.
                                 </p>
                                 <div
                                     style={{
@@ -500,7 +502,7 @@ export default function GordenLanding() {
                                     }}
                                 >
                                     <a
-                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                         target="_blank"
                                         rel="noopener"
                                         style={{
@@ -511,7 +513,7 @@ export default function GordenLanding() {
                                             justifyContent: 'center',
                                             minHeight: '56px',
                                             padding: '14px 20px',
-                                            background: '#FF6B35',
+                                            background: '#25D366',
                                             color: '#fff',
                                             fontSize: 'clamp(15px, 3.9vw, 17px)',
                                             fontWeight: '700',
@@ -918,7 +920,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -928,7 +930,7 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '56px',
                                         padding: '14px 18px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
@@ -2014,7 +2016,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2024,7 +2026,7 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '56px',
                                         padding: '14px 18px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
@@ -2252,7 +2254,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2262,7 +2264,7 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '56px',
                                         padding: '14px 18px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
@@ -2613,7 +2615,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -2623,7 +2625,7 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '56px',
                                         padding: '14px 18px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
@@ -3582,7 +3584,7 @@ export default function GordenLanding() {
                         <div style={{ margin: '22px 0 0' }}>
                             <div style={{ display: 'flex' }}>
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -3592,7 +3594,7 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '58px',
                                         padding: '15px 22px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
@@ -4351,7 +4353,7 @@ export default function GordenLanding() {
                                 }}
                             >
                                 <a
-                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                     target="_blank"
                                     rel="noopener"
                                     style={{
@@ -4361,13 +4363,13 @@ export default function GordenLanding() {
                                         justifyContent: 'center',
                                         minHeight: '56px',
                                         padding: '14px 18px',
-                                        background: '#FF6B35',
+                                        background: '#25D366',
                                         color: '#fff',
                                         fontSize: 'clamp(15px, 3.9vw, 17px)',
                                         fontWeight: '700',
                                         textDecoration: 'none',
                                         borderRadius: '12px',
-                                        backgroundColor: '#FF6B35',
+                                        backgroundColor: '#25D366',
                                     }}
                                 >
                                     <img
@@ -4774,7 +4776,7 @@ export default function GordenLanding() {
                                                         Bersih dan tidak ramai, pas untuk rumah minimalis.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -4785,7 +4787,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -4901,7 +4903,7 @@ export default function GordenLanding() {
                                                         Model, bahan, dan ukuran menyesuaikan ruangan Anda.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -4912,7 +4914,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -5028,7 +5030,7 @@ export default function GordenLanding() {
                                                         Tirai tembus pandang, hampir wajib untuk kamar tidur.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5039,7 +5041,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -5164,7 +5166,7 @@ export default function GordenLanding() {
                                                             Gorden pita nempel jendela, simpel untuk rumah minimalis.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5175,7 +5177,7 @@ export default function GordenLanding() {
                                                                 gap: '7px',
                                                                 minHeight: '40px',
                                                                 padding: '8px 12px',
-                                                                background: '#FF6B35',
+                                                                background: '#25D366',
                                                                 color: '#fff',
                                                                 fontSize: '14px',
                                                                 fontWeight: '700',
@@ -5291,7 +5293,7 @@ export default function GordenLanding() {
                                                             Bahan dan model kelas hotel untuk unit sewa.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5302,7 +5304,7 @@ export default function GordenLanding() {
                                                                 gap: '7px',
                                                                 minHeight: '40px',
                                                                 padding: '8px 12px',
-                                                                background: '#FF6B35',
+                                                                background: '#25D366',
                                                                 color: '#fff',
                                                                 fontSize: '14px',
                                                                 fontWeight: '700',
@@ -5418,7 +5420,7 @@ export default function GordenLanding() {
                                                             Untuk rumah sakit, sekolah, dan ruang publik.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -5429,7 +5431,7 @@ export default function GordenLanding() {
                                                                 gap: '7px',
                                                                 minHeight: '40px',
                                                                 padding: '8px 12px',
-                                                                background: '#FF6B35',
+                                                                background: '#25D366',
                                                                 color: '#fff',
                                                                 fontSize: '14px',
                                                                 fontWeight: '700',
@@ -5611,7 +5613,7 @@ export default function GordenLanding() {
                                                         Ditarik naik-turun, hemat tempat, rapi untuk kantor.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5622,7 +5624,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -5756,7 +5758,7 @@ export default function GordenLanding() {
                                                         Gorden dan vitrase jadi satu, terang-gelap tinggal digeser.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5767,7 +5769,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -5883,7 +5885,7 @@ export default function GordenLanding() {
                                                         Kesan formal, arah cahaya bisa diatur supaya layar tidak silau.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -5894,7 +5896,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -6019,7 +6021,7 @@ export default function GordenLanding() {
                                                             Slat aluminium, ringan dan mudah dibersihkan.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -6030,7 +6032,7 @@ export default function GordenLanding() {
                                                                 gap: '7px',
                                                                 minHeight: '40px',
                                                                 padding: '8px 12px',
-                                                                background: '#FF6B35',
+                                                                background: '#25D366',
                                                                 color: '#fff',
                                                                 fontSize: '14px',
                                                                 fontWeight: '700',
@@ -6146,7 +6148,7 @@ export default function GordenLanding() {
                                                             Menahan panas dan silau dari luar, tahan angin.
                                                         </p>
                                                         <a
-                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                             target="_blank"
                                                             rel="noopener"
                                                             style={{
@@ -6157,7 +6159,7 @@ export default function GordenLanding() {
                                                                 gap: '7px',
                                                                 minHeight: '40px',
                                                                 padding: '8px 12px',
-                                                                background: '#FF6B35',
+                                                                background: '#25D366',
                                                                 color: '#fff',
                                                                 fontSize: '14px',
                                                                 fontWeight: '700',
@@ -6321,7 +6323,7 @@ export default function GordenLanding() {
                                                         Satu dinding saja bisa mengubah karakter ruangan.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -6332,7 +6334,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -6448,7 +6450,7 @@ export default function GordenLanding() {
                                                         Kasa nyamuk, rail rolet, dan perlengkapan gorden lain.
                                                     </p>
                                                     <a
-                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                                        href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                                         target="_blank"
                                                         rel="noopener"
                                                         style={{
@@ -6459,7 +6461,7 @@ export default function GordenLanding() {
                                                             gap: '7px',
                                                             minHeight: '40px',
                                                             padding: '8px 12px',
-                                                            background: '#FF6B35',
+                                                            background: '#25D366',
                                                             color: '#fff',
                                                             fontSize: '14px',
                                                             fontWeight: '700',
@@ -6511,7 +6513,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -6521,7 +6523,7 @@ export default function GordenLanding() {
                                                 justifyContent: 'center',
                                                 minHeight: '56px',
                                                 padding: '14px 18px',
-                                                background: '#FF6B35',
+                                                background: '#25D366',
                                                 color: '#fff',
                                                 fontSize: 'clamp(15px, 3.9vw, 17px)',
                                                 fontWeight: '700',
@@ -7257,7 +7259,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -7267,7 +7269,7 @@ export default function GordenLanding() {
                                                 justifyContent: 'center',
                                                 minHeight: '56px',
                                                 padding: '14px 18px',
-                                                background: '#FF6B35',
+                                                background: '#25D366',
                                                 color: '#fff',
                                                 fontSize: 'clamp(15px, 3.9vw, 17px)',
                                                 fontWeight: '700',
@@ -7514,7 +7516,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -7524,7 +7526,7 @@ export default function GordenLanding() {
                                                 justifyContent: 'center',
                                                 minHeight: '56px',
                                                 padding: '14px 18px',
-                                                background: '#FF6B35',
+                                                background: '#25D366',
                                                 color: '#fff',
                                                 fontSize: 'clamp(15px, 3.9vw, 17px)',
                                                 fontWeight: '700',
@@ -8013,7 +8015,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -8023,7 +8025,7 @@ export default function GordenLanding() {
                                                 justifyContent: 'center',
                                                 minHeight: '56px',
                                                 padding: '14px 18px',
-                                                background: '#FF6B35',
+                                                background: '#25D366',
                                                 color: '#fff',
                                                 fontSize: 'clamp(15px, 3.9vw, 17px)',
                                                 fontWeight: '700',
@@ -8243,7 +8245,7 @@ export default function GordenLanding() {
                                         }}
                                     >
                                         <a
-                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                                            href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                                             target="_blank"
                                             rel="noopener"
                                             style={{
@@ -8253,7 +8255,7 @@ export default function GordenLanding() {
                                                 justifyContent: 'center',
                                                 minHeight: '56px',
                                                 padding: '14px 18px',
-                                                background: '#FF6B35',
+                                                background: '#25D366',
                                                 color: '#fff',
                                                 fontSize: 'clamp(15px, 3.9vw, 17px)',
                                                 fontWeight: '700',
@@ -8351,7 +8353,7 @@ export default function GordenLanding() {
                                 <p style={{ margin: '0' }}>Jl. Songgolangit 22, Gentan, Solo</p>
                                 <p style={{ margin: '0' }}>
                                     WhatsApp:{' '}
-                                    <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }} target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
+                                    <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }} target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
                                         085.860.52.57.58
                                     </a>
                                 </p>
@@ -8522,7 +8524,7 @@ export default function GordenLanding() {
                 )}
 
                 <a
-                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20*Gorden%20Custom*%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
+                    href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
                     target="_blank"
                     rel="noopener"
                     aria-label="Konsultasi gratis via WhatsApp"
@@ -8534,17 +8536,20 @@ export default function GordenLanding() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        width: '58px',
+                        height: '58px',
                         borderRadius: '999px',
                         textDecoration: 'none',
                         boxShadow: '0 14px 28px -10px rgba(37,211,102,0.6)',
+                        backgroundColor: '#25D366',
                     }}
                 >
                     <img
                         src="/assets/whatsapp.svg"
                         alt=""
                         style={{
-                            width: '58px',
-                            height: '58px',
+                            width: '32px',
+                            height: '32px',
                             display: 'block',
                         }}
                     />
