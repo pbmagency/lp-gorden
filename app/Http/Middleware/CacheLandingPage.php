@@ -33,7 +33,7 @@ class CacheLandingPage
         }
 
         $routeSlug = $request->is('/') ? 'home' : 'c1-lp';
-        $cacheKey = 'landing_page_html_v3:'.$routeSlug.':'.self::contentVersion();
+        $cacheKey = 'landing_page_html_v4:'.$routeSlug.':'.self::contentVersion();
         $cache = Cache::store('file');
         $html = $cache->get($cacheKey);
 
@@ -53,11 +53,30 @@ class CacheLandingPage
         $response = $next($request);
 
         if ($response->getStatusCode() === 200) {
-            $cache->put($cacheKey, $response->getContent(), self::TTL_SECONDS);
+            $cache->put($cacheKey, self::normalizeAssetUrls($response->getContent()), self::TTL_SECONDS);
             $response->headers->set('X-Landing-Cache', 'MISS');
         }
 
         return $response;
+    }
+
+    /**
+     * Make the cached HTML host-independent.
+     *
+     * The Vite tag helpers emit absolute asset URLs based on the request host
+     * (e.g. http://127.0.0.1:8000/build/assets-v2/app.js). The cached page is
+     * served to every host, so baking in one host's origin breaks the page for
+     * visitors using a different hostname — module scripts then fail with a
+     * CORS error. Rewriting self-origin /build/ URLs to root-relative paths
+     * keeps the cached copy valid no matter which host requested it.
+     */
+    private static function normalizeAssetUrls(string $html): string
+    {
+        return preg_replace(
+            '#https?://[^"\'\s<>]+?/build/#',
+            '/build/',
+            $html,
+        ) ?? $html;
     }
 
     private static function contentVersion(): string
