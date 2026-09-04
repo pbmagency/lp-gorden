@@ -277,6 +277,15 @@ return;
                 `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="${style};fill:currentColor;filter:none">${WHATSAPP_ICON_PATHS}</svg>`,
         );
         result = result
+            .replace(
+                'background-color: #FFFFFF" style-hover="background: #F2EDE3;" style-active="background: #E7E0D2;"',
+                'background-color: #25D366; color: #FFFFFF" style-hover="background: #1FBA57;" style-active="background: #1AA34C;"',
+            )
+            .replace(
+                'width: 32px; height: 32px; display: block; filter: brightness(0) saturate(100%) invert(62%) sepia(72%) saturate(1000%) hue-rotate(85deg) brightness(95%) contrast(92%);;fill:currentColor;filter:none',
+                'width: 32px; height: 32px; display: block; fill: #FFFFFF; filter: none',
+            );
+        result = result
             .replace(/onClick="{{\s*([^}]+?)\s*}}"/g, 'data-action="$1"')
             .replace(/onChange="{{\s*([^}]+?)\s*}}"/g, 'data-action="$1"')
             .replace(/ref="{{\s*[^}]+?\s*}}"/g, '')
