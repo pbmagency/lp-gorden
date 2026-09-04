@@ -67,6 +67,7 @@ jobs:
             chown -R $CYBER_USER:$CYBER_GROUP /home/toko.gordenwallpapersolo.com/toko_laravel
             chown -R $CYBER_USER:$CYBER_GROUP /home/toko.gordenwallpapersolo.com/public_html
             
+            
             # 6. Beri izin jalan untuk folder cache & storage Laravel
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/storage
             chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/cache

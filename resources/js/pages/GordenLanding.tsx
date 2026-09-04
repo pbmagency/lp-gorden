@@ -55,8 +55,14 @@ export default function GordenLanding() {
         let timer: ReturnType<typeof setInterval> | undefined;
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting && !timer) {
+                if (
+                    entry.isIntersecting &&
+                    !timer &&
+                    !window.matchMedia('(prefers-reduced-motion: reduce)')
+                        .matches
+                ) {
                     timer = setInterval(() => {
+                        if (document.hidden) return;
                         setReviewIdx((i) => (i + 1) % reviewShots.length);
                     }, 5000);
                 } else if (!entry.isIntersecting && timer) {
