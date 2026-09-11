@@ -228,7 +228,6 @@ export default function GordenLanding() {
   @keyframes omBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
   @keyframes reviewMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 `}</style>
-                <style>{catalogRealityStyles}</style>
             </Head>
 
             <div
