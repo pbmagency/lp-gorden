@@ -35,10 +35,10 @@ const FOOTER_WITH_MAP = `
 
 const SOURCE_MARKUP = SOURCE_MARKUP_SOURCE.replace(
     '/assets/img-gorden-siang-dan-vitrase.webp',
-    '/assets/img-gorden-transparan-vitrase-gorden-siang.webp',
+    '/assets/sore gorden.png',
 ).replace(
     '/assets/img-outdoor-blinds.webp',
-    '/assets/img-tirai-outdoor-roller-blinds.webp',
+    '/assets/outdor.jpeg',
 ).replace(/<footer[\s\S]*?<\/footer>/, FOOTER_WITH_MAP);
 
 const WHATSAPP_ICON_PATHS =
