@@ -3342,12 +3342,12 @@ export default function GordenLanding() {
 
                                 <div>
                                     <div
-                                        data-zoom="/assets/img-outdoor-blinds-rumah-pribadi-ibu-indah-s.webp"
+                                        data-zoom="/assets/outdor.jpeg"
                                         style={{
                                             borderRadius: '12px',
                                             border: '1px solid oklch(0.88 0.02 80)',
                                             aspectRatio: '1 / 1',
-                                            ...lazyBackground("url('/assets/img-outdoor-blinds-rumah-pribadi-ibu-indah-s.webp')"),
+                                            ...lazyBackground("url('/assets/outdor.jpeg')"),
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center',
                                             cursor: 'zoom-in',
@@ -4965,7 +4965,7 @@ export default function GordenLanding() {
                                                     style={{
                                                         position: 'relative',
                                                         aspectRatio: '4 / 3',
-                                                        ...lazyBackground("url('/assets/img-gorden-transparan-vitrase-gorden-siang.webp')"),
+                                                        ...lazyBackground("url('/assets/sore gorden.png')"),
                                                         backgroundSize: 'cover',
                                                         backgroundPosition: 'center',
                                                     }}
