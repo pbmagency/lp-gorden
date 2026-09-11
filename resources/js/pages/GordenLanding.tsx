@@ -8362,6 +8362,7 @@ export default function GordenLanding() {
                             </section>
 
                             <footer
+                                id="lokasi"
                                 style={{
                                     padding: '34px 0 0',
                                     marginTop: '30px',
@@ -8369,9 +8370,12 @@ export default function GordenLanding() {
                                     fontSize: '15px',
                                     color: 'oklch(0.42 0.02 60)',
                                     display: 'grid',
-                                    gap: '6px',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+                                    alignItems: 'stretch',
+                                    gap: '28px',
                                 }}
                             >
+                                <div style={{ display: 'grid', alignContent: 'start', gap: '6px' }}>
                                 <p
                                     style={{
                                         margin: '0 0 6px',
@@ -8383,7 +8387,12 @@ export default function GordenLanding() {
                                 >
                                     Gorden Wallpaper Solo
                                 </p>
-                                <p style={{ margin: '0' }}>Jl. Songgolangit 22, Gentan, Solo</p>
+                                <p style={{ margin: '0' }}>Jl. Raya Songgo Langit No.22, Gentan, Baki, Sukoharjo</p>
+                                <p style={{ margin: '0 0 6px' }}>
+                                    <a href="https://maps.app.goo.gl/44ib1CVKZGDaduPL9" target="_blank" rel="noopener noreferrer" style={{ fontWeight: '600' }}>
+                                        Lihat lokasi di Google Maps →
+                                    </a>
+                                </p>
                                 <p style={{ margin: '0' }}>
                                     WhatsApp:{' '}
                                     <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }} target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
@@ -8410,6 +8419,27 @@ export default function GordenLanding() {
                                 >
                                     Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.
                                 </p>
+                                </div>
+                                <div
+                                    style={{
+                                        minHeight: '250px',
+                                        overflow: 'hidden',
+                                        border: '1px solid oklch(0.86 0.025 80)',
+                                        borderRadius: '16px',
+                                        background: '#e9e3d8',
+                                    }}
+                                >
+                                    <iframe
+                                        title="Peta lokasi Gorden Wallpaper Solo"
+                                        src="https://www.google.com/maps?q=Gorden%20Wallpaper%20Solo%20Mulya%20Abadi%2C%20Jl.%20Raya%20Songgo%20Langit%20No.22%2C%20Gentan%2C%20Baki%2C%20Sukoharjo&output=embed"
+                                        width="100%"
+                                        height="100%"
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        style={{ display: 'block', minHeight: '250px', border: '0' }}
+                                        allowFullScreen
+                                    />
+                                </div>
                             </footer>
                         </>
                     )}
