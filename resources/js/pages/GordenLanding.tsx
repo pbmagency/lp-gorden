@@ -4992,7 +4992,7 @@ export default function GordenLanding() {
                                                     style={{
                                                         position: 'relative',
                                                         aspectRatio: '4 / 3',
-                                                        ...lazyBackground("url('/assets/img-gorden-siang-dan-vitrase.webp')"),
+                                                        ...lazyBackground("url('/assets/img-gorden-transparan-vitrase-gorden-siang.webp')"),
                                                         backgroundSize: 'cover',
                                                         backgroundPosition: 'center',
                                                     }}
@@ -6110,7 +6110,7 @@ export default function GordenLanding() {
                                                         style={{
                                                             position: 'relative',
                                                             aspectRatio: '4 / 3',
-                                                            ...lazyBackground("url('/assets/img-outdoor-blinds.webp')"),
+                                                            ...lazyBackground("url('/assets/img-tirai-outdoor-roller-blinds.webp')"),
                                                             backgroundSize: 'cover',
                                                             backgroundPosition: 'center',
                                                         }}
