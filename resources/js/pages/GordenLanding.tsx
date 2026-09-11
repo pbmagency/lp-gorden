@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Head } from '@inertiajs/react';
-import CatalogRealitySection, {
-    catalogRealityStyles,
-} from '@/components/sections/gorden/CatalogRealitySection';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
@@ -650,29 +647,6 @@ export default function GordenLanding() {
                             </span>
                         </div>
                     </section>
-
-                    <CatalogRealitySection
-                        onWhatsAppClick={(event) => {
-                            (window as any).fbq?.('track', 'Search', {
-                                search_string: 'WhatsApp Inquiry',
-                            });
-                            trackCTA(
-                                'catalog_reality_whatsapp',
-                                'Konsultasi Gratis',
-                                event.currentTarget.href,
-                            );
-                            trackConversion('wa_inquiry', {
-                                location: 'catalog_reality',
-                            });
-                        }}
-                        onCatalogClick={(event) =>
-                            trackCTA(
-                                'catalog_reality_catalog',
-                                'Lihat Katalog',
-                                event.currentTarget.href,
-                            )
-                        }
-                    />
 
                     <section
                         style={{

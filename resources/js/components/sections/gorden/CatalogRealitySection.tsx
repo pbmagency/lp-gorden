@@ -298,7 +298,7 @@ export default function CatalogRealitySection({
 
                     <article className="catalog-reality__card catalog-reality__card--dark">
                         <h3 className="catalog-reality__card-title">
-                            Kalo konsultasi dengan owner berpengalaman
+                            Kalau konsultasi dengan owner berpengalaman
                         </h3>
                         <ol className="catalog-reality__list">
                             <li className="catalog-reality__item">
