@@ -105,7 +105,7 @@ export default function WhatsAppGreeting({
                         borderRadius: '999px',
                         background: '#f3efe7',
                     }}
-                />
+                loading="lazy" />
                 <div style={{ minWidth: '0' }}>
                     <p
                         className="whatsapp-greeting__name"
@@ -133,8 +133,8 @@ export default function WhatsAppGreeting({
                     <a
                         className="whatsapp-greeting__reply"
                         href={href}
-                        target="_blank"
-                        rel="noopener"
+                        target="_blank" rel="noopener noreferrer"
+                        rel="noopener noreferrer"
                         onClick={onReply}
                         style={{
                             color: '#48a566',

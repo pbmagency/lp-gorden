@@ -211,6 +211,8 @@ export default function GordenLanding() {
         <>
             <Head>
                 <title>Gorden Custom Solo Raya, Terima Beres Ukur & Pasang</title>
+                <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" fetchpriority="high" />
+                <link rel="preload" href="/assets/logo.webp" as="image" fetchpriority="high" />
                 <style>{`
   * { box-sizing: border-box; }
   body { margin: 0; background: oklch(0.97 0.015 85); font-family: "Poppins", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -273,11 +275,11 @@ export default function GordenLanding() {
                                 objectFit: 'contain',
                                 display: 'block',
                             }}
-                        />
+                        loading="lazy" />
                         <a
                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                            target="_blank"
-                            rel="noopener"
+                            target="_blank" rel="noopener noreferrer"
+                            rel="noopener noreferrer"
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -303,7 +305,7 @@ export default function GordenLanding() {
                                     marginRight: '8px',
                                     display: 'block',
                                 }}
-                            />
+                            loading="lazy" decoding="async" />
                             Konsultasi Gratis →
                         </a>
                     </div>
@@ -432,7 +434,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" />
                                         <img
                                             src="/assets/ava-2.webp"
                                             alt=""
@@ -448,7 +450,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" />
                                         <img
                                             src="/assets/ava-3.webp"
                                             alt=""
@@ -464,7 +466,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" />
                                     </span>
                                 </div>
                                 <h1
@@ -509,8 +511,8 @@ export default function GordenLanding() {
                                 >
                                     <a
                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                        target="_blank"
-                                        rel="noopener"
+                                        target="_blank" rel="noopener noreferrer"
+                                        rel="noopener noreferrer"
                                         style={{
                                             flex: '1 1 260px',
                                             whiteSpace: 'nowrap',
@@ -538,7 +540,7 @@ export default function GordenLanding() {
                                                 marginRight: '9px',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                         Konsultasi Gratis →
                                     </a>
                                     <a
@@ -927,8 +929,8 @@ export default function GordenLanding() {
                             >
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 260px',
                                         display: 'flex',
@@ -954,7 +956,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                                 <a
@@ -2023,8 +2025,8 @@ export default function GordenLanding() {
                             >
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 260px',
                                         display: 'flex',
@@ -2050,7 +2052,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                                 <a
@@ -2261,8 +2263,8 @@ export default function GordenLanding() {
                             >
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 260px',
                                         display: 'flex',
@@ -2288,7 +2290,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                                 <a
@@ -2622,8 +2624,8 @@ export default function GordenLanding() {
                             >
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 260px',
                                         display: 'flex',
@@ -2649,7 +2651,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                                 <a
@@ -3591,8 +3593,8 @@ export default function GordenLanding() {
                             <div style={{ display: 'flex' }}>
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 100%',
                                         display: 'flex',
@@ -3618,7 +3620,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                             </div>
@@ -3705,7 +3707,7 @@ export default function GordenLanding() {
                                     height: '26px',
                                     display: 'block',
                                 }}
-                            />
+                            loading="lazy" decoding="async" />
                             <span
                                 style={{
                                     display: 'flex',
@@ -3801,7 +3803,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                         <span
                                             style={{
                                                 display: 'flex',
@@ -3855,7 +3857,7 @@ export default function GordenLanding() {
                                                 height: '18px',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                     </div>
                                     <p
                                         style={{
@@ -3951,7 +3953,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                         <span
                                             style={{
                                                 display: 'flex',
@@ -4005,7 +4007,7 @@ export default function GordenLanding() {
                                                 height: '18px',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                     </div>
                                     <p
                                         style={{
@@ -4082,7 +4084,7 @@ export default function GordenLanding() {
                                                 objectFit: 'cover',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                         <span
                                             style={{
                                                 display: 'flex',
@@ -4136,7 +4138,7 @@ export default function GordenLanding() {
                                                 height: '18px',
                                                 display: 'block',
                                             }}
-                                        />
+                                        loading="lazy" decoding="async" />
                                     </div>
                                     <p
                                         style={{
@@ -4360,8 +4362,8 @@ export default function GordenLanding() {
                             >
                                 <a
                                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                    target="_blank"
-                                    rel="noopener"
+                                    target="_blank" rel="noopener noreferrer"
+                                    rel="noopener noreferrer"
                                     style={{
                                         flex: '1 1 260px',
                                         display: 'flex',
@@ -4388,7 +4390,7 @@ export default function GordenLanding() {
                                             marginRight: '9px',
                                             display: 'block',
                                         }}
-                                    />
+                                    loading="lazy" decoding="async" />
                                     Konsultasi Gratis →
                                 </a>
                                 <a
@@ -4783,8 +4785,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -4811,7 +4813,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -4910,8 +4912,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -4938,7 +4940,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -5037,8 +5039,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -5065,7 +5067,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -5173,8 +5175,8 @@ export default function GordenLanding() {
                                                         </p>
                                                         <a
                                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                            target="_blank"
-                                                            rel="noopener"
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            rel="noopener noreferrer"
                                                             style={{
                                                                 marginTop: 'auto',
                                                                 display: 'flex',
@@ -5201,7 +5203,7 @@ export default function GordenLanding() {
                                                                     height: '17px',
                                                                     display: 'block',
                                                                 }}
-                                                            />
+                                                            loading="lazy" decoding="async" />
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'nowrap',
@@ -5300,8 +5302,8 @@ export default function GordenLanding() {
                                                         </p>
                                                         <a
                                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                            target="_blank"
-                                                            rel="noopener"
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            rel="noopener noreferrer"
                                                             style={{
                                                                 marginTop: 'auto',
                                                                 display: 'flex',
@@ -5328,7 +5330,7 @@ export default function GordenLanding() {
                                                                     height: '17px',
                                                                     display: 'block',
                                                                 }}
-                                                            />
+                                                            loading="lazy" decoding="async" />
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'nowrap',
@@ -5427,8 +5429,8 @@ export default function GordenLanding() {
                                                         </p>
                                                         <a
                                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                            target="_blank"
-                                                            rel="noopener"
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            rel="noopener noreferrer"
                                                             style={{
                                                                 marginTop: 'auto',
                                                                 display: 'flex',
@@ -5455,7 +5457,7 @@ export default function GordenLanding() {
                                                                     height: '17px',
                                                                     display: 'block',
                                                                 }}
-                                                            />
+                                                            loading="lazy" decoding="async" />
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'nowrap',
@@ -5620,8 +5622,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -5648,7 +5650,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -5765,8 +5767,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -5793,7 +5795,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -5892,8 +5894,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -5920,7 +5922,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -6028,8 +6030,8 @@ export default function GordenLanding() {
                                                         </p>
                                                         <a
                                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                            target="_blank"
-                                                            rel="noopener"
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            rel="noopener noreferrer"
                                                             style={{
                                                                 marginTop: 'auto',
                                                                 display: 'flex',
@@ -6056,7 +6058,7 @@ export default function GordenLanding() {
                                                                     height: '17px',
                                                                     display: 'block',
                                                                 }}
-                                                            />
+                                                            loading="lazy" decoding="async" />
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'nowrap',
@@ -6155,8 +6157,8 @@ export default function GordenLanding() {
                                                         </p>
                                                         <a
                                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                            target="_blank"
-                                                            rel="noopener"
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            rel="noopener noreferrer"
                                                             style={{
                                                                 marginTop: 'auto',
                                                                 display: 'flex',
@@ -6183,7 +6185,7 @@ export default function GordenLanding() {
                                                                     height: '17px',
                                                                     display: 'block',
                                                                 }}
-                                                            />
+                                                            loading="lazy" decoding="async" />
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'nowrap',
@@ -6330,8 +6332,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -6358,7 +6360,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -6457,8 +6459,8 @@ export default function GordenLanding() {
                                                     </p>
                                                     <a
                                                         href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                                        target="_blank"
-                                                        rel="noopener"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        rel="noopener noreferrer"
                                                         style={{
                                                             marginTop: 'auto',
                                                             display: 'flex',
@@ -6485,7 +6487,7 @@ export default function GordenLanding() {
                                                                 height: '17px',
                                                                 display: 'block',
                                                             }}
-                                                        />
+                                                        loading="lazy" decoding="async" />
                                                         <span
                                                             style={{
                                                                 whiteSpace: 'nowrap',
@@ -6520,8 +6522,8 @@ export default function GordenLanding() {
                                     >
                                         <a
                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                            target="_blank"
-                                            rel="noopener"
+                                            target="_blank" rel="noopener noreferrer"
+                                            rel="noopener noreferrer"
                                             style={{
                                                 flex: '1 1 260px',
                                                 display: 'flex',
@@ -6547,7 +6549,7 @@ export default function GordenLanding() {
                                                     marginRight: '9px',
                                                     display: 'block',
                                                 }}
-                                            />
+                                            loading="lazy" decoding="async" />
                                             Konsultasi Gratis →
                                         </a>
                                         <a
@@ -7266,8 +7268,8 @@ export default function GordenLanding() {
                                     >
                                         <a
                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                            target="_blank"
-                                            rel="noopener"
+                                            target="_blank" rel="noopener noreferrer"
+                                            rel="noopener noreferrer"
                                             style={{
                                                 flex: '1 1 260px',
                                                 display: 'flex',
@@ -7293,7 +7295,7 @@ export default function GordenLanding() {
                                                     marginRight: '9px',
                                                     display: 'block',
                                                 }}
-                                            />
+                                            loading="lazy" decoding="async" />
                                             Konsultasi Gratis →
                                         </a>
                                         <a
@@ -7523,8 +7525,8 @@ export default function GordenLanding() {
                                     >
                                         <a
                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                            target="_blank"
-                                            rel="noopener"
+                                            target="_blank" rel="noopener noreferrer"
+                                            rel="noopener noreferrer"
                                             style={{
                                                 flex: '1 1 260px',
                                                 display: 'flex',
@@ -7550,7 +7552,7 @@ export default function GordenLanding() {
                                                     marginRight: '9px',
                                                     display: 'block',
                                                 }}
-                                            />
+                                            loading="lazy" decoding="async" />
                                             Konsultasi Gratis →
                                         </a>
                                         <a
@@ -8022,8 +8024,8 @@ export default function GordenLanding() {
                                     >
                                         <a
                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                            target="_blank"
-                                            rel="noopener"
+                                            target="_blank" rel="noopener noreferrer"
+                                            rel="noopener noreferrer"
                                             style={{
                                                 flex: '1 1 260px',
                                                 display: 'flex',
@@ -8049,7 +8051,7 @@ export default function GordenLanding() {
                                                     marginRight: '9px',
                                                     display: 'block',
                                                 }}
-                                            />
+                                            loading="lazy" decoding="async" />
                                             Konsultasi Gratis →
                                         </a>
                                         <a
@@ -8252,8 +8254,8 @@ export default function GordenLanding() {
                                     >
                                         <a
                                             href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                                            target="_blank"
-                                            rel="noopener"
+                                            target="_blank" rel="noopener noreferrer"
+                                            rel="noopener noreferrer"
                                             style={{
                                                 flex: '1 1 260px',
                                                 display: 'flex',
@@ -8279,7 +8281,7 @@ export default function GordenLanding() {
                                                     marginRight: '9px',
                                                     display: 'block',
                                                 }}
-                                            />
+                                            loading="lazy" decoding="async" />
                                             Konsultasi Gratis →
                                         </a>
                                         <a
@@ -8368,18 +8370,18 @@ export default function GordenLanding() {
                                 </p>
                                 <p style={{ margin: '0' }}>
                                     WhatsApp:{' '}
-                                    <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }} target="_blank" rel="noopener" style={{ fontWeight: '600' }}>
+                                    <a href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }} target="_blank" rel="noopener noreferrer" style={{ fontWeight: '600' }}>
                                         085.860.52.57.58
                                     </a>
                                 </p>
                                 <p style={{ margin: '0' }}>Jam operasional online: 24 jam, setiap hari</p>
                                 <p style={{ margin: '0' }}>Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
                                 <p style={{ margin: '0' }}>
-                                    <a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener">
+                                    <a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener noreferrer">
                                         Instagram @gorden.wallpapersolo
                                     </a>{' '}
                                     ·{' '}
-                                    <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener">
+                                    <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener noreferrer">
                                         Facebook Gorden Wallpaper Solo
                                     </a>
                                 </p>
@@ -8456,7 +8458,7 @@ export default function GordenLanding() {
                                     borderRadius: '12px',
                                     boxShadow: '0 30px 60px -20px rgba(0,0,0,0.7)',
                                 }}
-                            />
+                            loading="lazy" decoding="async" />
                             {(lbList[lbIdx]?.caption || '') && (
                                 <p
                                     style={{
@@ -8561,8 +8563,8 @@ export default function GordenLanding() {
 
                 <a
                     href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" onClick={(e) => { (window as any).fbq?.('track', 'Search', { search_string: 'WhatsApp Inquiry' }); trackCTA('whatsapp_button', 'WhatsApp Button', e.currentTarget.href); trackConversion('wa_inquiry', { location: 'whatsapp_button' }); }}
-                    target="_blank"
-                    rel="noopener"
+                    target="_blank" rel="noopener noreferrer"
+                    rel="noopener noreferrer"
                     aria-label="Konsultasi gratis via WhatsApp"
                     style={{
                         position: 'fixed',
@@ -8588,7 +8590,7 @@ export default function GordenLanding() {
                             height: '32px',
                             display: 'block',
                         }}
-                    />
+                    loading="lazy" decoding="async" />
                 </a>
             </div>
         </>
