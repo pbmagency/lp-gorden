@@ -6,6 +6,7 @@ void createInertiaApp({
         const pages = {
             GordenLanding: () => import('@/pages/GordenLanding'),
             'cycle1/c1-lp': () => import('@/pages/cycle1/c1-lp'),
+            'cycle2/c2-lp': () => import('@/pages/cycle2/c2-lp'),
         };
         const resolvePage = pages[name as keyof typeof pages];
         if (!resolvePage)

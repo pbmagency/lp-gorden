@@ -7,19 +7,20 @@ use Illuminate\Support\Facades\Route;
 // ── Public landing page ───────────────────────────────────────────────────────
 Route::inertia('/', 'GordenLanding')->name('home');
 Route::inertia('/c1-lp', 'cycle1/c1-lp')->name('cycle1.landing');
+Route::inertia('/c2-lp', 'cycle2/c2-lp')->name('cycle2.landing');
 // ── Cycle 4 Test Social Proof ─────────────────────
-Route::inertia('/c4-sp-1', 'cycle4/sp-test-1')->name('cycle4.sp.v1');
-Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');
-Route::inertia('/c5-hero', 'cycle5/hero-test')->name('cycle5.hero.test');
-Route::inertia('/c6-angle', 'cycle6/angle-1')->name('cycle6.angle.v1');
-Route::inertia('/c6-angle-2', 'cycle6/angle-2')->name('cycle6.angle.v2');
-Route::inertia('/c7-angle-1', 'cycle7/angle-1')->name('cycle7.angle.v1');
-Route::inertia('/c7-angle-2', 'cycle7/angle-2')->name('cycle7.angle.v2');
-Route::inertia('/c7-angle-3', 'cycle7/angle-3')->name('cycle7.angle.v3');
-Route::inertia('/c8-angle-1', 'cycle8/angle-1')->name('cycle8.angle.v1');
-Route::inertia('/bio-ig-toefl-hack', 'cycle7/angle-1')->name('home2');
-Route::inertia('/toefl-hack', 'cycle7/angle-1')->name('home3');
-Route::inertia('/e-course-toefl-hack', 'cycle7/angle-3')->name('home4');
+// Route::inertia('/c4-sp-1', 'cycle4/sp-test-1')->name('cycle4.sp.v1');
+// Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');
+// Route::inertia('/c5-hero', 'cycle5/hero-test')->name('cycle5.hero.test');
+// Route::inertia('/c6-angle', 'cycle6/angle-1')->name('cycle6.angle.v1');
+// Route::inertia('/c6-angle-2', 'cycle6/angle-2')->name('cycle6.angle.v2');
+// Route::inertia('/c7-angle-1', 'cycle7/angle-1')->name('cycle7.angle.v1');
+// Route::inertia('/c7-angle-2', 'cycle7/angle-2')->name('cycle7.angle.v2');
+// Route::inertia('/c7-angle-3', 'cycle7/angle-3')->name('cycle7.angle.v3');
+// Route::inertia('/c8-angle-1', 'cycle8/angle-1')->name('cycle8.angle.v1');
+// Route::inertia('/bio-ig-toefl-hack', 'cycle7/angle-1')->name('home2');
+// Route::inertia('/toefl-hack', 'cycle7/angle-1')->name('home3');
+// Route::inertia('/e-course-toefl-hack', 'cycle7/angle-3')->name('home4');
 
 // ── Analytics tracking endpoint (public, uses session CSRF) ──────────────────
 // Rate limit: 60 requests per minute per IP to prevent abuse

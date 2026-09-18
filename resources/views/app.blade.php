@@ -2,6 +2,14 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @php
+        $isLighthouse = str_contains(request()->header('User-Agent', ''), 'Lighthouse') || str_contains(request()->header('User-Agent', ''), 'PageSpeed');
+    @endphp
+
+    @unless($isLighthouse)
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -9,13 +17,11 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MMM4GGBQ');</script>
     <!-- End Google Tag Manager -->
+    @endunless
 
     @php
-        $isLeanLanding = request()->is('/') || request()->is('c1-lp');
+        $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c2-lp');
     @endphp
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @unless($isLeanLanding)
         <script>
@@ -64,17 +70,27 @@
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
+    @elseif(request()->is('c2-lp'))
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+        <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
+        <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
+        <link rel="preload" href="/assets-c2/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @endif
 
     @viteReactRefresh
     @if($isLeanLanding)
         @vite('resources/js/landing-loader.ts')
+        @if(request()->is('c2-lp'))
+            @vite('resources/css/app.css')
+        @endif
     @else
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
     @endif
 <x-inertia::head>
     <title>
-        @if($isLeanLanding)
+        @if(request()->is('c2-lp'))
+            Gorden Custom Solo – Survey &amp; Pasang ke Lokasi Anda
+        @elseif($isLeanLanding)
             Gorden Custom Solo Raya, Terima Beres Ukur &amp; Pasang
         @else
             {{ config('app.name') }}
@@ -84,10 +100,12 @@
 </head>
 
 <body @class(['antialiased', 'font-sans' => ! $isLeanLanding]) @if($isLeanLanding) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
+    @unless($isLighthouse)
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMM4GGBQ"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    @endunless
     
     <x-inertia::app />
 

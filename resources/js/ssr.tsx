@@ -20,6 +20,7 @@ createServer((page) =>
                 case name === 'landing':
                 case name === 'GordenLanding':
                 case name === 'cycle1/c1-lp':
+                case name === 'cycle2/c2-lp':
                 case name === 'checkout':
                 case name.startsWith('payment/'):
                 case name.startsWith('admin/'):
@@ -40,7 +41,8 @@ createServer((page) =>
         setup({ App, props }) {
             if (
                 page.component === 'GordenLanding' ||
-                page.component === 'cycle1/c1-lp'
+                page.component === 'cycle1/c1-lp' ||
+                page.component === 'cycle2/c2-lp'
             ) {
                 return <App {...props} />;
             }

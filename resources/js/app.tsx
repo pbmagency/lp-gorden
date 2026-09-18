@@ -21,7 +21,9 @@ try {
     // Inertia will report malformed page data with its own actionable error.
 }
 const isLeanLanding =
-    initialComponent === 'GordenLanding' || initialComponent === 'cycle1/c1-lp';
+    initialComponent === 'GordenLanding' ||
+    initialComponent === 'cycle1/c1-lp' ||
+    initialComponent === 'cycle2/c2-lp';
 
 // Analytics is deliberately kept out of the critical rendering path. Loading it
 // after the first interaction (or after a generous idle timeout) keeps PostHog
