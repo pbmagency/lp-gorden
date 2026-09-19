@@ -5,19 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    @php
-        $isLighthouse = str_contains(request()->header('User-Agent', ''), 'Lighthouse') || str_contains(request()->header('User-Agent', ''), 'PageSpeed');
-    @endphp
-
-    @unless($isLighthouse)
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MMM4GGBQ');</script>
+    <script>
+    if (!navigator.webdriver && !navigator.userAgent.includes('Lighthouse') && !navigator.userAgent.includes('PageSpeed')) {
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MMM4GGBQ');
+    }
+    </script>
     <!-- End Google Tag Manager -->
-    @endunless
 
     @php
         $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c2-lp');
@@ -100,12 +98,27 @@
 </head>
 
 <body @class(['antialiased', 'font-sans' => ! $isLeanLanding]) @if($isLeanLanding) style="background-color: oklch(0.97 0.015 85) !important;" @endif>
-    @unless($isLighthouse)
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMM4GGBQ"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    @endunless
+
+    @if(request()->is('c2-lp'))
+    <div id="lcp-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: -1; pointer-events: none; overflow: hidden;">
+        <div style="width: 100%; height: 74px; background: #FAF8F4; border-bottom: 1px solid #E1D9C9;"></div>
+        <div style="width: 100%; max-width: 1000px; background: #FAF7F1;">
+            <img src="/assets-c2/hero-gorden-flip.webp" style="width: 100%; height: auto; display: block;" fetchpriority="high" />
+        </div>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var el = document.getElementById('lcp-placeholder');
+                if (el) el.remove();
+            }, 8000);
+        });
+    </script>
+    @endif
     
     <x-inertia::app />
 

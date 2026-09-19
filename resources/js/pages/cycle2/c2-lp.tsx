@@ -1,10 +1,9 @@
 import { Head } from '@inertiajs/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import type { ChangeEvent, MouseEvent as ReactMouseEvent } from 'react';
 import { useAnalytics } from '@/hooks/use-analytics';
-import { useScrollTracking } from '@/hooks/use-scroll-tracking';
-import { useSectionTracking } from '@/hooks/use-section-tracking';
-import { useDwellTime } from '@/hooks/use-dwell-time';
+
+const AnalyticsWrapper = lazy(() => import('@/components/AnalyticsWrapper'));
 
 type LightboxItem = { src: string; caption: string };
 type KatCat = 'semua' | 'kain' | 'blinds' | 'lain';
@@ -12,10 +11,7 @@ type KatCat = 'semua' | 'kain' | 'blinds' | 'lain';
 const reviewShots: string[] = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets-c2/review-${n}.webp`);
 
 export default function GordenWallpaperSoloLanding() {
-  const { trackVisit, trackCTA, trackConversion } = useAnalytics();
-  useScrollTracking();
-  useDwellTime();
-  useSectionTracking();
+  const { trackCTA, trackConversion } = useAnalytics();
 
   const [isNarrow, setIsNarrow] = useState<boolean>(false);
   const [reviewIdx, setReviewIdx] = useState<number>(0);
@@ -26,10 +22,6 @@ export default function GordenWallpaperSoloLanding() {
   const [lbIdx, setLbIdx] = useState<number>(0);
   const [nudgeVisible, setNudgeVisible] = useState<boolean>(false);
   const [nudgeClosed, setNudgeClosed] = useState<boolean>(false);
-
-  useEffect(() => {
-    trackVisit();
-  }, [trackVisit]);
 
   const showTrustBar = true;
   const showKain: boolean = katCat === 'semua' || katCat === 'kain';
@@ -248,6 +240,9 @@ export default function GordenWallpaperSoloLanding() {
         <link rel="preload" href="/assets-c2/logo.webp" as="image" type="image/webp" />
         <meta name="description" content="Gorden custom Solo & sekitarnya. Survey & pasang ke lokasi, free ongkos ukur. Hubungi owner langsung via WhatsApp." />
       </Head>
+      <Suspense fallback={null}>
+        <AnalyticsWrapper />
+      </Suspense>
       {/* hanya untuk hal yang tidak bisa diekspresikan lewat utility class */}
       <style>{`
         @keyframes omBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
