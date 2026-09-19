@@ -105,20 +105,6 @@
     <!-- End Google Tag Manager (noscript) -->
 
     @if(request()->is('c2-lp'))
-    <div id="lcp-placeholder" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 50; pointer-events: none; overflow: hidden;">
-        <div style="width: 100%; height: 74px; background: #FAF8F4; border-bottom: 1px solid #E1D9C9;"></div>
-        <div style="width: 100%; max-width: 1000px; background: #FAF7F1;">
-            <img src="/assets-c2/hero-gorden-flip.webp" alt="" style="width: 100%; height: auto; display: block;" fetchpriority="high" />
-        </div>
-    </div>
-    <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                var el = document.getElementById('lcp-placeholder');
-                if (el) el.remove();
-            }, 8000);
-        });
-    </script>
     @endif
     
     <x-inertia::app />
