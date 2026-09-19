@@ -18,7 +18,7 @@
     <!-- End Google Tag Manager -->
 
     @php
-        $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c2-lp');
+        $isLeanLanding = request()->is('/') || request()->is('c1-lp');
     @endphp
 
     @unless($isLeanLanding)
@@ -31,8 +31,12 @@
             })();
         </script>
         <style>
+            @if(request()->is('c2-lp'))
+            html, body { background-color: oklch(0.97 0.015 85) !important; }
+            @else
             html { background-color: oklch(1 0 0); }
             html.dark { background-color: oklch(0.145 0 0); }
+            @endif
         </style>
     @else
         <style>
@@ -78,9 +82,6 @@
     @viteReactRefresh
     @if($isLeanLanding)
         @vite('resources/js/landing-loader.ts')
-        @if(request()->is('c2-lp'))
-            @vite('resources/css/app.css')
-        @endif
     @else
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
     @endif
@@ -104,10 +105,10 @@
     <!-- End Google Tag Manager (noscript) -->
 
     @if(request()->is('c2-lp'))
-    <div id="lcp-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: -1; pointer-events: none; overflow: hidden;">
+    <div id="lcp-placeholder" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 50; pointer-events: none; overflow: hidden;">
         <div style="width: 100%; height: 74px; background: #FAF8F4; border-bottom: 1px solid #E1D9C9;"></div>
         <div style="width: 100%; max-width: 1000px; background: #FAF7F1;">
-            <img src="/assets-c2/hero-gorden-flip.webp" style="width: 100%; height: auto; display: block;" fetchpriority="high" />
+            <img src="/assets-c2/hero-gorden-flip.webp" alt="" style="width: 100%; height: auto; display: block;" fetchpriority="high" />
         </div>
     </div>
     <script>
