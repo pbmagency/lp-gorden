@@ -1,6 +1,10 @@
 import { Head } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, MouseEvent as ReactMouseEvent } from 'react';
+import { useAnalytics } from '@/hooks/use-analytics';
+import { useScrollTracking } from '@/hooks/use-scroll-tracking';
+import { useSectionTracking } from '@/hooks/use-section-tracking';
+import { useDwellTime } from '@/hooks/use-dwell-time';
 
 type LightboxItem = { src: string; caption: string };
 type KatCat = 'semua' | 'kain' | 'blinds' | 'lain';
@@ -8,6 +12,11 @@ type KatCat = 'semua' | 'kain' | 'blinds' | 'lain';
 const reviewShots: string[] = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets-c2/review-${n}.webp`);
 
 export default function GordenWallpaperSoloLanding() {
+  const { trackVisit, trackCTA, trackConversion } = useAnalytics();
+  useScrollTracking();
+  useDwellTime();
+  useSectionTracking();
+
   const [isNarrow, setIsNarrow] = useState<boolean>(false);
   const [reviewIdx, setReviewIdx] = useState<number>(0);
   const [katCat, setKatCat] = useState<KatCat>('semua');
@@ -17,6 +26,10 @@ export default function GordenWallpaperSoloLanding() {
   const [lbIdx, setLbIdx] = useState<number>(0);
   const [nudgeVisible, setNudgeVisible] = useState<boolean>(false);
   const [nudgeClosed, setNudgeClosed] = useState<boolean>(false);
+
+  useEffect(() => {
+    trackVisit();
+  }, [trackVisit]);
 
   const showTrustBar = true;
   const showKain: boolean = katCat === 'semua' || katCat === 'kain';
@@ -57,6 +70,49 @@ export default function GordenWallpaperSoloLanding() {
       setReviewIdx((i) => (i + 1) % reviewShots.length);
     }, 3500);
   }, []);
+
+  const handleGlobalClick = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const anchor = target.closest<HTMLAnchorElement>('a[href]');
+
+    if (anchor) {
+      const destination = anchor.href;
+      const text =
+        anchor.getAttribute('aria-label') ||
+        anchor.textContent?.trim() ||
+        'Link';
+      const isWhatsApp =
+        anchor.hostname === 'wa.me' ||
+        anchor.hostname.endsWith('.whatsapp.com');
+      const location = isWhatsApp
+        ? 'whatsapp_button'
+        : anchor.getAttribute('href')?.startsWith('#')
+          ? 'page_anchor'
+          : 'outbound_link';
+
+      trackCTA(location, text, destination);
+
+      if (isWhatsApp) {
+        trackConversion('wa_inquiry', { location });
+
+        try {
+          (
+            window as typeof window & {
+              fbq?: (
+                action: string,
+                event: string,
+                data?: Record<string, string>,
+              ) => void;
+            }
+          ).fbq?.('track', 'Search', {
+            search_string: 'WhatsApp Inquiry',
+          });
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+  }, [trackCTA, trackConversion]);
 
   useEffect(() => {
     startReviewTimer();
@@ -198,7 +254,7 @@ export default function GordenWallpaperSoloLanding() {
         @keyframes reviewMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
       `}</style>
 
-      <div className="bg-[#FAF7F1] text-[#201D18] [font-family:Poppins,Helvetica,sans-serif] text-[17px] leading-[1.62] overflow-x-clip">
+      <div onClick={handleGlobalClick} className="bg-[#FAF7F1] text-[#201D18] [font-family:Poppins,Helvetica,sans-serif] text-[17px] leading-[1.62] overflow-x-clip">
       
         <div className="sticky top-[0] z-[60] bg-[rgba(250,248,244,0.95)] backdrop-blur-[10px] [border-bottom:1px_solid_#E1D9C9]">
           <div className="max-w-[1000px] my-[0] mx-[auto] py-[10px] px-[20px] flex items-center justify-between gap-[12px]">
