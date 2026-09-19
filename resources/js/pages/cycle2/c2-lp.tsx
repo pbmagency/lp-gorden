@@ -1445,14 +1445,19 @@ export default function GordenWallpaperSoloLanding() {
       
           
       
-          <footer className="pt-[34px] px-[0] pb-[0] mt-[30px] [border-top:1px_solid_#E5DDCF] text-[15px] text-[#585045] grid gap-[6px]">
-            <p className="mt-[0] mx-[0] mb-[6px] [font-family:Poppins,Helvetica,sans-serif] text-[19px] [font-weight:600] text-[oklch(0.24_0.02_60)]">Gorden Wallpaper Solo</p>
-            <p className="m-[0]">Jl. Songgolangit 22, Gentan, Solo</p>
-            <p className="m-[0]">WhatsApp: <a href="https://wa.me/6285860525758" target="_blank" rel="noopener noreferrer" className="[font-weight:600]">085.860.52.57.58</a></p>
-            <p className="m-[0]">Jam operasional online: 24 jam, setiap hari</p>
-            <p className="m-[0]">Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
-            <p className="m-[0]"><a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener noreferrer">Instagram @gorden.wallpapersolo</a> · <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener noreferrer">Facebook Gorden Wallpaper Solo</a></p>
-            <p className="mt-[8px] mx-[0] mb-[0] text-[13px] text-[oklch(0.58_0.03_70)]">Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.</p>
+          <footer id="lokasi" className="pt-[34px] px-[0] pb-[0] mt-[30px] [border-top:1px_solid_#E5DDCF] text-[15px] text-[#585045] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))] items-stretch gap-[28px]">
+            <div className="grid content-start gap-[6px]">
+              <p className="mt-[0] mx-[0] mb-[6px] [font-family:Poppins,Helvetica,sans-serif] text-[19px] [font-weight:600] text-[oklch(0.24_0.02_60)]">Gorden Wallpaper Solo</p>
+              <p className="m-[0]">Jl. Songgolangit 22, Gentan, Solo</p>
+              <p className="m-[0]">WhatsApp: <a href="https://wa.me/6285860525758" target="_blank" rel="noopener noreferrer" className="[font-weight:600]">085.860.52.57.58</a></p>
+              <p className="m-[0]">Jam operasional online: 24 jam, setiap hari</p>
+              <p className="m-[0]">Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
+              <p className="m-[0]"><a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener noreferrer">Instagram @gorden.wallpapersolo</a> &middot; <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener noreferrer">Facebook Gorden Wallpaper Solo</a></p>
+              <p className="mt-[8px] mx-[0] mb-[0] text-[13px] text-[oklch(0.58_0.03_70)]">Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.</p>
+            </div>
+            <div className="min-h-[250px] overflow-hidden [border:1px_solid_#D9CEBB] rounded-[16px] bg-[#E9E3D8]">
+              <iframe title="Peta lokasi Gorden Wallpaper Solo" src="https://www.google.com/maps?q=Gorden%20Wallpaper%20Solo%20Mulya%20Abadi%2C%20Jl.%20Raya%20Songgo%20Langit%20No.22%2C%20Gentan%2C%20Baki%2C%20Sukoharjo&amp;output=embed" width="100%" height="100%" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="block min-h-[250px] border-[0]" allowFullScreen></iframe>
+            </div>
           </footer>
       
         </div>
