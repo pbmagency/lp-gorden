@@ -23,7 +23,8 @@ try {
 const isLeanLanding =
     initialComponent === 'GordenLanding' ||
     initialComponent === 'cycle1/c1-lp' ||
-    initialComponent === 'cycle2/c2-lp';
+    initialComponent === 'cycle2/c2-lp' ||
+    initialComponent === 'cycle3/c3-lp';
 
 // Analytics is deliberately kept out of the critical rendering path. Loading it
 // after the first interaction (or after a generous idle timeout) keeps PostHog

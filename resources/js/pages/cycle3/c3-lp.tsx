@@ -1,0 +1,982 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, CSSProperties, MouseEvent as ReactMouseEvent } from 'react';
+import { Head } from '@inertiajs/react';
+
+type LightboxItem = { src: string; caption: string };
+type KatCat = 'semua' | 'kain' | 'blinds' | 'lain';
+
+interface GordenWallpaperSoloLandingProps {}
+
+const reviewShots: string[] = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets-c3/review-${n}.webp`);
+const N: number = reviewShots.length;
+const reviewSlides: string[] = [...reviewShots, ...reviewShots, ...reviewShots];
+
+export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLandingProps) {
+  const [katCat, setKatCat] = useState<KatCat>('semua');
+  const [reviewPos, setReviewPos] = useState<number>(N);
+  const [reviewNoAnim, setReviewNoAnim] = useState<boolean>(false);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lbList, setLbList] = useState<LightboxItem[]>([]);
+  const [lbIdx, setLbIdx] = useState<number>(0);
+  const [nudge, setNudge] = useState<boolean>(false);
+  const [nudgeClosed, setNudgeClosed] = useState<boolean>(false);
+
+  const showTrustBar: boolean = true;
+  const showKain: boolean = katCat === 'semua' || katCat === 'kain';
+  const showBlinds: boolean = katCat === 'semua' || katCat === 'blinds';
+  const showPelengkap: boolean = katCat === 'semua' || katCat === 'lain';
+  const showNudge: boolean = nudge && !nudgeClosed;
+  const reviewIdx: number = ((reviewPos % N) + N) % N;
+  const lightboxCaption: string = lbList[lbIdx]?.caption ?? '';
+  const lightboxPos: string = lbList.length > 1 ? `${lbIdx + 1} / ${lbList.length}` : '';
+
+  const posRef = useRef<number>(N);
+  const reviewTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const normTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /* carousel ulasan: geser halus + loop tanpa sambungan */
+  const advanceReview = useCallback((d: number) => {
+    const next = posRef.current + d;
+    posRef.current = next;
+    setReviewNoAnim(false);
+    setReviewPos(next);
+    if (normTimer.current) clearTimeout(normTimer.current);
+    normTimer.current = setTimeout(() => {
+      const p = posRef.current;
+      if (p < N || p >= 2 * N) {
+        const np = N + (((p % N) + N) % N);
+        posRef.current = np;
+        setReviewNoAnim(true);
+        setReviewPos(np);
+        setTimeout(() => setReviewNoAnim(false), 40);
+      }
+    }, 760);
+  }, []);
+
+  const startReviewTimer = useCallback(() => {
+    if (reviewTimer.current) clearInterval(reviewTimer.current);
+    reviewTimer.current = setInterval(() => advanceReview(1), 3500);
+  }, [advanceReview]);
+
+  useEffect(() => {
+    startReviewTimer();
+    return () => {
+      if (reviewTimer.current) clearInterval(reviewTimer.current);
+      if (normTimer.current) clearTimeout(normTimer.current);
+    };
+  }, [startReviewTimer]);
+
+  const stepReview = useCallback(
+    (d: number) => {
+      advanceReview(d);
+      startReviewTimer();
+    },
+    [advanceReview, startReviewTimer],
+  );
+
+  const reviewPrevClick = useCallback(() => stepReview(-1), [stepReview]);
+  const reviewNextClick = useCallback(() => stepReview(1), [stepReview]);
+
+  const onSlideClick = useCallback(
+    (i: number) => {
+      if (i === reviewPos) {
+        setLbList(reviewShots.map((src) => ({ src, caption: '' })));
+        setLbIdx(reviewIdx);
+        setLightbox(reviewShots[reviewIdx]);
+      } else {
+        stepReview(i - reviewPos);
+      }
+    },
+    [reviewPos, reviewIdx, stepReview],
+  );
+
+  /* popup WA muncul saat pertengahan section katalog */
+  useEffect(() => {
+    if (nudge) return;
+    const onScroll = () => {
+      const k = document.getElementById('katalog');
+      if (!k) return;
+      const r = k.getBoundingClientRect();
+      if (r.top + r.height / 2 <= window.innerHeight * 0.6) setNudge(true);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [nudge]);
+
+  const closeNudge = useCallback(() => setNudgeClosed(true), []);
+  const closeNudgeBtn = useCallback((e: ReactMouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setNudgeClosed(true);
+  }, []);
+
+  /* lightbox: semua elemen [data-zoom], dikelompokkan per section */
+  useEffect(() => {
+    const onZoomClick = (e: globalThis.MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-zoom]');
+      if (!target) return;
+      const scope: ParentNode = target.closest('section') ?? document;
+      const nodes = Array.from(scope.querySelectorAll<HTMLElement>('[data-zoom]'));
+      const list: LightboxItem[] = nodes.map((n) => {
+        const cap = n.querySelector('figcaption');
+        let parts: string[] = [];
+        if (cap) parts = Array.from(cap.querySelectorAll('span')).map((x) => (x.textContent ?? '').trim()).filter(Boolean);
+        if (!parts.length) {
+          const box = n.parentElement;
+          parts = box ? Array.from(box.querySelectorAll('p')).map((p) => (p.textContent ?? '').trim()).filter(Boolean) : [];
+        }
+        return { src: n.getAttribute('data-zoom') ?? '', caption: parts.slice(0, 2).join(', ') };
+      });
+      const idx = Math.max(0, nodes.indexOf(target));
+      setLbList(list);
+      setLbIdx(idx);
+      setLightbox(list[idx]?.src ?? null);
+    };
+    document.addEventListener('click', onZoomClick);
+    return () => document.removeEventListener('click', onZoomClick);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightbox(null);
+    setLbList([]);
+    setLbIdx(0);
+  }, []);
+
+  const moveLightbox = useCallback(
+    (d: number) => {
+      const n = lbList.length;
+      if (!n) return;
+      const i = (lbIdx + d + n) % n;
+      setLbIdx(i);
+      setLightbox(lbList[i].src);
+    },
+    [lbIdx, lbList],
+  );
+  const lightboxPrev = useCallback(() => moveLightbox(-1), [moveLightbox]);
+  const lightboxNext = useCallback(() => moveLightbox(1), [moveLightbox]);
+  const stopClick = useCallback((e: ReactMouseEvent) => e.stopPropagation(), []);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxPrev();
+      if (e.key === 'ArrowRight') lightboxNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox, closeLightbox, lightboxPrev, lightboxNext]);
+
+  /* kategori katalog */
+  const scrollKatalog = useCallback(() => {
+    const bar = document.getElementById('katalog-filter');
+    const el = (bar?.nextElementSibling as HTMLElement | null) ?? bar;
+    if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 132, behavior: 'smooth' });
+  }, []);
+  const pickCat = useCallback(
+    (cat: KatCat) => {
+      setKatCat(cat);
+      scrollKatalog();
+    },
+    [scrollKatalog],
+  );
+  const onPickCatSelect = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => pickCat(e.target.value as KatCat),
+    [pickCat],
+  );
+
+  return (
+    <>
+      <style>{`@keyframes omBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }`}</style>
+      <div className="bg-[#FAF7F1] text-[#201D18] [font-family:Poppins,Helvetica,sans-serif] text-[17px] leading-[1.62] overflow-x-clip">
+      
+        <div className="sticky top-[0] z-[60] bg-[rgba(250,248,244,0.95)] backdrop-blur-[10px] [border-bottom:1px_solid_#E1D9C9]">
+          <div className="max-w-[1000px] my-[0] mx-[auto] py-[10px] px-[20px] flex items-center justify-between gap-[12px]">
+            <img className="h-[52px] w-[auto] block" src="/assets-c3/logo.webp" alt="Gorden Wallpaper Solo" />
+            <a className="flex items-center justify-center min-h-[46px] py-[11px] px-[18px] bg-[#25D366] text-[#fff] text-[15px] [font-weight:600] no-underline rounded-[10px] whitespace-nowrap gap-[9px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+          </div>
+        </div>
+      
+        <div className="max-w-[1000px] my-[0] mx-[auto] pt-[12px] px-[clamp(14px,4vw,20px)] pb-[60px]">
+      
+          <section className="p-[0] h-[calc(100svh_-_79px)] min-h-[460px] flex flex-col">
+            <div className="relative flex-[1_1_auto] min-h-[0] w-[100vw] ml-[calc(50%_-_50vw)] mr-[calc(50%_-_50vw)] flex flex-col justify-center gap-[14px] pt-[clamp(52px,12vw,88px)] px-[clamp(20px,calc((100vw_-_960px)_/_2_+_20px),200px)] pb-[clamp(76px,15vw,96px)] overflow-hidden bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.78)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.1)_100%),url(/assets-c3/hero-gorden-flip.webp)] min-[761px]:bg-[image:linear-gradient(to_right,rgba(20,17,13,0.9)_0%,rgba(20,17,13,0.74)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.12)_100%),linear-gradient(to_top,rgba(20,17,13,0.55)_0%,rgba(20,17,13,0.1)_45%,rgba(20,17,13,0.05)_100%),url(/assets-c3/hero-gorden-flip.webp)] bg-cover bg-center rounded-[0px]">
+              <div className="relative w-[100%] max-w-[560px] mr-[auto] flex flex-col">
+                <div className="self-start inline-flex flex-nowrap whitespace-nowrap items-center gap-[8px] pt-[5px] pr-[11px] pb-[5px] pl-[12px] mt-[0] mx-[0] mb-[clamp(14px,2vw,20px)] bg-[rgba(253,252,250,0.14)] [border:1px_solid_rgba(253,252,250,0.35)] backdrop-blur-[6px] rounded-[999px]">
+                  <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
+                  <span className="text-[10.5px] [font-weight:700] tracking-[0.08em] uppercase text-[#FCFAF6] whitespace-nowrap">1.000+ Pembeli</span>
+                  <span className="flex">
+                    <img className="w-[19px] h-[19px] rounded-[999px] [border:1.5px_solid_rgba(253,252,250,0.8)] object-cover block" src="/assets-c3/ava-1.webp" alt="" />
+                    <img className="w-[19px] h-[19px] ml-[-7px] rounded-[999px] [border:1.5px_solid_rgba(253,252,250,0.8)] object-cover block" src="/assets-c3/ava-2.webp" alt="" />
+                    <img className="w-[19px] h-[19px] ml-[-7px] rounded-[999px] [border:1.5px_solid_rgba(253,252,250,0.8)] object-cover block" src="/assets-c3/ava-3.webp" alt="" />
+                  </span>
+                </div>
+                <h1 className="mt-[0] mx-[0] mb-[clamp(12px,1.8vw,18px)] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(24px,3vw,36px)] leading-[1.16] [font-weight:700] tracking-[-0.025em] text-[#FCFAF6] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)] text-pretty">Gorden Custom Solo Raya, <span className="bg-[image:linear-gradient(to_top,rgba(224,169,59,0.85)_0.28em,transparent_0.28em)]">Terima Beres Ukur &amp; Pasang</span></h1>
+                <p className="mt-[0] mx-[0] mb-[clamp(20px,2.6vw,30px)] max-w-[46ch] text-[clamp(13.5px,1.3vw,16px)] leading-[1.6] text-[rgba(253,252,250,0.92)] [text-shadow:0_1px_16px_rgba(0,0,0,0.6)] text-pretty"><b className="text-[rgb(252,250,246)]">Takut salah ukur atau salah model?</b> Konsultasi langsung dengan owner, kami ukur dan pasang di tempat.</p>
+                <div className="flex flex-wrap gap-[12px]">
+                  <a className="flex-[1_1_210px] whitespace-nowrap flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+                  <a className="flex-[1_1_170px] whitespace-nowrap flex items-center justify-center min-h-[56px] py-[14px] px-[18px] bg-[rgba(252,250,246,0.1)] [border:2px_solid_#FCFAF6] text-[#FCFAF6] text-[clamp(15px,3.9vw,17px)] [font-weight:700] no-underline rounded-[12px] backdrop-blur-[4px] hover:bg-[rgba(252,250,246,0.22)]" href="#katalog">Lihat Katalog →</a>
+                </div>
+                {showTrustBar ? (<>
+                <div className="flex flex-wrap justify-start items-center gap-y-[4px] gap-x-[7px] mt-[clamp(14px,2vw,20px)] mx-[0] mb-[0] text-[clamp(11px,2.9vw,12.5px)] [font-weight:500] text-left text-[rgba(253,252,250,0.95)] [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+                  <span className="flex items-center gap-[6px] whitespace-nowrap"><span className="text-[#FFB800] text-[13px] tracking-[1px]">★★★★★</span> <strong className="text-[#FCFAF6]">5,0</strong> Google Review</span>
+                  <span className="text-[rgba(253,252,250,0.45)]">•</span>
+                  <span className="whitespace-nowrap">Sejak 2012</span>
+                  <span className="text-[rgba(253,252,250,0.45)]">•</span>
+                  <span className="whitespace-nowrap">Garansi pemasangan 14 hari</span>
+                </div>
+                </>) : null}
+              </div>
+              <span className="absolute left-[50%] [transform:translateX(-50%)] bottom-[clamp(16px,2.8vw,22px)] flex items-center justify-center w-[clamp(40px,9vw,54px)] h-[clamp(40px,9vw,54px)] bg-[rgba(253,252,250,0.16)] [border:1.5px_solid_rgba(253,252,250,0.7)] backdrop-blur-[6px] rounded-[999px] text-[#FCFAF6] [animation:omBob_1.6s_ease-in-out_infinite]" aria-hidden="true">
+                <span className="block text-[clamp(21px,5vw,30px)] leading-[1] [font-weight:700] mt-[-3px]">↓</span>
+              </span>
+            </div>
+          </section>
+      
+          <section className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA] scroll-mt-[76px]" id="katalog">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Katalog model</p>
+            <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em]">Model yang bisa Anda pilih untuk ruangan itu</h2>
+            <p className="mt-[0] mx-[0] mb-[clamp(18px,3.4vw,24px)] text-[clamp(14px,3.8vw,17px)] leading-[1.5] text-[#585045] max-w-[52ch] text-pretty">Semua dibuat sesuai ukuran jendela Anda. Belum tahu yang cocok? Kami bantu pilihkan saat survey.</p>
+            <div className="sticky top-[68px] z-[20] mt-[0] mx-[0] mb-[18px] py-[10px] px-[0] bg-[#FCFAF6] [border-bottom:1px_solid_#ECE5D9]" id="katalog-filter">
+              <div className="contents min-[761px]:hidden">
+                  <select onChange={onPickCatSelect} value={katCat} aria-label="Pilih kategori model" className="w-full min-h-[48px] py-[12px] px-[14px] rounded-[12px] [border:1.5px_solid_#CFC5B0] bg-[#FCFAF6] [font-family:Poppins,Helvetica,sans-serif] text-[15px] [font-weight:600] text-[#3a352c]">
+                    <option value="semua">Semua model (13)</option>
+                    <option value="kain">Gorden kain (6)</option>
+                    <option value="blinds">Blinds (5)</option>
+                    <option value="lain">Wallpaper &amp; pelengkap (2)</option>
+                  </select>
+                </div>
+              <div className="hidden min-[761px]:contents">
+                  <div className="flex flex-nowrap gap-[20px] overflow-x-auto pt-[2px] [scrollbar-width:none]">
+                    <button type="button" onClick={() => pickCat('semua')} className={`min-h-[38px] py-[8px] px-[2px] border-0 border-b-2 bg-transparent [font-family:Poppins,Helvetica,sans-serif] text-[14px] [font-weight:500] cursor-pointer whitespace-nowrap flex-none ${katCat === 'semua' ? 'border-b-[#6E6553] text-[#221F1A]' : 'border-b-transparent text-[#877E6D]'}`}>Semua model <span className="opacity-[0.5] [font-weight:400]">13</span></button>
+                    <button type="button" onClick={() => pickCat('kain')} className={`min-h-[38px] py-[8px] px-[2px] border-0 border-b-2 bg-transparent [font-family:Poppins,Helvetica,sans-serif] text-[14px] [font-weight:500] cursor-pointer whitespace-nowrap flex-none ${katCat === 'kain' ? 'border-b-[#6E6553] text-[#221F1A]' : 'border-b-transparent text-[#877E6D]'}`}>Gorden kain <span className="opacity-[0.5] [font-weight:400]">6</span></button>
+                    <button type="button" onClick={() => pickCat('blinds')} className={`min-h-[38px] py-[8px] px-[2px] border-0 border-b-2 bg-transparent [font-family:Poppins,Helvetica,sans-serif] text-[14px] [font-weight:500] cursor-pointer whitespace-nowrap flex-none ${katCat === 'blinds' ? 'border-b-[#6E6553] text-[#221F1A]' : 'border-b-transparent text-[#877E6D]'}`}>Blinds <span className="opacity-[0.5] [font-weight:400]">5</span></button>
+                    <button type="button" onClick={() => pickCat('lain')} className={`min-h-[38px] py-[8px] px-[2px] border-0 border-b-2 bg-transparent [font-family:Poppins,Helvetica,sans-serif] text-[14px] [font-weight:500] cursor-pointer whitespace-nowrap flex-none ${katCat === 'lain' ? 'border-b-[#6E6553] text-[#221F1A]' : 'border-b-transparent text-[#877E6D]'}`}>Wallpaper &amp; pelengkap <span className="opacity-[0.5] [font-weight:400]">2</span></button>
+                  </div>
+                </div></div>
+            {showKain ? (<>
+              <div className="mt-[0] mx-[0] mb-[0]">
+                <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Gorden kain</h3>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-sala3-1152x1536.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">🔥 Best Seller</span>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Minimalis</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,9 · 312 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Minimalis." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-custom.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Custom</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 5,0 · 186 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Custom." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/kat-vitrase.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Siang &amp; Vitrase</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,8 · 197 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Siang%20%26%20Vitrase." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                    <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-kupu-1.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Kupu-Kupu</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,6 · 94 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Kupu-Kupu." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                    <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-hotel-apartemen.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Hotel &amp; Apartemen</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,9 · 63 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Hotel%20%26%20Apartemen." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                    <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-rumah-sakit-rso-orthopedi-surakar.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tirai Area Publik</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,9 · 54 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Tirai%20Area%20Publik." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  </div>
+              </div>
+            </>) : null}
+            {showBlinds ? (<>
+              <div className="mt-[30px] mx-[0] mb-[0]">
+                <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Blinds</h3>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-roller-blinds-untuk-kantor-1152x1536.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">🏢 Favorit Kantor</span>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Roller Blinds</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,8 · 241 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Roller%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-zebra-blinds.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">⭐ Terlaris</span>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Zebra Blinds</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,8 · 268 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Zebra%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-vertikal-blinds.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Vertikal Blinds</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,7 · 152 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Vertikal%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                    <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-slimline-blinds-gorden-kantor-scaled-e16.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Slimline Blinds</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,7 · 81 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Slimline%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                    <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/kat-outdoor.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Outdoor Blinds</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,8 · 72 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Outdoor%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  </div>
+              </div>
+            </>) : null}
+            {showPelengkap ? (<>
+              <div className="mt-[30px] mx-[0] mb-[0]">
+                <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Wallpaper &amp; pelengkap</h3>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-wallpaper-custom-motif-peta-dunia.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Wallpaper Custom</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,8 · 143 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Wallpaper%20Custom." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-kasa-nyamuk-magnetik-1536x1012.webp)] bg-[size:cover] bg-[position:center]">
+                      <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
+                      <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
+                        <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Perlengkapan Lainnya</span>
+                        <span className="block mt-[2px] text-[11.5px] text-[rgba(252,250,246,0.85)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"><span className="text-[#FFB800]">★</span> 4,7 · 112 pembeli</span>
+                      </figcaption>
+                    </figure>
+                    <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Perlengkapan%20Lainnya." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
+                  </div>
+                </div>
+              </div>
+            </>) : null}
+            <p className="mt-[26px] mx-[0] mb-[0] text-[16px] text-[#6A6252] text-center [font-weight:700]">Belum yakin yang mana? Kirim foto jendela Anda lewat WA, kami bantu pilihkan modelnya.</p>
+            <div className="mt-[12px] mx-[0] mb-[0]">
+              <div className="flex flex-col items-stretch gap-[10px]">
+                <a className="flex-[1_1_100%] flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+              </div>
+              <div className="flex flex-wrap justify-center items-center gap-y-[5px] gap-x-[10px] mt-[12px] mx-[0] mb-[0] text-[clamp(11.5px,3vw,12.5px)] [font-weight:500] text-center text-[#3C3529]">
+                <span className="text-[#FFB800] tracking-[1px]">★★★★★</span><strong className="text-[#221F1A]">5,0</strong><span>Google Review</span><span className="opacity-[0.5]">•</span><span>1.000+ pembeli</span><span className="opacity-[0.5]">•</span><span>Garansi pemasangan 14 hari</span>
+              </div>
+            </div>
+          </section>
+      
+          <section className="w-[100vw] ml-[calc(50%_-_50vw)] py-[clamp(40px,7vw,72px)] px-[0] bg-[#FAF7F1]">
+            <div className="max-w-[1000px] my-[0] mx-[auto] py-[0] px-[clamp(16px,4vw,20px)]">
+              <div className="text-left mt-[0] mx-[0] mb-[clamp(18px,3.4vw,26px)]">
+                <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Hasil pemasangan nyata</p>
+                <h2 className="mt-[0] mx-[0] mb-[8px] max-w-[24ch] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(23px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em] text-[#221F1A] text-pretty">Bukan cuma bagus di katalog</h2>
+                <p className="m-[0] max-w-[48ch] text-[clamp(14px,3.8vw,16.5px)] leading-[1.55] text-[#585045] text-pretty">Lihat hasilnya setelah dipasang di rumah pelanggan.</p>
+                
+              </div>
+      
+              <div className="hidden min-[761px]:contents">
+              <div className="grid grid-cols-[1.85fr_1fr] grid-rows-[1fr_1fr] gap-[10px] items-stretch">
+                <div className="row-[span_2] flex">
+                <figure className="m-[0] flex-[1_1_auto] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p05-box-full-plafon-wonosari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[20px] px-[20px] pb-[18px] text-[#FCFAF6]">
+                    <span className="block text-[clamp(17px,2.2vw,21px)] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Ruangan Terlihat Lebih Tinggi</span>
+                    <span className="block mt-[3px] text-[13px] text-[rgba(252,250,246,0.84)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]">Box custom full plafon · Wonosari, Klaten</span>
+                  </figcaption>
+                </figure>
+                </div>
+                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p17-kaca-besar-tawangsari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[14px] pb-[13px] text-[#FCFAF6]">
+                    <span className="block text-[15px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Lebih Rapi Tanpa Rel Terlihat</span>
+                    <span className="block mt-[3px] text-[12px] text-[rgba(252,250,246,0.84)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]">Hidden rail · Tawangsari, Sukoharjo</span>
+                  </figcaption>
+                </figure>
+                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p01-hidden-rail-klodran.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[14px] pb-[13px] text-[#FCFAF6]">
+                    <span className="block text-[15px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tidur Lebih Nyaman dan Gelap</span>
+                    <span className="block mt-[3px] text-[12px] text-[rgba(252,250,246,0.84)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]">Blackout 100% · Klodran, Colomadu</span>
+                  </figcaption>
+                </figure>
+              </div>
+              </div>
+      
+              <div className="contents min-[761px]:hidden">
+              <div className="grid gap-[8px]">
+                <figure className="m-[0] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p05-box-full-plafon-wonosari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[15px] pb-[14px] text-[#FCFAF6]">
+                    <span className="block text-[clamp(16px,4.4vw,19px)] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Ruangan Terlihat Lebih Tinggi</span>
+                    <span className="block mt-[3px] text-[12.5px] text-[rgba(252,250,246,0.84)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]">Box custom full plafon · Wonosari, Klaten</span>
+                  </figcaption>
+                </figure>
+                <div className="grid grid-cols-[repeat(3,1fr)] gap-[8px]">
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p17-kaca-besar-tawangsari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
+                    <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Lebih Rapi Tanpa Rel Terlihat</span>
+                  </figcaption>
+                </figure>
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p01-hidden-rail-klodran.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
+                    <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tidur Lebih Nyaman dan Gelap</span>
+                  </figcaption>
+                </figure>
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p12-villa-the-ponggok.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p12-villa-the-ponggok.webp">
+                  <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
+                  <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
+                    <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Terasa Seperti Kamar Hotel</span>
+                  </figcaption>
+                </figure>
+                </div>
+              </div>
+              </div>
+      
+              <div className="mt-[clamp(36px,6vw,56px)] mx-[0] mb-[0] pt-[clamp(28px,5vw,40px)] px-[0] pb-[0] [border-top:1px_solid_#EDE6DA]">
+            <div className="text-left mt-[0] mx-[0] mb-[clamp(16px,3vw,22px)]">
+              <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Lihat perubahannya</p>
+              <h3 className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(20px,4.8vw,27px)] leading-[1.16] [font-weight:600] tracking-[-0.03em] text-[#221F1A] text-pretty">Dari ruangan biasa menjadi lebih rapi dan nyaman</h3>
+            </div>
+            <div className="m-[0] py-[18px] px-[16px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[20px]">
+              <div className="grid grid-cols-[1fr_1fr] gap-[clamp(10px,2.4vw,14px)]">
+                <figure className="m-[0]" data-zoom="/assets-c3/before-gorden.webp">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:url(/assets-c3/before-gorden.webp)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in">
+                    <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#FCFAF6] text-[#5d5546] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sebelum</span>
+                  </div>
+                </figure>
+                <figure className="m-[0]" data-zoom="/assets-c3/after-gorden.webp">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:url(/assets-c3/after-gorden.webp)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in">
+                    <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#6E6553] text-[#fff] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sesudah</span>
+                  </div>
+                </figure>
+              </div>
+              <p className="mt-[14px] mx-[0] mb-[0] text-center text-[clamp(13px,3.5vw,14.5px)] leading-[1.5] text-[#585045] text-pretty">Lebih rapi, lebih tinggi, dan sesuai konsep ruangan. Direkomendasikan langsung oleh owner berdasarkan kondisi ruangannya.</p>
+            </div>
+      
+              </div>
+              <div className="mt-[clamp(36px,6vw,56px)] mx-[0] mb-[0] pt-[clamp(28px,5vw,40px)] px-[0] pb-[0] [border-top:1px_solid_#EDE6DA]">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Kata pelanggan</p>
+            <h3 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(20px,4.8vw,27px)] leading-[1.16] [font-weight:600] tracking-[-0.03em] text-pretty">Kenapa pelanggan puas setelah gorden terpasang?</h3>
+            <div className="inline-flex items-center gap-[14px] mt-[0] mx-[0] mb-[22px] py-[12px] px-[18px] bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px]">
+              <img className="flex-none w-[26px] h-[26px] block" src="/assets-c3/google-g.svg" alt="Google" />
+              <span className="flex flex-col gap-[2px]">
+                <span className="flex items-center gap-[7px]"><span className="text-[#FFB800] text-[14px] tracking-[1px]">★★★★★</span><strong className="text-[15px] text-[#221F1A]">5,0</strong></span>
+                <span className="text-[13px] text-[oklch(0.5_0.03_70)]">100+ ulasan di Google Review</span>
+              </span>
+            </div>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[16px] items-stretch">
+              <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
+                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-1.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
+                  <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Harga sebanding kualitasnya</span>
+                  <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
+                    <img className="flex-none w-[40px] h-[40px] rounded-[999px] object-cover block" src="/assets-c3/ava-1.webp" alt="Notikawati Puput" />
+                    <span className="flex flex-col gap-[2px] min-w-[0]">
+                      <span className="text-[15px] [font-weight:700] text-[#221F1A]">Notikawati Puput</span>
+                      <span className="flex items-center gap-[6px]">
+                        <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
+                        <span className="text-[12px] text-[#7B7263]">7 bulan lalu</span>
+                      </span>
+                    </span>
+                    <img className="flex-none ml-[auto] w-[18px] h-[18px] block" src="/assets-c3/google-g.svg" alt="Google" />
+                  </div>
+                  <p className="m-[0] text-[14.5px] leading-[1.6] text-[#4A4339]">Desainnya elegan, dan <b className="[font-weight:700] text-[#221F1A]">kualitas bahan serta jahitannya rapi dan premium</b>. Ruangan jadi terlihat lebih cantik dan berkelas.</p>
+                </div>
+              </article>
+              <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
+                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-2.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
+                  <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Selesai lebih cepat dari janji</span>
+                  <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
+                    <img className="flex-none w-[40px] h-[40px] rounded-[999px] object-cover block" src="/assets-c3/ava-2.webp" alt="Ing Sun" />
+                    <span className="flex flex-col gap-[2px] min-w-[0]">
+                      <span className="text-[15px] [font-weight:700] text-[#221F1A]">Ing Sun</span>
+                      <span className="flex items-center gap-[6px]">
+                        <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
+                        <span className="text-[12px] text-[#7B7263]">3 bulan lalu</span>
+                      </span>
+                    </span>
+                    <img className="flex-none ml-[auto] w-[18px] h-[18px] block" src="/assets-c3/google-g.svg" alt="Google" />
+                  </div>
+                  <p className="m-[0] text-[14.5px] leading-[1.6] text-[#4A4339]">Produk bagus, bisa custom, dan <b className="[font-weight:700] text-[#221F1A]">orderan selesai serta dipasang lebih cepat dari yang dijanjikan</b>. Sangat recommended.</p>
+                </div>
+              </article>
+              <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
+                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-3.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
+                  <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Warnanya cocok di ruangan</span>
+                  <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
+                    <img className="flex-none w-[40px] h-[40px] rounded-[999px] object-cover block" src="/assets-c3/ava-3.webp" alt="Chusnul Khotimah" />
+                    <span className="flex flex-col gap-[2px] min-w-[0]">
+                      <span className="text-[15px] [font-weight:700] text-[#221F1A]">Chusnul Khotimah</span>
+                      <span className="flex items-center gap-[6px]">
+                        <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
+                        <span className="text-[12px] text-[#7B7263]">1 minggu lalu</span>
+                      </span>
+                    </span>
+                    <img className="flex-none ml-[auto] w-[18px] h-[18px] block" src="/assets-c3/google-g.svg" alt="Google" />
+                  </div>
+                  <p className="m-[0] text-[14.5px] leading-[1.6] text-[#4A4339]">Pesan jauh-jauh dari Semarang, dan <b className="[font-weight:700] text-[#221F1A]">hasilnya rapi banget, warnanya cocok dengan ruangan</b>. Rumah jadi terasa baru.</p>
+                </div>
+              </article>
+            </div>
+            
+      
+            <div className="mt-[26px] mx-[0] mb-[0] pt-[18px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9]">
+              <p className="mt-[0] mx-[0] mb-[12px] text-center text-[12.5px] text-[#7B7263]">Cuplikan ulasan lain langsung dari Google</p>
+              <div className="flex items-center justify-center gap-[clamp(6px,2vw,14px)]">
+                <button className="flex-none flex items-center justify-center h-[30px] w-[30px] rounded-[999px] [border:1px_solid_#E5DDCF] bg-[#fff] shadow-[0_6px_16px_rgba(58,53,44,0.16)] text-[#3a352c] text-[15px] cursor-pointer hover:bg-[#F2EDE3]" onClick={reviewPrevClick} aria-label="Ulasan sebelumnya">‹</button>
+                <div className="flex-[1_1_auto] min-w-[0] overflow-hidden pt-[8px] px-[0] pb-[22px]">
+                  <div
+                    style={{ ['--pos' as string]: reviewPos } as CSSProperties}
+                    className={`flex items-center translate-x-[calc(12%-var(--pos)*76%)] min-[761px]:translate-x-[calc(27%-var(--pos)*46%)] ${reviewNoAnim ? 'transition-none' : 'transition-[translate] duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)]'}`}
+                  >
+                    {reviewSlides.map((src, i) => (
+                      <div
+                        key={i}
+                        onClick={() => onSlideClick(i)}
+                        className={`flex-[0_0_76%] min-[761px]:flex-[0_0_46%] flex justify-center px-[6px] cursor-pointer ${reviewNoAnim ? 'transition-none' : 'transition-[opacity,scale] duration-700 ease-[ease]'} ${i === reviewPos ? 'opacity-100 scale-100' : 'opacity-[0.45] scale-[0.9]'}`}
+                      >
+                        <img src={src} alt="Ulasan pelanggan di Google" className="block h-[min(46vh,300px)] min-[761px]:h-[240px] w-auto max-w-full object-contain rounded-[16px] [border:1px_solid_#ECE5D9] bg-[#fff] shadow-[0_20px_38px_-22px_rgba(58,53,44,0.95)]" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <button className="flex-none flex items-center justify-center h-[30px] w-[30px] rounded-[999px] [border:1px_solid_#E5DDCF] bg-[#fff] shadow-[0_6px_16px_rgba(58,53,44,0.16)] text-[#3a352c] text-[15px] cursor-pointer hover:bg-[#F2EDE3]" onClick={reviewNextClick} aria-label="Ulasan selanjutnya">›</button>
+              </div>
+              <div className="flex justify-center gap-[6px] mt-[10px] mx-[0] mb-[0]">
+                {reviewShots.map((_, i) => (
+                  <span key={i} className={`w-[5px] h-[5px] rounded-[999px] ${i === reviewIdx ? 'bg-[#6E6553]' : 'bg-[#CFC5B0]'}`} />
+                ))}
+              </div>
+              </div>
+      
+              </div>
+              <div className="flex justify-center mt-[clamp(18px,3.2vw,26px)] mx-[0] mb-[0]">
+                <a className="flex-[0_1_380px] flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+              </div>
+            </div>
+          </section>
+      
+          <section className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
+            <div className="py-[clamp(24px,5vw,34px)] px-[clamp(16px,4.5vw,28px)] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[20px]">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">KENAPA PILIH GORDEN WALLPAPER SOLO?</p>
+            <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em] text-pretty"><span className="hidden min-[761px]:inline">Kenapa hasil gorden kami beda dengan marketplace dan toko gorden lain</span><span className="min-[761px]:hidden">Kenapa hasil kami beda dari marketplace &amp; toko lain?</span></h2>
+            <p className="mt-[0] mx-[0] mb-[22px] text-[#585045] max-w-[62ch] text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55]">Silakan dibandingkan. Bedanya paling terasa setelah gordennya terpasang.</p>
+            <div className="bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[12px] overflow-clip">
+              <div className="sticky top-[60px] z-[15] grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-stretch gap-[6px] bg-[#f4f1ea] shadow-[0_6px_12px_-10px_rgba(58,53,44,0.7)]">
+                <span className="flex items-center py-[12px] px-[14px] text-[clamp(11px,3vw,12px)] [font-weight:700] tracking-[0.08em] uppercase text-[#877E6D]">Kriteria</span>
+                <span className="flex items-center justify-center py-[12px] px-[4px] text-center text-[clamp(11px,3vw,13px)] [font-weight:700] leading-[1.15] text-[#877E6D]">Market­place</span>
+                <span className="flex items-center justify-center py-[12px] px-[4px] text-center text-[clamp(11px,3vw,13px)] [font-weight:700] leading-[1.15] text-[#877E6D]">Toko lain</span>
+                <span className="flex items-center justify-center py-[12px] px-[4px] text-center text-[clamp(11px,3vw,13px)] [font-weight:700] leading-[1.15] text-[#FCFAF6] bg-[#6E6553]">Kami</span>
+              </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Harga sepadan hasilnya</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#e6e0d3] text-[#7d7362] text-[12px] [font-weight:700]">–</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+                                    <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px] [border-top:1px_solid_#F1ECE2]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Pas di jendela Anda</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#eee9df] text-[#A79B85] text-[12px] [font-weight:700]">✕</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px] [border-top:1px_solid_#F1ECE2]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Jatuhnya rapi berkat finishing steam</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#eee9df] text-[#A79B85] text-[12px] [font-weight:700]">✕</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#e6e0d3] text-[#7d7362] text-[12px] [font-weight:700]">–</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px] [border-top:1px_solid_#F1ECE2]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Aman dari salah ukur</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#eee9df] text-[#A79B85] text-[12px] [font-weight:700]">✕</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#e6e0d3] text-[#7d7362] text-[12px] [font-weight:700]">–</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+                          <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px] [border-top:1px_solid_#F1ECE2]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Terpasang, tinggal terima beres</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#eee9df] text-[#A79B85] text-[12px] [font-weight:700]">✕</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#e6e0d3] text-[#7d7362] text-[12px] [font-weight:700]">–</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_clamp(46px,12vw,84px)_clamp(46px,12vw,84px)_clamp(52px,13vw,96px)] items-center gap-[6px] [border-top:1px_solid_#F1ECE2]">
+                  <span className="py-[13px] px-[14px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.35] [font-weight:500] text-[#2A2620]">Ada garansi kalau kurang pas</span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#eee9df] text-[#A79B85] text-[12px] [font-weight:700]">✕</span></span>
+                  <span className="flex justify-center py-[12px] px-[0]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#e6e0d3] text-[#7d7362] text-[12px] [font-weight:700]">–</span></span>
+                  <span className="flex items-center justify-center py-[12px] px-[0] bg-[#F4EFE5] h-[100%]"><span className="w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span></span>
+                </div>
+            </div>
+            <p className="mt-[22px] mx-[0] mb-[0] py-[18px] px-[20px] bg-[#FCFAF6] [border-left:5px_solid_#6E6553] rounded-[12px] text-[clamp(15px,4vw,18px)] leading-[1.5] text-[#2A2620] text-pretty">Yang kami janjikan hasil akhir yang pas di jendela Anda, rapi dan siap pakai.</p>
+            </div>
+            <div className="mt-[clamp(36px,6vw,56px)] mx-[0] mb-[0] pt-[clamp(28px,5vw,40px)] px-[0] pb-[0] [border-top:1px_solid_#EDE6DA] scroll-mt-[76px]" id="proses">
+            <div className="text-left mt-[0] mx-[0] mb-[clamp(18px,3.4vw,26px)]">
+              <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Proses kerja</p>
+              <h3 className="mt-[0] mx-[0] mb-[10px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(20px,4.8vw,27px)] leading-[1.16] [font-weight:600] tracking-[-0.03em] text-pretty">Dari ukur sampai terpasang, kami yang urus semuanya.</h3>
+              <p className="mt-[0] mx-[0] mb-[22px] text-[#585045] max-w-[none] text-pretty text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55]">Anda cukup pilih model dan kain. Selebihnya, tim kami yang mengukur, membuat, hingga memasang.</p>
+            </div>
+            <div className="hidden min-[761px]:contents">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-[16px] items-stretch">
+                <div className="py-[24px] px-[22px] bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[12px]">
+                  <div className="p-[0]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">01</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Konsultasi &amp; Survey</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Ceritakan kebutuhan Anda via WhatsApp. Kami jadwalkan survey ke rumah.</p>
+                    </div>
+                  </div>
+                  </div>
+                  <div className="pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">02</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Ukur &amp; Pilih Kain</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami ukur jendela secara presisi dan bantu pilih kain yang sesuai.</p>
+                    </div>
+                  </div>
+                  </div>
+                  <div className="pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">03</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Dibuat Sesuai Ukuran</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Gorden dibuat khusus dengan ukuran jendela Anda.</p>
+                    </div>
+                  </div>
+                  </div>
+                  <div className="pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">04</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Pasang &amp; Cek</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami pasang hingga rapi dan memastikan semuanya pas.</p>
+                    </div>
+                  </div>
+                  </div>
+                  <p className="mt-[22px] mx-[0] mb-[0] py-[14px] px-[16px] bg-[#F2EDE3] rounded-[10px] text-[14px] leading-[1.45] text-[#4A4339]"><strong className="text-[#221F1A]">Jadwal fleksibel.</strong> Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.</p>
+                </div>
+                <div className="flex flex-col gap-[16px] min-h-[420px]">
+                  <div className="flex-[1.8_1_0] min-h-[260px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/proses-ukur.webp)] bg-[size:cover] bg-[position:center]">
+                    <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Survey &amp; ukur di rumah pelanggan</p>
+                  </div>
+                  <div className="flex-[1_1_0] min-h-[150px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/p14-box-glossy-permata-mayang.webp)] bg-[size:cover] bg-[position:center]">
+                    <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Hasil akhirnya: terpasang rapi dan pas</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="contents min-[761px]:hidden">
+              <div className="py-[22px] px-[18px] bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[12px]">
+                  <div className="grid gap-[14px] p-[0]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">01</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Konsultasi &amp; Survey</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Ceritakan kebutuhan Anda via WhatsApp. Kami jadwalkan survey ke rumah.</p>
+                    </div>
+                  </div>
+                    
+                  </div>
+                  <div className="grid gap-[14px] pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">02</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Ukur &amp; Pilih Kain</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami ukur jendela secara presisi dan bantu pilih kain yang sesuai.</p>
+                    </div>
+                  </div>
+                    <div className="aspect-[16/10] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/proses-ukur.webp)] bg-[size:cover] bg-[position:center]">
+                    <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Survey &amp; ukur di rumah pelanggan</p>
+                  </div>
+                  </div>
+                  <div className="grid gap-[14px] pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">03</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Dibuat Sesuai Ukuran</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Gorden dibuat khusus dengan ukuran jendela Anda.</p>
+                    </div>
+                  </div>
+                    
+                  </div>
+                  <div className="grid gap-[14px] pt-[20px] px-[0] pb-[0] [border-top:1px_solid_#ECE5D9] mt-[20px]">
+                    <div className="grid grid-cols-[42px_1fr] gap-[14px] items-start">
+                    <span className="[font-family:Poppins,Helvetica,sans-serif] text-[21px] [font-weight:700] leading-[1.15] tracking-[-0.02em] text-[#A79B85]">04</span>
+                    <div>
+                      <h3 className="mt-[0] mx-[0] mb-[5px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(17px,4.2vw,19px)] [font-weight:600] tracking-[-0.01em]">Pasang &amp; Cek</h3>
+                      <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami pasang hingga rapi dan memastikan semuanya pas.</p>
+                    </div>
+                  </div>
+                    <div className="aspect-[16/8] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/p14-box-glossy-permata-mayang.webp)] bg-[size:cover] bg-[position:center]">
+                    <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Hasil akhirnya: terpasang rapi dan pas</p>
+                  </div>
+                  </div>
+                <p className="mt-[22px] mx-[0] mb-[0] py-[14px] px-[16px] bg-[#F2EDE3] rounded-[10px] text-[14px] leading-[1.45] text-[#4A4339]"><strong className="text-[#221F1A]">Jadwal fleksibel.</strong> Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.</p>
+              </div>
+            </div>
+            </div>
+            <div className="mt-[clamp(36px,6vw,56px)] mx-[0] mb-[0] py-[clamp(24px,5vw,38px)] px-[clamp(18px,4.5vw,32px)] bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px]">
+            <div className="max-w-[640px] mt-[0] mx-[auto] mb-[clamp(20px,3.6vw,28px)] text-center">
+              <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Jaminan</p>
+              <h3 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.14] [font-weight:700] tracking-[-0.03em] text-[#221F1A] text-pretty">Garansi pemasangan 14 hari</h3>
+              <p className="m-[0] text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55] text-[#585045] text-pretty">Ada yang kurang pas setelah terpasang? Kami perbaiki tanpa biaya tambahan.</p>
+            </div>
+            <div className="grid grid-cols-[repeat(2,minmax(0,1fr))] gap-[10px]">
+                <div className="flex flex-wrap gap-y-[10px] gap-x-[12px] items-start p-[16px] bg-[#FAF7F1] [border:1px_solid_#E5DDCF] rounded-[12px]">
+                  <span className="flex-none w-[24px] h-[24px] mt-[1px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span>
+                  <span className="flex-[1_1_130px] min-w-[0]">
+                    <span className="block text-[clamp(14px,3.8vw,16px)] [font-weight:600] leading-[1.3] text-[#221F1A]">Perbaikan gratis</span>
+                    <span className="block mt-[3px] text-[clamp(12.5px,3.4vw,13.5px)] leading-[1.45] text-[#6F6757] text-pretty">Kurang rapi? Kami betulkan.</span>
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-y-[10px] gap-x-[12px] items-start p-[16px] bg-[#FAF7F1] [border:1px_solid_#E5DDCF] rounded-[12px]">
+                  <span className="flex-none w-[24px] h-[24px] mt-[1px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span>
+                  <span className="flex-[1_1_130px] min-w-[0]">
+                    <span className="block text-[clamp(14px,3.8vw,16px)] [font-weight:600] leading-[1.3] text-[#221F1A]">Survey gratis</span>
+                    <span className="block mt-[3px] text-[clamp(12.5px,3.4vw,13.5px)] leading-[1.45] text-[#6F6757] text-pretty">Diukur dulu, tanpa biaya.</span>
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-y-[10px] gap-x-[12px] items-start p-[16px] bg-[#FAF7F1] [border:1px_solid_#E5DDCF] rounded-[12px]">
+                  <span className="flex-none w-[24px] h-[24px] mt-[1px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span>
+                  <span className="flex-[1_1_130px] min-w-[0]">
+                    <span className="block text-[clamp(14px,3.8vw,16px)] [font-weight:600] leading-[1.3] text-[#221F1A]">Harga jujur</span>
+                    <span className="block mt-[3px] text-[clamp(12.5px,3.4vw,13.5px)] leading-[1.45] text-[#6F6757] text-pretty">Tanpa biaya tersembunyi.</span>
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-y-[10px] gap-x-[12px] items-start p-[16px] bg-[#FAF7F1] [border:1px_solid_#E5DDCF] rounded-[12px]">
+                  <span className="flex-none w-[24px] h-[24px] mt-[1px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">✓</span>
+                  <span className="flex-[1_1_130px] min-w-[0]">
+                    <span className="block text-[clamp(14px,3.8vw,16px)] [font-weight:600] leading-[1.3] text-[#221F1A]">Tim sendiri</span>
+                    <span className="block mt-[3px] text-[clamp(12.5px,3.4vw,13.5px)] leading-[1.45] text-[#6F6757] text-pretty">Tidak dilempar ke vendor.</span>
+                  </span>
+                </div>
+            </div>
+            </div>
+            <div className="mt-[26px] mx-[0] mb-[0]">
+              <div className="flex flex-col items-stretch gap-[10px]">
+                <a className="flex-[1_1_100%] flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+                <p className="m-[0] text-center text-[clamp(12.5px,3.3vw,13.5px)] leading-[1.45] text-[#6F6757]">Chat langsung dibalas owner, gratis dan tanpa wajib memesan.</p>
+                <a className="self-center inline-flex items-center gap-[6px] min-h-[30px] py-[2px] px-[0] bg-transparent border-0 text-[#585045] text-[clamp(13.5px,3.5vw,15px)] [font-weight:500] underline [text-underline-offset:4px] [text-decoration-color:#C7BBA2] hover:text-[#221F1A] hover:[text-decoration-color:#6E6553]" href="#katalog">Lihat katalog model dulu</a>
+              </div>
+              <div className="flex flex-wrap justify-center items-center gap-y-[5px] gap-x-[10px] mt-[12px] mx-[0] mb-[0] text-[clamp(11.5px,3vw,12.5px)] [font-weight:500] text-center text-[#3C3529]">
+                <span className="text-[#FFB800] tracking-[1px]">★★★★★</span><strong className="text-[#221F1A]">5,0</strong><span>Google Review</span><span className="opacity-[0.5]">•</span><span>1.000+ pembeli</span><span className="opacity-[0.5]">•</span><span>Garansi pemasangan 14 hari</span>
+              </div>
+            </div>
+          
+          </section>
+      
+          <section className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Tanya jawab &amp; area layanan</p>
+            <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em]">Pertanyaan yang paling sering masuk</h2>
+            <p className="mt-[0] mx-[0] mb-[22px] text-[#585045] max-w-[62ch] text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55]">Klik pertanyaannya untuk melihat jawaban.</p>
+            <div className="grid gap-[10px]">
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">1</span>
+                  <span className="flex-[1]">Berapa lama proses produksinya?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Umumnya <strong>7-10 hari kerja setelah survey</strong>, tergantung jumlah jendela dan ketersediaan kain yang Anda pilih. Kalau Anda sedang mengejar tanggal tertentu, sampaikan di awal, nanti kami cek dulu apakah bisa kami kejar.</div>
+              </details>
+      
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">2</span>
+                  <span className="flex-[1]">Apakah ada diskon?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Ada promo tertentu tergantung periode dan jumlah jendela yang dikerjakan. Paling enak tanya langsung ke owner via WhatsApp, biar kami info promo yang benar-benar aktif sekarang, bukan yang sudah lewat.</div>
+              </details>
+      
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">3</span>
+                  <span className="flex-[1]">Kapan waktu pemasangannya?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Dijadwalkan sesuai kesepakatan setelah produksi selesai, biasanya <strong>7-10 hari kerja</strong> setelahnya. Anda pilih hari dan jamnya; kami yang menyesuaikan.</div>
+              </details>
+      
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">4</span>
+                  <span className="flex-[1]">Kalau setelah dipasang ada yang kurang pas?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Masuk garansi pemasangan 14 hari. Kabari saja, kami datang memperbaiki tanpa biaya tambahan.</div>
+              </details>
+      
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">5</span>
+                  <span className="flex-[1]">Apakah survey dan konsultasi dikenakan biaya?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Tidak. Konsultasi dan survey ke lokasi gratis untuk area Solo Raya.</div>
+              </details>
+      
+              <details className="bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[20px] overflow-hidden">
+                <summary className="flex items-center gap-[11px] py-[13px] px-[14px] cursor-pointer list-none text-[clamp(14px,3.7vw,16px)] leading-[1.35] [font-weight:600] text-[#221F1A]">
+                  <span className="flex-none w-[24px] h-[24px] flex items-center justify-center rounded-[999px] bg-[#6E6553] text-[#FCFAF6] text-[12px] [font-weight:700]">6</span>
+                  <span className="flex-[1]">Bisa bantu pilih model kalau saya belum ada bayangan?</span>
+                  <span className="flex-none text-[19px] leading-[1] text-[#6E6553]">+</span>
+                </summary>
+                <div className="pt-[0] pr-[16px] pb-[16px] pl-[49px] text-[clamp(13.5px,3.6vw,15.5px)] leading-[1.55] text-[#4F4840]">Justru itu tugas kami. Ceritakan fungsi ruangannya dan arah jendelanya, nanti owner yang bantu susun pilihannya, bukan Anda yang dibiarkan menebak sendiri.</div>
+              </details>
+            </div>
+            
+            <div className="mt-[clamp(28px,5vw,40px)] mx-[0] mb-[0] py-[clamp(24px,5.5vw,32px)] px-[clamp(16px,4.5vw,24px)] bg-[#6E6553] text-[#FCFAF6] rounded-[12px]">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[12px] [font-weight:700] tracking-[0.14em] uppercase text-[rgba(253,252,250,0.75)]">Area layanan</p>
+            <h3 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(20px,4.8vw,27px)] leading-[1.16] [font-weight:600] tracking-[-0.03em]">Survey &amp; pasang di seluruh Solo Raya</h3>
+            <p className="mt-[0] mx-[0] mb-[20px] text-[rgba(253,252,250,0.85)] max-w-[62ch]">Workshop kami di Jl. Songgolangit 22, Gentan, Solo, dan tim datang ke lokasi Anda tanpa biaya survey.</p>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(46%,130px),1fr))] gap-[10px]">
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Solo</span>
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Sukoharjo</span>
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Karanganyar</span>
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Boyolali</span>
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Klaten</span>
+              <span className="py-[14px] px-[16px] bg-[rgba(253,252,250,0.12)] [border:1px_solid_rgba(253,252,250,0.28)] rounded-[12px] text-[17px] [font-weight:600] text-center">Sragen</span>
+            </div>
+            <p className="mt-[18px] mx-[0] mb-[0] text-[16px] text-[rgba(253,252,250,0.85)]">Di luar area tersebut? Tanyakan dulu lewat WhatsApp, biasanya masih bisa kami bantu.</p>
+      
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[12px] mt-[22px] mx-[0] mb-[0]">
+              <div className="py-[16px] px-[18px] bg-[rgba(252,250,246,0.08)] [border:1px_solid_rgba(252,250,246,0.2)] rounded-[12px]">
+                <p className="mt-[0] mx-[0] mb-[6px] text-[11px] [font-weight:600] tracking-[0.18em] uppercase text-[rgba(252,250,246,0.7)]">Workshop</p>
+                <p className="mt-[0] mx-[0] mb-[4px] text-[16px] [font-weight:600] leading-[1.4] text-[#FCFAF6]">Jl. Songgolangit 22, Gentan, Solo</p>
+                <p className="mt-[0] mx-[0] mb-[10px] text-[13.5px] leading-[1.5] text-[rgba(252,250,246,0.8)]">Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
+                <a className="inline-flex items-center gap-[6px] min-h-[36px] text-[14px] [font-weight:600] text-[#FCFAF6] underline [text-underline-offset:3px]" href="https://www.google.com/maps/search/?api=1&amp;query=Gorden+Wallpaper+Solo+Jl.+Songgolangit+22+Gentan" target="_blank" rel="noopener">Buka di Google Maps →</a>
+              </div>
+              <div className="py-[16px] px-[18px] bg-[rgba(252,250,246,0.08)] [border:1px_solid_rgba(252,250,246,0.2)] rounded-[12px]">
+                <p className="mt-[0] mx-[0] mb-[6px] text-[11px] [font-weight:600] tracking-[0.18em] uppercase text-[rgba(252,250,246,0.7)]">Kontak WhatsApp</p>
+                <p className="mt-[0] mx-[0] mb-[4px] text-[16px] [font-weight:600] leading-[1.4] text-[#FCFAF6]">085860525758</p>
+                <p className="mt-[0] mx-[0] mb-[10px] text-[13.5px] leading-[1.5] text-[rgba(252,250,246,0.8)]">Online 24 jam, setiap hari</p>
+                <a className="inline-flex items-center gap-[6px] min-h-[36px] text-[14px] [font-weight:600] text-[#FCFAF6] underline [text-underline-offset:3px]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener">Chat sekarang →</a>
+              </div>
+            </div>
+            </div>
+            <div className="mt-[26px] mx-[0] mb-[0]">
+              <div className="flex flex-col items-stretch gap-[10px]">
+                <a className="flex-[1_1_100%] flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
+                <p className="m-[0] text-center text-[clamp(12.5px,3.3vw,13.5px)] leading-[1.45] text-[#6F6757]">Chat langsung dibalas owner, gratis dan tanpa wajib memesan.</p>
+                <a className="self-center inline-flex items-center gap-[6px] min-h-[30px] py-[2px] px-[0] bg-transparent border-0 text-[#585045] text-[clamp(13.5px,3.5vw,15px)] [font-weight:500] underline [text-underline-offset:4px] [text-decoration-color:#C7BBA2] hover:text-[#221F1A] hover:[text-decoration-color:#6E6553]" href="#katalog">Lihat katalog model dulu</a>
+              </div>
+              <div className="flex flex-wrap justify-center items-center gap-y-[5px] gap-x-[10px] mt-[12px] mx-[0] mb-[0] text-[clamp(11.5px,3vw,12.5px)] [font-weight:500] text-center text-[#3C3529]">
+                <span className="text-[#FFB800] tracking-[1px]">★★★★★</span><strong className="text-[#221F1A]">5,0</strong><span>Google Review</span><span className="opacity-[0.5]">•</span><span>1.000+ pembeli</span><span className="opacity-[0.5]">•</span><span>Garansi pemasangan 14 hari</span>
+              </div>
+            </div>
+          
+          </section>
+      
+      
+          <footer className="pt-[34px] px-[0] pb-[0] mt-[30px] [border-top:1px_solid_#E5DDCF] text-[15px] text-[#585045] grid gap-[6px]">
+            <p className="mt-[0] mx-[0] mb-[6px] [font-family:Poppins,Helvetica,sans-serif] text-[19px] [font-weight:600] text-[oklch(0.24_0.02_60)]">Gorden Wallpaper Solo</p>
+            <p className="m-[0]">Jl. Songgolangit 22, Gentan, Solo</p>
+            <p className="m-[0]">WhatsApp: <a className="[font-weight:600]" href="https://wa.me/6285860525758" target="_blank" rel="noopener">085860525758</a></p>
+            <p className="m-[0]">Jam operasional online: 24 jam, setiap hari</p>
+            <p className="m-[0]">Workshop: Senin-Sabtu 09.00-17.00, Minggu dan hari libur by appointment</p>
+            <p className="m-[0]"><a href="https://instagram.com/gorden.wallpapersolo" target="_blank" rel="noopener">Instagram @gorden.wallpapersolo</a> · <a href="https://facebook.com/search/top?q=gorden%20wallpaper%20solo" target="_blank" rel="noopener">Facebook Gorden Wallpaper Solo</a></p>
+            <p className="mt-[8px] mx-[0] mb-[0] text-[13px] text-[oklch(0.58_0.03_70)]">Melayani gorden custom rumah &amp; kantor di Solo, Sukoharjo, Karanganyar, Boyolali, Klaten, dan Sragen sejak 2012.</p>
+          </footer>
+          <div className="contents min-[761px]:hidden"><div className="h-[76px]"></div></div>
+      
+        </div>
+      
+        {!!lightbox ? (<>
+          <div className="fixed inset-0 z-[90] flex items-center justify-center p-[20px] bg-[rgba(28,25,20,0.88)] [cursor:zoom-out]" onClick={closeLightbox}>
+            <div className="flex flex-col items-center gap-[14px] max-w-[100%] max-h-[100%] cursor-default" onClick={stopClick}>
+              <img className="max-w-[100%] max-h-[74vh] w-[auto] h-[auto] rounded-[12px] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]" alt="Pratinjau gambar" src={lightbox ?? undefined} />
+              {lightboxCaption ? (<>
+                <p className="m-[0] max-w-[42ch] text-center [font-family:Poppins,Helvetica,sans-serif] text-[15px] leading-[1.45] [font-weight:600] text-[#FCFAF6]">{lightboxCaption}</p>
+              </>) : null}
+              {lbList.length > 1 ? (<>
+                <div className="flex items-center gap-[14px]">
+                  <button className="w-[44px] h-[44px] flex items-center justify-center rounded-[999px] border-0 bg-[rgba(253,252,250,0.92)] text-[#3a352c] text-[20px] cursor-pointer" type="button" onClick={lightboxPrev} aria-label="Foto sebelumnya">‹</button>
+                  <span className="text-[13px] [font-weight:600] text-[rgba(253,252,250,0.8)]">{lightboxPos}</span>
+                  <button className="w-[44px] h-[44px] flex items-center justify-center rounded-[999px] border-0 bg-[rgba(253,252,250,0.92)] text-[#3a352c] text-[20px] cursor-pointer" type="button" onClick={lightboxNext} aria-label="Foto selanjutnya">›</button>
+                </div>
+              </>) : null}
+            </div>
+            <button className="absolute top-[16px] right-[16px] w-[42px] h-[42px] flex items-center justify-center rounded-[999px] border-0 bg-[rgba(253,252,250,0.92)] text-[#3a352c] text-[20px] cursor-pointer" type="button" onClick={closeLightbox} aria-label="Tutup">✕</button>
+          </div>
+        </>) : null}
+      
+        {showNudge ? (<>
+          <a className="fixed right-[18px] bottom-[86px] min-[761px]:bottom-[88px] z-[59] max-w-[min(260px,calc(100vw-36px))] min-[761px]:max-w-[min(320px,calc(100vw-36px))] flex items-start gap-[10px] py-[9px] px-[10px] min-[761px]:py-[15px] min-[761px]:px-[16px] bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[16px] shadow-[0_18px_44px_-18px_rgba(32,29,24,0.42)] no-underline cursor-pointer hover:bg-[#F7F3EA]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" onClick={closeNudge}>
+            <img className="flex-none w-[26px] h-[26px] min-[761px]:w-[42px] min-[761px]:h-[42px] rounded-[999px] object-cover bg-[#F2EDE3] [border:1px_solid_#E5DDCF]" src="/assets-c3/owner-elang.webp" alt="" />
+            <div className="min-w-[0]">
+              <p className="mt-[0] mx-[0] mb-[3px] [font-family:Poppins,Helvetica,sans-serif] text-[11.5px] min-[761px]:text-[14px] [font-weight:700] leading-[1.3] text-[#221F1A]">Pak Elang - Owner Gorden Wallpaper Solo</p>
+              <p className="mt-[0] mx-[0] mb-[7px] text-[11.5px] min-[761px]:text-[13.5px] leading-[1.4] text-[#585045] text-pretty"><span className="min-[761px]:hidden">Bingung pilih model? Tanya saya.</span><span className="hidden min-[761px]:inline">Masih bingung pilih model atau ukuran? Tanya langsung ke saya di WA.</span></p>
+              <span className="inline-flex items-center gap-[6px] text-[11.5px] min-[761px]:text-[13.5px] [font-weight:700] text-[#1EA855]">Balas sekarang <span aria-hidden="true">→</span></span>
+            </div>
+            <button className="absolute top-[-10px] right-[-8px] w-[28px] h-[28px] flex items-center justify-center rounded-[999px] border-0 bg-[#221F1A] text-[#FCFAF6] text-[13px] leading-[1] cursor-pointer" type="button" onClick={closeNudgeBtn} aria-label="Tutup">✕</button>
+          </a>
+        </>) : null}
+      
+      
+        <a className="fixed right-[18px] bottom-[18px] z-[60] flex items-center justify-center w-[58px] h-[58px] rounded-[999px] no-underline shadow-[0_14px_28px_-10px_rgba(37,211,102,0.6)] bg-[#25D366] hover:bg-[#1EBE5A] active:bg-[#19A84F]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" aria-label="Konsultasi gratis via WhatsApp">
+          <img className="w-[32px] h-[32px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />
+        </a>
+        
+      </div>
+    </>
+  );
+}

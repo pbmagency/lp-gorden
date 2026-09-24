@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'GordenLanding')->name('home');
 Route::inertia('/c1-lp', 'cycle1/c1-lp')->name('cycle1.landing');
 Route::inertia('/c2-lp', 'cycle2/c2-lp')->name('cycle2.landing');
+Route::inertia('/c3-lp', 'cycle3/c3-lp')->name('cycle2.landing');
 // ── Cycle 4 Test Social Proof ─────────────────────
 // Route::inertia('/c4-sp-1', 'cycle4/sp-test-1')->name('cycle4.sp.v1');
 // Route::inertia('/c4-sp-2', 'cycle4/sp-test-2')->name('cycle4.sp.v2');

@@ -31,7 +31,7 @@
             })();
         </script>
         <style>
-            @if(request()->is('c2-lp'))
+            @if(request()->is('c2-lp') || request()->is('c3-lp'))
             html, body { background-color: oklch(0.97 0.015 85) !important; }
             @else
             html { background-color: oklch(1 0 0); }
@@ -72,11 +72,11 @@
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
-    @elseif(request()->is('c2-lp'))
+    @elseif(request()->is('c2-lp') || request()->is('c3-lp'))
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="preload" href="/assets-c2/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
+        <link rel="preload" href="/assets-{{ request()->is('c3-lp') ? 'c3' : 'c2' }}/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @endif
 
     @viteReactRefresh
@@ -87,7 +87,7 @@
     @endif
 <x-inertia::head>
     <title>
-        @if(request()->is('c2-lp'))
+        @if(request()->is('c2-lp') || request()->is('c3-lp'))
             Gorden Custom Solo – Survey &amp; Pasang ke Lokasi Anda
         @elseif($isLeanLanding)
             Gorden Custom Solo Raya, Terima Beres Ukur &amp; Pasang
