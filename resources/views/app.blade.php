@@ -6,45 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Google Tag Manager -->
-    @if(request()->is('c3-lp'))
     <script>
-    // Keep the initial render free of tag-manager work. Queue the page view,
-    // then load the container when idle or when a visitor contacts us.
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'});
-    (function () {
-        let started = false;
-        function start() {
-            if (started) return;
-            started = true;
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MMM4GGBQ';
-            document.head.appendChild(script);
-        }
-        window.addEventListener('load', function () {
-            window.setTimeout(function () {
-                if ('requestIdleCallback' in window) window.requestIdleCallback(start, {timeout: 4000});
-                else start();
-            }, 8000);
-        }, {once: true});
-        document.addEventListener('click', function (event) {
-            if (event.target instanceof Element && event.target.closest('a[href^="https://wa.me/"]')) start();
-        }, {capture: true});
-        window.addEventListener('pagehide', start, {once: true});
-    })();
-    </script>
-    @else
-    <script>
-    if (!navigator.webdriver && !navigator.userAgent.includes('Lighthouse') && !navigator.userAgent.includes('PageSpeed')) {
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MMM4GGBQ');
-    }
     </script>
-    @endif
     <!-- End Google Tag Manager -->
 
     @php
