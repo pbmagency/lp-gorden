@@ -1,0 +1,15 @@
+@import 'tailwindcss' source(none);
+
+@source '../js/pages/cycle3/c3-lp.tsx';
+
+@font-face { font-family: Poppins; src: url('/fonts/poppins-latin-400-normal.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: Poppins; src: url('/fonts/poppins-latin-500-normal.woff2') format('woff2'); font-style: normal; font-weight: 500; font-display: swap; }
+@font-face { font-family: Poppins; src: url('/fonts/poppins-latin-600-normal.woff2') format('woff2'); font-style: normal; font-weight: 600; font-display: swap; }
+@font-face { font-family: Poppins; src: url('/fonts/poppins-latin-700-normal.woff2') format('woff2'); font-style: normal; font-weight: 700; font-display: swap; }
+
+/* Sections below the hero keep their layout space but skip rendering until
+   they approach the viewport, including their CSS background images. */
+.c3-page section:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 2400px;
+}

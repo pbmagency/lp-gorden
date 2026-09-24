@@ -21,6 +21,7 @@ createServer((page) =>
                 case name === 'GordenLanding':
                 case name === 'cycle1/c1-lp':
                 case name === 'cycle2/c2-lp':
+                case name === 'cycle3/c3-lp':
                 case name === 'checkout':
                 case name.startsWith('payment/'):
                 case name.startsWith('admin/'):
@@ -42,7 +43,8 @@ createServer((page) =>
             if (
                 page.component === 'GordenLanding' ||
                 page.component === 'cycle1/c1-lp' ||
-                page.component === 'cycle2/c2-lp'
+                page.component === 'cycle2/c2-lp' ||
+                page.component === 'cycle3/c3-lp'
             ) {
                 return <App {...props} />;
             }

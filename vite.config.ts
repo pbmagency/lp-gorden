@@ -12,6 +12,9 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/c3-lp.css',
+                'resources/js/c3-images.ts',
+                'resources/js/c3-analytics.ts',
                 'resources/js/app.tsx',
                 'resources/js/landing-loader.ts',
             ],

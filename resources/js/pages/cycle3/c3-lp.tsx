@@ -189,20 +189,20 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
 
   return (
     <>
-      <style>{`@keyframes omBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }`}</style>
-      <div className="bg-[#FAF7F1] text-[#201D18] [font-family:Poppins,Helvetica,sans-serif] text-[17px] leading-[1.62] overflow-x-clip">
+      <Head title="Gorden Custom Solo – Survey & Pasang ke Lokasi Anda"><meta name="description" content="Gorden custom Solo & sekitarnya. Survey & pasang ke lokasi, free ongkos ukur. Hubungi owner langsung via WhatsApp." /></Head><style>{`@keyframes omBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }`}</style>
+      <div className="c3-page bg-[#FAF7F1] text-[#201D18] [font-family:Poppins,Helvetica,sans-serif] text-[17px] leading-[1.62] overflow-x-clip">
       
         <div className="sticky top-[0] z-[60] bg-[rgba(250,248,244,0.95)] backdrop-blur-[10px] [border-bottom:1px_solid_#E1D9C9]">
           <div className="max-w-[1000px] my-[0] mx-[auto] py-[10px] px-[20px] flex items-center justify-between gap-[12px]">
-            <img className="h-[52px] w-[auto] block" src="/assets-c3/logo.webp" alt="Gorden Wallpaper Solo" />
+            <img className="h-[52px] w-[auto] block" src="/assets-c3/logo-small.webp" width="52" height="52" alt="Gorden Wallpaper Solo" />
             <a className="flex items-center justify-center min-h-[46px] py-[11px] px-[18px] bg-[#25D366] text-[#fff] text-[15px] [font-weight:600] no-underline rounded-[10px] whitespace-nowrap gap-[9px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
           </div>
         </div>
       
         <div className="max-w-[1000px] my-[0] mx-[auto] pt-[12px] px-[clamp(14px,4vw,20px)] pb-[60px]">
       
-          <section className="p-[0] h-[calc(100svh_-_79px)] min-h-[460px] flex flex-col">
-            <div className="relative flex-[1_1_auto] min-h-[0] w-[100vw] ml-[calc(50%_-_50vw)] mr-[calc(50%_-_50vw)] flex flex-col justify-center gap-[14px] pt-[clamp(52px,12vw,88px)] px-[clamp(20px,calc((100vw_-_960px)_/_2_+_20px),200px)] pb-[clamp(76px,15vw,96px)] overflow-hidden bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.78)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.1)_100%),url(/assets-c3/hero-gorden-flip.webp)] min-[761px]:bg-[image:linear-gradient(to_right,rgba(20,17,13,0.9)_0%,rgba(20,17,13,0.74)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.12)_100%),linear-gradient(to_top,rgba(20,17,13,0.55)_0%,rgba(20,17,13,0.1)_45%,rgba(20,17,13,0.05)_100%),url(/assets-c3/hero-gorden-flip.webp)] bg-cover bg-center rounded-[0px]">
+          <section id="hero" className="p-[0] h-[calc(100svh_-_79px)] min-h-[460px] flex flex-col">
+            <div className="relative flex-[1_1_auto] min-h-[0] w-[100vw] ml-[calc(50%_-_50vw)] mr-[calc(50%_-_50vw)] flex flex-col justify-center gap-[14px] pt-[clamp(52px,12vw,88px)] px-[clamp(20px,calc((100vw_-_960px)_/_2_+_20px),200px)] pb-[clamp(76px,15vw,96px)] overflow-hidden bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.78)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.1)_100%),url(/assets-c3/hero-mobile.webp)] min-[761px]:bg-[image:linear-gradient(to_right,rgba(20,17,13,0.9)_0%,rgba(20,17,13,0.74)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.12)_100%),linear-gradient(to_top,rgba(20,17,13,0.55)_0%,rgba(20,17,13,0.1)_45%,rgba(20,17,13,0.05)_100%),url(/assets-c3/hero-gorden-flip.webp)] bg-cover bg-center rounded-[0px]">
               <div className="relative w-[100%] max-w-[560px] mr-[auto] flex flex-col">
                 <div className="self-start inline-flex flex-nowrap whitespace-nowrap items-center gap-[8px] pt-[5px] pr-[11px] pb-[5px] pl-[12px] mt-[0] mx-[0] mb-[clamp(14px,2vw,20px)] bg-[rgba(253,252,250,0.14)] [border:1px_solid_rgba(253,252,250,0.35)] backdrop-blur-[6px] rounded-[999px]">
                   <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
@@ -261,7 +261,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                 <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Gorden kain</h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-sala3-1152x1536.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-gorden-sala3-1152x1536.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">🔥 Best Seller</span>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
@@ -272,7 +272,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Minimalis." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-custom.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-gorden-custom.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Custom</span>
@@ -282,7 +282,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Custom." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/kat-vitrase.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/kat-vitrase.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Siang &amp; Vitrase</span>
@@ -292,7 +292,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Siang%20%26%20Vitrase." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                     <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-kupu-1.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-gorden-kupu-1.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Kupu-Kupu</span>
@@ -302,7 +302,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Kupu-Kupu." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                     <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-hotel-apartemen.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-gorden-hotel-apartemen.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Gorden Hotel &amp; Apartemen</span>
@@ -312,7 +312,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Gorden%20Hotel%20%26%20Apartemen." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                     <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-gorden-rumah-sakit-rso-orthopedi-surakar.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-gorden-rumah-sakit-rso-orthopedi-surakar.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tirai Area Publik</span>
@@ -329,7 +329,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                 <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Blinds</h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-roller-blinds-untuk-kantor-1152x1536.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-roller-blinds-untuk-kantor-1152x1536.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">🏢 Favorit Kantor</span>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
@@ -340,7 +340,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Roller%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-zebra-blinds.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-zebra-blinds.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <span className="absolute top-[10px] left-[10px] py-[5px] px-[10px] bg-[rgba(252,250,246,0.94)] text-[#221F1A] text-[11px] [font-weight:600] rounded-[999px] whitespace-nowrap leading-[1.2]">⭐ Terlaris</span>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
@@ -351,7 +351,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Zebra%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-vertikal-blinds.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-vertikal-blinds.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Vertikal Blinds</span>
@@ -361,7 +361,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Vertikal%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                     <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-slimline-blinds-gorden-kantor-scaled-e16.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-slimline-blinds-gorden-kantor-scaled-e16.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Slimline Blinds</span>
@@ -371,7 +371,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Slimline%20Blinds." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                     <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/kat-outdoor.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/kat-outdoor.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Outdoor Blinds</span>
@@ -388,7 +388,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                 <h3 className="mt-[0] mx-[0] mb-[14px] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:700] tracking-[0.1em] uppercase text-[#877E6D]">Wallpaper &amp; pelengkap</h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(min(48%,240px),1fr))] gap-y-[14px] gap-x-[8px] items-start">
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-wallpaper-custom-motif-peta-dunia.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-wallpaper-custom-motif-peta-dunia.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Wallpaper Custom</span>
@@ -398,7 +398,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                     <a className="flex items-center justify-center gap-[6px] mt-[8px] mx-[0] mb-[0] min-h-[44px] py-[9px] px-[8px] bg-[#FCFAF6] [border:1.5px_solid_#DCD3C1] text-[#221F1A] text-[12.5px] [font-weight:600] no-underline rounded-[8px] leading-[1.25] text-center hover:bg-[#F2EDE3] hover:border-[#6E6553]" href="https://wa.me/6285860525758?text=Halo%2C%20saya%20mau%20tanya%20harga%20dan%20spesifikasi%20Wallpaper%20Custom." target="_blank" rel="noopener"><img className="flex-none w-[15px] h-[15px] block [filter:brightness(0)_saturate(100%)_invert(62%)_sepia(72%)_saturate(1000%)_hue-rotate(85deg)_brightness(95%)_contrast(92%)]" src="/assets-c3/whatsapp.svg" alt="" />Tanya harga &amp; spesifikasi</a>
                   </div>
                   <div className="flex flex-col">
-                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:url(/assets-c3/img-kasa-nyamuk-magnetik-1536x1012.webp)] bg-[size:cover] bg-[position:center]">
+                    <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[4px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/img-kasa-nyamuk-magnetik-1536x1012.webp">
                       <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_52%,rgba(28,25,21,0.66)_100%)]"></div>
                       <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[12px] pb-[12px] text-[#FCFAF6]">
                         <span className="block text-[clamp(14.5px,3.8vw,17px)] [font-weight:500] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Perlengkapan Lainnya</span>
@@ -421,7 +421,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
             </div>
           </section>
       
-          <section className="w-[100vw] ml-[calc(50%_-_50vw)] py-[clamp(40px,7vw,72px)] px-[0] bg-[#FAF7F1]">
+          <section id="portofolio" className="w-[100vw] ml-[calc(50%_-_50vw)] py-[clamp(40px,7vw,72px)] px-[0] bg-[#FAF7F1]">
             <div className="max-w-[1000px] my-[0] mx-[auto] py-[0] px-[clamp(16px,4vw,20px)]">
               <div className="text-left mt-[0] mx-[0] mb-[clamp(18px,3.4vw,26px)]">
                 <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Hasil pemasangan nyata</p>
@@ -433,7 +433,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
               <div className="hidden min-[761px]:contents">
               <div className="grid grid-cols-[1.85fr_1fr] grid-rows-[1fr_1fr] gap-[10px] items-stretch">
                 <div className="row-[span_2] flex">
-                <figure className="m-[0] flex-[1_1_auto] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p05-box-full-plafon-wonosari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp">
+                <figure className="m-[0] flex-[1_1_auto] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp" data-c3-bg="/assets-c3/p05-box-full-plafon-wonosari.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[20px] px-[20px] pb-[18px] text-[#FCFAF6]">
                     <span className="block text-[clamp(17px,2.2vw,21px)] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Ruangan Terlihat Lebih Tinggi</span>
@@ -441,14 +441,14 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                   </figcaption>
                 </figure>
                 </div>
-                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p17-kaca-besar-tawangsari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp">
+                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp" data-c3-bg="/assets-c3/p17-kaca-besar-tawangsari.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[14px] pb-[13px] text-[#FCFAF6]">
                     <span className="block text-[15px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Lebih Rapi Tanpa Rel Terlihat</span>
                     <span className="block mt-[3px] text-[12px] text-[rgba(252,250,246,0.84)] [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]">Hidden rail · Tawangsari, Sukoharjo</span>
                   </figcaption>
                 </figure>
-                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p01-hidden-rail-klodran.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp">
+                <figure className="m-[0] relative min-h-[0] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp" data-c3-bg="/assets-c3/p01-hidden-rail-klodran.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[14px] px-[14px] pb-[13px] text-[#FCFAF6]">
                     <span className="block text-[15px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tidur Lebih Nyaman dan Gelap</span>
@@ -460,7 +460,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
       
               <div className="contents min-[761px]:hidden">
               <div className="grid gap-[8px]">
-                <figure className="m-[0] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p05-box-full-plafon-wonosari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp">
+                <figure className="m-[0] relative aspect-[4/3] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p05-box-full-plafon-wonosari.webp" data-c3-bg="/assets-c3/p05-box-full-plafon-wonosari.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[15px] pb-[14px] text-[#FCFAF6]">
                     <span className="block text-[clamp(16px,4.4vw,19px)] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Ruangan Terlihat Lebih Tinggi</span>
@@ -468,19 +468,19 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                   </figcaption>
                 </figure>
                 <div className="grid grid-cols-[repeat(3,1fr)] gap-[8px]">
-                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p17-kaca-besar-tawangsari.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp">
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p17-kaca-besar-tawangsari.webp" data-c3-bg="/assets-c3/p17-kaca-besar-tawangsari.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
                     <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Lebih Rapi Tanpa Rel Terlihat</span>
                   </figcaption>
                 </figure>
-                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p01-hidden-rail-klodran.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp">
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p01-hidden-rail-klodran.webp" data-c3-bg="/assets-c3/p01-hidden-rail-klodran.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
                     <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Tidur Lebih Nyaman dan Gelap</span>
                   </figcaption>
                 </figure>
-                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:url(/assets-c3/p12-villa-the-ponggok.webp)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p12-villa-the-ponggok.webp">
+                <figure className="m-[0] relative aspect-[3/4] overflow-hidden rounded-[6px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in" data-zoom="/assets-c3/p12-villa-the-ponggok.webp" data-c3-bg="/assets-c3/p12-villa-the-ponggok.webp">
                   <div className="absolute inset-0 bg-[image:linear-gradient(180deg,rgba(28,25,21,0)_48%,rgba(28,25,21,0.72)_100%)]"></div>
                   <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[10px] px-[9px] pb-[9px] text-[#FCFAF6]">
                     <span className="block text-[12px] [font-weight:600] tracking-[-0.01em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">Terasa Seperti Kamar Hotel</span>
@@ -498,12 +498,12 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
             <div className="m-[0] py-[18px] px-[16px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[20px]">
               <div className="grid grid-cols-[1fr_1fr] gap-[clamp(10px,2.4vw,14px)]">
                 <figure className="m-[0]" data-zoom="/assets-c3/before-gorden.webp">
-                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:url(/assets-c3/before-gorden.webp)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/before-gorden.webp">
                     <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#FCFAF6] text-[#5d5546] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sebelum</span>
                   </div>
                 </figure>
                 <figure className="m-[0]" data-zoom="/assets-c3/after-gorden.webp">
-                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:url(/assets-c3/after-gorden.webp)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/after-gorden.webp">
                     <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#6E6553] text-[#fff] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sesudah</span>
                   </div>
                 </figure>
@@ -524,7 +524,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[16px] items-stretch">
               <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
-                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-1.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="aspect-[3/4] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/testi-1.webp"></div>
                 <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
                   <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Harga sebanding kualitasnya</span>
                   <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
@@ -542,7 +542,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                 </div>
               </article>
               <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
-                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-2.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="aspect-[3/4] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/testi-2.webp"></div>
                 <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
                   <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Selesai lebih cepat dari janji</span>
                   <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
@@ -560,7 +560,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                 </div>
               </article>
               <article className="flex flex-col bg-[#FCFAF6] [border:1px_solid_#E8E1D4] rounded-[20px] overflow-hidden">
-                <div className="aspect-[3/4] bg-[image:url(/assets-c3/testi-3.webp)] bg-[size:cover] bg-[position:center]"></div>
+                <div className="aspect-[3/4] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/testi-3.webp"></div>
                 <div className="flex-[1] flex flex-col pt-[18px] px-[20px] pb-[20px]">
                   <span className="inline-flex self-start items-center gap-[6px] mt-[0] mx-[0] mb-[12px] py-[5px] px-[11px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[999px] text-[11.5px] [font-weight:700] tracking-[0.04em] uppercase text-[#6E6553]">Warnanya cocok di ruangan</span>
                   <div className="flex items-center gap-[12px] mt-[0] mx-[0] mb-[12px]">
@@ -595,7 +595,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                         onClick={() => onSlideClick(i)}
                         className={`flex-[0_0_76%] min-[761px]:flex-[0_0_46%] flex justify-center px-[6px] cursor-pointer ${reviewNoAnim ? 'transition-none' : 'transition-[opacity,scale] duration-700 ease-[ease]'} ${i === reviewPos ? 'opacity-100 scale-100' : 'opacity-[0.45] scale-[0.9]'}`}
                       >
-                        <img src={src} alt="Ulasan pelanggan di Google" className="block h-[min(46vh,300px)] min-[761px]:h-[240px] w-auto max-w-full object-contain rounded-[16px] [border:1px_solid_#ECE5D9] bg-[#fff] shadow-[0_20px_38px_-22px_rgba(58,53,44,0.95)]" />
+                        <img src={src} alt="Ulasan pelanggan di Google" loading="lazy" decoding="async" className="block h-[min(46vh,300px)] min-[761px]:h-[240px] w-auto max-w-full object-contain rounded-[16px] [border:1px_solid_#ECE5D9] bg-[#fff] shadow-[0_20px_38px_-22px_rgba(58,53,44,0.95)]" />
                       </div>
                     ))}
                   </div>
@@ -616,7 +616,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
             </div>
           </section>
       
-          <section className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
+          <section id="keunggulan" className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
             <div className="py-[clamp(24px,5vw,34px)] px-[clamp(16px,4.5vw,28px)] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[20px]">
             <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">KENAPA PILIH GORDEN WALLPAPER SOLO?</p>
             <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em] text-pretty"><span className="hidden min-[761px]:inline">Kenapa hasil gorden kami beda dengan marketplace dan toko gorden lain</span><span className="min-[761px]:hidden">Kenapa hasil kami beda dari marketplace &amp; toko lain?</span></h2>
@@ -715,10 +715,10 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                   <p className="mt-[22px] mx-[0] mb-[0] py-[14px] px-[16px] bg-[#F2EDE3] rounded-[10px] text-[14px] leading-[1.45] text-[#4A4339]"><strong className="text-[#221F1A]">Jadwal fleksibel.</strong> Survey dan pemasangan menyesuaikan waktu Anda, termasuk di luar jam kerja.</p>
                 </div>
                 <div className="flex flex-col gap-[16px] min-h-[420px]">
-                  <div className="flex-[1.8_1_0] min-h-[260px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/proses-ukur.webp)] bg-[size:cover] bg-[position:center]">
+                  <div className="flex-[1.8_1_0] min-h-[260px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/proses-ukur.webp">
                     <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Survey &amp; ukur di rumah pelanggan</p>
                   </div>
-                  <div className="flex-[1_1_0] min-h-[150px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/p14-box-glossy-permata-mayang.webp)] bg-[size:cover] bg-[position:center]">
+                  <div className="flex-[1_1_0] min-h-[150px] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/p14-box-glossy-permata-mayang.webp">
                     <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Hasil akhirnya: terpasang rapi dan pas</p>
                   </div>
                 </div>
@@ -744,7 +744,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                       <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami ukur jendela secara presisi dan bantu pilih kain yang sesuai.</p>
                     </div>
                   </div>
-                    <div className="aspect-[16/10] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/proses-ukur.webp)] bg-[size:cover] bg-[position:center]">
+                    <div className="aspect-[16/10] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/proses-ukur.webp">
                     <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Survey &amp; ukur di rumah pelanggan</p>
                   </div>
                   </div>
@@ -766,7 +766,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
                       <p className="m-[0] text-[15px] leading-[1.5] text-[#615949]">Kami pasang hingga rapi dan memastikan semuanya pas.</p>
                     </div>
                   </div>
-                    <div className="aspect-[16/8] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),url(/assets-c3/p14-box-glossy-permata-mayang.webp)] bg-[size:cover] bg-[position:center]">
+                    <div className="aspect-[16/8] relative flex items-end py-[14px] px-[16px] rounded-[20px] overflow-hidden bg-[image:linear-gradient(to_top,rgba(30,25,19,0.8)_0%,rgba(30,25,19,0.26)_42%,rgba(30,25,19,0)_78%),var(--c3-bg)] bg-[size:cover] bg-[position:center]" data-c3-bg="/assets-c3/p14-box-glossy-permata-mayang.webp">
                     <p className="m-[0] [font-family:Poppins,Helvetica,sans-serif] text-[13px] [font-weight:600] leading-[1.35] text-[#FCFAF6]">Hasil akhirnya: terpasang rapi dan pas</p>
                   </div>
                   </div>
@@ -824,7 +824,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
           
           </section>
       
-          <section className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
+          <section id="faq" className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA]">
             <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Tanya jawab &amp; area layanan</p>
             <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(22px,5.6vw,34px)] leading-[1.16] [font-weight:700] tracking-[-0.03em]">Pertanyaan yang paling sering masuk</h2>
             <p className="mt-[0] mx-[0] mb-[22px] text-[#585045] max-w-[62ch] text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55]">Klik pertanyaannya untuk melihat jawaban.</p>
@@ -960,19 +960,19 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
         </>) : null}
       
         {showNudge ? (<>
-          <a className="fixed right-[18px] bottom-[86px] min-[761px]:bottom-[88px] z-[59] max-w-[min(260px,calc(100vw-36px))] min-[761px]:max-w-[min(320px,calc(100vw-36px))] flex items-start gap-[10px] py-[9px] px-[10px] min-[761px]:py-[15px] min-[761px]:px-[16px] bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[16px] shadow-[0_18px_44px_-18px_rgba(32,29,24,0.42)] no-underline cursor-pointer hover:bg-[#F7F3EA]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" onClick={closeNudge}>
+          <a className="fixed right-[18px] bottom-[86px] min-[761px]:bottom-[88px] z-[59] max-w-[min(260px,calc(100vw-36px))] min-[761px]:max-w-[min(320px,calc(100vw-36px))] flex items-start gap-[10px] py-[9px] px-[10px] min-[761px]:py-[15px] min-[761px]:px-[16px] bg-[#FCFAF6] [border:1px_solid_#E5DDCF] rounded-[16px] shadow-[0_18px_44px_-18px_rgba(32,29,24,0.42)] no-underline cursor-pointer hover:bg-[#F7F3EA]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" data-cta-zone="nudge" onClick={closeNudge}>
             <img className="flex-none w-[26px] h-[26px] min-[761px]:w-[42px] min-[761px]:h-[42px] rounded-[999px] object-cover bg-[#F2EDE3] [border:1px_solid_#E5DDCF]" src="/assets-c3/owner-elang.webp" alt="" />
             <div className="min-w-[0]">
               <p className="mt-[0] mx-[0] mb-[3px] [font-family:Poppins,Helvetica,sans-serif] text-[11.5px] min-[761px]:text-[14px] [font-weight:700] leading-[1.3] text-[#221F1A]">Pak Elang - Owner Gorden Wallpaper Solo</p>
               <p className="mt-[0] mx-[0] mb-[7px] text-[11.5px] min-[761px]:text-[13.5px] leading-[1.4] text-[#585045] text-pretty"><span className="min-[761px]:hidden">Bingung pilih model? Tanya saya.</span><span className="hidden min-[761px]:inline">Masih bingung pilih model atau ukuran? Tanya langsung ke saya di WA.</span></p>
-              <span className="inline-flex items-center gap-[6px] text-[11.5px] min-[761px]:text-[13.5px] [font-weight:700] text-[#1EA855]">Balas sekarang <span aria-hidden="true">→</span></span>
+              <span data-c3-cta-label className="inline-flex items-center gap-[6px] text-[11.5px] min-[761px]:text-[13.5px] [font-weight:700] text-[#1EA855]">Balas sekarang <span aria-hidden="true">→</span></span>
             </div>
             <button className="absolute top-[-10px] right-[-8px] w-[28px] h-[28px] flex items-center justify-center rounded-[999px] border-0 bg-[#221F1A] text-[#FCFAF6] text-[13px] leading-[1] cursor-pointer" type="button" onClick={closeNudgeBtn} aria-label="Tutup">✕</button>
           </a>
         </>) : null}
       
       
-        <a className="fixed right-[18px] bottom-[18px] z-[60] flex items-center justify-center w-[58px] h-[58px] rounded-[999px] no-underline shadow-[0_14px_28px_-10px_rgba(37,211,102,0.6)] bg-[#25D366] hover:bg-[#1EBE5A] active:bg-[#19A84F]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" aria-label="Konsultasi gratis via WhatsApp">
+        <a className="fixed right-[18px] bottom-[18px] z-[60] flex items-center justify-center w-[58px] h-[58px] rounded-[999px] no-underline shadow-[0_14px_28px_-10px_rgba(37,211,102,0.6)] bg-[#25D366] hover:bg-[#1EBE5A] active:bg-[#19A84F]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener" aria-label="Konsultasi gratis via WhatsApp" data-cta-zone="floating">
           <img className="w-[32px] h-[32px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />
         </a>
         

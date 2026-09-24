@@ -6,6 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Google Tag Manager -->
+    @if(request()->is('c3-lp'))
+    <script>
+    // Keep the initial render free of tag-manager work. Queue the page view,
+    // then load the container when idle or when a visitor contacts us.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'});
+    (function () {
+        let started = false;
+        function start() {
+            if (started) return;
+            started = true;
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MMM4GGBQ';
+            document.head.appendChild(script);
+        }
+        window.addEventListener('load', function () {
+            window.setTimeout(function () {
+                if ('requestIdleCallback' in window) window.requestIdleCallback(start, {timeout: 4000});
+                else start();
+            }, 8000);
+        }, {once: true});
+        document.addEventListener('click', function (event) {
+            if (event.target instanceof Element && event.target.closest('a[href^="https://wa.me/"]')) start();
+        }, {capture: true});
+        window.addEventListener('pagehide', start, {once: true});
+    })();
+    </script>
+    @else
     <script>
     if (!navigator.webdriver && !navigator.userAgent.includes('Lighthouse') && !navigator.userAgent.includes('PageSpeed')) {
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -15,10 +44,11 @@
         })(window,document,'script','dataLayer','GTM-MMM4GGBQ');
     }
     </script>
+    @endif
     <!-- End Google Tag Manager -->
 
     @php
-        $isLeanLanding = request()->is('/') || request()->is('c1-lp');
+        $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c3-lp');
     @endphp
 
     @unless($isLeanLanding)
@@ -72,7 +102,11 @@
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
-    @elseif(request()->is('c2-lp') || request()->is('c3-lp'))
+    @elseif(request()->is('c3-lp'))
+        <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/assets-c3/hero-mobile.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
+        <link rel="preload" href="/assets-c3/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
+    @elseif(request()->is('c2-lp'))
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
@@ -80,7 +114,9 @@
     @endif
 
     @viteReactRefresh
-    @if($isLeanLanding)
+    @if(request()->is('c3-lp'))
+        @vite(['resources/css/c3-lp.css', 'resources/js/c3-images.ts', 'resources/js/c3-analytics.ts', 'resources/js/landing-loader.ts'])
+    @elseif($isLeanLanding)
         @vite('resources/js/landing-loader.ts')
     @else
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])

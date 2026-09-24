@@ -74,6 +74,8 @@ class AnalyticsController extends Controller
             'event_data.page' => ['nullable', 'string', 'max:2048'],
             'event_data.timestamp' => ['nullable', 'date'],
             'event_data.location' => ['nullable', 'string', 'max:100'],
+            'event_data.cta_zone' => ['nullable', 'string', 'max:100'],
+            'event_data.cta_name' => ['nullable', 'string', 'max:255'],
             'event_data.text' => ['nullable', 'string', 'max:255'],
             'event_data.destination' => ['nullable', 'string', 'max:2048'],
             'event_data.section' => ['nullable', 'string', 'max:100'],
