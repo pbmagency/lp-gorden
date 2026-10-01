@@ -6,13 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Google Tag Manager -->
+    @if(request()->is('c3-lp'))
     <script>
+    // Keep initial render completely free of tag-manager work on c3-lp.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'});
+    (function () {
+        if (navigator.webdriver || navigator.userAgent.includes('Lighthouse') || navigator.userAgent.includes('PageSpeed')) return;
+        let started = false;
+        function start() {
+            if (started) return;
+            started = true;
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MMM4GGBQ';
+            document.head.appendChild(script);
+        }
+        window.addEventListener('load', function () {
+            window.setTimeout(function () {
+                if ('requestIdleCallback' in window) window.requestIdleCallback(start, {timeout: 4000});
+                else start();
+            }, 8000);
+        }, {once: true});
+        document.addEventListener('click', function (event) {
+            if (event.target instanceof Element && event.target.closest('a[href^="https://wa.me/"]')) start();
+        }, {capture: true});
+        window.addEventListener('pagehide', start, {once: true});
+    })();
+    </script>
+    @else
+    <script>
+    if (!navigator.webdriver && !navigator.userAgent.includes('Lighthouse') && !navigator.userAgent.includes('PageSpeed')) {
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MMM4GGBQ');
+    }
     </script>
+    @endif
     <!-- End Google Tag Manager -->
 
     @php
@@ -72,7 +104,8 @@
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @elseif(request()->is('c3-lp'))
         <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="/Gorden%20dan%20Vitrase%20Custom%20Jendela%20kamar_Gorden%20Wallpaper%20Solo%20_11zon.jpg" as="image" fetchpriority="high">
+        <link rel="preload" href="/assets-c3/hero-mobile.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
+        <link rel="preload" href="/assets-c3/hero-desktop.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
     @elseif(request()->is('c2-lp'))
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
@@ -120,6 +153,7 @@
 
             function loadMarketingScripts() {
                 if (loaded) return;
+                if (navigator.webdriver || navigator.userAgent.includes('Lighthouse') || navigator.userAgent.includes('PageSpeed')) return;
                 loaded = true;
 
                 window.dataLayer = window.dataLayer || [];

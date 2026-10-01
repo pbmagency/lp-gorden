@@ -3344,12 +3344,12 @@ export default function GordenLanding() {
 
                                 <div>
                                     <div
-                                        data-zoom="/assets/outdor.jpeg"
+                                        data-zoom="/assets/outdor.webp"
                                         style={{
                                             borderRadius: '12px',
                                             border: '1px solid oklch(0.88 0.02 80)',
                                             aspectRatio: '1 / 1',
-                                            ...lazyBackground("url('/assets/outdor.jpeg')"),
+                                            ...lazyBackground("url('/assets/outdor.webp')"),
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center',
                                             cursor: 'zoom-in',
