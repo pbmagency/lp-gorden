@@ -75,7 +75,7 @@ landing.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
                     }),
             method: 'get',
         })
-
+    
     landing.form = landingForm
 /**
 * @see \Inertia\Controller::__invoke

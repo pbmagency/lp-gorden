@@ -72,8 +72,7 @@
         <link rel="preload" href="/assets/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
     @elseif(request()->is('c3-lp'))
         <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="/assets-c3/hero-mobile.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
-        <link rel="preload" href="/assets-c3/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
+        <link rel="preload" href="/Gorden%20dan%20Vitrase%20Custom%20Jendela%20kamar_Gorden%20Wallpaper%20Solo%20_11zon.jpg" as="image" fetchpriority="high">
     @elseif(request()->is('c2-lp'))
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">

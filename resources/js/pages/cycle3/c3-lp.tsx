@@ -202,7 +202,7 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
         <div className="max-w-[1000px] my-[0] mx-[auto] pt-[12px] px-[clamp(14px,4vw,20px)] pb-[60px]">
       
           <section id="hero" className="p-[0] h-[calc(100svh_-_79px)] min-h-[460px] flex flex-col">
-            <div className="relative flex-[1_1_auto] min-h-[0] w-[100vw] ml-[calc(50%_-_50vw)] mr-[calc(50%_-_50vw)] flex flex-col justify-center gap-[14px] pt-[clamp(52px,12vw,88px)] px-[clamp(20px,calc((100vw_-_960px)_/_2_+_20px),200px)] pb-[clamp(76px,15vw,96px)] overflow-hidden bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.78)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.1)_100%),url(/assets-c3/hero-mobile.webp)] min-[761px]:bg-[image:linear-gradient(to_right,rgba(20,17,13,0.9)_0%,rgba(20,17,13,0.74)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.12)_100%),linear-gradient(to_top,rgba(20,17,13,0.55)_0%,rgba(20,17,13,0.1)_45%,rgba(20,17,13,0.05)_100%),url(/assets-c3/hero-gorden-flip.webp)] bg-cover bg-center rounded-[0px]">
+            <div className="relative flex-[1_1_auto] min-h-[0] w-[100vw] ml-[calc(50%_-_50vw)] mr-[calc(50%_-_50vw)] flex flex-col justify-center gap-[14px] pt-[clamp(52px,12vw,88px)] px-[clamp(20px,calc((100vw_-_960px)_/_2_+_20px),200px)] pb-[clamp(76px,15vw,96px)] overflow-hidden bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.78)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.1)_100%),url('/Gorden%20dan%20Vitrase%20Custom%20Jendela%20kamar_Gorden%20Wallpaper%20Solo%20_11zon.jpg')] min-[761px]:bg-[image:linear-gradient(to_right,rgba(20,17,13,0.9)_0%,rgba(20,17,13,0.74)_34%,rgba(20,17,13,0.34)_62%,rgba(20,17,13,0.12)_100%),linear-gradient(to_top,rgba(20,17,13,0.55)_0%,rgba(20,17,13,0.1)_45%,rgba(20,17,13,0.05)_100%),url('/Gorden%20dan%20Vitrase%20Custom%20Jendela%20kamar_Gorden%20Wallpaper%20Solo%20_11zon.jpg')] bg-cover bg-center rounded-[0px]">
               <div className="relative w-[100%] max-w-[560px] mr-[auto] flex flex-col">
                 <div className="self-start inline-flex flex-nowrap whitespace-nowrap items-center gap-[8px] pt-[5px] pr-[11px] pb-[5px] pl-[12px] mt-[0] mx-[0] mb-[clamp(14px,2vw,20px)] bg-[rgba(253,252,250,0.14)] [border:1px_solid_rgba(253,252,250,0.35)] backdrop-blur-[6px] rounded-[999px]">
                   <span className="text-[#FFB800] text-[12px] tracking-[1px]">★★★★★</span>
@@ -613,6 +613,78 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
               <div className="flex justify-center mt-[clamp(18px,3.2vw,26px)] mx-[0] mb-[0]">
                 <a className="flex-[0_1_380px] flex items-center justify-center gap-[9px] min-h-[56px] py-[14px] px-[20px] bg-[#25D366] text-[#fff] text-[clamp(15px,3.9vw,17px)] [font-weight:700] tracking-[-0.01em] no-underline rounded-[12px] shadow-[0px_8px_20px_rgba(37,211,102,0.3)] hover:bg-[#1FBA57]" href="https://wa.me/6285860525758?text=Halo%20saya%20mau%20pesan%20Gorden%20Custom%2C%2Cbisa%20survey%20ke%20lokasi%3F" target="_blank" rel="noopener"><img className="flex-none w-[20px] h-[20px] block [filter:brightness(0)_invert(1)]" src="/assets-c3/whatsapp.svg" alt="" />Konsultasi Gratis →</a>
               </div>
+            </div>
+          </section>
+
+          <section id="portofolio-inspirasi" className="py-[clamp(46px,8vw,78px)] px-[0] [border-top:1px_solid_#EDE6DA] scroll-mt-[76px]">
+            <p className="mt-[0] mx-[0] mb-[10px] text-[11px] [font-weight:600] tracking-[0.22em] uppercase text-[#96876C]">Portofolio</p>
+            <h2 className="mt-[0] mx-[0] mb-[8px] [font-family:Poppins,Helvetica,sans-serif] text-[clamp(24px,5.6vw,36px)] leading-[1.16] [font-weight:700] tracking-[-0.03em] text-[#221F1A]">Bayangkan gorden ini di ruangan Anda</h2>
+            <p className="mt-[0] mx-[0] mb-[clamp(20px,3.6vw,28px)] text-[#585045] max-w-[56ch] text-[clamp(14.5px,3.9vw,16.5px)] leading-[1.55]">Foto asli hasil pemasangan kami. Tekan foto untuk melihat lebih besar.</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[14px] items-stretch">
+              <figure
+                data-zoom="/assets-c3/porto-kamar-lembut-siang.png"
+                data-c3-bg="/assets-c3/porto-kamar-lembut-siang.webp"
+                className="m-[0] relative aspect-[4/5] overflow-hidden rounded-[14px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in group shadow-[0_10px_25px_-10px_rgba(32,29,24,0.18)]"
+              >
+                <div className="absolute inset-0 bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.72)_36%,rgba(20,17,13,0.2)_65%,transparent_100%)] transition-opacity duration-300 group-hover:opacity-90"></div>
+                <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[16px] pb-[16px] text-[#FCFAF6] z-10">
+                  <span className="block text-[clamp(15px,3.6vw,17.5px)] [font-weight:700] tracking-[-0.015em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+                    Lembut Siang, Gelap Malam
+                  </span>
+                  <span className="block mt-[4px] text-[clamp(11.5px,2.9vw,13px)] text-[rgba(252,250,246,0.85)] leading-[1.3] [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
+                    Gorden &amp; vitrase custom · Kamar tidur
+                  </span>
+                </figcaption>
+              </figure>
+
+              <figure
+                data-zoom="/assets-c3/porto-kamar-terasa-lega.png"
+                data-c3-bg="/assets-c3/porto-kamar-terasa-lega.webp"
+                className="m-[0] relative aspect-[4/5] overflow-hidden rounded-[14px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in group shadow-[0_10px_25px_-10px_rgba(32,29,24,0.18)]"
+              >
+                <div className="absolute inset-0 bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.72)_36%,rgba(20,17,13,0.2)_65%,transparent_100%)] transition-opacity duration-300 group-hover:opacity-90"></div>
+                <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[16px] pb-[16px] text-[#FCFAF6] z-10">
+                  <span className="block text-[clamp(15px,3.6vw,17.5px)] [font-weight:700] tracking-[-0.015em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+                    Kamar Terasa Lebih Lega
+                  </span>
+                  <span className="block mt-[4px] text-[clamp(11.5px,2.9vw,13px)] text-[rgba(252,250,246,0.85)] leading-[1.3] [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
+                    Full plafon blackout 100% · Kamar utama
+                  </span>
+                </figcaption>
+              </figure>
+
+              <figure
+                data-zoom="/assets-c3/porto-rapi-sampai-plafon.png"
+                data-c3-bg="/assets-c3/porto-rapi-sampai-plafon.webp"
+                className="m-[0] relative aspect-[4/5] overflow-hidden rounded-[14px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in group shadow-[0_10px_25px_-10px_rgba(32,29,24,0.18)]"
+              >
+                <div className="absolute inset-0 bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.72)_36%,rgba(20,17,13,0.2)_65%,transparent_100%)] transition-opacity duration-300 group-hover:opacity-90"></div>
+                <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[16px] pb-[16px] text-[#FCFAF6] z-10">
+                  <span className="block text-[clamp(15px,3.6vw,17.5px)] [font-weight:700] tracking-[-0.015em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+                    Rapi Sampai ke Plafon
+                  </span>
+                  <span className="block mt-[4px] text-[clamp(11.5px,2.9vw,13px)] text-[rgba(252,250,246,0.85)] leading-[1.3] [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
+                    Drop ceiling blackout 90% · Kamar utama
+                  </span>
+                </figcaption>
+              </figure>
+
+              <figure
+                data-zoom="/assets-c3/porto-kantor-adem.png"
+                data-c3-bg="/assets-c3/porto-kantor-adem.webp"
+                className="m-[0] relative aspect-[4/5] overflow-hidden rounded-[14px] bg-[#EDE7DA] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] cursor-zoom-in group shadow-[0_10px_25px_-10px_rgba(32,29,24,0.18)]"
+              >
+                <div className="absolute inset-0 bg-[image:linear-gradient(to_top,rgba(20,17,13,0.92)_0%,rgba(20,17,13,0.72)_36%,rgba(20,17,13,0.2)_65%,transparent_100%)] transition-opacity duration-300 group-hover:opacity-90"></div>
+                <figcaption className="absolute left-[0] right-[0] bottom-[0] pt-[16px] px-[16px] pb-[16px] text-[#FCFAF6] z-10">
+                  <span className="block text-[clamp(15px,3.6vw,17.5px)] [font-weight:700] tracking-[-0.015em] leading-[1.25] [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+                    Kantor Adem, Tidak Silau
+                  </span>
+                  <span className="block mt-[4px] text-[clamp(11.5px,2.9vw,13px)] text-[rgba(252,250,246,0.85)] leading-[1.3] [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
+                    Vertikal blinds dimout · Ruang kantor
+                  </span>
+                </figcaption>
+              </figure>
             </div>
           </section>
       
