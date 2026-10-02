@@ -507,13 +507,13 @@ export default function GordenWallpaperSoloLanding(_props: GordenWallpaperSoloLa
             </div>
             <div className="m-[0] py-[18px] px-[16px] bg-[#F2EDE3] [border:1px_solid_#E5DDCF] rounded-[20px]">
               <div className="grid grid-cols-[1fr_1fr] gap-[clamp(10px,2.4vw,14px)]">
-                <figure className="m-[0]" data-zoom="/assets-c3/before-gorden.webp?v=2">
-                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/before-gorden.webp?v=2">
+                <figure className="m-[0]" data-zoom="/assets-c3/before-gorden1.webp?v=2">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/before-gorden1.webp?v=2">
                     <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#FCFAF6] text-[#5d5546] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sebelum</span>
                   </div>
                 </figure>
-                <figure className="m-[0]" data-zoom="/assets-c3/after-gorden.webp?v=2">
-                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/after-gorden.webp?v=2">
+                <figure className="m-[0]" data-zoom="/assets-c3/after-gorden1.webp?v=2">
+                  <div className="relative aspect-[3/4] rounded-[16px] [border:1px_solid_#DCD3C1] bg-[image:var(--c3-bg)] bg-[size:cover] bg-[position:center] overflow-hidden cursor-zoom-in" data-c3-bg="/assets-c3/after-gorden1.webp?v=2">
                     <span className="absolute top-[12px] left-[12px] py-[6px] px-[14px] bg-[#6E6553] text-[#fff] text-[12px] [font-weight:700] tracking-[0.1em] uppercase rounded-[999px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">Sesudah</span>
                   </div>
                 </figure>
