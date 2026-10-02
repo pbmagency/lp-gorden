@@ -187,19 +187,18 @@
                 })(window, document);
             }
 
+            ['pointerdown', 'touchstart', 'scroll'].forEach(function (eventName) {
+                window.addEventListener(eventName, function () {
+                    window.setTimeout(loadMarketingScripts, 3000);
+                }, {
+                    once: true,
+                    passive: true
+                });
+            });
+
             document.addEventListener('click', function (event) {
                 if (event.target instanceof Element && event.target.closest('a[href^="https://wa.me/"]')) loadMarketingScripts();
             }, {capture: true});
-
-            window.addEventListener('load', function () {
-                window.setTimeout(function () {
-                    if ('requestIdleCallback' in window) {
-                        window.requestIdleCallback(loadMarketingScripts, { timeout: 4000 });
-                    } else {
-                        loadMarketingScripts();
-                    }
-                }, 10000);
-            }, { once: true });
         })();
     </script>
     @else
