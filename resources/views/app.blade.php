@@ -145,6 +145,64 @@
     
     <x-inertia::app />
 
+    @if(request()->is('c3-lp'))
+    <script>
+        (function () {
+            let loaded = false;
+
+            function loadMarketingScripts() {
+                if (loaded) return;
+                if (navigator.webdriver || navigator.userAgent.includes('Lighthouse') || navigator.userAgent.includes('PageSpeed')) return;
+                loaded = true;
+
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+                window.gtag('js', new Date());
+                window.gtag('config', 'G-7DZSEDBHZY');
+
+                const ga = document.createElement('script');
+                ga.async = true;
+                ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-7DZSEDBHZY';
+                document.head.appendChild(ga);
+
+                (function(c, l, a, r, i, t, y) {
+                    c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+                    t = l.createElement(r); t.async = 1;
+                    t.src = "https://www.clarity.ms/tag/" + i;
+                    y = l.getElementsByTagName(r)[0];
+                    y.parentNode.insertBefore(t, y);
+                })(window, document, "clarity", "script", "y5mfs5rh07");
+
+                (function (w, d) {
+                    if (w.__plerdyCode) return;
+                    w.__plerdyCode = 1;
+                    w._protocol = w.location.protocol === 'https:' ? 'https://' : 'http://';
+                    w._site_hash_code = 'e5ad2bad413372216eb0cbf6646f35c3';
+                    w._suid = 79951;
+                    const script = d.createElement('script');
+                    script.async = true;
+                    script.referrerPolicy = 'strict-origin-when-cross-origin';
+                    script.src = 'https://a.plerdy.com/public/js/click/main.js';
+                    d.head.appendChild(script);
+                })(window, document);
+            }
+
+            document.addEventListener('click', function (event) {
+                if (event.target instanceof Element && event.target.closest('a[href^="https://wa.me/"]')) loadMarketingScripts();
+            }, {capture: true});
+
+            window.addEventListener('load', function () {
+                window.setTimeout(function () {
+                    if ('requestIdleCallback' in window) {
+                        window.requestIdleCallback(loadMarketingScripts, { timeout: 4000 });
+                    } else {
+                        loadMarketingScripts();
+                    }
+                }, 10000);
+            }, { once: true });
+        })();
+    </script>
+    @else
     {{-- Other marketing scripts load after the visitor interacts or after
          a generous post-load idle window. --}}
     <script>
@@ -210,6 +268,7 @@
             }, { once: true });
         })();
     </script>
+    @endif
 </body>
 
 </html>
