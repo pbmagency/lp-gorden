@@ -48,7 +48,7 @@
     <!-- End Google Tag Manager -->
 
     @php
-        $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c3-lp');
+        $isLeanLanding = request()->is('/') || request()->is('c1-lp') || request()->is('c3-lp') || request()->is('c4-lp');
     @endphp
 
     @unless($isLeanLanding)
@@ -111,11 +111,19 @@
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="preload" href="/assets-{{ request()->is('c3-lp') ? 'c3' : 'c2' }}/hero-gorden-flip.webp" as="image" type="image/webp" fetchpriority="high">
+    @elseif(request()->is('c4-lp'))
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+        <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
+        <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
+        <link rel="preload" href="/assets-lp2/hero-tirai-vertikal.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
+        <link rel="preload" href="/assets-lp2/hero-tirai-top-v2.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
     @endif
 
     @viteReactRefresh
     @if(request()->is('c3-lp'))
         @vite(['resources/css/c3-lp.css', 'resources/js/c3-images.ts', 'resources/js/c3-analytics.ts', 'resources/js/landing-loader.ts'])
+    @elseif(request()->is('c4-lp'))
+        @vite(['resources/css/app.css', 'resources/js/app.tsx', 'resources/js/pages/GordenWallpaperSoloLanding.tsx', 'resources/js/c3-analytics.ts'])
     @elseif($isLeanLanding)
         @vite('resources/js/landing-loader.ts')
     @else
@@ -123,7 +131,9 @@
     @endif
 <x-inertia::head>
     <title>
-        @if(request()->is('c2-lp') || request()->is('c3-lp'))
+        @if(request()->is('c4-lp'))
+            Gorden Custom Solo – Survey Gratis &amp; Garansi 14 Hari
+        @elseif(request()->is('c2-lp') || request()->is('c3-lp'))
             Gorden Custom Solo – Survey &amp; Pasang ke Lokasi Anda
         @elseif($isLeanLanding)
             Gorden Custom Solo Raya, Terima Beres Ukur &amp; Pasang

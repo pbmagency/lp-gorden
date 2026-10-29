@@ -24,12 +24,13 @@ const isLeanLanding =
     initialComponent === 'GordenLanding' ||
     initialComponent === 'cycle1/c1-lp' ||
     initialComponent === 'cycle2/c2-lp' ||
-    initialComponent === 'cycle3/c3-lp';
+    initialComponent === 'cycle3/c3-lp' ||
+    initialComponent === 'GordenWallpaperSoloLanding';
 
 // Analytics is deliberately kept out of the critical rendering path. Loading it
 // after the first interaction (or after a generous idle timeout) keeps PostHog
 // out of the initial bundle while still capturing meaningful visits.
-if (import.meta.env.PROD) {
+if (import.meta.env.PROD && initialComponent !== 'GordenWallpaperSoloLanding') {
     let analyticsLoaded = false;
     const loadAnalytics = () => {
         if (analyticsLoaded) return;

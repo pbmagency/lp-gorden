@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\UserAnalytic;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class AnalyticsTrackingTest extends TestCase
@@ -16,6 +17,16 @@ class AnalyticsTrackingTest extends TestCase
         $this->get('/c1-lp')
             ->assertOk()
             ->assertSee('meta name="csrf-token"', false);
+    }
+
+    public function test_single_scroll_landing_page_exposes_csrf_token_for_analytics(): void
+    {
+        $this->get('/c4-lp')
+            ->assertOk()
+            ->assertSee('meta name="csrf-token"', false)
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('GordenWallpaperSoloLanding'),
+            );
     }
 
     public function test_tracking_an_event_invalidates_cached_dashboard_data(): void
