@@ -115,8 +115,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="preload" href="/assets-lp2/hero-tirai-vertikal.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
-        <link rel="preload" href="/assets-lp2/hero-tirai-top-v2.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
+        <link rel="preload" href="/assets-lp2/p17-kaca-besar-tawangsari.webp" as="image" type="image/webp" fetchpriority="high">
     @endif
 
     @viteReactRefresh
