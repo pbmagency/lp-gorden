@@ -1,114 +1,76 @@
-name: Deploy to CyberPanel VPS1 (Toko)
+name: Deploy Gorden to aaPanel
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gorden-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 25
+    env:
+      SERVER_IP: '187.124.141.96'
+      TARGET_DIR: '/www/wwwroot/toko.gordenwallpapersolo.com'
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3' # Sesuaikan kalau lu pake versi lain
-
-      - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+          php-version: '8.4'
+          tools: composer:v2
+      - name: Install PHP dependencies
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-
-      - name: Install NPM & Build Assets
+          node-version: '22.22.1'
+          cache: npm
+      - name: Build browser and SSR assets
         run: |
           npm ci --include=optional
           npm run build:ssr
-
-      - name: Setup SSH Key (Jalur Elit VPS1)
-        uses: webfactory/ssh-agent@v0.9.0
+      - uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY_VPS1 }}
-
-      - name: Add Server to Known Hosts
-        run: ssh-keyscan -H 72.61.210.213 >> ~/.ssh/known_hosts
-
-      - name: Deploy files with rsync
+          ssh-private-key: ${{ secrets.DEPLOY_KEY_VPS3 }}
+      - name: Trust verified VPS host key
         run: |
-          # Mengirim semua file (kecuali git & env) ke gudang toko_laravel
-          rsync -avz --exclude='.git' --exclude='.github' --exclude='.env' ./ root@72.61.210.213:/home/toko.gordenwallpapersolo.com/toko_laravel/
-
-      - name: Fix Permissions, Move Public, & Auto-Edit index.php
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' '187.124.141.96 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPn5fIkFXUfwwJSvDBQjlkevGrvt3g4UX+64k31TJb+' >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+      - name: Sync application
         run: |
-          ssh root@72.61.210.213 << 'EOF'
-            # 1. Bikin folder gudang kalau belum ada
-            mkdir -p /home/toko.gordenwallpapersolo.com/toko_laravel
-            
-            # 2. Pindahkan isi folder public ke etalase utama (public_html)
-            cp -r /home/toko.gordenwallpapersolo.com/toko_laravel/public/* /home/toko.gordenwallpapersolo.com/public_html/
-            cp /home/toko.gordenwallpapersolo.com/toko_laravel/public/.htaccess /home/toko.gordenwallpapersolo.com/public_html/.htaccess
-            
-            # 3. Auto-edit file index.php agar mengarah ke gudang toko_laravel
-            sed -i "s|__DIR__.'/../storage|__DIR__.'/../toko_laravel/storage|g" /home/toko.gordenwallpapersolo.com/public_html/index.php
-            sed -i "s|__DIR__.'/../vendor|__DIR__.'/../toko_laravel/vendor|g" /home/toko.gordenwallpapersolo.com/public_html/index.php
-            sed -i "s|__DIR__.'/../bootstrap|__DIR__.'/../toko_laravel/bootstrap|g" /home/toko.gordenwallpapersolo.com/public_html/index.php
-            
-            # 4. Cari tahu siapa user/karyawan CyberPanel asli di server ini
-            CYBER_USER=$(stat -c '%U' /home/toko.gordenwallpapersolo.com/public_html)
-            CYBER_GROUP=$(stat -c '%G' /home/toko.gordenwallpapersolo.com/public_html)
-            
-            # 5. Copot gembok root! Ubah kepemilikan menjadi milik CyberPanel
-            chown -R $CYBER_USER:$CYBER_GROUP /home/toko.gordenwallpapersolo.com/toko_laravel
-            chown -R $CYBER_USER:$CYBER_GROUP /home/toko.gordenwallpapersolo.com/public_html
-            
-            
-            # 6. Beri izin jalan untuk folder cache & storage Laravel
-            chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/storage
-            chmod -R 775 /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/cache
+          rsync -az --delete \
+            --exclude='/.env' \
+            --exclude='/.user.ini' \
+            --exclude='/.well-known/' \
+            --exclude='/public/.user.ini' \
+            --exclude='/public/.well-known/' \
+            --exclude='/public/storage' \
+            --exclude='/storage/' \
+            --exclude='/bootstrap/cache/' \
+            --exclude='/.git/' \
+            --exclude='/.github/' \
+            --exclude='/node_modules/' \
+            ./ "root@$SERVER_IP:$TARGET_DIR/"
+      - name: Finish deployment and verify HTTPS
+        run: |
+          ssh "root@$SERVER_IP" 'bash -se' <<'REMOTE'
+          cd /www/wwwroot/toko.gordenwallpapersolo.com
+          /www/server/php/84/bin/php artisan optimize:clear
+          /www/server/php/84/bin/php artisan migrate --force
+          test -L public/storage || ln -s ../storage/app/public public/storage
+          /www/server/php/84/bin/php artisan optimize
+          chown -R www:www /www/wwwroot/toko.gordenwallpapersolo.com
+          chmod 640 .env
+          systemctl restart toko-gorden-inertia-ssr.service
+          systemctl is-active --quiet toko-gorden-inertia-ssr.service
+          curl --retry 3 --retry-delay 2 --retry-all-errors -fsS --resolve toko.gordenwallpapersolo.com:443:127.0.0.1 https://toko.gordenwallpapersolo.com/ -o /dev/null
+          REMOTE
 
-            # 7. Jalankan migrasi database
-            cd /home/toko.gordenwallpapersolo.com/toko_laravel
-            php artisan migrate --force
-
-            # 8. Cache konfigurasi/rute/view Laravel untuk menekan TTFB.
-            php artisan optimize
-
-            # 8. Jalankan Inertia SSR sebagai service yang otomatis hidup lagi
-            # setelah deploy maupun reboot. Bila Node belum tersedia, situs
-            # tetap aman memakai client rendering dan deploy tidak dibuat gagal.
-            NODE_BIN=$(command -v node || true)
-            if [ -n "$NODE_BIN" ]; then
-              printf '%s\n' \
-                '[Unit]' \
-                'Description=Toko Gorden Inertia SSR' \
-                'After=network.target' \
-                '' \
-                '[Service]' \
-                'Type=simple' \
-                "User=$CYBER_USER" \
-                "Group=$CYBER_GROUP" \
-                'WorkingDirectory=/home/toko.gordenwallpapersolo.com/toko_laravel' \
-                "ExecStart=$NODE_BIN /home/toko.gordenwallpapersolo.com/toko_laravel/bootstrap/ssr/ssr.js" \
-                'Restart=always' \
-                'RestartSec=3' \
-                '' \
-                '[Install]' \
-                'WantedBy=multi-user.target' \
-                > /etc/systemd/system/toko-gorden-inertia-ssr.service
-              systemctl daemon-reload
-              systemctl enable toko-gorden-inertia-ssr.service
-              systemctl restart toko-gorden-inertia-ssr.service
-            else
-              echo "Node.js tidak tersedia di VPS; Inertia SSR dilewati."
-            fi
-
-            # 9. Isi cache HTML landing setelah bundle/service terbaru aktif.
-            curl -kfsS --resolve toko.gordenwallpapersolo.com:443:127.0.0.1 https://toko.gordenwallpapersolo.com/ > /dev/null || true
-            curl -kfsS --resolve toko.gordenwallpapersolo.com:443:127.0.0.1 https://toko.gordenwallpapersolo.com/ > /dev/null || true
-          EOF
